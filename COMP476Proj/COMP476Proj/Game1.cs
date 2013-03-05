@@ -19,6 +19,9 @@ namespace COMP476Proj
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        World world;
+        InputManager input;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -47,7 +50,20 @@ namespace COMP476Proj
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            //Populate Sprite Database
+            Texture2D streaker = Content.Load<Texture2D>("streaker");
+            SpriteDatabase.AddAnimation(new Animation("streaker_static", streaker, 2, 143, 184, 0));
+            SpriteDatabase.AddAnimation(new Animation("streaker_walk", streaker, 5, 143, 184, 184));
+            SpriteDatabase.AddAnimation(new Animation("streaker_fall", streaker, 7, 143, 184, 368));
+            SpriteDatabase.AddAnimation(new Animation("streaker_getup", streaker, 7, 143, 184, 552));
+            SpriteDatabase.AddAnimation(new Animation("streaker_dance", streaker, 5, 143, 184, 736));
+
+            //Create World
+            world = new World();
+
+            //Managers
+            input = new InputManager(world);
+
         }
 
         /// <summary>
@@ -69,9 +85,9 @@ namespace COMP476Proj
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-
+            world.Update(gameTime);
+            input.Update(gameTime);
             // TODO: Add your update logic here
-
             base.Update(gameTime);
         }
 
@@ -82,7 +98,9 @@ namespace COMP476Proj
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            spriteBatch.Begin();
+            world.Draw(gameTime, spriteBatch);
+            spriteBatch.End();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
