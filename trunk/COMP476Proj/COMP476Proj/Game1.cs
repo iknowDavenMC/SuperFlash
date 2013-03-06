@@ -52,17 +52,21 @@ namespace COMP476Proj
 
             //Populate Sprite Database
             Texture2D streaker = Content.Load<Texture2D>("streaker");
+            Texture2D happyFace = Content.Load<Texture2D>("smiley_face");
             SpriteDatabase.AddAnimation(new Animation("streaker_static", streaker, 2, 143, 184, 0));
             SpriteDatabase.AddAnimation(new Animation("streaker_walk", streaker, 5, 143, 184, 184));
             SpriteDatabase.AddAnimation(new Animation("streaker_fall", streaker, 7, 143, 184, 368));
             SpriteDatabase.AddAnimation(new Animation("streaker_getup", streaker, 7, 143, 184, 552));
             SpriteDatabase.AddAnimation(new Animation("streaker_dance", streaker, 5, 143, 184, 736));
+            SpriteDatabase.AddAnimation(new Animation("happyface",happyFace));
 
             //Create World
             world = new World();
 
             //Managers
             input = new InputManager(world);
+
+            Debugger.getInstance();
 
         }
 
@@ -85,6 +89,7 @@ namespace COMP476Proj
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+            //Debugger.getInstance().Clear();
             world.Update(gameTime);
             input.Update(gameTime);
             // TODO: Add your update logic here
@@ -100,6 +105,7 @@ namespace COMP476Proj
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             world.Draw(gameTime, spriteBatch);
+            //Debugger.getInstance().Draw(spriteBatch);
             spriteBatch.End();
             // TODO: Add your drawing code here
 

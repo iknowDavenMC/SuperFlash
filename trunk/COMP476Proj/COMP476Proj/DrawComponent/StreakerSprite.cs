@@ -15,6 +15,7 @@ namespace COMP476Proj
         public StreakerSprite(Entity e)
             : base(e, SpriteDatabase.GetAnimation("streaker_static"), 150)
         {
+            scale = new Vector2(.5f,.5f);
             Pause();
         }
         #endregion
