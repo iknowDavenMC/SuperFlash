@@ -14,5 +14,11 @@ namespace COMP476Proj
         public Vector2 position = new Vector2(200f,200f);
         public Vector2 velocity = Vector2.Zero;
         #endregion
+
+        public virtual void Update(GameTime gameTime)
+        {
+            position += velocity;
+            velocity = Vector2.Zero;
+        }
     }
 }

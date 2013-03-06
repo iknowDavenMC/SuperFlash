@@ -36,13 +36,15 @@ namespace COMP476Proj
                     animation = SpriteDatabase.GetAnimation("streaker_static");
                     Play();
                     break;
-                case CharacterState.WALK_LEFT:
-                    spriteEffects = SpriteEffects.FlipHorizontally;
-                    animation = SpriteDatabase.GetAnimation("streaker_walk");
-                    Play();
-                    break;
-                case CharacterState.WALK_RIGHT:
-                    spriteEffects = SpriteEffects.None;
+                case CharacterState.WALK:
+                    if (entity.GetIntelligenceComponent().flipped)
+                    {
+                        spriteEffects = SpriteEffects.FlipHorizontally;
+                    }
+                    else
+                    {
+                        spriteEffects = SpriteEffects.None;
+                    }
                     animation = SpriteDatabase.GetAnimation("streaker_walk");
                     Play();
                     break;
