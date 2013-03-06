@@ -11,12 +11,19 @@ namespace COMP476Proj
 {
     public class World
     {
+        #region Fields
         public Streaker streaker;
+        public List<BoundingBox> mapBoundingBoxes;
+        #endregion
+
+        #region Init
         public World()
         {
             streaker = EntityBuilder.buildStreaker();
         }
+        #endregion
 
+        #region Update & Draw
         public void Update(GameTime gameTime)
         {
             streaker.Update(gameTime);
@@ -26,6 +33,8 @@ namespace COMP476Proj
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             streaker.Draw(gameTime, spriteBatch);
+            
         }
+        #endregion
     }
 }

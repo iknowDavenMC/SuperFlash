@@ -21,5 +21,10 @@ namespace COMP476Proj
             lvl = Level.MAIN_MENU;
         }
         #endregion
+
+        public void SwitchToSchool()
+        {
+
+        }
     }
 }

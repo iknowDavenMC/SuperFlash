@@ -11,6 +11,7 @@ namespace COMP476Proj
 {
     public class Streaker : Entity
     {
+        
         public PhysicsComponent physics;
         public DrawComponent draw;
         public IntelligenceComponent intelligence;
@@ -21,6 +22,7 @@ namespace COMP476Proj
         public override void Update(GameTime gameTime)
         {
             draw.Update(gameTime);
+            //Debugger.getInstance().pointsToDraw.Add(physics.position);
             base.Update(gameTime);
         }
 
