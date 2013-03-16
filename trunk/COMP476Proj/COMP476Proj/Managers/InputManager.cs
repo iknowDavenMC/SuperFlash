@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace COMP476Proj
 {
-    public class ImputManager : GameComponent
+    public class InputManager : GameComponent
     {
         #region Enumerations
 
@@ -54,7 +54,7 @@ namespace COMP476Proj
         /// <param name="game">Current game instance</param>
         /// <param name="type">Type of controller to check for input</param>
         /// <param name="numberOfPlayers">Number of players whose inputs must be checked</param>
-        public ImputManager(Game game, ControllerType type)
+        public InputManager(Game game, ControllerType type)
             : base(game)
 	    {
             controllerType = type;
@@ -107,7 +107,12 @@ namespace COMP476Proj
                     keyboardMapping.Add("MenuSelection", new Keys[2] { Keys.Enter, Keys.Space });
                     keyboardMapping.Add("Pause", new Keys[2] { Keys.Pause, Keys.P });
                     keyboardMapping.Add("MenuBack", new Keys[1] { Keys.Escape });
+                    keyboardMapping.Add("Down", new Keys[1] { Keys.Down });
+                    keyboardMapping.Add("Up", new Keys[1] { Keys.Up });
+                    keyboardMapping.Add("Right", new Keys[1] { Keys.Right });
+                    keyboardMapping.Add("Left", new Keys[1] { Keys.Left });
 
+                    /*
                     switch (playerIndex)
                     {
                         case PlayerIndex.One:
@@ -144,6 +149,7 @@ namespace COMP476Proj
 
                             break;
                     }
+                     * */
 
                     break;
             }
@@ -165,8 +171,10 @@ namespace COMP476Proj
 
             if (controllerType == ControllerType.GamePad)
             {
-                gamePadState = GamePad.GetState(playerIndex);
-
+                foreach (KeyValuePair<PlayerIndex, GamePadState> pair in gamePadStates)
+                {
+                    gamePadStates[pair.Key] = GamePad.GetState(pair.Key);
+                }
             }
             else
             {
