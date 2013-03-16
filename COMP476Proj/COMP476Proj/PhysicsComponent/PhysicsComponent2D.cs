@@ -130,22 +130,22 @@ namespace COMP476Proj
             get { return maxAngularAcceleration; }
         }
 
-        public Vector3 Direction
+        public Vector2 Direction
         {
             get { return movementDirection; }
         }
 
-        public Vector3 Position
+        public Vector2 Position
         {
             get { return position; }
         }
 
-        public Vector3 Velocity
+        public Vector2 Velocity
         {
             get { return velocity; }
         }
 
-        public Vector3 Acceleration
+        public Vector2 Acceleration
         {
             get { return acceleration; }
         }
@@ -160,7 +160,7 @@ namespace COMP476Proj
             get { return isSteering; }
         }
 
-        public BoundingRectangularPrism BoundingBox
+        public BoundingRectangle BoundingBox
         {
             get { return boundingBox; }
         }
@@ -198,7 +198,7 @@ namespace COMP476Proj
             this.position = position;
             this.orientation = orientationDirection = orientation;
             this.isSteering = isSteering;
-            boundingBox = new BoundingRectangle(position, dimensions.X, dimensions.Y);
+            boundingBox = new BoundingRectangle(position, (int)dimensions.X, (int)dimensions.Y);
 
             // Unspecified
             movementDirection = velocity = acceleration = Vector2.Zero;
@@ -339,22 +339,22 @@ namespace COMP476Proj
         {
             if (isToStop != null)
             {
-                isStopping = isToStop;
+                isStopping = (bool)isToStop;
             }
 
             if (!targetDirection.Equals(null))
             {
-                movementDirection = targetDirection;
+                movementDirection = (Vector2)targetDirection;
             }
 
             if (!targetVelocity.Equals(null))
             {
-                velocity = targetVelocity;
+                velocity = (Vector2)targetVelocity;
             }
 
             if (!targetAcceleration.Equals(null))
             {
-                acceleration = targetAcceleration;
+                acceleration = (Vector2)targetAcceleration;
             }
         }
 
@@ -367,12 +367,12 @@ namespace COMP476Proj
         {
             if (targetOrientation != null)
             {
-                orientationDirection = targetOrientation;
+                orientationDirection = (float)targetOrientation;
             }
 
             if (targetAcceleration != null)
             {
-                angularAcceleration = targetAcceleration;
+                angularAcceleration = (float)targetAcceleration;
             }
         }
 
@@ -422,10 +422,10 @@ namespace COMP476Proj
         /// General collsion
         /// </summary>
         /// <param name="other">Physics Component of the object that was collided with</param>
-        public void Collision(PhysicsComponent3D other)
+        public void Collision(PhysicsComponent2D other)
         {
             // Switch velocities
-            Vector3 temp = velocity;
+            Vector2 temp = velocity;
             velocity = other.velocity;
             other.velocity = velocity;
         }
