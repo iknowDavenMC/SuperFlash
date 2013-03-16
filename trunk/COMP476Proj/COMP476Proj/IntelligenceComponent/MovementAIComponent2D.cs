@@ -227,7 +227,7 @@ namespace COMP476Proj
             velocity.Normalize();
             velocity *= speed;
 
-            Vector3 targetAcceleration = velocity - physics.Velocity;
+            Vector2 targetAcceleration = velocity - physics.Velocity;
             targetAcceleration /= timeToTarget;
 
             if (targetAcceleration.Length() > physics.MaxAcceleration)
@@ -286,7 +286,7 @@ namespace COMP476Proj
         /// </summary>
         /// <param name="physics">Physics component of the target</param>
         /// <returns>Whether or not the target can be seen</returns>
-        private bool isInPerceptionZone(ref PhysicsComponent3D physics)
+        private bool isInPerceptionZone(ref PhysicsComponent2D physics)
         {
             Vector2 direction = targetPosition - physics.Position;
 
@@ -295,7 +295,7 @@ namespace COMP476Proj
                 return true;
             }
 
-            float angle = (float)Math.Atan2(direction.X, direction.Z);
+            float angle = (float)Math.Atan2(direction.X, direction.Y);
 
             return (Math.Abs(angle - physics.Orientation) < (perceptionAngle / (perceptionConstant * physics.Velocity.Length() + 1)));
         }
@@ -396,7 +396,7 @@ namespace COMP476Proj
         /// Flee movement
         /// </summary>
         /// <param name="physics">The physics component of the thinking character</param>
-        public void Flee(ref PhysicsComponent3D physics)
+        public void Flee(ref PhysicsComponent2D physics)
         {
             // Flee normally
             Vector2 toFlee = physics.Position + (physics.Position - targetPosition);
@@ -462,7 +462,7 @@ namespace COMP476Proj
                 return;
             }
 
-            targetOrientation = (float)Math.Atan2(physics.Velocity.X, physics.Velocity.Z);
+            targetOrientation = (float)Math.Atan2(physics.Velocity.X, physics.Velocity.Y);
 
             allign(ref physics);
         }
@@ -481,7 +481,7 @@ namespace COMP476Proj
                 return;
             }
 
-            targetOrientation = (float)Math.Atan2(direction.X, direction.Z);
+            targetOrientation = (float)Math.Atan2(direction.X, direction.Y);
 
             allign(ref physics);
         }
@@ -499,7 +499,7 @@ namespace COMP476Proj
                 return;
             }
 
-            targetOrientation = (float)Math.Atan2(direction.X, direction.Z);
+            targetOrientation = (float)Math.Atan2(direction.X, direction.Y);
 
             allign(ref physics);
         }
