@@ -36,23 +36,23 @@ public class BoundingRectangle
         }
 
         // Bounding sphere style constructor
-        public BoundingRectangle(Vector2 center, float radius)
+        public BoundingRectangle(Vector2 center, int radius)
         {
             dimensionsFromCenter = new Vector2(radius, radius);
 
             this.center = center;
 
-            boundingRectangle = new Rectangle(center.x - radius, center.y - radius, 2*radius, 2*radius);
+            boundingRectangle = new Rectangle((int)center.X - radius, (int)center.Y - radius, 2 * radius, 2 * radius);
         }
 
         // Bounding rectangle style constructor
-        public BoundingRectangle(Vector2 center, float x, float y)
+        public BoundingRectangle(Vector2 center, int x, int y)
         {
             dimensionsFromCenter = new Vector2(x / 2, y / 2);
 
             this.center = center;
 
-            boundingRectangle = new Rectangle(center.x - x / 2 , center.y - y / 2, x, y);
+            boundingRectangle = new Rectangle((int)center.X - x / 2, (int)center.Y - y / 2, x, y);
         }
 
     #endregion
@@ -63,8 +63,8 @@ public class BoundingRectangle
         public void Update(Vector2 center)
         {
             this.center = center;
-            boundingRectangle.X = center.X - dimensionsFromCenter.X;
-            boundingRectangle.Y = center.Y - dimensionsFromCenter.Y;
+            boundingRectangle.X = (int)(center.X - dimensionsFromCenter.X);
+            boundingRectangle.Y = (int)(center.Y - dimensionsFromCenter.Y);
         }
 
         // Intersection Methods
@@ -79,6 +79,8 @@ public class BoundingRectangle
         }
 
         // Draw the bounding rectangle for debugging purposes
+    // TODO
+    /*
         public void DrawBoundingCube(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Color color)
         {
             if (effect == null)
@@ -112,6 +114,7 @@ public class BoundingRectangle
                 graphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.LineList, primitiveList, 0, 8, indices, 0, 12);
             }
         }
+     * */
 
     #endregion
 }
