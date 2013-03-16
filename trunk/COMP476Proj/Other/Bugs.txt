@@ -1,0 +1,15 @@
+Move from found to fixed when fixed.
+
+--
+
+BUGS FOUND
+
+Animation switches continue from the last frame index instead of restaring. Ex: If running ends at frame 4, then falling will start at 5.
+
+Character state should be called streaker state, and should be in streaker class.
+
+Logic of keyboard input to movement result needs to be fixed. Streaker should check keyboard state using input manager, input manager should not tell the streaker what to do.
+
+
+
+BUGS FIXED
