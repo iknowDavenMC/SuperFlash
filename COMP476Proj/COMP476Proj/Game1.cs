@@ -20,7 +20,7 @@ namespace COMP476Proj
         SpriteBatch spriteBatch;
 
         World world;
-        InputManager input;
+        InputManagerTemp input;
 
         public Game1()
         {
@@ -64,7 +64,7 @@ namespace COMP476Proj
             world = new World();
 
             //Managers
-            input = new InputManager(world);
+            input = new InputManagerTemp(world);
 
             Debugger.getInstance();
 
