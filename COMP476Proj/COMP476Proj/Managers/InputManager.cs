@@ -18,7 +18,7 @@ namespace COMP476Proj
         #endregion
 
         #region Attributes
-
+ 
         /// <summary>
         /// Controller type
         /// </summary>
@@ -82,7 +82,6 @@ namespace COMP476Proj
 
             #region Button Mappings
 
-            // TODO
             // Assign the various actions to the mapping dictionaries
             // ex: gamePadMapping.Add("MenuSelection", new Buttons[2] {Buttons.A, Buttons.Start});
             switch (controllerType)
@@ -96,9 +95,7 @@ namespace COMP476Proj
                     gamePadMapping.Add("Up", new Buttons[2] { Buttons.DPadUp, Buttons.LeftThumbstickUp });
                     gamePadMapping.Add("Right", new Buttons[2] { Buttons.DPadRight, Buttons.LeftThumbstickRight });
                     gamePadMapping.Add("Left", new Buttons[2] { Buttons.DPadLeft, Buttons.LeftThumbstickLeft });
-
-                    // TODO
-                    // ...
+                    gamePadMapping.Add("Dance", new Buttons[1] { Buttons.A });
 
                     break;
 
@@ -111,45 +108,7 @@ namespace COMP476Proj
                     keyboardMapping.Add("Up", new Keys[1] { Keys.Up });
                     keyboardMapping.Add("Right", new Keys[1] { Keys.Right });
                     keyboardMapping.Add("Left", new Keys[1] { Keys.Left });
-
-                    /*
-                    switch (playerIndex)
-                    {
-                        case PlayerIndex.One:
-
-                            keyboardMapping.Add("Down", new Keys[1] { Keys.Down });
-                            keyboardMapping.Add("Up", new Keys[1] { Keys.Up });
-                            keyboardMapping.Add("Right", new Keys[1] { Keys.Right });
-                            keyboardMapping.Add("Left", new Keys[1] { Keys.Left });
-
-                            // ...
-
-                            break;
-
-                        case PlayerIndex.Two:
-
-                            keyboardMapping.Add("Down", new Keys[1] { Keys.S });
-                            keyboardMapping.Add("Up", new Keys[1] { Keys.W });
-                            keyboardMapping.Add("Right", new Keys[1] { Keys.D });
-                            keyboardMapping.Add("Left", new Keys[1] { Keys.A });
-
-                            // ...
-
-                            break;
-
-                        case PlayerIndex.Three:
-
-                            // ...
-
-                            break;
-
-                        case PlayerIndex.Four:
-
-                            // ...
-
-                            break;
-                    }
-                     * */
+                    keyboardMapping.Add("Dance", new Keys[1] { Keys.Space });
 
                     break;
             }
