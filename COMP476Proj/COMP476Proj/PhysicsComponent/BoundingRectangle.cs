@@ -7,114 +7,117 @@ using Microsoft.Xna.Framework.Graphics;
 /// </summary>
 public class BoundingRectangle
 {
-    #region Static Attributes
-
-        // Holds the indices required for drawing the bounding rectangle
-        static private short[] indices = new short[] {0, 1, 1, 2, 2, 3, 3, 0};
-
-    #endregion
-
     #region Attributes
 
-        private Vector2 center;
-        private Vector2 dimensionsFromCenter;
-        private Rectangle boundingRectangle;
-        private BasicEffect effect;
+    private Vector2 center;
+    private Vector2 dimensionsFromCenter;
+    private Rectangle boundingRectangle;
+    private BasicEffect effect;
 
     #endregion
 
     #region Constructors
 
-        // Rectangle style constructor
-        public BoundingRectangle(int x, int y, int width, int height)
-        {
-            center = new Vector2(x + (float)width / 2, y + (float)height / 2);
+    /// <summary>
+    /// Rectangle style constructor
+    /// </summary>
+    /// <param name="x">Left most X value</param>
+    /// <param name="y">Top most Y value</param>
+    /// <param name="width">Width of the box</param>
+    /// <param name="height">Height of the box</param>
+    public BoundingRectangle(int x, int y, int width, int height)
+    {
+        center = new Vector2(x + (float)width / 2, y + (float)height / 2);
 
-            boundingRectangle = new Rectangle(x, y, width, height);
+        boundingRectangle = new Rectangle(x, y, width, height);
 
-            dimensionsFromCenter = new Vector2((float)width / 2, (float)height / 2);
-        }
+        dimensionsFromCenter = new Vector2((float)width / 2, (float)height / 2);
+    }
 
-        // Bounding sphere style constructor
-        public BoundingRectangle(Vector2 center, int radius)
-        {
-            dimensionsFromCenter = new Vector2(radius, radius);
+    /// <summary>
+    /// Bounding sphere style constructor
+    /// </summary>
+    /// <param name="center">Center of the box</param>
+    /// <param name="radius">Radius from center</param>
+    public BoundingRectangle(Vector2 center, int radius)
+    {
+        dimensionsFromCenter = new Vector2(radius, radius);
 
-            this.center = center;
+        this.center = center;
 
-            boundingRectangle = new Rectangle((int)center.X - radius, (int)center.Y - radius, 2 * radius, 2 * radius);
-        }
+        boundingRectangle = new Rectangle((int)center.X - radius, (int)center.Y - radius, 2 * radius, 2 * radius);
+    }
 
-        // Bounding rectangle style constructor
-        public BoundingRectangle(Vector2 center, int x, int y)
-        {
-            dimensionsFromCenter = new Vector2(x / 2, y / 2);
+    /// <summary>
+    /// Bounding rectangle style constructor
+    /// </summary>
+    /// <param name="center">Center of the box</param>
+    /// <param name="x">Total width</param>
+    /// <param name="y">Total height</param>
+    public BoundingRectangle(Vector2 center, int x, int y)
+    {
+        dimensionsFromCenter = new Vector2(x / 2, y / 2);
 
-            this.center = center;
+        this.center = center;
 
-            boundingRectangle = new Rectangle((int)center.X - x / 2, (int)center.Y - y / 2, x, y);
-        }
+        boundingRectangle = new Rectangle((int)center.X - x / 2, (int)center.Y - y / 2, x, y);
+    }
 
     #endregion
 
     #region Methods
 
-        // Update the bounding rectangle position
-        public void Update(Vector2 center)
+    /// <summary>
+    /// Update the bounding rectangle position
+    /// </summary>
+    /// <param name="center"></param>
+    public void Update(Vector2 center)
+    {
+        this.center = center;
+        boundingRectangle.X = (int)(center.X - dimensionsFromCenter.X);
+        boundingRectangle.Y = (int)(center.Y - dimensionsFromCenter.Y);
+    }
+
+    /// <summary>
+    /// Checks for collision with other bounding rectangle
+    /// </summary>
+    /// <param name="rectangle">Bounding rectangle to check collision with</param>
+    /// <returns>True if there is a collision</returns>
+    public bool Collides(BoundingRectangle rectangle)
+    {
+        return boundingRectangle.Intersects(rectangle.boundingRectangle);
+    }
+
+    /// <summary>
+    /// Checks for collision with a rectangle
+    /// </summary>
+    /// <param name="rectangle">Rectangle to check collision with</param>
+    /// <returns>True if there is a collision</returns>
+    public bool Collides(Rectangle rectangle)
+    {
+        return boundingRectangle.Intersects(rectangle);
+    }
+
+    /// <summary>
+    /// Draw the bounding rectangle for debugging purposes
+    /// </summary>
+    /// <param name="graphicsDevice">Graphics device</param>
+    /// <param name="spriteBatch">Sprite batch</param>
+    public void Draw(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
+    {
+        Texture2D textureToDraw = new Texture2D(graphicsDevice, (int)dimensionsFromCenter.X, (int)dimensionsFromCenter.Y);
+
+        Color[] data = new Color[textureToDraw.Width * textureToDraw.Height];
+
+        for (int i = 0; i != data.Length; ++i)
         {
-            this.center = center;
-            boundingRectangle.X = (int)(center.X - dimensionsFromCenter.X);
-            boundingRectangle.Y = (int)(center.Y - dimensionsFromCenter.Y);
+            data[i] = Color.Red;
         }
 
-        // Intersection Methods
-        public bool Intersects(BoundingRectangle rectangle)
-        {
-            return boundingRectangle.Intersects(rectangle.boundingRectangle);
-        }
+        textureToDraw.SetData(data);
 
-        public bool Intersects(Rectangle rectangle)
-        {
-            return boundingRectangle.Intersects(rectangle);
-        }
-
-        // Draw the bounding rectangle for debugging purposes
-    // TODO
-    /*
-        public void DrawBoundingCube(GraphicsDevice graphicsDevice, Matrix view, Matrix projection, Color color)
-        {
-            if (effect == null)
-            {
-                effect = new BasicEffect(graphicsDevice);
-                effect.VertexColorEnabled = true;
-                effect.TextureEnabled = false;
-                effect.World = Matrix.Identity;
-            }
-
-            Vector2[] corners = new Vector2[4] {center + dimensionsFromCenter,
-                                                new Vector2(center.X + dimensionsFromCenter.X, center.Y - dimensionsFromCenter.Y),
-                                                center - dimensionsFromCenter,
-                                                new Vector2(center.X - dimensionsFromCenter.X, center.Y + dimensionsFromCenter.Y)};
-
-            VertexPositionColor[] primitiveList = new VertexPositionColor[corners.Length];
-
-            for (int i = 0; i < corners.Length; i++)
-            {
-                primitiveList[i] = new VertexPositionColor(corners[i], color);
-            }
-
-            effect.View = view;
-            effect.Projection = projection;
-
-            // Draw the box with a LineList
-            foreach (EffectPass pass in effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-
-                graphicsDevice.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.LineList, primitiveList, 0, 8, indices, 0, 12);
-            }
-        }
-     * */
-
+        spriteBatch.Draw(textureToDraw, boundingRectangle, Color.White);
+    }
+     
     #endregion
 }
