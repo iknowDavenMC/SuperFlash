@@ -77,9 +77,7 @@
     <Compile Include="DrawComponent\Camera.cs" />
     <Compile Include="DrawComponent\DrawComponent.cs" />
     <Compile Include="DrawComponent\SpriteDatabase.cs" />
-    <Compile Include="DrawComponent\StreakerSprite.cs" />
     <Compile Include="Entities\Entity.cs" />
-    <Compile Include="Entities\EntityBuilder.cs" />
     <Compile Include="Entities\Streaker.cs" />
     <Compile Include="HUD.cs" />
     <Compile Include="Managers\InputManagerTemp.cs" />

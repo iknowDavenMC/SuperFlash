@@ -20,7 +20,8 @@ namespace COMP476Proj
         #region Init
         public World()
         {
-            streaker = EntityBuilder.buildStreaker();
+            streaker = new Streaker(new PhysicsComponent(),
+                new DrawComponent(SpriteDatabase.GetAnimation("streaker_static"), Color.White, Vector2.Zero, new Vector2(.5f, .5f), .5f, 150));
             //camera = new Camera();
         }
         #endregion
