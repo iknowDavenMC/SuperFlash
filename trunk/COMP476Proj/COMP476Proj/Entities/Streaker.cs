@@ -20,8 +20,10 @@ namespace COMP476Proj
 
         private int velocity = 5;
 
-        public Streaker()
+        public Streaker(PhysicsComponent phys, DrawComponent draw)
         {
+            physics = phys;
+            this.draw = draw;
             //Initialize Components using Entitybuilder!
         }
         public override void Update(GameTime gameTime){
