@@ -26,10 +26,37 @@ namespace COMP476Proj
         
             physics.Update(gameTime);
             draw.Update(gameTime, this);
+            UpdateStates(draw.animComplete);
             //Debugger.getInstance().pointsToDraw.Add(physics.position);
             base.Update(gameTime);
         }
 
+        public void UpdateStates(bool animComplete)
+        {
+            switch (charState)
+            {
+                case StreakerState.STATIC:
+                    break;
+                case StreakerState.WALK:
+                    break;
+                case StreakerState.FALL:
+                    if (animComplete)
+                    {
+                        charState = StreakerState.GET_UP;
+                        //draw.Reset();
+                    }
+                    break;
+                case StreakerState.GET_UP:
+                    if (animComplete)
+                    {
+                        charState = StreakerState.STATIC;
+                        //draw.Reset();
+                    }
+                    break;
+                case StreakerState.DANCE:
+                    break;
+            }
+        }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             draw.Draw(gameTime, spriteBatch, physics.position);
