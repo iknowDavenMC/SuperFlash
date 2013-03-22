@@ -9,12 +9,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace COMP476Proj
 {
+    public enum StreakerState { STATIC, WALK, FALL, GET_UP, DANCE };
+
     public class Streaker : Entity
     {
-        bool flip = false;
+        public bool flip = false;
         public PhysicsComponent physics;
         public DrawComponent draw;
-        public IntelligenceComponent intelligence;
+        public StreakerState charState = StreakerState.STATIC;
+
         public Streaker()
         {
             //Initialize Components using Entitybuilder!
@@ -22,14 +25,14 @@ namespace COMP476Proj
         public override void Update(GameTime gameTime){
         
             physics.Update(gameTime);
-            draw.Update(gameTime);
+            draw.Update(gameTime, this);
             //Debugger.getInstance().pointsToDraw.Add(physics.position);
             base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            draw.Draw(gameTime, spriteBatch);
+            draw.Draw(gameTime, spriteBatch, physics.position);
             base.Draw(gameTime, spriteBatch);
         }
 
@@ -43,28 +46,23 @@ namespace COMP476Proj
             return physics;
         }
 
-        public override IntelligenceComponent GetIntelligenceComponent()
-        {
-            return intelligence;
-        }
-
         public void moveLeft() {
             physics.velocity.X = -1;
-            intelligence.charState = CharacterState.WALK;
-            intelligence.flipped = true;
+            charState = StreakerState.WALK;
+            flip = true;
         }
         public void moveRight() {
             physics.velocity.X = 1;
-            intelligence.charState = CharacterState.WALK;
-            intelligence.flipped = false;
+            charState = StreakerState.WALK;
+            flip = false;
         }
         public void moveDown() {
             physics.velocity.Y = 1;
-            intelligence.charState = CharacterState.WALK;
+            charState = StreakerState.WALK;
         }
         public void moveUp() {
             physics.velocity.Y = -1;
-            intelligence.charState = CharacterState.WALK;
+            charState = StreakerState.WALK;
         }
 
     }
