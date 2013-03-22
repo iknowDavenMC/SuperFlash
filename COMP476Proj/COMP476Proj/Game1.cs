@@ -20,9 +20,10 @@ namespace COMP476Proj
         public const int SCREEN_HEIGHT = 600;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        SpriteFont spriteFont; 
         World world;
         InputManagerTemp input;
+        public HUD hud;  
 
         public Game1()
         {
@@ -54,16 +55,22 @@ namespace COMP476Proj
             graphics.ApplyChanges();
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            spriteFont = Content.Load<SpriteFont>("Fonts/Game Over");
             //Populate Sprite Database
             Texture2D streaker = Content.Load<Texture2D>("streaker");
             Texture2D level1 = Content.Load<Texture2D>("level1");
+            //Hud elements
+            Texture2D banner = Content.Load<Texture2D>("Hud/banner");
+            Texture2D notorietyBar = Content.Load<Texture2D>("Hud/notorietyBar");
+            Texture2D notorietyMeter = Content.Load<Texture2D>("Hud/notorietyMeter");
+            //Animation elements 
             SpriteDatabase.AddAnimation(new Animation("streaker_static", streaker, 2, 143, 184, 0));
             SpriteDatabase.AddAnimation(new Animation("streaker_walk", streaker, 5, 143, 184, 184));
             SpriteDatabase.AddAnimation(new Animation("streaker_fall", streaker, 7, 143, 184, 368));
             SpriteDatabase.AddAnimation(new Animation("streaker_getup", streaker, 7, 143, 184, 552));
             SpriteDatabase.AddAnimation(new Animation("streaker_dance", streaker, 5, 143, 184, 736));
             SpriteDatabase.AddAnimation(new Animation("level1",level1));
+
 
             //Create World
             world = new World();
@@ -72,7 +79,8 @@ namespace COMP476Proj
             input = new InputManagerTemp(world);
 
             Debugger.getInstance();
-
+            //Hud
+            hud = new HUD(this, spriteBatch, spriteFont, banner, notorietyBar, notorietyMeter);
         }
 
         /// <summary>
@@ -97,6 +105,7 @@ namespace COMP476Proj
             //Debugger.getInstance().Clear();
             world.Update(gameTime);
             input.Update(gameTime);
+            hud.Update(gameTime);
             // TODO: Add your update logic here
             base.Update(gameTime);
         }
@@ -110,6 +119,7 @@ namespace COMP476Proj
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             world.Draw(gameTime, spriteBatch);
+            hud.Draw(gameTime);
             //Debugger.getInstance().Draw(spriteBatch);
             spriteBatch.End();
             // TODO: Add your drawing code here

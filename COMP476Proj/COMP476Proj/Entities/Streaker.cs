@@ -18,6 +18,8 @@ namespace COMP476Proj
         public DrawComponent draw;
         public StreakerState charState = StreakerState.STATIC;
 
+        private int velocity = 5;
+
         public Streaker()
         {
             //Initialize Components using Entitybuilder!
@@ -74,21 +76,21 @@ namespace COMP476Proj
         }
 
         public void moveLeft() {
-            physics.velocity.X = -1;
+            physics.velocity.X = -velocity;
             charState = StreakerState.WALK;
             flip = true;
         }
         public void moveRight() {
-            physics.velocity.X = 1;
+            physics.velocity.X = velocity;
             charState = StreakerState.WALK;
             flip = false;
         }
         public void moveDown() {
-            physics.velocity.Y = 1;
+            physics.velocity.Y = velocity;
             charState = StreakerState.WALK;
         }
         public void moveUp() {
-            physics.velocity.Y = -1;
+            physics.velocity.Y = -velocity;
             charState = StreakerState.WALK;
         }
 
