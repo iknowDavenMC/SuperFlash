@@ -305,23 +305,6 @@ namespace COMP476Proj
         #region Public Methods
 
         /// <summary>
-        /// Determines how to move next
-        /// </summary>
-        /// <param name="physics">The physics component of the thinking character</param>
-        /// <param name="targetPosition">Position of the target</param>
-        /// <param name="targetVelocity">Velocity of the target</param>
-        /// <param name="targetOrientation">Orientation of the target</param>
-        public void Think(ref PhysicsComponent2D physics, Vector2 targetPosition, Vector2 targetVelocity, float targetOrientation)
-        {
-            // Set target
-            this.targetPosition = targetPosition;
-            this.targetVelocity = targetVelocity;
-            this.targetOrientation = targetOrientation;
-
-            // TODO: Thinking, if necessary
-        }
-
-        /// <summary>
         /// Sets the position to target
         /// </summary>
         /// <param name="targetPosition">Desired position</param>
