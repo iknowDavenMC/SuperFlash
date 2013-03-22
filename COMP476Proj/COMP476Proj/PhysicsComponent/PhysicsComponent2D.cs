@@ -43,7 +43,11 @@ namespace COMP476Proj
         #region Orientation Variables
 
         /// <summary>
-        /// Orientation in radians. 0 points to the bottom of the screen
+        /// Orientation in radians.
+        /// 0 points to the right of the screen
+        /// Pi points to the left of the screen
+        /// Pi/2 points to the bottom of the screen
+        /// -Pi/2 points to the top of the screen
         /// </summary>
         protected float orientation;
 
@@ -415,19 +419,6 @@ namespace COMP476Proj
             {
                 updateOrientationKinematic(time);
             }
-        }
-
-        /// <summary>
-        /// TODO
-        /// General collsion
-        /// </summary>
-        /// <param name="other">Physics Component of the object that was collided with</param>
-        public void Collision(PhysicsComponent2D other)
-        {
-            // Switch velocities
-            Vector2 temp = velocity;
-            velocity = other.velocity;
-            other.velocity = velocity;
         }
 
         /// <summary>
