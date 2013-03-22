@@ -332,6 +332,38 @@ namespace COMP476Proj
         #region Public Methods
 
         /// <summary>
+        /// Sets the character to move right
+        /// </summary>
+        public void MoveRight()
+        {
+            movementDirection = new Vector2(1, 0);
+        }
+
+        /// <summary>
+        /// Sets the character to move left
+        /// </summary>
+        public void MoveLeft()
+        {
+            movementDirection = new Vector2(-1, 0);
+        }
+
+        /// <summary>
+        /// Sets the character to move up
+        /// </summary>
+        public void MoveUp()
+        {
+            movementDirection = new Vector2(0, -1);
+        }
+
+        /// <summary>
+        /// Sets the character to move down
+        /// </summary>
+        public void MoveDown()
+        {
+            movementDirection = new Vector2(0, 1);
+        }
+
+        /// <summary>
         /// Sets the target values (used with AI characters to move based on thinking)
         /// If null, the parameter is not important
         /// </summary>
