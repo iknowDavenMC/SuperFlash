@@ -87,9 +87,16 @@ namespace COMP476Proj
                 if (timeElapsed > timePerFrame)
                 {
                     currentFrame++;
-                    animComplete = currentFrame > animation.NumOfColumns;
-                    currentFrame = currentFrame % animation.NumOfColumns;
-                    timeElapsed -= timePerFrame;
+                    if (currentFrame >= animation.NumOfColumns)
+                    {
+                        animComplete = true;
+                        currentFrame = 0;
+                    }
+                    else
+                    {
+                        animComplete = false;
+                    }
+                    timeElapsed = 0;
                 }
             }
         }

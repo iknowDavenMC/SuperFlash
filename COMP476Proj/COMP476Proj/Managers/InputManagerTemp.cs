@@ -42,11 +42,13 @@ namespace COMP476Proj
 
             if (keyState.IsKeyDown(Keys.F) && prevKeyState.IsKeyUp(Keys.F))
             {
+                world.streaker.draw.Reset();
                 world.streaker.charState = StreakerState.FALL;
             }
 
             if (keyState.IsKeyDown(Keys.G) && prevKeyState.IsKeyUp(Keys.G))
             {
+                world.streaker.draw.Reset();
                 world.streaker.charState = StreakerState.GET_UP;
             }
 
