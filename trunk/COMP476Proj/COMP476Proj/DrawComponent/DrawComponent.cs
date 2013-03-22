@@ -103,7 +103,8 @@ namespace COMP476Proj
             if (visible && pc != null)
             {
                 Rectangle sourceRect = new Rectangle(animation.FrameWidth * currentFrame, animation.YPos, animation.FrameWidth, animation.FrameHeight);
-                spriteBatch.Draw(animation.Texture, pc.position, sourceRect, color, 0, Origin, scale, spriteEffects, depth);
+                Vector2 drawPos = new Vector2(pc.position.X - Camera.X, pc.position.Y - Camera.Y);
+                spriteBatch.Draw(animation.Texture, drawPos, sourceRect, color, 0, Origin, scale, spriteEffects, depth);
             }
         }
 

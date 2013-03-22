@@ -16,6 +16,8 @@ namespace COMP476Proj
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        public const int SCREEN_WIDTH = 800;
+        public const int SCREEN_HEIGHT = 600;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -47,18 +49,21 @@ namespace COMP476Proj
         /// </summary>
         protected override void LoadContent()
         {
+            graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
+            graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
+            graphics.ApplyChanges();
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Populate Sprite Database
             Texture2D streaker = Content.Load<Texture2D>("streaker");
-            Texture2D happyFace = Content.Load<Texture2D>("smiley_face");
+            Texture2D level1 = Content.Load<Texture2D>("level1");
             SpriteDatabase.AddAnimation(new Animation("streaker_static", streaker, 2, 143, 184, 0));
             SpriteDatabase.AddAnimation(new Animation("streaker_walk", streaker, 5, 143, 184, 184));
             SpriteDatabase.AddAnimation(new Animation("streaker_fall", streaker, 7, 143, 184, 368));
             SpriteDatabase.AddAnimation(new Animation("streaker_getup", streaker, 7, 143, 184, 552));
             SpriteDatabase.AddAnimation(new Animation("streaker_dance", streaker, 5, 143, 184, 736));
-            SpriteDatabase.AddAnimation(new Animation("happyface",happyFace));
+            SpriteDatabase.AddAnimation(new Animation("level1",level1));
 
             //Create World
             world = new World();
@@ -87,7 +92,7 @@ namespace COMP476Proj
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
             //Debugger.getInstance().Clear();
             world.Update(gameTime);

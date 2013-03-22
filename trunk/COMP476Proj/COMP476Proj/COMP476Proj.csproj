@@ -13,7 +13,7 @@
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
-    <XnaProfile>Reach</XnaProfile>
+    <XnaProfile>HiDef</XnaProfile>
     <XnaCrossPlatformGroupID>e9a6c0f5-d645-42e0-bf5a-8cf8efdd3122</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
     <ApplicationIcon>Game.ico</ApplicationIcon>
@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Debugger\Debugger.cs" />
     <Compile Include="DrawComponent\Animation.cs" />
+    <Compile Include="DrawComponent\Camera.cs" />
     <Compile Include="DrawComponent\DrawComponent.cs" />
     <Compile Include="DrawComponent\SpriteDatabase.cs" />
     <Compile Include="DrawComponent\StreakerSprite.cs" />
