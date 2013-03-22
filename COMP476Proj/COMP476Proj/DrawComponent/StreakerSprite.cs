@@ -12,8 +12,8 @@ namespace COMP476Proj
     public class StreakerSprite : DrawComponent
     {
         #region Init
-        public StreakerSprite(Entity e)
-            : base(e, SpriteDatabase.GetAnimation("streaker_static"), 150)
+        public StreakerSprite()
+            : base(SpriteDatabase.GetAnimation("streaker_static"), 150)
         {
             scale = new Vector2(.5f,.5f);
             Pause();
@@ -21,23 +21,17 @@ namespace COMP476Proj
         #endregion
 
         #region Update & Draw
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime, Entity e)
         {
-            PhysicsComponent pc = entity.GetPhysicsComponent();
-            if (pc == null)
+            Streaker streaker = (Streaker)e;
+            switch (streaker.charState)
             {
-                Pause();
-            }
-            CharacterState cState = entity.GetIntelligenceComponent().charState;
-
-            switch (cState)
-            {
-                case CharacterState.STATIC:
+                case StreakerState.STATIC:
                     animation = SpriteDatabase.GetAnimation("streaker_static");
                     Play();
                     break;
-                case CharacterState.WALK:
-                    if (entity.GetIntelligenceComponent().flipped)
+                case StreakerState.WALK:
+                    if (streaker.flip)
                     {
                         spriteEffects = SpriteEffects.FlipHorizontally;
                     }
@@ -48,15 +42,15 @@ namespace COMP476Proj
                     animation = SpriteDatabase.GetAnimation("streaker_walk");
                     Play();
                     break;
-                case CharacterState.FALL:
+                case StreakerState.FALL:
                     animation = SpriteDatabase.GetAnimation("streaker_fall");
                     Play();
                     break;
-                case CharacterState.GET_UP:
+                case StreakerState.GET_UP:
                     animation = SpriteDatabase.GetAnimation("streaker_getup");
                     Play();
                     break;
-                case CharacterState.DANCE:
+                case StreakerState.DANCE:
                     animation = SpriteDatabase.GetAnimation("streaker_dance");
                     Play();
                     break;
@@ -64,12 +58,12 @@ namespace COMP476Proj
                     Pause();
                     break;
             }
-            base.Update(gameTime);
+            base.Update(gameTime, streaker);
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 pos)
         {
-            base.Draw(gameTime, spriteBatch);
+            base.Draw(gameTime, spriteBatch, pos);
         }
         #endregion
     }

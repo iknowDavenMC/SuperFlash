@@ -13,7 +13,6 @@ namespace COMP476Proj
         #region Fields
 
         public Animation animation;
-        public Entity entity;
 
         //Draw Logic
         protected bool visible = true;
@@ -28,6 +27,7 @@ namespace COMP476Proj
         protected int currentFrame = 0;
         protected float timePerFrame = -1;
         protected float timeElapsed = 0;
+        public bool animComplete = true;
 
         #endregion
 
@@ -44,21 +44,18 @@ namespace COMP476Proj
         /*-------------------------------------------------------------------------*/
         #region Init
 
-        public DrawComponent(Entity e, Animation defaultAnimation) {
-            entity = e;
+        public DrawComponent(Animation defaultAnimation) {
             animation = defaultAnimation;
         }
 
-        public DrawComponent(Entity e, Animation defaultAnimation, int timePerFrame)
+        public DrawComponent(Animation defaultAnimation, int timePerFrame)
         {
-            entity = e;
             animation = defaultAnimation;
             this.timePerFrame = timePerFrame;
         }
 
-        public DrawComponent(Entity e, Animation defaultAnimation, Color col, Vector2 orig, Vector2 scale, float depth)
+        public DrawComponent(Animation defaultAnimation, Color col, Vector2 orig, Vector2 scale, float depth)
        {
-           entity = e;
            animation = defaultAnimation;
            color = col;
            Origin = orig;
@@ -66,10 +63,9 @@ namespace COMP476Proj
            this.depth = depth;
        }
 
-        public DrawComponent(Entity e, Animation defaultAnimation, Color col, Vector2 orig, Vector2 scale, float depth, 
+        public DrawComponent(Animation defaultAnimation, Color col, Vector2 orig, Vector2 scale, float depth, 
             int timePerFrame)
        {
-           entity = e;
            animation = defaultAnimation;
            color = col;
            Origin = orig;
@@ -82,7 +78,7 @@ namespace COMP476Proj
        /*-------------------------------------------------------------------------*/
         #region Update and Draw
 
-        public virtual void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime, Entity e)
         {
             if (!paused && timePerFrame > 0)
             {
@@ -91,19 +87,19 @@ namespace COMP476Proj
                 if (timeElapsed > timePerFrame)
                 {
                     currentFrame++;
+                    animComplete = currentFrame > animation.NumOfColumns;
                     currentFrame = currentFrame % animation.NumOfColumns;
                     timeElapsed -= timePerFrame;
                 }
             }
         }
 
-        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 pos)
         {
-            PhysicsComponent pc = entity.GetPhysicsComponent();
-            if (visible && pc != null)
+            if (visible)
             {
                 Rectangle sourceRect = new Rectangle(animation.FrameWidth * currentFrame, animation.YPos, animation.FrameWidth, animation.FrameHeight);
-                Vector2 drawPos = new Vector2(pc.position.X - Camera.X, pc.position.Y - Camera.Y);
+                Vector2 drawPos = new Vector2(pos.X - Camera.X, pos.Y - Camera.Y);
                 spriteBatch.Draw(animation.Texture, drawPos, sourceRect, color, 0, Origin, scale, spriteEffects, depth);
             }
         }

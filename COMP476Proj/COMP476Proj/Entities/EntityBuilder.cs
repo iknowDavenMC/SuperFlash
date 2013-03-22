@@ -25,8 +25,7 @@ namespace COMP476Proj
         {
             Streaker s = new Streaker();
             s.physics = new PhysicsComponent();
-            s.intelligence = new IntelligenceComponent();
-            s.draw = new StreakerSprite(s);
+            s.draw = new StreakerSprite();
             return s;
         }
 

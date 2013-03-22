@@ -42,22 +42,22 @@ namespace COMP476Proj
 
             if (keyState.IsKeyDown(Keys.F) && prevKeyState.IsKeyUp(Keys.F))
             {
-                world.streaker.GetIntelligenceComponent().charState = CharacterState.FALL;
+                world.streaker.charState = StreakerState.FALL;
             }
 
             if (keyState.IsKeyDown(Keys.G) && prevKeyState.IsKeyUp(Keys.G))
             {
-                world.streaker.GetIntelligenceComponent().charState = CharacterState.GET_UP;
+                world.streaker.charState = StreakerState.GET_UP;
             }
 
             if (keyState.IsKeyDown(Keys.D) && prevKeyState.IsKeyUp(Keys.D))
             {
-                world.streaker.GetIntelligenceComponent().charState = CharacterState.DANCE;
+                world.streaker.charState = StreakerState.DANCE;
             }
 
             if (keyState.IsKeyDown(Keys.S) && prevKeyState.IsKeyUp(Keys.S))
             {
-                world.streaker.GetIntelligenceComponent().charState = CharacterState.STATIC;
+                world.streaker.charState = StreakerState.STATIC;
             }
 
             prevKeyState = keyState;
