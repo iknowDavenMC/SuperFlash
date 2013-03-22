@@ -25,7 +25,7 @@ namespace COMP476Proj
         {
             Streaker s = new Streaker();
             s.physics = new PhysicsComponent();
-            s.draw = new StreakerSprite();
+            s.draw = new DrawComponent(SpriteDatabase.GetAnimation("streaker_static"), Color.White, Vector2.Zero, new Vector2(.5f, .5f), .5f, 150);
             return s;
         }
 

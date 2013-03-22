@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace COMP476Proj
 {
-    public abstract class DrawComponent
+    public class DrawComponent
     {
         /*-------------------------------------------------------------------------*/
         #region Fields
@@ -38,6 +38,10 @@ namespace COMP476Proj
         {
             get { return paused; }
         }
+        public SpriteEffects SpriteEffect
+        {
+            set { spriteEffects = value; }
+        }
 
         #endregion
 
@@ -46,12 +50,14 @@ namespace COMP476Proj
 
         public DrawComponent(Animation defaultAnimation) {
             animation = defaultAnimation;
+            Pause();
         }
 
         public DrawComponent(Animation defaultAnimation, int timePerFrame)
         {
             animation = defaultAnimation;
             this.timePerFrame = timePerFrame;
+            Pause();
         }
 
         public DrawComponent(Animation defaultAnimation, Color col, Vector2 orig, Vector2 scale, float depth)
@@ -61,6 +67,7 @@ namespace COMP476Proj
            Origin = orig;
            this.scale = scale;
            this.depth = depth;
+           Pause();
        }
 
         public DrawComponent(Animation defaultAnimation, Color col, Vector2 orig, Vector2 scale, float depth, 
@@ -72,6 +79,7 @@ namespace COMP476Proj
            this.scale = scale;
            this.depth = depth;
            this.timePerFrame = timePerFrame;
+           Pause();
        }
         #endregion
 
@@ -87,17 +95,20 @@ namespace COMP476Proj
                 if (timeElapsed > timePerFrame)
                 {
                     currentFrame++;
-                    if (currentFrame >= animation.NumOfColumns)
-                    {
-                        animComplete = true;
-                        currentFrame = 0;
-                    }
-                    else
-                    {
-                        animComplete = false;
-                    }
+                    
                     timeElapsed = 0;
                 }
+                if (currentFrame >= animation.NumOfColumns)
+                {
+                    animComplete = true;
+                    //currentFrame = 0;
+                    Reset();
+                }
+                else
+                {
+                    animComplete = false;
+                }
+                
             }
         }
 

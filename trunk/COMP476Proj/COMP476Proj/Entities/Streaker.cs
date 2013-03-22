@@ -29,6 +29,8 @@ namespace COMP476Proj
             physics.Update(gameTime);
             draw.Update(gameTime, this);
             UpdateStates(draw.animComplete);
+            
+            
             //Debugger.getInstance().pointsToDraw.Add(physics.position);
             base.Update(gameTime);
         }
@@ -38,24 +40,52 @@ namespace COMP476Proj
             switch (charState)
             {
                 case StreakerState.STATIC:
+                    draw.animation = SpriteDatabase.GetAnimation("streaker_static");
+                    draw.Play();
                     break;
                 case StreakerState.WALK:
+                    if (flip)
+                    {
+                        draw.SpriteEffect = SpriteEffects.FlipHorizontally;
+                    }
+                    else
+                    {
+                        draw.SpriteEffect = SpriteEffects.None;
+                    }
+                    draw.animation = SpriteDatabase.GetAnimation("streaker_walk");
+                    draw.Play();
                     break;
                 case StreakerState.FALL:
+               
                     if (animComplete)
                     {
+                        draw.animation = SpriteDatabase.GetAnimation("streaker_getup");
                         charState = StreakerState.GET_UP;
-                        //draw.Reset();
+                        draw.Reset();
+                    }
+                    else
+                    {
+                        draw.animation = SpriteDatabase.GetAnimation("streaker_fall");
+                        draw.Play();
                     }
                     break;
                 case StreakerState.GET_UP:
+                    
                     if (animComplete)
                     {
+                        draw.animation = SpriteDatabase.GetAnimation("streaker_static");
                         charState = StreakerState.STATIC;
-                        //draw.Reset();
+                        draw.Reset();
+                    }
+                    else
+                    {
+                        draw.animation = SpriteDatabase.GetAnimation("streaker_getup");
+                        draw.Play();
                     }
                     break;
                 case StreakerState.DANCE:
+                    draw.animation = SpriteDatabase.GetAnimation("streaker_dance");
+                    draw.Play();
                     break;
             }
         }
