@@ -17,6 +17,8 @@ namespace COMP476Proj
         protected int frameWidth;
         protected int frameHeight;
         protected int yPos = 0;
+        protected int timePerFrame = -1;
+
         #endregion
 
         /*-------------------------------------------------------------------------*/
@@ -53,6 +55,11 @@ namespace COMP476Proj
             get { return numOfColumns; }
         }
 
+        public int TimePerFrame
+        {
+            get { return timePerFrame; }
+        }
+
         #endregion
 
         /*-------------------------------------------------------------------------*/
@@ -67,8 +74,9 @@ namespace COMP476Proj
             frameHeight = texture.Height;
         }
 
-        public Animation(string animationID, Texture2D texture, int numOfCol, int frameWid, int frameHt, int y)
+        public Animation(string animationID, Texture2D texture, int numOfCol, int frameWid, int frameHt, int y, int timePerFrame)
         {
+            this.timePerFrame = timePerFrame;
             this.animationId = animationID;
             this.texture = texture;
             numOfColumns = numOfCol;
