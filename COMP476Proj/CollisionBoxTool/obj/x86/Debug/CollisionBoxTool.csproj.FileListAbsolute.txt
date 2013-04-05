@@ -1,0 +1,37 @@
+d:\Alex\Documents\Visual Studio 2010\Projects\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\bin\x86\Debug\Content\scene.xnb
+d:\Alex\Documents\Visual Studio 2010\Projects\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\bin\x86\Debug\CollisionBoxTool.exe
+d:\Alex\Documents\Visual Studio 2010\Projects\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\bin\x86\Debug\CollisionBoxTool.pdb
+d:\Alex\Documents\Visual Studio 2010\Projects\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\obj\x86\Debug\CollisionBoxTool.csprojResolveAssemblyReference.cache
+d:\Alex\Documents\Visual Studio 2010\Projects\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+d:\Alex\Documents\Visual Studio 2010\Projects\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\obj\x86\Debug\CollisionBoxTool.exe
+d:\Alex\Documents\Visual Studio 2010\Projects\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\obj\x86\Debug\CollisionBoxTool.pdb
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\bin\x86\Debug\Content\scene.xnb
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\bin\x86\Debug\CollisionBoxTool.exe
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\bin\x86\Debug\CollisionBoxTool.pdb
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\obj\x86\Debug\CollisionBoxTool.csprojResolveAssemblyReference.cache
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\obj\x86\Debug\CollisionBoxTool.exe
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\obj\x86\Debug\CollisionBoxTool.pdb
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\bin\x86\Debug\Content\Font.xnb
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\bin\x86\Debug\Content\scene.xnb
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\bin\x86\Debug\Content\Font.xnb
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\bin\x86\Debug\CollisionBoxTool.exe
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\bin\x86\Debug\CollisionBoxTool.pdb
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\obj\x86\Debug\CollisionBoxTool.csprojResolveAssemblyReference.cache
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\obj\x86\Debug\CollisionBoxTool.exe
+C:\Users\al_atta\Desktop\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\CollisionBoxTool\obj\x86\Debug\CollisionBoxTool.pdb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\CollisionBoxTool\obj\x86\Debug\CollisionBoxTool.csprojResolveAssemblyReference.cache
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\CollisionBoxTool\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\CollisionBoxTool\obj\x86\Debug\CollisionBoxTool.exe
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\CollisionBoxTool\obj\x86\Debug\CollisionBoxTool.pdb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\CollisionBoxTool\bin\x86\Debug\Content\streaker.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\CollisionBoxTool\bin\x86\Debug\Content\level1.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\CollisionBoxTool\bin\x86\Debug\Content\Hud\notorietyBar.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\CollisionBoxTool\bin\x86\Debug\Content\Hud\banner.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\CollisionBoxTool\bin\x86\Debug\Content\Hud\notorietyMeter.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\CollisionBoxTool\bin\x86\Debug\Content\Fonts\Game Over.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\CollisionBoxTool\bin\x86\Debug\CollisionBoxTool.exe
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\CollisionBoxTool\bin\x86\Debug\CollisionBoxTool.pdb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\CollisionBoxTool\bin\x86\Debug\StreakerLibrary.dll
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\CollisionBoxTool\bin\x86\Debug\StreakerLibrary.pdb
