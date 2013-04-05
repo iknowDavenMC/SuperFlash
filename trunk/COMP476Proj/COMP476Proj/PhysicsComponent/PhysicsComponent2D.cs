@@ -78,7 +78,7 @@ namespace COMP476Proj
         /// <summary>
         /// Max Velocity
         /// </summary>
-        protected float maxVelocity = 125; // Average running speed
+        protected float maxVelocity = 150; // Average running speed
 
         /// <summary>
         /// Max Acceleration
@@ -224,7 +224,7 @@ namespace COMP476Proj
             if (isStopping)
             {
                 // Acceleration opposes last movement
-                acceleration = velocity * -5;
+                acceleration = velocity * -8;
 
                 // Capped by max acceleration
                 if (acceleration.Length() > maxAcceleration)
