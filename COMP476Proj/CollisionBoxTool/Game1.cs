@@ -111,7 +111,7 @@ namespace CollisionBoxTool
                     circleData[i] = Color.Transparent;
             }
             circle.SetData(circleData);
-            scene = Content.Load<Texture2D>("level1");
+            scene = Content.Load<Texture2D>("level_1");
 
             maxW = scene.Width;
             maxH = scene.Height;
