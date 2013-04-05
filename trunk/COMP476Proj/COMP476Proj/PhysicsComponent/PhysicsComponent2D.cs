@@ -78,12 +78,17 @@ namespace COMP476Proj
         /// <summary>
         /// Max Velocity
         /// </summary>
-        protected float maxVelocity = 150; // Average running speed
+        protected float maxVelocity = 150; // Good for streaker
 
         /// <summary>
         /// Max Acceleration
         /// </summary>
-        protected float maxAcceleration = 750f; // Assuming it takes 2.5 seconds to reach max speed
+        protected float maxAcceleration = 750f; // Good for streaker
+
+        /// <summary>
+        /// Controls how quickly people come to a stop
+        /// </summary>
+        protected float friction = 8;
 
         #endregion
 
@@ -194,14 +199,20 @@ namespace COMP476Proj
         /// <param name="position">Position of the object</param>
         /// <param name="orientation">Orientation of the object</param>
         /// <param name="dimensions">Dimensions of the object's bounding rectangle</param>
+        /// <param name="maxVelocity">Max player velocity</param>
+        /// <param name="maxAcceleration">Max player acceleration</param>
+        /// <param name="friction">Sliding factor on stop</param>
         /// <param name="isSteering">Is steering being employed, or is kinematic movement being used</param>
-        public PhysicsComponent2D(Vector2 position, float orientation, Vector2 dimensions,
-            bool isSteering = false)
+        public PhysicsComponent2D(Vector2 position, float orientation, Vector2 dimensions, float maxVelocity,
+            float maxAcceleration, float friction, bool isSteering = false)
         {
             // Specified
             this.position = position;
             this.orientation = orientationDirection = orientation;
             this.isSteering = isSteering;
+            this.maxAcceleration = maxAcceleration;
+            this.maxVelocity = maxVelocity;
+            this.friction = friction;
             boundingBox = new BoundingRectangle(position, (int)dimensions.X, (int)dimensions.Y);
 
             // Unspecified
@@ -224,7 +235,7 @@ namespace COMP476Proj
             if (isStopping)
             {
                 // Acceleration opposes last movement
-                acceleration = velocity * -8;
+                acceleration = velocity * -friction;
 
                 // Capped by max acceleration
                 if (acceleration.Length() > maxAcceleration)
