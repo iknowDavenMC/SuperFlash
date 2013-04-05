@@ -14,7 +14,6 @@ namespace COMP476Proj
         private Vector2 center;
         private Vector2 dimensionsFromCenter;
         private Rectanglef boundingRectangle;
-        private BasicEffect effect;
 
         public Rectanglef Bounds { get { return boundingRectangle; } }
 
@@ -54,18 +53,18 @@ namespace COMP476Proj
         }
 
         /// <summary>
-        /// Bounding rectangle style constructor
+        /// Bounding sphere style constructor 2
         /// </summary>
         /// <param name="center">Center of the box</param>
-        /// <param name="x">Total width</param>
-        /// <param name="y">Total height</param>
+        /// <param name="x">X radius from center</param>
+        /// <param name="y">Y radius from center</param>
         public BoundingRectangle(Vector2 center, float x, float y)
         {
-            dimensionsFromCenter = new Vector2(x / 2, y / 2);
+            dimensionsFromCenter = new Vector2(x, y);
 
             this.center = center;
 
-            boundingRectangle = new Rectanglef(center.X - x / 2, center.Y - y / 2, x, y);
+            boundingRectangle = new Rectanglef(center.X - x, center.Y - y, 2 * x, 2 * y);
         }
 
         #endregion
@@ -110,7 +109,7 @@ namespace COMP476Proj
         /// <param name="spriteBatch">Sprite batch</param>
         public void Draw(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
         {
-            Texture2D textureToDraw = new Texture2D(graphicsDevice, (int)dimensionsFromCenter.X, (int)dimensionsFromCenter.Y);
+            Texture2D textureToDraw = new Texture2D(graphicsDevice, (int)dimensionsFromCenter.X * 2, (int)dimensionsFromCenter.Y * 2);
 
             Color[] data = new Color[textureToDraw.Width * textureToDraw.Height];
 
@@ -121,9 +120,9 @@ namespace COMP476Proj
 
             textureToDraw.SetData(data);
 
-            Rectangle drawRect = new Rectangle((int)boundingRectangle.X, (int)boundingRectangle.Y, (int)boundingRectangle.Width, (int)boundingRectangle.Height);
+            Vector2 drawPos = new Vector2(center.X - dimensionsFromCenter.X  - Camera.X, center.Y - dimensionsFromCenter.Y - Camera.Y);
 
-            spriteBatch.Draw(textureToDraw, drawRect, Color.White);
+            spriteBatch.Draw(textureToDraw, drawPos, Color.White);
         }
 
         #endregion
