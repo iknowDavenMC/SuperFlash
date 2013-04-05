@@ -16,6 +16,8 @@ namespace COMP476Proj
         private Rectanglef boundingRectangle;
         private BasicEffect effect;
 
+        public Rectanglef Bounds { get { return boundingRectangle; } }
+
         #endregion
 
         #region Constructors

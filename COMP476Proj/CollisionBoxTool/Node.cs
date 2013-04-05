@@ -23,6 +23,14 @@ namespace CollisionBoxTool
             position = new Vector2(x, y);
         }
 
+        public Node(float x, float y, int id)
+        {
+            if (count < id)
+                count = id;
+            ID = id;
+            position = new Vector2(x, y);
+        }
+
         public bool pointInside(int x, int y)
         {
             float dx = x - position.X;

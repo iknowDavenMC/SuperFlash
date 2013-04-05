@@ -1,0 +1,36 @@
+RECTANGLES
+1 1 38 507
+42 469 443 41
+447 2 36 262
+446 342 40 128
+41 0 402 43
+NODES
+1 96 90
+2 413 80
+3 407 416
+4 81 428
+5 248 253
+6 427 300
+7 513 299
+EDGES
+7 6
+6 3
+3 4
+4 1
+1 5
+5 2
+2 6
+5 6
+3 5
+5 4
+1 2
+NPCS
+382 127 Civilian Wander
+112 134 Civilian Wander
+101 319 Civilian Wander
+333 348 DumbCop Wander
+254 109 DumbCop Static
+199 394 DumbCop Wander
+354 274 SmartCop Static
+114 259 SmartCop Static
+368 207 SmartCop Wander

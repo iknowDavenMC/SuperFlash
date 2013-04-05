@@ -9,10 +9,11 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Storage;
 
 namespace CollisionBoxTool
 {
-    public enum DrawModes { Box, Node, Edge }
+    public enum DrawModes { Box, Node, NPC }
     /// <summary>
     /// This is the main type for your game
     /// </summary>
@@ -36,6 +37,7 @@ namespace CollisionBoxTool
         List<Rectangle> boxes;
         List<Node> nodes;
         List<Edge> edges;
+        List<NPC> NPCs;
 
         Color boxColor;
         Color nodeColor;
@@ -45,12 +47,16 @@ namespace CollisionBoxTool
         Node selected;
         Node mouseNode;
         Edge mouseEdge;
+        NPC mouseNPC;
+        NPC.Type npcType = NPC.Type.Civilian;
+        NPC.Mode npcMode = NPC.Mode.Static;
 
         DrawModes mode = DrawModes.Box;
 
         public int circler = 16;
-        bool zpressed = false;
         bool mpressed = false;
+        bool wpressed = false;
+        bool lpressed = false;
 
         bool drawing = false;
         bool saving = false;
@@ -113,10 +119,12 @@ namespace CollisionBoxTool
             selected = null;
             mouseNode = new Node(0, 0);
             mouseEdge = new Edge(null, null);
+            mouseNPC = new NPC(0, 0, npcType, npcMode);
 
             boxes = new List<Rectangle>();
             nodes = new List<Node>();
             edges = new List<Edge>();
+            NPCs = new List<NPC>();
 
             boxColor = new Color(0.35f, 0.5f, 0.85f, 0.5f);
             nodeColor = new Color(0f, 0.2f, 1f, 0.75f);
@@ -149,6 +157,7 @@ namespace CollisionBoxTool
                 this.Exit();
 
             int dx = 0, dy = 0;
+
             if (ks.IsKeyDown(Keys.Left))
             {
                 dx = -camSpeed;
@@ -165,35 +174,64 @@ namespace CollisionBoxTool
             {
                 dy = camSpeed;
             }
-            if (ks.IsKeyDown(Keys.Z) && !zpressed)
+
+            if (ks.IsKeyDown(Keys.D1) && mode == DrawModes.NPC)
             {
-                if (boxes.Count > 0)
-                    boxes.RemoveAt(boxes.Count - 1);
-                zpressed = true;
+                npcType = NPC.Type.Civilian;
+                mouseNPC.type = NPC.Type.Civilian;
             }
+            if (ks.IsKeyDown(Keys.D2) && mode == DrawModes.NPC)
+            {
+                npcType = NPC.Type.DumbCop;
+                mouseNPC.type = NPC.Type.DumbCop;
+            }
+            if (ks.IsKeyDown(Keys.D3) && mode == DrawModes.NPC)
+            {
+                npcType = NPC.Type.SmartCop;
+                mouseNPC.type = NPC.Type.SmartCop;
+            }
+
+            if (ks.IsKeyDown(Keys.L) && !lpressed)
+            {
+                load("level.txt");
+                lpressed = true;
+            }
+
             if (ks.IsKeyDown(Keys.M) && !mpressed)
             {
                 if (mode == DrawModes.Box)
                     mode = DrawModes.Node;
-                else
+                else if (mode == DrawModes.Node)
+                    mode = DrawModes.NPC;
+                else if (mode == DrawModes.NPC)
                     mode = DrawModes.Box;
                 mpressed = true;
             }
-            if (ks.IsKeyDown(Keys.C))
-            {
-                boxes.Clear();
-            }
+
             if (ks.IsKeyDown(Keys.S) && !saving)
             {
                 save();
                 saving = true;
             }
-            if (ks.IsKeyUp(Keys.S))
-                saving = false;
-            if (ks.IsKeyUp(Keys.Z))
-                zpressed = false;
+
+            if (ks.IsKeyDown(Keys.W) && !wpressed)
+            {
+                if (npcMode == NPC.Mode.Static)
+                    npcMode = NPC.Mode.Wander;
+                else if (npcMode == NPC.Mode.Wander)
+                    npcMode = NPC.Mode.Static;
+                mouseNPC.mode = npcMode;
+                wpressed = true;
+            }
+
+            if (ks.IsKeyUp(Keys.L))
+                lpressed = false;
             if (ks.IsKeyUp(Keys.M))
                 mpressed = false;
+            if (ks.IsKeyUp(Keys.S))
+                saving = false;
+            if (ks.IsKeyUp(Keys.W))
+                wpressed = false;
 
             if (ms.LeftButton == ButtonState.Pressed)
             {
@@ -212,7 +250,7 @@ namespace CollisionBoxTool
                     mouseRect.Width = (int)Math.Abs(startPos.X - endPos.X);
                     mouseRect.Height = (int)Math.Abs(startPos.Y - endPos.Y);
                 }
-                else
+                else if (mode == DrawModes.Node)
                 {
                     mouseNode.position = new Vector2(ms.X + Camera.X, ms.Y + Camera.Y);
                     if (!drawing)
@@ -234,6 +272,21 @@ namespace CollisionBoxTool
                     }
 
                 }
+                else if (mode == DrawModes.NPC)
+                {
+                    mouseNPC.position = new Vector2(ms.X + Camera.X, ms.Y + Camera.Y);
+                    if (!drawing)
+                    {
+                        foreach (NPC npc in NPCs)
+                        {
+                            if (npc.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
+                            {
+                                break;
+                            }
+                        }
+                        drawing = true;
+                    }
+                }
             }
             if (ms.LeftButton == ButtonState.Released && drawing)
             {
@@ -242,7 +295,7 @@ namespace CollisionBoxTool
                     drawing = false;
                     boxes.Add(new Rectangle(mouseRect.X, mouseRect.Y, mouseRect.Width, mouseRect.Height));
                 }
-                else
+                else if (mode == DrawModes.Node)
                 {
                     drawing = false;
                     if (selected != null)
@@ -259,11 +312,17 @@ namespace CollisionBoxTool
                             }
                         }
                     }
-                    else 
+                    else
                     {
                         nodes.Add(mouseNode);
                         mouseNode = new Node(ms.X + Camera.X, ms.Y + Camera.Y);
                     }
+                }
+                else if (mode == DrawModes.NPC)
+                {
+                    drawing = false;
+                    NPCs.Add(mouseNPC);
+                    mouseNPC = new NPC(ms.X + Camera.X, ms.Y + Camera.Y, npcType, npcMode);
 
                 }
             }
@@ -282,7 +341,7 @@ namespace CollisionBoxTool
                         }
                     }
                 }
-                else
+                else if (mode == DrawModes.Node)
                 {
                     for (int i = 0; i != nodes.Count; i++)
                     {
@@ -299,6 +358,18 @@ namespace CollisionBoxTool
                                     j--;
                                 }
                             }
+                            i--;
+                        }
+                    }
+                }
+                else if (mode == DrawModes.NPC)
+                {
+                    for (int i = 0; i != NPCs.Count; i++)
+                    {
+                        NPC n = NPCs[i];
+                        if (n.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
+                        {
+                            NPCs.Remove(n);
                             i--;
                         }
                     }
@@ -346,6 +417,19 @@ namespace CollisionBoxTool
             {
                 edge.draw(spriteBatch, blank, edgeColor, Camera);
             }
+            foreach (NPC npc in NPCs)
+            {
+                npc.draw(spriteBatch, circle, Camera);
+                switch (npc.mode)
+                {
+                    case NPC.Mode.Static:
+                        drawBordered(spriteBatch, npc.X, npc.Y, "S", Color.Black, Color.White);
+                        break;
+                    case NPC.Mode.Wander:
+                        drawBordered(spriteBatch, npc.X, npc.Y, "W", Color.Black, Color.White);
+                        break;
+                }
+            }
             if (drawing)
             {
                 if (mode == DrawModes.Box)
@@ -353,26 +437,46 @@ namespace CollisionBoxTool
                     Rectangle mouseDraw = new Rectangle(mouseRect.X - Camera.X, mouseRect.Y - Camera.Y, mouseRect.Width, mouseRect.Height);
                     spriteBatch.Draw(blank, mouseDraw, boxColor);
                 }
-                else
+                else if (mode == DrawModes.Node)
                 {
                     mouseEdge.draw(spriteBatch, blank, Color.Blue, Camera);
                 }
+                else if (mode == DrawModes.NPC)
+                {
+                    mouseNPC.draw(spriteBatch, circle, Camera);
+                }
             }
-            String modestr = "MODE: " + (mode == DrawModes.Box ? "BOX" : "NODE");
-            spriteBatch.DrawString(font, modestr, new Vector2(12, 12), Color.Black);
-            spriteBatch.DrawString(font, modestr, new Vector2(11, 12), Color.Black);
-            spriteBatch.DrawString(font, modestr, new Vector2(10, 12), Color.Black);
-            spriteBatch.DrawString(font, modestr, new Vector2(10, 11), Color.Black);
-            spriteBatch.DrawString(font, modestr, new Vector2(10, 10), Color.Black);
-            spriteBatch.DrawString(font, modestr, new Vector2(11, 10), Color.Black);
-            spriteBatch.DrawString(font, modestr, new Vector2(12, 10), Color.Black);
-            spriteBatch.DrawString(font, modestr, new Vector2(12, 11), Color.Black);
-            spriteBatch.DrawString(font, modestr, new Vector2(11, 11), Color.White);
+            String modestr = "MODE: " + mode.ToString();
+            drawBordered(spriteBatch, 10, 10, modestr, Color.Black, Color.White);
+            if (mode == DrawModes.NPC)
+            {
+                drawBordered(spriteBatch, 10, 28, "[1,2,3]", Color.Black, Color.White);
+                drawBordered(spriteBatch, 110, 28, "Civilian", Color.Black, (npcType == NPC.Type.Civilian ? Color.LimeGreen : Color.White));
+                drawBordered(spriteBatch, 210, 28, "Dumb Cop", Color.Black, (npcType == NPC.Type.DumbCop ? Color.Crimson : Color.White));
+                drawBordered(spriteBatch, 310, 28, "SmartCop", Color.Black, (npcType == NPC.Type.SmartCop ? Color.Orange : Color.White));
+                drawBordered(spriteBatch, 10, 46, "[W]", Color.Black, Color.White);
+                drawBordered(spriteBatch, 50, 46, npcMode.ToString(), Color.Black, Color.White);
+            }
+            drawBordered(spriteBatch, 575, 10, "[S] Save to out.txt", Color.Black, Color.White);
+            drawBordered(spriteBatch, 575, 28, "[L] Load level.txt", Color.Black, Color.White);
             spriteBatch.End();
 
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+        }
+
+        public void drawBordered(SpriteBatch spriteBatch, int x, int y, string str, Color border, Color text)
+        {
+            spriteBatch.DrawString(font, str, new Vector2(x - 1, y - 1), border);
+            spriteBatch.DrawString(font, str, new Vector2(x - 1, y), border);
+            spriteBatch.DrawString(font, str, new Vector2(x - 1, y + 1), border);
+            spriteBatch.DrawString(font, str, new Vector2(x, y + 1), border);
+            spriteBatch.DrawString(font, str, new Vector2(x + 1, y + 1), border);
+            spriteBatch.DrawString(font, str, new Vector2(x + 1, y), border);
+            spriteBatch.DrawString(font, str, new Vector2(x + 1, y - 1), border);
+            spriteBatch.DrawString(font, str, new Vector2(x, y - 1), border);
+            spriteBatch.DrawString(font, str, new Vector2(x, y), text);
         }
 
         protected void save()
@@ -398,8 +502,107 @@ namespace CollisionBoxTool
                 string line = edge.start.ID + " " + edge.end.ID;
                 writer.WriteLine(line);
             }
+            writer.WriteLine("NPCS");
+            foreach (NPC npc in NPCs)
+            {
+                string line = npc.X + " " + npc.Y + " " + npc.type.ToString() + " " + npc.mode.ToString();
+                writer.WriteLine(line);
+            }
             writer.Close();
             fs.Close();
+        }
+
+        protected void load(string filename)
+        {
+            boxes.Clear();
+            nodes.Clear();
+            edges.Clear();
+            NPCs.Clear();
+
+            StreamReader reader = new StreamReader(filename);
+            try
+            {
+                string line = reader.ReadLine();
+                if (line.StartsWith("RECTANGLES"))
+                    line = reader.ReadLine();
+                while (reader.Peek() != -1
+                    && !line.StartsWith("NODES")
+                    && !line.StartsWith("EDGES")
+                    && !line.StartsWith("NPCS")
+                    )
+                {
+                    int x, y, w, h;
+                    int spacei = line.IndexOf(' ');
+                    x = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    y = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    w = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    h = int.Parse(line);
+                    boxes.Add(new Rectangle(x, y, w, h));
+                    line = reader.ReadLine();
+                }
+                if (line.StartsWith("NODES"))
+                    line = reader.ReadLine();
+                while (reader.Peek() != -1
+                    && !line.StartsWith("EDGES")
+                    && !line.StartsWith("NPCS")
+                    )
+                {
+                    int id, x, y;
+                    int spacei = line.IndexOf(' ');
+                    id = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    x = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    y = int.Parse(line);
+                    nodes.Add(new Node(x, y, id));
+                    line = reader.ReadLine();
+                }
+                if (line.StartsWith("EDGES"))
+                    line = reader.ReadLine();
+                while (reader.Peek() != -1
+                    && !line.StartsWith("NPCS")
+                    )
+                {
+                    int sid, eid;
+                    int spacei = line.IndexOf(' ');
+                    sid = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    eid = int.Parse(line);
+                    edges.Add(new Edge(nodes.Find(n => n.ID == sid), nodes.Find(n => n.ID == eid)));
+                    line = reader.ReadLine();
+                }
+                if (line.StartsWith("NPCS"))
+                    line = reader.ReadLine();
+                while (reader.Peek() != -1)
+                {
+                    int x, y;
+                    NPC.Type type;
+                    NPC.Mode mode;
+                    int spacei = line.IndexOf(' ');
+                    x = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    y = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    type = (NPC.Type)Enum.Parse(typeof(NPC.Type), line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    mode = (NPC.Mode)Enum.Parse(typeof(NPC.Mode), line);
+                    NPCs.Add(new NPC(x, y, type, mode));
+                    line = reader.ReadLine();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+            }
         }
     }
 }
