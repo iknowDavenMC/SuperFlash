@@ -99,7 +99,6 @@ namespace COMP476Proj
             SpriteDatabase.AddAnimation(new Animation("student3_fall", student3, 7, 143, 184, 368, fall));
             SpriteDatabase.AddAnimation(new Animation("student3_getup", student3, 7, 143, 184, 552, getUp));
 
-
             SpriteDatabase.AddAnimation(new Animation("level1",level1));
 
 
