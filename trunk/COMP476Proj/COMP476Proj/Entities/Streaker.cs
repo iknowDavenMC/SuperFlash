@@ -81,11 +81,45 @@ namespace COMP476Proj
             // Get input manager instance
             InputManager input = InputManager.GetInstance();
 
+            if (input.IsDoing("Fall", PlayerIndex.One))
+            {
+                if (charState != StreakerState.FALL)
+                {
+                    draw.Reset();
+                }
+
+                charState = StreakerState.FALL;
+
+                physics.SetTargetValues(true, null, null, null);
+
+                return;
+            }
+            
+            if (input.IsDoing("Get Up", PlayerIndex.One))
+            {
+                if (charState != StreakerState.GET_UP)
+                {
+                    draw.Reset();
+                }
+
+                charState = StreakerState.GET_UP;
+
+                physics.SetTargetValues(true, null, null, null);
+
+                return;
+            }
+
             // Check input
             // Dance takes precedence
             if (input.IsDoing("Dance", PlayerIndex.One))
             {
+                if (charState != StreakerState.DANCE)
+                {
+                    draw.Reset();
+                }
+
                 charState = StreakerState.DANCE;
+
                 physics.SetTargetValues(true, null, null, null);
             }
             // Else check movement
@@ -111,7 +145,13 @@ namespace COMP476Proj
                 // If no movement, static
                 if (direction == Vector2.Zero)
                 {
+                    if (charState != StreakerState.STATIC)
+                    {
+                        draw.Reset();
+                    }
+
                     charState = StreakerState.STATIC;
+
                     physics.SetTargetValues(true, null, null, null);
                 }
                 else
