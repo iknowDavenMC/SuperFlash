@@ -132,21 +132,25 @@ namespace COMP476Proj
         /// <returns>The only instance of input manager</returns>
         public static InputManager GetInstance(ControllerType type)
         {
-            if (instance == null)
+            if (instance == null || type != instance.controllerType)
             {
                 instance = new InputManager(type);
             }
-
+            
             return instance;
         }
 
         /// <summary>
-        /// Allows the instance to be retrieved. This assumes the constructor has been called.
+        /// Allows the instance to be retrieved. If the instance is null, a new one is instantiated assuming keyboard input.
         /// </summary>
-        /// <param name="type">Type of the controller to be used</param>
-        /// <returns>The only instance of input manager (may be null if called at the wrong time)</returns>
+        /// <returns>The only instance of input manager</returns>
         public static InputManager GetInstance()
         {
+            if (instance == null)
+            {
+                instance = new InputManager(ControllerType.Keyboard);
+            }
+
             return instance;
         }
 
