@@ -41,6 +41,8 @@ namespace COMP476Proj
         {
             // TODO: Add your initialization logic here
 
+            InputManager.GetInstance(InputManager.ControllerType.Keyboard);
+
             base.Initialize();
         }
 
@@ -99,6 +101,8 @@ namespace COMP476Proj
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            InputManager.GetInstance().Update(gameTime);
+
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
