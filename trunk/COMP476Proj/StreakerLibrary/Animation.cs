@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace COMP476Proj
+namespace StreakerLibrary
 {
     public class Animation
     {
