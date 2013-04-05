@@ -241,16 +241,6 @@ namespace COMP476Proj
             base.Draw(gameTime, spriteBatch);
         }
 
-        //public override DrawComponent GetDrawComponent()
-        //{
-        //    return draw;
-        //}
-
-        //public override PhysicsComponent2D GetPhysicsComponent()
-        //{
-        //    return physics;
-        //}
-
         #endregion
     }
 }
