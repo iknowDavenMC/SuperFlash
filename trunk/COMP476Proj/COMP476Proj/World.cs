@@ -19,7 +19,7 @@ namespace COMP476Proj
         #region Init
         public World()
         {
-            streaker = new Streaker(new PhysicsComponent2D(Vector2.Zero,0,new Vector2(20,20),true),
+            streaker = new Streaker(new PhysicsComponent2D(Vector2.Zero,0,new Vector2(20,20),150, 750, 8, true),
                 new DrawComponent(SpriteDatabase.GetAnimation("streaker_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f));
         }
         #endregion
