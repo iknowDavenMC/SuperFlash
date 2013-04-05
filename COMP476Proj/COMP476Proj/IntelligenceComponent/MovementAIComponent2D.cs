@@ -94,6 +94,15 @@ namespace COMP476Proj
 
         #endregion
 
+        #region Random Number Attributes
+
+        /// <summary>
+        /// Random number
+        /// </summary>
+        static private Random random;
+
+        #endregion
+
         #endregion
 
         #region Properties
@@ -133,6 +142,11 @@ namespace COMP476Proj
 
             targetPosition = Vector2.Zero;
             targetVelocity = Vector2.Zero;
+
+            if (random == null)
+            {
+                random = new Random();
+            }
         }
 
         /// <summary>
@@ -167,11 +181,28 @@ namespace COMP476Proj
             targetVelocity = velocity;
 
             this.timeToTarget = timeToTarget;
+
+            if (random == null)
+            {
+                random = new Random();
+            }
         }
 
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Generates a roughly normally distributed random number around 0
+        /// </summary>
+        /// <returns>Approximately normally distributed number around 0</returns>
+        private double normallyDistributedRandomNumber()
+        {
+            double a = 2 * random.NextDouble() - 1;
+            double b = 2 * random.NextDouble() - 1;
+
+            return a * b;
+        }
 
         /// <summary>
         /// Kinematic arrive to the target
@@ -422,6 +453,49 @@ namespace COMP476Proj
             // Flee normally
             targetPos = physics.Position + (physics.Position - targetPos);
             physics.SetTargetValues(false, targetPos, null, null);
+        }
+
+        /// <summary>
+        /// Wander movement
+        /// </summary>
+        /// <param name="physics">The physics component of the thinking character</param>
+        public void Wander(ref PhysicsComponent2D physics)
+        {
+            Vector2 direction;
+            float angle;
+
+            if (physics.Direction.Length() == 0)
+            {
+                Random random = new Random();
+                float x, y;
+
+                do
+                {
+                    x = random.Next(-1, 2);
+                } while (x == 0);
+
+                do
+                {
+                    y = random.Next(-1, 2);
+                } while (y == 0);
+
+                direction = new Vector2(x, y);
+                direction.Normalize();
+            }
+            else
+            {
+                do
+                {
+                    angle = MathHelper.ToRadians(135 * (float)normallyDistributedRandomNumber());
+                    direction.X = (float)Math.Cos(physics.Orientation + angle);
+                    direction.Y = -(float)Math.Sin(physics.Orientation + angle);
+                    direction.Normalize();
+                }
+                while (direction.Length() == 0);
+            }
+
+            // Seek normally
+            physics.SetTargetValues(false, direction, null, null);
         }
 
         /// <summary>
