@@ -11,7 +11,7 @@ namespace COMP476Proj
 {
     public enum StreakerState { STATIC, WALK, FALL, GET_UP, DANCE };
 
-    public class Streaker : Entity
+    public class Streaker : EntityMoveable
     {
         #region Attributes
 
@@ -34,16 +34,6 @@ namespace COMP476Proj
         /// Whether or not the image is flipped
         /// </summary>
         public bool flip = false;
-
-        /// <summary>
-        /// Phsyics component
-        /// </summary>
-        public PhysicsComponent2D physics;
-
-        /// <summary>
-        /// Drawing component
-        /// </summary>
-        public DrawComponent draw;
 
         /// <summary>
         /// Character state
@@ -252,15 +242,15 @@ namespace COMP476Proj
             base.Draw(gameTime, spriteBatch);
         }
 
-        public override DrawComponent GetDrawComponent()
-        {
-            return draw;
-        }
+        //public override DrawComponent GetDrawComponent()
+        //{
+        //    return draw;
+        //}
 
-        public override PhysicsComponent2D GetPhysicsComponent()
-        {
-            return physics;
-        }
+        //public override PhysicsComponent2D GetPhysicsComponent()
+        //{
+        //    return physics;
+        //}
 
         #endregion
     }
