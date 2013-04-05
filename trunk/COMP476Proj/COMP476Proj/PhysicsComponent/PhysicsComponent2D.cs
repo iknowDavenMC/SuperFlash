@@ -78,12 +78,12 @@ namespace COMP476Proj
         /// <summary>
         /// Max Velocity
         /// </summary>
-        protected float maxVelocity = 6.25f; // Average running speed
+        protected float maxVelocity = 125; // Average running speed
 
         /// <summary>
         /// Max Acceleration
         /// </summary>
-        protected float maxAcceleration = 2.5f; // Assuming it takes 2.5 seconds to reach max speed
+        protected float maxAcceleration = 750f; // Assuming it takes 2.5 seconds to reach max speed
 
         #endregion
 
@@ -193,7 +193,7 @@ namespace COMP476Proj
         /// </summary>
         /// <param name="position">Position of the object</param>
         /// <param name="orientation">Orientation of the object</param>
-        /// <param name="dimensions">Dimensions of the object</param>
+        /// <param name="dimensions">Dimensions of the object's bounding rectangle</param>
         /// <param name="isSteering">Is steering being employed, or is kinematic movement being used</param>
         public PhysicsComponent2D(Vector2 position, float orientation, Vector2 dimensions,
             bool isSteering = false)
@@ -224,7 +224,7 @@ namespace COMP476Proj
             if (isStopping)
             {
                 // Acceleration opposes last movement
-                acceleration = velocity * -1;
+                acceleration = velocity * -5;
 
                 // Capped by max acceleration
                 if (acceleration.Length() > maxAcceleration)
@@ -332,38 +332,6 @@ namespace COMP476Proj
         #region Public Methods
 
         /// <summary>
-        /// Sets the character to move right
-        /// </summary>
-        public void MoveRight()
-        {
-            movementDirection = new Vector2(1, 0);
-        }
-
-        /// <summary>
-        /// Sets the character to move left
-        /// </summary>
-        public void MoveLeft()
-        {
-            movementDirection = new Vector2(-1, 0);
-        }
-
-        /// <summary>
-        /// Sets the character to move up
-        /// </summary>
-        public void MoveUp()
-        {
-            movementDirection = new Vector2(0, -1);
-        }
-
-        /// <summary>
-        /// Sets the character to move down
-        /// </summary>
-        public void MoveDown()
-        {
-            movementDirection = new Vector2(0, 1);
-        }
-
-        /// <summary>
         /// Sets the target values (used with AI characters to move based on thinking)
         /// If null, the parameter is not important
         /// </summary>
@@ -381,6 +349,7 @@ namespace COMP476Proj
             if (!targetDirection.Equals(null))
             {
                 movementDirection = (Vector2)targetDirection;
+                movementDirection.Normalize();
             }
 
             if (!targetVelocity.Equals(null))
