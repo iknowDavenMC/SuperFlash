@@ -11,11 +11,26 @@ namespace COMP476Proj
 {
     public abstract class Entity
     {
+        #region Fields
+        protected Vector2 pos;
+        protected BoundingRectangle rect;
+        #endregion
+
+        #region Properties
+        public Vector2 Position
+        {
+            get { return pos; }
+            set { pos = value; }
+        }
+        public BoundingRectangle BoundingRectangle
+        {
+            get { return rect; }
+            set { rect = value; }
+        }
+        #endregion
+
         #region Virtual Functions
-        public virtual DrawComponent GetDrawComponent() { return null; }
-        public virtual PhysicsComponent GetPhysicsComponent() { return null; }
         public virtual void Update(GameTime gameTime) { }
-        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch) { }
         #endregion
     }
 }
