@@ -97,20 +97,6 @@ namespace COMP476Proj
 
                 return;
             }
-            
-            if (input.IsDoing("Get Up", PlayerIndex.One))
-            {
-                if (charState != StreakerState.GET_UP)
-                {
-                    draw.Reset();
-                }
-
-                charState = StreakerState.GET_UP;
-
-                physics.SetTargetValues(true, null, null, null);
-
-                return;
-            }
 
             // Check input
             // Dance takes precedence

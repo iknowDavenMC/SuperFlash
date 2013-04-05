@@ -16,7 +16,7 @@ namespace COMP476Proj
         public float Left { get { return (Width >= 0 ? X : X + Width); } }
         public float Right { get { return (Width >= 0 ? X + Width : X); } }
         public float Top { get { return (Height >= 0 ? Y : Y + Height); } }
-        public float Bottom { get { return (Height >= 0 ? X : X + Height); } }
+        public float Bottom { get { return (Height >= 0 ? Y + Height : Y); } }
 
         public bool isEmpty { get { return X == 0 && Y == 0 && Width == 0 && Height == 0; } }
 
