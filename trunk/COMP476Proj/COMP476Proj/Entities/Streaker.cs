@@ -50,6 +50,8 @@ namespace COMP476Proj
             this.draw = draw;
             //Initialize Components using Entitybuilder!
 
+            this.BoundingRectangle = new COMP476Proj.BoundingRectangle(phys.Position, 16, 6);
+
             inputTimer = 0;
             inputDelay = 50;
         }
