@@ -13,18 +13,27 @@ namespace COMP476Proj
     {
         #region Fields
         Level lvl;
+        private LevelManager instance;
         #endregion
 
         #region Init
-        public LevelManager()
+        private LevelManager()
         {
             lvl = Level.MAIN_MENU;
         }
         #endregion
 
+        #region Methods
+        public LevelManager getInstance()
+        {
+            if (instance == null)
+                instance = new LevelManager();
+            return instance;
+        }
         public void SwitchToSchool()
         {
 
         }
+        #endregion
     }
 }
