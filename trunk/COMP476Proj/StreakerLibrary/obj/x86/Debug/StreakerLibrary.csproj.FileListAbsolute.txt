@@ -1,0 +1,25 @@
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\StreakerLibrary\bin\x86\Debug\Content\streaker.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\StreakerLibrary\bin\x86\Debug\Content\level1.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\StreakerLibrary\bin\x86\Debug\Content\Hud\notorietyBar.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\StreakerLibrary\bin\x86\Debug\Content\Hud\banner.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\StreakerLibrary\bin\x86\Debug\Content\Hud\notorietyMeter.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\StreakerLibrary\bin\x86\Debug\Content\Fonts\Game Over.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\StreakerLibrary\bin\x86\Debug\StreakerLibrary.dll
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\StreakerLibrary\bin\x86\Debug\StreakerLibrary.pdb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\StreakerLibrary\obj\x86\Debug\StreakerLibrary.csprojResolveAssemblyReference.cache
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\StreakerLibrary\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\StreakerLibrary\obj\x86\Debug\StreakerLibrary.dll
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\StreakerLibrary\obj\x86\Debug\StreakerLibrary.pdb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\StreakerLibrary\bin\x86\Debug\Content\streaker.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\StreakerLibrary\bin\x86\Debug\Content\level1.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\StreakerLibrary\bin\x86\Debug\Content\Hud\notorietyBar.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\StreakerLibrary\bin\x86\Debug\Content\Hud\banner.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\StreakerLibrary\bin\x86\Debug\Content\Hud\notorietyMeter.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\StreakerLibrary\bin\x86\Debug\Content\Fonts\Game Over.xnb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\StreakerLibrary\bin\x86\Debug\Content\Fonts\Game Over.spritefont
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\StreakerLibrary\bin\x86\Debug\StreakerLibrary.dll
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\StreakerLibrary\bin\x86\Debug\StreakerLibrary.pdb
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\StreakerLibrary\obj\x86\Debug\StreakerLibrary.csprojResolveAssemblyReference.cache
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\StreakerLibrary\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\StreakerLibrary\obj\x86\Debug\StreakerLibrary.dll
+G:\My Documents\Visual Studio 2010\Projects\COMP476Proj\COMP476Proj\StreakerLibrary\obj\x86\Debug\StreakerLibrary.pdb
