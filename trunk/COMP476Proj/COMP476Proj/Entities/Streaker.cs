@@ -13,26 +13,181 @@ namespace COMP476Proj
 
     public class Streaker : Entity
     {
+        #region Attributes
+
+        /// <summary>
+        /// Determines how many milliseconds have gone by since input was last checked
+        /// </summary>
+        private int inputTimer;
+
+        /// <summary>
+        /// Determines how many milliseconds must have gone by before input is checked again
+        /// </summary>
+        private int inputDelay;
+
+        /// <summary>
+        /// Direction the character is moving
+        /// </summary>
+        private Vector2 direction;
+
+        /// <summary>
+        /// Whether or not the image is flipped
+        /// </summary>
         public bool flip = false;
-        public PhysicsComponent physics;
+
+        /// <summary>
+        /// Phsyics component
+        /// </summary>
+        public PhysicsComponent2D physics;
+
+        /// <summary>
+        /// Drawing component
+        /// </summary>
         public DrawComponent draw;
+
+        /// <summary>
+        /// Character state
+        /// </summary>
         public StreakerState charState = StreakerState.STATIC;
 
         private int velocity = 5;
 
-        public Streaker(PhysicsComponent phys, DrawComponent draw)
+        #endregion
+
+        #region Constructors
+
+        public Streaker(PhysicsComponent2D phys, DrawComponent draw)
         {
             physics = phys;
             this.draw = draw;
             //Initialize Components using Entitybuilder!
+
+            inputTimer = 0;
+            inputDelay = 100;
         }
-        public override void Update(GameTime gameTime){
-        
-            physics.Update(gameTime);
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Deals with the user input from gamepad or keyboard
+        /// </summary>
+        /// <param name="gameTime">Game time</param>
+        private void handleUserInput(GameTime gameTime)
+        {
+            inputTimer += gameTime.ElapsedGameTime.Milliseconds;
+
+            if (inputTimer < inputDelay)
+            {
+                return;
+            }
+            else
+            {
+                inputTimer = 0;
+            }
+
+            // Reset direction
+            direction = Vector2.Zero;
+
+            // Get input manager instance
+            InputManager input = InputManager.GetInstance();
+
+            // Check input
+            // Dance takes precedence
+            if (input.IsDoing("Dance", PlayerIndex.One))
+            {
+                charState = StreakerState.DANCE;
+            }
+            // Else check movement
+            else
+            {
+                if (input.IsDoing("Left", PlayerIndex.One))
+                {
+                    moveLeft();
+                }
+                if (input.IsDoing("Right", PlayerIndex.One))
+                {
+                    moveRight();
+                }
+                if (input.IsDoing("Up", PlayerIndex.One))
+                {
+                    moveUp();
+                }
+                if (input.IsDoing("Down", PlayerIndex.One))
+                {
+                    moveDown();
+                }
+            }
+
+            // If no movement, static
+            if (direction == Vector2.Zero)
+            {
+                charState = StreakerState.STATIC;
+                physics.SetTargetValues(true, direction, null, null);
+            }
+            else
+            {
+                physics.SetTargetValues(false, direction, null, null);
+            }
+        }
+
+        /// <summary>
+        /// Move left
+        /// </summary>
+        private void moveLeft()
+        {
+            direction += -Vector2.UnitX;
+            charState = StreakerState.WALK;
+            flip = true;
+        }
+
+        /// <summary>
+        /// Move right
+        /// </summary>
+        private void moveRight()
+        {
+            direction += Vector2.UnitX;
+            charState = StreakerState.WALK;
+            flip = false;
+        }
+
+        /// <summary>
+        /// Move down
+        /// </summary>
+        private void moveDown()
+        {
+            direction += Vector2.UnitY;
+            charState = StreakerState.WALK;
+        }
+
+        /// <summary>
+        /// Move up
+        /// </summary>
+        private void moveUp()
+        {
+            direction += -Vector2.UnitY;
+            charState = StreakerState.WALK;
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public override void Update(GameTime gameTime)
+        {
+            if (charState != StreakerState.FALL && charState != StreakerState.GET_UP)
+            {
+                handleUserInput(gameTime);
+            }
+
+            physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds);
+            physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
+
             draw.Update(gameTime, this);
             UpdateStates(draw.animComplete);
-            
-            
+
+
             //Debugger.getInstance().pointsToDraw.Add(physics.position);
             base.Update(gameTime);
         }
@@ -93,7 +248,7 @@ namespace COMP476Proj
         }
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            draw.Draw(gameTime, spriteBatch, physics.position);
+            draw.Draw(gameTime, spriteBatch, physics.Position);
             base.Draw(gameTime, spriteBatch);
         }
 
@@ -102,29 +257,11 @@ namespace COMP476Proj
             return draw;
         }
 
-        public override PhysicsComponent GetPhysicsComponent()
+        public override PhysicsComponent2D GetPhysicsComponent()
         {
             return physics;
         }
 
-        public void moveLeft() {
-            physics.velocity.X = -velocity;
-            charState = StreakerState.WALK;
-            flip = true;
-        }
-        public void moveRight() {
-            physics.velocity.X = velocity;
-            charState = StreakerState.WALK;
-            flip = false;
-        }
-        public void moveDown() {
-            physics.velocity.Y = velocity;
-            charState = StreakerState.WALK;
-        }
-        public void moveUp() {
-            physics.velocity.Y = -velocity;
-            charState = StreakerState.WALK;
-        }
-
+        #endregion
     }
 }
