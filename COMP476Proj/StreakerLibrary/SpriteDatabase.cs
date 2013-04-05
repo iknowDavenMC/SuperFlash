@@ -92,23 +92,23 @@ namespace StreakerLibrary
             SpriteDatabase.AddAnimation(new Animation("cop_getup", cop, 7, 143, 184, 552, getUp));
             SpriteDatabase.AddAnimation(new Animation("cop_attack", cop, 5, 143, 184, 736, attack));
 
-            SpriteDatabase.AddAnimation(new Animation("student1_static", student1, 2, 143, 184, 0, notMoving));
-            SpriteDatabase.AddAnimation(new Animation("student1_walk", student1, 5, 143, 184, 184, walk));
-            SpriteDatabase.AddAnimation(new Animation("student1_fall", student1, 7, 143, 184, 368, fall));
-            SpriteDatabase.AddAnimation(new Animation("student1_getup", student1, 7, 143, 184, 552, getUp));
+            SpriteDatabase.AddAnimation(new Animation("student1_static", student1, 2, 137, 155, 0, notMoving));
+            SpriteDatabase.AddAnimation(new Animation("student1_walk", student1, 5, 137, 155, 155, walk));
+            SpriteDatabase.AddAnimation(new Animation("student1_fall", student1, 7, 137, 155, 310, fall));
+            SpriteDatabase.AddAnimation(new Animation("student1_getup", student1, 7, 137, 155, 465, getUp));
 
-            SpriteDatabase.AddAnimation(new Animation("student2_static", student2, 2, 143, 184, 0, notMoving));
-            SpriteDatabase.AddAnimation(new Animation("student2_walk", student2, 5, 143, 184, 184, walk));
-            SpriteDatabase.AddAnimation(new Animation("student2_fall", student2, 7, 143, 184, 368, fall));
-            SpriteDatabase.AddAnimation(new Animation("student2_getup", student2, 7, 143, 184, 552, getUp));
+            SpriteDatabase.AddAnimation(new Animation("student2_static", student2, 2, 137, 155, 0, notMoving));
+            SpriteDatabase.AddAnimation(new Animation("student2_walk", student2, 5, 137, 155, 155, walk));
+            SpriteDatabase.AddAnimation(new Animation("student2_fall", student2, 7, 137, 155, 310, fall));
+            SpriteDatabase.AddAnimation(new Animation("student2_getup", student2, 7, 137, 155, 465, getUp));
 
-            SpriteDatabase.AddAnimation(new Animation("student3_static", student3, 2, 143, 184, 0, notMoving));
-            SpriteDatabase.AddAnimation(new Animation("student3_walk", student3, 5, 143, 184, 184, walk));
-            SpriteDatabase.AddAnimation(new Animation("student3_fall", student3, 7, 143, 184, 368, fall));
-            SpriteDatabase.AddAnimation(new Animation("student3_getup", student3, 7, 143, 184, 552, getUp));
+            SpriteDatabase.AddAnimation(new Animation("student3_static", student3, 2, 145, 164, 0, notMoving));
+            SpriteDatabase.AddAnimation(new Animation("student3_walk", student3, 5, 145, 164, 164, walk));
+            SpriteDatabase.AddAnimation(new Animation("student3_fall", student3, 7, 145, 164, 328, fall));
+            SpriteDatabase.AddAnimation(new Animation("student3_getup", student3, 7, 145, 164, 492, getUp));
 
+            SpriteDatabase.AddAnimation(new Animation("level_1", level1));
 
-            SpriteDatabase.AddAnimation(new Animation("level1", level1));
         }
 
         #endregion

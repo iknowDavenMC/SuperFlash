@@ -47,7 +47,7 @@ namespace COMP476Proj
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Vector2 drawPos = new Vector2(-Camera.X, -Camera.Y);
-            spriteBatch.Draw(SpriteDatabase.GetAnimation("level1").Texture, drawPos, Color.White);
+            spriteBatch.Draw(SpriteDatabase.GetAnimation("level_1").Texture, drawPos, Color.White);
             streaker.Draw(gameTime, spriteBatch);
             ped.Draw(gameTime, spriteBatch);
             
