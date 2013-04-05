@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StreakerLibrary;
 
 namespace COMP476Proj
 {
@@ -91,8 +92,10 @@ namespace COMP476Proj
 
         public virtual void Update(GameTime gameTime, Entity e)
         {
-            timePerFrame = animation.TimePerFrame;
-
+            if (animation != null)
+                timePerFrame = animation.TimePerFrame;
+            else
+                timePerFrame = 0;
             if (!paused && timePerFrame > 0)
             {
                 timeElapsed += (float)gameTime.ElapsedGameTime.Milliseconds;
