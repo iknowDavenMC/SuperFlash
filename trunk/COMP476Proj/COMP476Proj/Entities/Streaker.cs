@@ -40,8 +40,6 @@ namespace COMP476Proj
         /// </summary>
         public StreakerState charState = StreakerState.STATIC;
 
-        private int velocity = 5;
-
         #endregion
 
         #region Constructors
@@ -53,7 +51,7 @@ namespace COMP476Proj
             //Initialize Components using Entitybuilder!
 
             inputTimer = 0;
-            inputDelay = 100;
+            inputDelay = 50;
         }
 
         #endregion
@@ -88,6 +86,7 @@ namespace COMP476Proj
             if (input.IsDoing("Dance", PlayerIndex.One))
             {
                 charState = StreakerState.DANCE;
+                physics.SetTargetValues(true, null, null, null);
             }
             // Else check movement
             else
@@ -108,17 +107,17 @@ namespace COMP476Proj
                 {
                     moveDown();
                 }
-            }
-
-            // If no movement, static
-            if (direction == Vector2.Zero)
-            {
-                charState = StreakerState.STATIC;
-                physics.SetTargetValues(true, direction, null, null);
-            }
-            else
-            {
-                physics.SetTargetValues(false, direction, null, null);
+                
+                // If no movement, static
+                if (direction == Vector2.Zero)
+                {
+                    charState = StreakerState.STATIC;
+                    physics.SetTargetValues(true, null, null, null);
+                }
+                else
+                {
+                    physics.SetTargetValues(false, direction, null, null);
+                }
             }
         }
 
