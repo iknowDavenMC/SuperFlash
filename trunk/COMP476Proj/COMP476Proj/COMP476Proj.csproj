@@ -83,7 +83,6 @@
     <Compile Include="Entities\Streaker.cs" />
     <Compile Include="Entities\Wall.cs" />
     <Compile Include="HUD.cs" />
-    <Compile Include="Managers\InputManagerTemp.cs" />
     <Compile Include="IntelligenceComponent\MovementAIComponent2D.cs" />
     <Compile Include="Managers\LevelManager.cs" />
     <Compile Include="Managers\InputManager.cs" />

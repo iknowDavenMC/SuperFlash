@@ -14,15 +14,13 @@ namespace COMP476Proj
         #region Fields
         public Streaker streaker;
         public List<BoundingBox> mapBoundingBoxes;
-        //public Camera camera;
         #endregion
 
         #region Init
         public World()
         {
-            streaker = new Streaker(new PhysicsComponent(),
+            streaker = new Streaker(new PhysicsComponent2D(Vector2.Zero,0,new Vector2(20,20),true),
                 new DrawComponent(SpriteDatabase.GetAnimation("streaker_static"), Color.White, Vector2.Zero, new Vector2(.5f, .5f), .5f, 150));
-            //camera = new Camera();
         }
         #endregion
 
@@ -30,8 +28,8 @@ namespace COMP476Proj
         public void Update(GameTime gameTime)
         {
             streaker.Update(gameTime);
-            Camera.X = (int)streaker.physics.position.X - Camera.Width/2;
-            Camera.Y = (int)streaker.physics.position.Y - Camera.Height/2;
+            Camera.X = (int)streaker.ComponentPhysics.Position.X - Camera.Width/2;
+            Camera.Y = (int)streaker.ComponentPhysics.Position.Y - Camera.Height / 2;
             if (Camera.X < 0)
                 Camera.X = 0;
             if (Camera.Y < 0)

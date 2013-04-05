@@ -22,7 +22,6 @@ namespace COMP476Proj
         SpriteBatch spriteBatch;
         SpriteFont spriteFont; 
         World world;
-        InputManagerTemp input;
         public HUD hud;  
 
         public Game1()
@@ -77,9 +76,6 @@ namespace COMP476Proj
             //Create World
             world = new World();
 
-            //Managers
-            input = new InputManagerTemp(world);
-
             Debugger.getInstance();
             //Hud
             hud = new HUD(this, spriteBatch, spriteFont, banner, notorietyBar, notorietyMeter);
@@ -108,7 +104,6 @@ namespace COMP476Proj
                 this.Exit();
             //Debugger.getInstance().Clear();
             world.Update(gameTime);
-            input.Update(gameTime);
             hud.Update(gameTime);
             // TODO: Add your update logic here
             base.Update(gameTime);
