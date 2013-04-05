@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace COMP476Proj
 {
-    public class InputManager : GameComponent
+    public class InputManager
     {
         #region Enumerations
 
@@ -18,6 +18,11 @@ namespace COMP476Proj
         #endregion
 
         #region Attributes
+
+        /// <summary>
+        /// Private instance
+        /// </summary>
+        private static volatile InputManager instance = null;
  
         /// <summary>
         /// Controller type
@@ -54,8 +59,7 @@ namespace COMP476Proj
         /// <param name="game">Current game instance</param>
         /// <param name="type">Type of controller to check for input</param>
         /// <param name="numberOfPlayers">Number of players whose inputs must be checked</param>
-        public InputManager(Game game, ControllerType type)
-            : base(game)
+        private InputManager(ControllerType type)
 	    {
             controllerType = type;
 
@@ -121,23 +125,51 @@ namespace COMP476Proj
         #region Methods
 
         /// <summary>
-        /// Update method called automatically
+        /// Allows the instance to be retrieved. This acts as the constructor
+        /// </summary>
+        /// <param name="type">Type of the controller to be used</param>
+        /// <returns>The only instance of input manager</returns>
+        public static InputManager GetInstance(ControllerType type)
+        {
+            if (instance == null)
+            {
+                instance = new InputManager(type);
+            }
+
+            return instance;
+        }
+
+        /// <summary>
+        /// Allows the instance to be retrieved. This assumes the constructor has been called.
+        /// </summary>
+        /// <param name="type">Type of the controller to be used</param>
+        /// <returns>The only instance of input manager (may be null if called at the wrong time)</returns>
+        public static InputManager GetInstance()
+        {
+            return instance;
+        }
+
+        /// <summary>
+        /// Update method
         /// </summary>
         /// <param name="gameTime">Current game time</param>
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
-
-            if (controllerType == ControllerType.GamePad)
+            if (instance == null)
             {
-                foreach (KeyValuePair<PlayerIndex, GamePadState> pair in gamePadStates)
+                return;
+            }
+
+            if (instance.controllerType == ControllerType.GamePad)
+            {
+                foreach (KeyValuePair<PlayerIndex, GamePadState> pair in instance.gamePadStates)
                 {
-                    gamePadStates[pair.Key] = GamePad.GetState(pair.Key);
+                    instance.gamePadStates[pair.Key] = GamePad.GetState(pair.Key);
                 }
             }
             else
             {
-                keyboardState = Keyboard.GetState();
+                instance.keyboardState = Keyboard.GetState();
             }
         }
 
@@ -149,14 +181,19 @@ namespace COMP476Proj
         /// <returns></returns>
         public bool IsDoing(String key, PlayerIndex index)
         {
+            if (instance == null)
+            {
+                return false;
+            }
+
             // If gamePad
-            if (controllerType == ControllerType.GamePad)
+            if (instance.controllerType == ControllerType.GamePad)
             {
                 try
                 {
-                    for (int i = 0; i != gamePadMapping[key].GetLength(0); ++i)
+                    for (int i = 0; i != instance.gamePadMapping[key].GetLength(0); ++i)
                     {
-                        if (gamePadStates[index].IsButtonDown(gamePadMapping[key][i]))
+                        if (instance.gamePadStates[index].IsButtonDown(instance.gamePadMapping[key][i]))
                         {
                             return true;
                         }
@@ -175,9 +212,9 @@ namespace COMP476Proj
             {
                 try
                 {
-                    for (int i = 0; i != keyboardMapping[key].GetLength(0); ++i)
+                    for (int i = 0; i != instance.keyboardMapping[key].GetLength(0); ++i)
                     {
-                        if (keyboardState.IsKeyDown(keyboardMapping[key][i]))
+                        if (instance.keyboardState.IsKeyDown(instance.keyboardMapping[key][i]))
                         {
                             return true;
                         }
