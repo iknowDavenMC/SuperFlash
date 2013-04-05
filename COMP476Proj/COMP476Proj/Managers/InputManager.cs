@@ -113,6 +113,7 @@ namespace COMP476Proj
                     keyboardMapping.Add("Right", new Keys[1] { Keys.Right });
                     keyboardMapping.Add("Left", new Keys[1] { Keys.Left });
                     keyboardMapping.Add("Dance", new Keys[1] { Keys.Space });
+                    keyboardMapping.Add("Fall", new Keys[1] { Keys.F });
 
                     break;
             }
