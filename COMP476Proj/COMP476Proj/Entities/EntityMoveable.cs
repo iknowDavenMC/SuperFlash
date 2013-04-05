@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace COMP476Proj
 {
@@ -18,5 +19,9 @@ namespace COMP476Proj
         }
         #endregion
 
+        public override void Update(GameTime gameTime)
+        {
+            rect.Update(physics.Position);
+        }
     }
 }
