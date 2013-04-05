@@ -73,11 +73,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Debugger\Debugger.cs" />
+    <Compile Include="Debugger\FrameRate.cs" />
     <Compile Include="DrawComponent\Camera.cs" />
     <Compile Include="DrawComponent\DrawComponent.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityMoveable.cs" />
     <Compile Include="Entities\EntityVisible.cs" />
+    <Compile Include="Entities\NPC.cs" />
+    <Compile Include="Entities\Pedestrian.cs" />
     <Compile Include="Entities\Streaker.cs" />
     <Compile Include="Entities\Wall.cs" />
     <Compile Include="HUD.cs" />
