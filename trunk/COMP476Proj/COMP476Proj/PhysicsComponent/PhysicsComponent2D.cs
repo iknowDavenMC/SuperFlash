@@ -68,11 +68,6 @@ namespace COMP476Proj
 
         #endregion
 
-        /// <summary>
-        /// Bounding Rectangle for collisions
-        /// </summary>
-        protected BoundingRectangle boundingBox;
-
         #region Movement-related Bounds
 
         /// <summary>
@@ -169,11 +164,6 @@ namespace COMP476Proj
             get { return isSteering; }
         }
 
-        public BoundingRectangle BoundingBox
-        {
-            get { return boundingBox; }
-        }
-
         public float MaxRotation
         {
             get { return maxRotation; }
@@ -213,7 +203,6 @@ namespace COMP476Proj
             this.maxAcceleration = maxAcceleration;
             this.maxVelocity = maxVelocity;
             this.friction = friction;
-            boundingBox = new BoundingRectangle(position, (int)dimensions.X, (int)dimensions.Y);
 
             // Unspecified
             movementDirection = velocity = acceleration = Vector2.Zero;
@@ -410,9 +399,6 @@ namespace COMP476Proj
 
             // Calculates position
             position += velocity * (float)time;
-
-            // Updates bounding box
-            boundingBox.Update(position);
         }
 
         /// <summary>
