@@ -29,6 +29,9 @@ namespace COMP476Proj
         protected float timeElapsed = 0;
         public bool animComplete = true;
 
+        private const int PIXELS_HEAD_TO_TOE = 149;
+        private const int PIXELS_LEFT_TO_CENTER = 88;
+
         #endregion
 
         /*-------------------------------------------------------------------------*/
@@ -117,7 +120,18 @@ namespace COMP476Proj
             if (visible)
             {
                 Rectangle sourceRect = new Rectangle(animation.FrameWidth * currentFrame, animation.YPos, animation.FrameWidth, animation.FrameHeight);
-                Vector2 drawPos = new Vector2(pos.X - Camera.X, pos.Y - Camera.Y);
+                Vector2 offset;
+
+                if (spriteEffects == SpriteEffects.FlipHorizontally)
+                {
+                    offset = new Vector2((animation.FrameWidth - PIXELS_LEFT_TO_CENTER) * scale.X, PIXELS_HEAD_TO_TOE * scale.Y);
+                }
+                else
+                {
+                    offset = new Vector2(PIXELS_LEFT_TO_CENTER * scale.X, PIXELS_HEAD_TO_TOE * scale.Y);
+                }
+
+                Vector2 drawPos = new Vector2(pos.X - Camera.X, pos.Y - Camera.Y) - offset;
                 spriteBatch.Draw(animation.Texture, drawPos, sourceRect, color, 0, Origin, scale, spriteEffects, depth);
             }
         }
