@@ -413,8 +413,8 @@ namespace COMP476Proj
         public void Flee(ref PhysicsComponent2D physics)
         {
             // Flee normally
-            Vector2 toFlee = physics.Position + (physics.Position - targetPosition);
-            physics.SetTargetValues(false, toFlee, Vector2.Zero, Vector2.Zero);
+            Vector2 toFlee = (physics.Position - targetPosition);
+            physics.SetTargetValues(false, toFlee, null, null);
         }
 
         /// <summary>
@@ -451,7 +451,7 @@ namespace COMP476Proj
             targetPos += targetVelocity * prediction;
 
             // Flee normally
-            targetPos = physics.Position + (physics.Position - targetPos);
+            targetPos = (physics.Position - targetPos);
             physics.SetTargetValues(false, targetPos, null, null);
         }
 

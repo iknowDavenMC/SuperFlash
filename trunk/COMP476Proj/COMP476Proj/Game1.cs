@@ -65,7 +65,50 @@ namespace COMP476Proj
             spriteBatch = new SpriteBatch(GraphicsDevice);
             spriteFont = Content.Load<SpriteFont>("Fonts/Game Over");
             //Populate Sprite Database
-            
+            Texture2D streaker = Content.Load<Texture2D>("streaker");
+            Texture2D cop = Content.Load<Texture2D>("cop");
+            Texture2D student1 = Content.Load<Texture2D>("student1");
+            Texture2D student2 = Content.Load<Texture2D>("student2");
+            Texture2D student3 = Content.Load<Texture2D>("student3");
+            Texture2D level1 = Content.Load<Texture2D>("level1");
+            //Hud elements
+            Texture2D banner = Content.Load<Texture2D>("Hud/banner");
+            Texture2D notorietyBar = Content.Load<Texture2D>("Hud/notorietyBar");
+            Texture2D notorietyMeter = Content.Load<Texture2D>("Hud/notorietyMeter");
+
+            //Animation elements 
+            int notMoving = 150, walk = 60, fall = 60, getUp = 100, dance = 100, attack = 50;
+
+            SpriteDatabase.AddAnimation(new Animation("streaker_static", streaker, 2, 143, 184, 0, notMoving));
+            SpriteDatabase.AddAnimation(new Animation("streaker_walk", streaker, 5, 143, 184, 184, walk));
+            SpriteDatabase.AddAnimation(new Animation("streaker_fall", streaker, 7, 143, 184, 368, fall));
+            SpriteDatabase.AddAnimation(new Animation("streaker_getup", streaker, 7, 143, 184, 552, getUp));
+            SpriteDatabase.AddAnimation(new Animation("streaker_dance", streaker, 5, 143, 184, 736, dance));
+
+            SpriteDatabase.AddAnimation(new Animation("cop_static", cop, 2, 143, 184, 0, notMoving));
+            SpriteDatabase.AddAnimation(new Animation("cop_walk", cop, 5, 143, 184, 184, walk));
+            SpriteDatabase.AddAnimation(new Animation("cop_fall", cop, 7, 143, 184, 368, fall));
+            SpriteDatabase.AddAnimation(new Animation("cop_getup", cop, 7, 143, 184, 552, getUp));
+            SpriteDatabase.AddAnimation(new Animation("cop_attack", cop, 5, 143, 184, 736, attack));
+
+            SpriteDatabase.AddAnimation(new Animation("student1_static", student1, 2, 137, 155, 0, notMoving));
+            SpriteDatabase.AddAnimation(new Animation("student1_walk", student1, 5, 137, 155, 155, walk));
+            SpriteDatabase.AddAnimation(new Animation("student1_fall", student1, 8, 137, 155, 310, fall));
+            SpriteDatabase.AddAnimation(new Animation("student1_getup", student1, 7, 137, 155, 465, getUp));
+
+            SpriteDatabase.AddAnimation(new Animation("student2_static", student2, 2, 137, 155, 0, notMoving));
+            SpriteDatabase.AddAnimation(new Animation("student2_walk", student2, 5, 137, 155, 155, walk));
+            SpriteDatabase.AddAnimation(new Animation("student2_fall", student2, 8, 137, 155, 310, fall));
+            SpriteDatabase.AddAnimation(new Animation("student2_getup", student2, 7, 137, 155, 465, getUp));
+
+            SpriteDatabase.AddAnimation(new Animation("student3_static", student3, 2, 145, 164, 0, notMoving));
+            SpriteDatabase.AddAnimation(new Animation("student3_walk", student3, 5, 145, 164, 164, walk));
+            SpriteDatabase.AddAnimation(new Animation("student3_fall", student3, 8, 145, 164, 328, fall));
+            SpriteDatabase.AddAnimation(new Animation("student3_getup", student3, 7, 145, 164, 492, getUp));
+
+            SpriteDatabase.AddAnimation(new Animation("level1",level1));
+
+
             //Create World
             world = new World();
 
@@ -125,8 +168,12 @@ namespace COMP476Proj
             world.Draw(gameTime, spriteBatch);
             hud.Draw(gameTime);
             //Debugger.getInstance().Draw(spriteBatch);
+            world.ped.BoundingRectangle.Draw(graphics.GraphicsDevice, spriteBatch);
+            world.streaker.BoundingRectangle.Draw(graphics.GraphicsDevice, spriteBatch);
             spriteBatch.End();
             // TODO: Add your drawing code here
+
+            
 
             base.Draw(gameTime);
         }

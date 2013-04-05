@@ -5,13 +5,13 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using StreakerLibrary;
 
-namespace COMP476Proj.Entities
+namespace COMP476Proj
 {
     public abstract class NPC : EntityMoveable
     {
         #region Fields
         protected MovementAIComponent2D movement;
-        protected float detectRadius = 40f;
+        protected float detectRadius = 500f;
         #endregion
 
         #region Properties

@@ -110,7 +110,7 @@ namespace COMP476Proj
         public void Draw(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch)
         {
             Texture2D textureToDraw = new Texture2D(graphicsDevice, (int)dimensionsFromCenter.X * 2, (int)dimensionsFromCenter.Y * 2);
-
+            //Texture2D textureToDraw = new Texture2D(graphicsDevice, (int)boundingRectangle.Width, (int)boundingRectangle.Height);
             Color[] data = new Color[textureToDraw.Width * textureToDraw.Height];
 
             for (int i = 0; i != data.Length; ++i)
@@ -121,7 +121,7 @@ namespace COMP476Proj
             textureToDraw.SetData(data);
 
             Vector2 drawPos = new Vector2(center.X - dimensionsFromCenter.X  - Camera.X, center.Y - dimensionsFromCenter.Y - Camera.Y);
-
+            //Vector2 drawPos = new Vector2(boundingRectangle.X, boundingRectangle.Y);
             spriteBatch.Draw(textureToDraw, drawPos, Color.White);
         }
 
