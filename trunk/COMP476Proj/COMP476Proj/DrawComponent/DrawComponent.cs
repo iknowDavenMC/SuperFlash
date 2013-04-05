@@ -56,6 +56,7 @@ namespace COMP476Proj
             Pause();
         }
 
+        /*
         public DrawComponent(Animation defaultAnimation, int timePerFrame)
         {
             animation = defaultAnimation;
@@ -72,16 +73,15 @@ namespace COMP476Proj
            this.depth = depth;
            Pause();
        }
+         * */
 
-        public DrawComponent(Animation defaultAnimation, Color col, Vector2 orig, Vector2 scale, float depth, 
-            int timePerFrame)
+        public DrawComponent(Animation defaultAnimation, Color col, Vector2 orig, Vector2 scale, float depth)
        {
            animation = defaultAnimation;
            color = col;
            Origin = orig;
            this.scale = scale;
            this.depth = depth;
-           this.timePerFrame = timePerFrame;
            Pause();
        }
         #endregion
@@ -91,6 +91,8 @@ namespace COMP476Proj
 
         public virtual void Update(GameTime gameTime, Entity e)
         {
+            timePerFrame = animation.TimePerFrame;
+
             if (!paused && timePerFrame > 0)
             {
                 timeElapsed += (float)gameTime.ElapsedGameTime.Milliseconds;
