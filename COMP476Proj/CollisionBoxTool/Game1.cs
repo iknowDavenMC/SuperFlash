@@ -10,10 +10,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Storage;
+using StreakerLibrary;
 
 namespace CollisionBoxTool
 {
-    public enum DrawModes { Box, Node, NPC }
+    public enum DrawModes { Box, Node, NPC, Player }
     /// <summary>
     /// This is the main type for your game
     /// </summary>
@@ -38,6 +39,7 @@ namespace CollisionBoxTool
         List<Node> nodes;
         List<Edge> edges;
         List<NPC> NPCs;
+        NPC player;
 
         Color boxColor;
         Color nodeColor;
@@ -48,6 +50,8 @@ namespace CollisionBoxTool
         Node mouseNode;
         Edge mouseEdge;
         NPC mouseNPC;
+        NPC mousePlayer;
+
         NPC.Type npcType = NPC.Type.Civilian;
         NPC.Mode npcMode = NPC.Mode.Static;
 
@@ -107,7 +111,7 @@ namespace CollisionBoxTool
                     circleData[i] = Color.Transparent;
             }
             circle.SetData(circleData);
-            scene = Content.Load<Texture2D>("scene");
+            scene = Content.Load<Texture2D>("level1");
 
             maxW = scene.Width;
             maxH = scene.Height;
@@ -120,15 +124,19 @@ namespace CollisionBoxTool
             mouseNode = new Node(0, 0);
             mouseEdge = new Edge(null, null);
             mouseNPC = new NPC(0, 0, npcType, npcMode);
+            mousePlayer = new NPC(0, 0, NPC.Type.Streaker, NPC.Mode.Static);
 
             boxes = new List<Rectangle>();
             nodes = new List<Node>();
             edges = new List<Edge>();
             NPCs = new List<NPC>();
+            player = null;
 
-            boxColor = new Color(0.35f, 0.5f, 0.85f, 0.5f);
+            boxColor = new Color(0.35f, 0.5f, 0.85f, 0.75f);
             nodeColor = new Color(0f, 0.2f, 1f, 0.75f);
             edgeColor = new Color(0.33f, 1f, 0f, 1f);
+
+            SpriteDatabase.loadSprites(Content);
 
             Camera = new Rectangle(0, 0, 800, 600);
             // TODO: use this.Content to load your game content here
@@ -204,6 +212,8 @@ namespace CollisionBoxTool
                 else if (mode == DrawModes.Node)
                     mode = DrawModes.NPC;
                 else if (mode == DrawModes.NPC)
+                    mode = DrawModes.Player;
+                else if (mode == DrawModes.Player)
                     mode = DrawModes.Box;
                 mpressed = true;
             }
@@ -287,6 +297,14 @@ namespace CollisionBoxTool
                         drawing = true;
                     }
                 }
+                else if (mode == DrawModes.Player)
+                {
+                    mousePlayer.position = new Vector2(ms.X + Camera.X, ms.Y + Camera.Y);
+                    if (!drawing)
+                    {
+                        drawing = true;
+                    }
+                }
             }
             if (ms.LeftButton == ButtonState.Released && drawing)
             {
@@ -311,6 +329,8 @@ namespace CollisionBoxTool
                                 break;
                             }
                         }
+                        selected = null;
+                        mouseEdge = new Edge(null, null);
                     }
                     else
                     {
@@ -323,6 +343,13 @@ namespace CollisionBoxTool
                     drawing = false;
                     NPCs.Add(mouseNPC);
                     mouseNPC = new NPC(ms.X + Camera.X, ms.Y + Camera.Y, npcType, npcMode);
+
+                }
+                else if (mode == DrawModes.Player)
+                {
+                    drawing = false;
+                    player = mousePlayer;
+                    mousePlayer = new NPC(ms.X + Camera.X, ms.Y + Camera.Y, NPC.Type.Streaker, NPC.Mode.Static);
 
                 }
             }
@@ -374,6 +401,13 @@ namespace CollisionBoxTool
                         }
                     }
                 }
+                else if (mode == DrawModes.Player)
+                {
+                    if (player != null && player.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
+                    {
+                        player = null;
+                    }
+                }
             }
 
             Camera.X += dx;
@@ -423,13 +457,15 @@ namespace CollisionBoxTool
                 switch (npc.mode)
                 {
                     case NPC.Mode.Static:
-                        drawBordered(spriteBatch, npc.X, npc.Y, "S", Color.Black, Color.White);
+                        drawBordered(spriteBatch, npc.X-Camera.X, npc.Y-Camera.Y, "S", Color.Black, Color.White);
                         break;
                     case NPC.Mode.Wander:
-                        drawBordered(spriteBatch, npc.X, npc.Y, "W", Color.Black, Color.White);
+                        drawBordered(spriteBatch, npc.X - Camera.X, npc.Y - Camera.Y, "W", Color.Black, Color.White);
                         break;
                 }
             }
+            if (player != null)
+                player.draw(spriteBatch, circle, Camera);
             if (drawing)
             {
                 if (mode == DrawModes.Box)
@@ -444,6 +480,10 @@ namespace CollisionBoxTool
                 else if (mode == DrawModes.NPC)
                 {
                     mouseNPC.draw(spriteBatch, circle, Camera);
+                }
+                else if (mode == DrawModes.Player)
+                {
+                    mousePlayer.draw(spriteBatch, circle, Camera);
                 }
             }
             String modestr = "MODE: " + mode.ToString();
@@ -508,6 +548,8 @@ namespace CollisionBoxTool
                 string line = npc.X + " " + npc.Y + " " + npc.type.ToString() + " " + npc.mode.ToString();
                 writer.WriteLine(line);
             }
+            writer.WriteLine("PLAYER");
+            writer.WriteLine(player.X + " " + player.Y);
             writer.Close();
             fs.Close();
         }
@@ -518,6 +560,7 @@ namespace CollisionBoxTool
             nodes.Clear();
             edges.Clear();
             NPCs.Clear();
+            player = null;
 
             StreamReader reader = new StreamReader(filename);
             try
@@ -525,11 +568,7 @@ namespace CollisionBoxTool
                 string line = reader.ReadLine();
                 if (line.StartsWith("RECTANGLES"))
                     line = reader.ReadLine();
-                while (reader.Peek() != -1
-                    && !line.StartsWith("NODES")
-                    && !line.StartsWith("EDGES")
-                    && !line.StartsWith("NPCS")
-                    )
+                do
                 {
                     int x, y, w, h;
                     int spacei = line.IndexOf(' ');
@@ -544,13 +583,16 @@ namespace CollisionBoxTool
                     h = int.Parse(line);
                     boxes.Add(new Rectangle(x, y, w, h));
                     line = reader.ReadLine();
-                }
-                if (line.StartsWith("NODES"))
-                    line = reader.ReadLine();
-                while (reader.Peek() != -1
+                } while (reader.Peek() != -1
+                    && !line.StartsWith("NODES")
                     && !line.StartsWith("EDGES")
                     && !line.StartsWith("NPCS")
-                    )
+                    && !line.StartsWith("PLAYER")
+                    );
+
+                if (line.StartsWith("NODES"))
+                    line = reader.ReadLine();
+                do
                 {
                     int id, x, y;
                     int spacei = line.IndexOf(' ');
@@ -562,12 +604,15 @@ namespace CollisionBoxTool
                     y = int.Parse(line);
                     nodes.Add(new Node(x, y, id));
                     line = reader.ReadLine();
-                }
+                } while (reader.Peek() != -1
+                    && !line.StartsWith("EDGES")
+                    && !line.StartsWith("NPCS")
+                    && !line.StartsWith("PLAYER")
+                    );
+
                 if (line.StartsWith("EDGES"))
                     line = reader.ReadLine();
-                while (reader.Peek() != -1
-                    && !line.StartsWith("NPCS")
-                    )
+                do
                 {
                     int sid, eid;
                     int spacei = line.IndexOf(' ');
@@ -576,10 +621,14 @@ namespace CollisionBoxTool
                     eid = int.Parse(line);
                     edges.Add(new Edge(nodes.Find(n => n.ID == sid), nodes.Find(n => n.ID == eid)));
                     line = reader.ReadLine();
-                }
+                } while (reader.Peek() != -1
+                    && !line.StartsWith("NPCS")
+                    && !line.StartsWith("PLAYER")
+                    );
+
                 if (line.StartsWith("NPCS"))
                     line = reader.ReadLine();
-                while (reader.Peek() != -1)
+                do
                 {
                     int x, y;
                     NPC.Type type;
@@ -597,6 +646,23 @@ namespace CollisionBoxTool
                     NPCs.Add(new NPC(x, y, type, mode));
                     line = reader.ReadLine();
                 }
+                while (reader.Peek() != -1
+                    && !line.StartsWith("PLAYER")
+                    );
+
+                if (line.StartsWith("PLAYER"))
+                    line = reader.ReadLine();
+                do
+                {
+                    int x, y;
+                    int spacei = line.IndexOf(' ');
+                    x = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    y = int.Parse(line);
+                    player = new NPC(x, y, NPC.Type.Streaker, NPC.Mode.Static);
+                    line = reader.ReadLine();
+                } while (reader.Peek() != -1);
             }
             catch (Exception e)
             {

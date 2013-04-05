@@ -33,4 +33,5 @@ NPCS
 199 394 DumbCop Wander
 354 274 SmartCop Static
 114 259 SmartCop Static
-368 207 SmartCop Wander
+PLAYER
+559 205
