@@ -108,6 +108,7 @@ namespace COMP476Proj
             {
                 currentframesPerSecond = (int)numberOfFrames / seconds;
 
+                /*
                 #if (DEBUG)
                 {
                     Console.WriteLine("Frame rate at " + DateTime.Now.ToString("HH:mm:ss tt") +
@@ -115,6 +116,7 @@ namespace COMP476Proj
                         + " : " + currentframesPerSecond + " frames per second.");
                 }
                 #endif
+                 * */
 
                 seconds = 0;
                 numberOfFrames = 0;
