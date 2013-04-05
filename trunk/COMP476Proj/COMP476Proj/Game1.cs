@@ -21,11 +21,13 @@ namespace COMP476Proj
         public const int SCREEN_HEIGHT = 600;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        SpriteFont spriteFont; 
+        SpriteFont spriteFont;
         World world;
         public HUD hud;
 
         FrameRate frameRate;
+
+        ParticleSpewer ps;
 
         public Game1()
         {
@@ -63,13 +65,14 @@ namespace COMP476Proj
             graphics.ApplyChanges();
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
             spriteFont = Content.Load<SpriteFont>("Fonts/Game Over");
 
             SpriteDatabase.loadSprites(Content);
             //Create World
             world = new World();
-            
-            
+
+
 
             Debugger.getInstance();
             //Hud
@@ -78,6 +81,21 @@ namespace COMP476Proj
             Texture2D notorietyBar = Content.Load<Texture2D>("Hud/notorietyBar");
             Texture2D notorietyMeter = Content.Load<Texture2D>("Hud/notorietyMeter");
             hud = new HUD(this, spriteBatch, spriteFont, banner, notorietyBar, notorietyMeter);
+
+            Texture2D blank = new Texture2D(GraphicsDevice, 1, 1);
+            blank.SetData(new[] { Color.White });
+            SpriteDatabase.AddAnimation(new Animation("blank", blank, 1, 1, 1, 0, 1));
+
+            ps = new ParticleSpewer(
+                150, 600, // Start position
+                1000, 2, // Max particles and emitters
+                MathHelper.ToRadians(247.5f), // Angle range to spew at
+                MathHelper.ToRadians(292.5f), 
+                50, 1000, // Lifespan range
+                3, 200, // Particle size and speed
+                0, 360, 1, 1, 1, 1, // Min and max Hue, Saturation and Value
+                true, 0.5f); // Fade out after half the lifespan
+            ps.Start();
         }
 
         /// <summary>
@@ -104,6 +122,7 @@ namespace COMP476Proj
             //Debugger.getInstance().Clear();
             world.Update(gameTime);
             hud.Update(gameTime);
+            ps.Update(gameTime);
 
 #if (DEBUG)
             {
@@ -121,16 +140,17 @@ namespace COMP476Proj
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
             world.Draw(gameTime, spriteBatch);
             hud.Draw(gameTime);
+            ps.Draw(gameTime, spriteBatch);
             //Debugger.getInstance().Draw(spriteBatch);
             world.ped.BoundingRectangle.Draw(graphics.GraphicsDevice, spriteBatch);
             world.streaker.BoundingRectangle.Draw(graphics.GraphicsDevice, spriteBatch);
             spriteBatch.End();
             // TODO: Add your drawing code here
 
-            
+
 
             base.Draw(gameTime);
         }

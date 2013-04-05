@@ -80,6 +80,7 @@
     <Compile Include="Entities\EntityMoveable.cs" />
     <Compile Include="Entities\EntityVisible.cs" />
     <Compile Include="Entities\NPC.cs" />
+    <Compile Include="Entities\ParticleSpewer.cs" />
     <Compile Include="Entities\Pedestrian.cs" />
     <Compile Include="Entities\Streaker.cs" />
     <Compile Include="Entities\Wall.cs" />
