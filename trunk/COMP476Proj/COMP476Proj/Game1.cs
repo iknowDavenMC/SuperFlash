@@ -59,6 +59,10 @@ namespace COMP476Proj
             spriteFont = Content.Load<SpriteFont>("Fonts/Game Over");
             //Populate Sprite Database
             Texture2D streaker = Content.Load<Texture2D>("streaker");
+            Texture2D cop = Content.Load<Texture2D>("cop");
+            Texture2D student1 = Content.Load<Texture2D>("student1");
+            Texture2D student2 = Content.Load<Texture2D>("student2");
+            Texture2D student3 = Content.Load<Texture2D>("student3");
             Texture2D level1 = Content.Load<Texture2D>("level1");
             //Hud elements
             Texture2D banner = Content.Load<Texture2D>("Hud/banner");
@@ -70,6 +74,29 @@ namespace COMP476Proj
             SpriteDatabase.AddAnimation(new Animation("streaker_fall", streaker, 7, 143, 184, 368));
             SpriteDatabase.AddAnimation(new Animation("streaker_getup", streaker, 7, 143, 184, 552));
             SpriteDatabase.AddAnimation(new Animation("streaker_dance", streaker, 5, 143, 184, 736));
+
+            SpriteDatabase.AddAnimation(new Animation("cop_static", cop, 2, 143, 184, 0));
+            SpriteDatabase.AddAnimation(new Animation("cop_walk", cop, 5, 143, 184, 184));
+            SpriteDatabase.AddAnimation(new Animation("cop_fall", cop, 7, 143, 184, 368));
+            SpriteDatabase.AddAnimation(new Animation("cop_getup", cop, 7, 143, 184, 552));
+            SpriteDatabase.AddAnimation(new Animation("cop_attack", cop, 5, 143, 184, 736));
+
+            SpriteDatabase.AddAnimation(new Animation("student1_static", student1, 2, 143, 184, 0));
+            SpriteDatabase.AddAnimation(new Animation("student1_walk", student1, 5, 143, 184, 184));
+            SpriteDatabase.AddAnimation(new Animation("student1_fall", student1, 7, 143, 184, 368));
+            SpriteDatabase.AddAnimation(new Animation("student1_getup", student1, 7, 143, 184, 552));
+
+            SpriteDatabase.AddAnimation(new Animation("student2_static", student2, 2, 143, 184, 0));
+            SpriteDatabase.AddAnimation(new Animation("student2_walk", student2, 5, 143, 184, 184));
+            SpriteDatabase.AddAnimation(new Animation("student2_fall", student2, 7, 143, 184, 368));
+            SpriteDatabase.AddAnimation(new Animation("student2_getup", student2, 7, 143, 184, 552));
+
+            SpriteDatabase.AddAnimation(new Animation("student3_static", student3, 2, 143, 184, 0));
+            SpriteDatabase.AddAnimation(new Animation("student3_walk", student3, 5, 143, 184, 184));
+            SpriteDatabase.AddAnimation(new Animation("student3_fall", student3, 7, 143, 184, 368));
+            SpriteDatabase.AddAnimation(new Animation("student3_getup", student3, 7, 143, 184, 552));
+
+
             SpriteDatabase.AddAnimation(new Animation("level1",level1));
 
 
