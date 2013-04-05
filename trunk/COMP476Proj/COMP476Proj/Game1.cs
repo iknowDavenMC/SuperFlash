@@ -23,12 +23,16 @@ namespace COMP476Proj
         SpriteBatch spriteBatch;
         SpriteFont spriteFont; 
         World world;
-        public HUD hud;  
+        public HUD hud;
+
+        FrameRate frameRate;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            this.Window.Title = "Superflash";
         }
 
         /// <summary>
@@ -39,9 +43,11 @@ namespace COMP476Proj
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             InputManager.GetInstance(InputManager.ControllerType.Keyboard);
+
+            frameRate = new FrameRate(this, 1);
+
+            Components.Add(frameRate);
 
             base.Initialize();
         }
@@ -98,7 +104,13 @@ namespace COMP476Proj
             //Debugger.getInstance().Clear();
             world.Update(gameTime);
             hud.Update(gameTime);
-            // TODO: Add your update logic here
+
+#if (DEBUG)
+            {
+                this.Window.Title = frameRate.CurrentFramesPerSecond.ToString() + " frames per second";
+            }
+#endif
+
             base.Update(gameTime);
         }
 
