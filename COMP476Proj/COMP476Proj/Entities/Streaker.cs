@@ -201,6 +201,7 @@ namespace COMP476Proj
 
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds);
             physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
+            pos = physics.Position;
 
             draw.Update(gameTime, this);
             UpdateStates(draw.animComplete);

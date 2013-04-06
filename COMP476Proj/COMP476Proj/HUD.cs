@@ -26,7 +26,7 @@ namespace COMP476Proj
         private Vector2 positionNotorietyBar;
         private Vector2 positionNotorietyMeter;
         private Vector2 positionScore;
-        private Vector2 positionTime; 
+        private Vector2 positionTime;
         private SpriteBatch spriteBatch;
         private SpriteFont spriteFont;
         private int windowHeight = 600;
@@ -47,11 +47,11 @@ namespace COMP476Proj
             this.notorietyBar = nororietyBar;
             this.notorietyMeter = notorietyMeter;
             positionBanner = new Vector2(0, windowHeight - 45);
-            positionNotorietyBar = new Vector2(positionBanner.X + 120, positionBanner.Y+15);
-            positionNotorietyMeter = new Vector2(positionBanner.X+118, positionBanner.Y+11);
-            positionScore = new Vector2(positionBanner.X, positionBanner.Y+1);
+            positionNotorietyBar = new Vector2(positionBanner.X + 120, positionBanner.Y + 15);
+            positionNotorietyMeter = new Vector2(positionBanner.X + 118, positionBanner.Y + 11);
+            positionScore = new Vector2(positionBanner.X, positionBanner.Y + 1);
             positionTime = new Vector2(positionBanner.X + 750, positionBanner.Y + 1);
-            score = 0; 
+            score = 0;
         }
         #endregion
 
@@ -60,7 +60,7 @@ namespace COMP476Proj
         public override void Initialize()
         {
 
-            
+
             base.Initialize();
         }
 
@@ -68,7 +68,7 @@ namespace COMP476Proj
         {
             base.LoadContent();
         }
-        #endregion 
+        #endregion
 
         /*-------------------------------------------------------------------------*/
         #region Update & Draw
@@ -86,12 +86,18 @@ namespace COMP476Proj
 
         public override void Draw(GameTime gameTime)
         {
-            spriteBatch.Draw(banner, positionBanner, Color.White);
-            spriteBatch.Draw(notorietyBar, positionNotorietyBar, new Rectangle(0, 0, notorietyBarLength, 12), Color.White, 0.0f, new Vector2(0.0f, 0.0f), 1.0f, SpriteEffects.None, 1.0f);
-            spriteBatch.Draw(notorietyMeter, positionNotorietyMeter, Color.White);
-            
-            spriteBatch.DrawString(spriteFont, "10899", positionScore, Color.White);
-            spriteBatch.DrawString(spriteFont, ""+seconds, positionTime, Color.White);
+            float scale = 1 / Camera.Scale;
+
+            Vector2 offset = new Vector2(-Camera.Width / 2, -Camera.Height / 2);
+            offset *= scale;
+            offset.X += Camera.X;
+            offset.Y += Camera.Y;
+            spriteBatch.Draw(banner, positionBanner * scale + offset, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(notorietyBar, positionNotorietyBar * scale + offset, new Rectangle(0, 0, notorietyBarLength, 12), Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(notorietyMeter, positionNotorietyMeter * scale + offset, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0f);
+
+            spriteBatch.DrawString(spriteFont, "10899", positionScore * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(spriteFont, "" + seconds, positionTime * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             base.Draw(gameTime);
         }
         #endregion

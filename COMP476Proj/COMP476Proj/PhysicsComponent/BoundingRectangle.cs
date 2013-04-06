@@ -120,7 +120,7 @@ namespace COMP476Proj
 
             textureToDraw.SetData(data);
 
-            Vector2 drawPos = new Vector2(center.X - dimensionsFromCenter.X  - Camera.X, center.Y - dimensionsFromCenter.Y - Camera.Y);
+            Vector2 drawPos = new Vector2(center.X - dimensionsFromCenter.X, center.Y - dimensionsFromCenter.Y);
             //Vector2 drawPos = new Vector2(boundingRectangle.X, boundingRectangle.Y);
             spriteBatch.Draw(textureToDraw, drawPos, Color.White);
         }

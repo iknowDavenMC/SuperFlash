@@ -27,6 +27,8 @@ namespace COMP476Proj
             get { return rect; }
             set { rect = value; }
         }
+        public float X { get { return pos.X; } set { pos.X = value; } }
+        public float Y { get { return pos.Y; } set { pos.Y = value; } }
         #endregion
 
         #region Virtual Functions
