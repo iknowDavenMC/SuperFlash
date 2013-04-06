@@ -11,6 +11,7 @@ namespace COMP476Proj
 
     class ParticleSpewer : EntityVisible
     {
+        #region Particle structure
         private struct Particle
         {
             public Vector2 position;
@@ -20,7 +21,9 @@ namespace COMP476Proj
             public int lifespan;
             public Color color;
         }
+        #endregion
 
+        #region Members
         List<Particle> particles;
         int maxParticles;
         int emitters;
@@ -37,6 +40,10 @@ namespace COMP476Proj
         Texture2D tex;
         Random rand;
         bool started;
+        public bool Absolute = false; // If true, positions and sizes are absolute (ie: not relative to the camera);
+        #endregion
+
+        #region Contructor
 
         /// <summary>
         /// Construct a new particle spewer.
@@ -136,12 +143,16 @@ namespace COMP476Proj
             rand = new Random();
         }
 
+        #endregion
+
+        #region Public Methods
+
         public override void Update(GameTime gameTime)
         {
             int count = particles.Count;
             // If particles are fewer than max and the emitter is on, make new particles
             if (started && count < maxParticles)
-            {                
+            {
                 for (int i = 0; i != emitters; ++i)
                 {
                     Particle p = new Particle();
@@ -190,8 +201,8 @@ namespace COMP476Proj
                         if (agePct >= fadePercent)
                         {
                             float fadeDist = 100 - fadePercent;
-                            p.color.A = (byte)((255- (agePct - fadePercent) / (1-fadePercent)) * 255);
-                         }
+                            p.color.A = (byte)((255 - (agePct - fadePercent) / (1 - fadePercent)) * 255);
+                        }
                     }
                     particles[i] = p;
                 }
@@ -203,11 +214,18 @@ namespace COMP476Proj
         {
             foreach (Particle p in particles)
             {
-                Rectangle destRect = new Rectangle(
-                    (int)(p.position.X - p.scale / 2), 
-                    (int)(p.position.Y - p.scale / 2), 
-                    p.scale, p.scale);
-                spriteBatch.Draw(tex, destRect, p.color);
+                float scale = 1f;
+                Vector2 offset = new Vector2(0,0);
+                if (Absolute)
+                {
+                    scale = 1f / Camera.Scale;
+                    offset = new Vector2(-Camera.Width / 2, -Camera.Height / 2);
+                    offset *= scale;
+                    offset.X += Camera.X;
+                    offset.Y += Camera.Y;
+                }
+                Vector2 drawPos = new Vector2(p.position.X - p.scale / 2, p.position.Y - p.scale / 2);
+                spriteBatch.Draw(tex, drawPos * scale + offset, null, p.color, 0f, Vector2.Zero, p.scale * scale, SpriteEffects.None, 0f);
             }
             base.Draw(gameTime, spriteBatch);
         }
@@ -227,6 +245,10 @@ namespace COMP476Proj
         {
             started = false;
         }
+
+        #endregion
+
+        #region Private Methods
 
         /// <summary>
         /// Convert a colour from HSV to a Color instance
@@ -257,5 +279,7 @@ namespace COMP476Proj
             return new Color(0f, 0f, 0f, A);
 
         }
+
+        #endregion
     }
 }

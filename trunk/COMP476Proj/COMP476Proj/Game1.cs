@@ -28,6 +28,7 @@ namespace COMP476Proj
         FrameRate frameRate;
 
         ParticleSpewer ps;
+        ParticleSpewer ps2;
 
         public Game1()
         {
@@ -72,7 +73,12 @@ namespace COMP476Proj
             //Create World
             world = new World();
 
+            Texture2D level = SpriteDatabase.GetAnimation("level_1").Texture;
 
+            Camera.MaxX = level.Width;
+            Camera.MaxY = level.Height;
+            Camera.Target = world.streaker;
+            Camera.Scale = 1f;
 
             Debugger.getInstance();
             //Hud
@@ -86,16 +92,30 @@ namespace COMP476Proj
             blank.SetData(new[] { Color.White });
             SpriteDatabase.AddAnimation(new Animation("blank", blank, 1, 1, 1, 0, 1));
 
+            // Two example particle spewers. One is stuck to the HUD and always on, 
+            // the other will follow the streaker and only turn on when he dances
             ps = new ParticleSpewer(
-                150, 600, // Start position
+                150, 555, // Start position
                 1000, 2, // Max particles and emitters
                 MathHelper.ToRadians(247.5f), // Angle range to spew at
-                MathHelper.ToRadians(292.5f), 
-                50, 1000, // Lifespan range
-                3, 200, // Particle size and speed
-                0, 360, 1, 1, 1, 1, // Min and max Hue, Saturation and Value
+                MathHelper.ToRadians(292.5f), // This will be a narrow cone upward
+                50, 1000, // Lifespan range (up to one second of life)
+                3, 100, // Particle size and speed (3-pixel particles at 100 pixels/s
+                0, 360, 1, 1, 1, 1, // Min and max Hue, Saturation and Value (This uses any colour at full saturation and value)
                 true, 0.5f); // Fade out after half the lifespan
+            ps.Absolute = true; // The camera does not affect this particle spewer
             ps.Start();
+
+            ps2 = new ParticleSpewer(
+                100, 75, // Start at the streaker's chest
+                1000, 36, // Shoot a lot of particles at once
+                MathHelper.ToRadians(0), // Spew in every direction
+                MathHelper.ToRadians(360),
+                0, 500, // Live for up to half a second
+                2, 200, // 2-pixel particles moving at 200 pixels/s
+                150, 240, 0, 1, 1, 1, // Colours range from cyan to blue, with and saturation and full value
+                true, 0.9f); // Only fade at the end
+
         }
 
         /// <summary>
@@ -120,10 +140,20 @@ namespace COMP476Proj
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
             //Debugger.getInstance().Clear();
+
+            // Start the spewer while dancing
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                ps2.Start();
+            }
+            else ps2.Stop();
             world.Update(gameTime);
             hud.Update(gameTime);
             ps.Update(gameTime);
-
+            ps2.X = world.streaker.X;
+            ps2.Y = world.streaker.Y - 25;
+            ps2.Update(gameTime);
+            Camera.Update(gameTime);
 #if (DEBUG)
             {
                 this.Window.Title = frameRate.CurrentFramesPerSecond.ToString() + " frames per second";
@@ -140,9 +170,12 @@ namespace COMP476Proj
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
+            Vector3 center = new Vector3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0);
+            Matrix transform = Matrix.CreateTranslation(-(Camera.X), -(Camera.Y), 0) * Matrix.CreateScale(Camera.Scale) * Matrix.CreateTranslation(center);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, null, null, null, transform);
             world.Draw(gameTime, spriteBatch);
             hud.Draw(gameTime);
+            ps2.Draw(gameTime, spriteBatch);
             ps.Draw(gameTime, spriteBatch);
             //Debugger.getInstance().Draw(spriteBatch);
             world.ped.BoundingRectangle.Draw(graphics.GraphicsDevice, spriteBatch);
