@@ -170,7 +170,7 @@ namespace COMP476Proj
             movement.Look(ref physics);
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds);
             physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
-            
+            pos = physics.Position;
             if (physics.Orientation > 0)
             {
                 draw.SpriteEffect = SpriteEffects.None;
