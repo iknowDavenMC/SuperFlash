@@ -15,7 +15,14 @@ namespace COMP476Proj
         private Vector2 dimensionsFromCenter;
         private Rectanglef boundingRectangle;
 
-        public Rectanglef Bounds { get { return boundingRectangle; } }
+        #endregion
+
+        #region Properties
+
+        public Rectanglef Bounds
+        {
+            get { return boundingRectangle; }
+        }
 
         #endregion
 
