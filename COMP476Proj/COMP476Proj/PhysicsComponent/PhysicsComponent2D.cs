@@ -68,17 +68,51 @@ namespace COMP476Proj
 
         #endregion
 
+        #region Collision Variables
+
+        /// <summary>
+        /// Mass of the object
+        /// </summary>
+        protected float mass;
+
+        /// <summary>
+        /// Coefficient of restitution
+        /// </summary>
+        protected float coefficientOfRestitution;
+
+        #endregion
+
         #region Movement-related Bounds
 
         /// <summary>
         /// Max Velocity
         /// </summary>
-        protected float maxVelocity = 150; // Good for streaker
+        protected float maxVelocity;
 
         /// <summary>
         /// Max Acceleration
         /// </summary>
-        protected float maxAcceleration = 750f; // Good for streaker
+        protected float maxAcceleration;
+
+        /// <summary>
+        /// Max Velocity for a walk
+        /// </summary>
+        protected float maxVelocityWalk = 150; // Good for streaker
+
+        /// <summary>
+        /// Max Acceleration for a walk
+        /// </summary>
+        protected float maxAccelerationWalk = 750f; // Good for streaker
+
+        /// <summary>
+        /// Max Velocity for a run
+        /// </summary>
+        protected float maxVelocityRun = 150; // Good for streaker
+
+        /// <summary>
+        /// Max Acceleration for a run
+        /// </summary>
+        protected float maxAccelerationRun = 750f; // Good for streaker
 
         /// <summary>
         /// Controls how quickly people come to a stop
@@ -92,12 +126,12 @@ namespace COMP476Proj
         /// <summary>
         /// Max rotation
         /// </summary>
-        protected float maxRotation = MathHelper.ToRadians(240); // It takes about 1.5 seconds to do a full turn
+        protected float maxRotation = MathHelper.ToRadians(720); // It takes about 1.5 seconds to do a full turn
 
         /// <summary>
         /// Max angular acceleration
         /// </summary>
-        protected float maxAngularAcceleration = MathHelper.ToRadians(480); // Assuming it takes 0.5 seconds to reach max rotation speed
+        protected float maxAngularAcceleration = MathHelper.ToRadians(720); // Assuming it takes 0.5 seconds to reach max rotation speed
 
         #endregion
 
@@ -189,20 +223,32 @@ namespace COMP476Proj
         /// <param name="position">Position of the object</param>
         /// <param name="orientation">Orientation of the object</param>
         /// <param name="dimensions">Dimensions of the object's bounding rectangle</param>
-        /// <param name="maxVelocity">Max player velocity</param>
-        /// <param name="maxAcceleration">Max player acceleration</param>
+        /// <param name="maxVelocityRun">Max player velocity when running</param>
+        /// <param name="maxAccelerationRun">Max player acceleration when running</param>
+        /// <param name="maxVelocityWalk">Max player velocity when walking</param>
+        /// <param name="maxAccelerationWalk">Max player acceleration when walking</param>
         /// <param name="friction">Sliding factor on stop</param>
+        /// <param name="mass">Character mass</param>
+        /// <param name="coefficientOfRestitution">How much is momentum preserved</param>
         /// <param name="isSteering">Is steering being employed, or is kinematic movement being used</param>
-        public PhysicsComponent2D(Vector2 position, float orientation, Vector2 dimensions, float maxVelocity,
-            float maxAcceleration, float friction, bool isSteering = false)
+        public PhysicsComponent2D(Vector2 position, float orientation, Vector2 dimensions, float maxVelocityRun,
+            float maxAccelerationRun, float maxVelocityWalk, float maxAccelerationWalk, float friction,
+            float mass, float coefficientOfRestitution, bool isSteering = false)
         {
             // Specified
             this.position = position;
             this.orientation = orientationDirection = orientation;
             this.isSteering = isSteering;
-            this.maxAcceleration = maxAcceleration;
-            this.maxVelocity = maxVelocity;
+            this.maxAccelerationRun = maxAccelerationRun;
+            this.maxVelocityRun = maxVelocityRun;
+            this.maxAccelerationWalk = maxAccelerationWalk;
+            this.maxVelocityWalk = maxVelocityWalk;
             this.friction = friction;
+            this.mass = mass;
+            this.coefficientOfRestitution = coefficientOfRestitution;
+
+            maxAcceleration = maxAccelerationWalk;
+            maxVelocity = maxVelocityWalk;
 
             // Unspecified
             movementDirection = velocity = acceleration = Vector2.Zero;
@@ -234,7 +280,18 @@ namespace COMP476Proj
                 }
 
                 // Update velocity
+                int signX = Math.Sign(velocity.X), signY = Math.Sign(velocity.Y);
                 velocity += acceleration * (float)time;
+
+                if (Math.Sign(velocity.X) != signX)
+                {
+                    velocity.X = 0;
+                }
+
+                if (Math.Sign(velocity.Y) != signY)
+                {
+                    velocity.Y = 0;
+                }
 
                 // Capped by max velocity
                 if (velocity.Length() > maxVelocity)
@@ -420,17 +477,147 @@ namespace COMP476Proj
         }
 
         /// <summary>
+        /// Resolve collision between two moveable objects
+        /// </summary>
+        /// <param name="other">Other object colliding</param>
+        public void ResolveCollision(PhysicsComponent2D other)
+        {
+            // Normal
+            Vector2 contactNormal;
+            Vector2 contactNormal1 = position - other.position;
+            Vector2 contactNormal2 = -contactNormal1;
+
+            // If moving, work with your velocity
+            if (velocity.Length() > 0.005)
+            {
+                // If contact normal1 opposes velocity, use that contact normal
+                if (Vector2.Dot(contactNormal1, velocity) < Vector2.Dot(contactNormal2, velocity))
+                {
+                    contactNormal = contactNormal1;
+                }
+                else
+                {
+                    contactNormal = contactNormal2;
+                }
+            }
+            else
+            {
+                if (Vector2.Dot(contactNormal1, other.velocity) < Vector2.Dot(contactNormal2, other.velocity))
+                {
+                    contactNormal = contactNormal2;
+                }
+                else
+                {
+                    contactNormal = contactNormal1;
+                }
+            }
+
+            contactNormal.Normalize();
+
+            // Steps outlined in the class slides
+            float Vs = -(1 + coefficientOfRestitution) * -Math.Abs(Vector2.Dot(velocity, contactNormal)) + Math.Abs(Vector2.Dot(other.velocity, contactNormal));
+            float deltaPD = 1 / mass + 1 / other.mass;
+            float g = Vs / deltaPD;
+            contactNormal *= g;
+
+            velocity += contactNormal / mass;
+            movementDirection = contactNormal;
+            movementDirection.Normalize();
+        }
+
+        /// <summary>
+        /// Resolves a collision with a wall
+        /// </summary>
+        public void ResolveWallCollision(Rectanglef overlap)
+        {
+            // If overlap has more height than width
+            if (overlap.Height > overlap.Width)
+            {
+                movementDirection.X *= -1;
+            }
+            // If overlap has less height than width
+            else if (overlap.Height < overlap.Width)
+            {
+                movementDirection.Y *= -1;
+            }
+            // If equal
+            else
+            {
+                movementDirection *= -1;
+            }
+        }
+
+        /// <summary>
+        /// Resolve inter penetration between two moveable objects
+        /// </summary>
+        /// <param name="overlap">Area of interpenetration</param>
+        public void ResolveInterPenetration(Rectanglef overlap)
+        {
+            if (overlap.Width < overlap.Height)
+            {
+                if (movementDirection.X != 0)
+                {
+                    position.X += Math.Sign(movementDirection.X) * (overlap.Width);
+                }
+                else if (movementDirection.Y != 0)
+                {
+                    position.Y += Math.Sign(movementDirection.Y) * (overlap.Height);
+                }
+                else
+                {
+                    // This should never happen
+                    Console.ReadLine();
+                }
+            }
+            else
+            {
+                if (movementDirection.Y != 0)
+                {
+                    position.Y += Math.Sign(movementDirection.Y) * (overlap.Height);
+                }
+                else if (movementDirection.X != 0)
+                {
+                    position.X += Math.Sign(movementDirection.X) * (overlap.Width);
+                }
+                else
+                {
+                    // This should never happen
+                    Console.ReadLine();
+                }
+            }
+        }
+
+        /// <summary>
         /// Toggle steering
         /// </summary>
-        public void ToggleSteering()
+        /// <param name="isSteering">New steering value</param>
+        public void ToggleSteering(bool isSteering)
         {
-            isSteering = !isSteering;
+            this.isSteering = isSteering;
 
             #if (DEBUG)
             {
                 Console.WriteLine("Steer is " + (isSteering ? "on" : "off") + ".");
             }
             #endif
+        }
+
+        /// <summary>
+        /// Sets the pace of the entity to use walk or run values
+        /// </summary>
+        /// <param name="isFast">Whether or not to set pace to the fast value</param>
+        public void SetPace(bool isFast)
+        {
+            if (isFast)
+            {
+                maxAcceleration = maxAccelerationRun;
+                maxVelocity = maxVelocityRun;
+            }
+            else
+            {
+                maxAcceleration = maxAccelerationWalk;
+                maxVelocity = maxVelocityWalk;
+            }
         }
 
         #endregion
