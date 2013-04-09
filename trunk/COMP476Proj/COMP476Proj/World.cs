@@ -15,17 +15,17 @@ namespace COMP476Proj
         #region Fields
         public Streaker streaker;
         public Pedestrian ped;
-        public List<BoundingBox> mapBoundingBoxes;
+        public List<Wall> walls;
         #endregion
 
         #region Init
         public World()
         {
-            streaker = new Streaker(new PhysicsComponent2D(new Vector2(100, 100), 0, new Vector2(20,20),150, 750, 8, true),
+            streaker = new Streaker(new PhysicsComponent2D(new Vector2(100, 100), 0, new Vector2(20,20),150, 750, 150, 750, 8, 50, 0.25f, true),
                 new DrawComponent(SpriteDatabase.GetAnimation("streaker_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f));
 
-            ped = new Pedestrian(new PhysicsComponent2D(new Vector2(150, 150), 0, new Vector2(20, 20), 100, 750, 8, true), new MovementAIComponent2D(),
-                new DrawComponent(SpriteDatabase.GetAnimation("student3_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f),PedestrianState.STATIC);
+            ped = new Pedestrian(new PhysicsComponent2D(new Vector2(200, 200), 0, new Vector2(20, 20), 150, 750, 75, 1000, 8, 50, 0.25f, true), new MovementAIComponent2D(),
+                new DrawComponent(SpriteDatabase.GetAnimation("student3_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f),PedestrianState.WANDER);
         }
         #endregion
 
@@ -40,8 +40,19 @@ namespace COMP476Proj
                 Camera.X = 0;
             if (Camera.Y < 0)
                 Camera.Y = 0;
+
             //for each enemy --> update
             ped.Update(gameTime,this);
+
+            // Temp collision checks
+            if (streaker.BoundingRectangle.Collides(ped.BoundingRectangle))
+            {
+                ped.ResolveCollision(streaker);
+                streaker.ResolveCollision(ped);
+                streaker.Fall();
+            }
+
+
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
