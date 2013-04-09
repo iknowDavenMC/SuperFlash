@@ -95,6 +95,9 @@ namespace COMP476Proj
                 if (rect.Collides(w.streaker.BoundingRectangle))
                 {
                     behavior = PedestrianBehavior.COLLIDE;
+                    state = PedestrianState.FALL;
+                    draw.animation = SpriteDatabase.GetAnimation(studentType + "_fall");
+                    draw.Reset();
                     return;
                 }
 
@@ -132,7 +135,8 @@ namespace COMP476Proj
                 switch (state)
                 {
                     case PedestrianState.FALL:
-                        movement.Stop(ref physics);
+                        //movement.Stop(ref physics);
+                        
                         if (draw.animComplete)
                         {
                             draw.animation = SpriteDatabase.GetAnimation(studentType + "_getup");
@@ -148,7 +152,15 @@ namespace COMP476Proj
                         break;
                     case PedestrianState.GET_UP:
                         movement.Stop(ref physics);
-                        if (draw.animComplete)
+                        if (rect.Collides(w.streaker.BoundingRectangle))
+                        {
+                            behavior = PedestrianBehavior.COLLIDE;
+                            state = PedestrianState.GET_UP;
+                            draw.animation = SpriteDatabase.GetAnimation(studentType + "_getup");
+                            draw.Reset();
+                            return;
+                        }
+                        else if (draw.animComplete)
                         {
                             behavior = PedestrianBehavior.AWARE;
                             state = PedestrianState.WANDER;
