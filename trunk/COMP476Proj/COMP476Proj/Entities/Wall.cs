@@ -12,5 +12,10 @@ namespace COMP476Proj
             this.pos = pos;
             this.rect = boundRect;
         }
+
+        public override void ResolveCollision(Entity other)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

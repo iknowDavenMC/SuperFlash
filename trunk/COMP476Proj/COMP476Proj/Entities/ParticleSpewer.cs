@@ -147,6 +147,11 @@ namespace COMP476Proj
 
         #region Public Methods
 
+        public override void ResolveCollision(Entity other)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Update(GameTime gameTime)
         {
             int count = particles.Count;
