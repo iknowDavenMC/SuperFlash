@@ -54,7 +54,7 @@ namespace COMP476Proj
             this.BoundingRectangle = new COMP476Proj.BoundingRectangle(phys.Position, 16, 6);
 
             inputTimer = 0;
-            inputDelay = 50;
+            inputDelay = 100;
         }
 
         #endregion
@@ -199,6 +199,10 @@ namespace COMP476Proj
                 handleUserInput(gameTime);
             }
 
+            // Character will move kinematically after a collision (simulates an impulse)
+            physics.ToggleSteering(!isColliding);
+            isColliding = false;
+
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds);
             physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
             pos = physics.Position;
@@ -265,10 +269,25 @@ namespace COMP476Proj
                     break;
             }
         }
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             draw.Draw(gameTime, spriteBatch, physics.Position);
             base.Draw(gameTime, spriteBatch);
+        }
+
+        public void Fall()
+        {
+            if (charState != StreakerState.FALL)
+            {
+                draw.Reset();
+            }
+
+            charState = StreakerState.FALL;
+
+            physics.SetTargetValues(true, null, null, null);
+
+            return;
         }
 
         #endregion

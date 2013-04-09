@@ -14,6 +14,7 @@ namespace COMP476Proj
         #region Fields
         protected Vector2 pos;
         protected BoundingRectangle rect;
+        protected bool isColliding = false;
         #endregion
 
         #region Properties
@@ -29,10 +30,18 @@ namespace COMP476Proj
         }
         public float X { get { return pos.X; } set { pos.X = value; } }
         public float Y { get { return pos.Y; } set { pos.Y = value; } }
+
+        public bool IsColliding
+        {
+            get { return isColliding; }
+            set { isColliding = value; }
+        }
+
         #endregion
 
         #region Virtual Functions
         public virtual void Update(GameTime gameTime) { }
+        public abstract void ResolveCollision(Entity other);
         #endregion
     }
 }
