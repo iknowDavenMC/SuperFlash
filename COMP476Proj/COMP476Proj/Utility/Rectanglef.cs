@@ -96,10 +96,10 @@ namespace COMP476Proj
             else
             {
                 result = new Rectanglef(
-                    Math.Max(rect1.Left, rect2.Left),
-                    Math.Min(rect1.Right, rect2.Right),
-                    Math.Abs(rect1.Width - rect2.Width),
-                    Math.Abs(rect1.Height - rect2.Height));
+                    Math.Max(rect1.X, rect2.X),
+                    Math.Max(rect1.Y, rect2.Y),
+                    Math.Min(rect1.Right, rect2.Right) - Math.Max(rect1.Left, rect2.Left),
+                    Math.Min(rect1.Bottom, rect2.Bottom) - Math.Max(rect1.Top, rect2.Top));
             }
             return result;
         }
@@ -115,10 +115,10 @@ namespace COMP476Proj
             else
             {
                 result = new Rectanglef(
-                    Math.Max(rect1.Left, rect2.Left),
-                    Math.Min(rect1.Right, rect2.Right),
-                    Math.Abs(rect1.Width - rect2.Width),
-                    Math.Abs(rect1.Height - rect2.Height));
+                    Math.Max(rect1.X, rect2.X),
+                    Math.Max(rect1.Y, rect2.Y),
+                    Math.Min(rect1.Right, rect2.Right) - Math.Max(rect1.Left, rect2.Left),
+                    Math.Min(rect1.Bottom, rect2.Bottom) - Math.Max(rect1.Top, rect2.Top));
             }
         }
 
