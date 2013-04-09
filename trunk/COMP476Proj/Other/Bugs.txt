@@ -4,6 +4,8 @@ Move from found to fixed when fixed.
 
 BUGS FOUND
 
+If you run into a wall and move parallel to it, the player will occasionally shoot up or down the wall (extremely rare).
+
 
 BUGS FIXED
 
