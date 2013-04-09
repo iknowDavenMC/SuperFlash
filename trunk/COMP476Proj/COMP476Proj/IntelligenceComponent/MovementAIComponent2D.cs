@@ -471,12 +471,12 @@ namespace COMP476Proj
 
                 do
                 {
-                    x = random.Next(-1, 2);
+                    x = random.Next(-10, 11);
                 } while (x == 0);
 
                 do
                 {
-                    y = random.Next(-1, 2);
+                    y = random.Next(-10, 11);
                 } while (y == 0);
 
                 direction = new Vector2(x, y);
@@ -486,9 +486,9 @@ namespace COMP476Proj
             {
                 do
                 {
-                    angle = MathHelper.ToRadians(135 * (float)normallyDistributedRandomNumber());
+                    angle = MathHelper.ToRadians(15 * (float)normallyDistributedRandomNumber());
                     direction.X = (float)Math.Cos(physics.Orientation + angle);
-                    direction.Y = -(float)Math.Sin(physics.Orientation + angle);
+                    direction.Y = (float)Math.Sin(physics.Orientation + angle);
                     direction.Normalize();
                 }
                 while (direction.Length() == 0);
