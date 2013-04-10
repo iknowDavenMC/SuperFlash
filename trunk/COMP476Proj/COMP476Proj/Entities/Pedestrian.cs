@@ -92,12 +92,10 @@ namespace COMP476Proj
             }
             else if (behavior == PedestrianBehavior.AWARE)
             {
-                if (rect.Collides(w.streaker.BoundingRectangle))
+                if (isColliding)
                 {
+                    isColliding = false;
                     behavior = PedestrianBehavior.COLLIDE;
-                    state = PedestrianState.FALL;
-                    draw.animation = SpriteDatabase.GetAnimation(studentType + "_fall");
-                    draw.Reset();
                     return;
                 }
 
@@ -152,8 +150,9 @@ namespace COMP476Proj
                         break;
                     case PedestrianState.GET_UP:
                         movement.Stop(ref physics);
-                        if (rect.Collides(w.streaker.BoundingRectangle))
+                        if (isColliding)
                         {
+                            isColliding = false;
                             behavior = PedestrianBehavior.COLLIDE;
                             state = PedestrianState.GET_UP;
                             draw.animation = SpriteDatabase.GetAnimation(studentType + "_getup");
@@ -175,14 +174,13 @@ namespace COMP476Proj
 
                         break;
                     default:
-                        state = PedestrianState.FALL;
+                        //state = PedestrianState.FALL;
                         break;
                 }
             }
             movement.Look(ref physics);
-            physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds);
+            physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
             physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
-            pos = physics.Position;
             if (physics.Orientation > 0)
             {
                 draw.SpriteEffect = SpriteEffects.None;
@@ -201,6 +199,21 @@ namespace COMP476Proj
             draw.Draw(gameTime, spriteBatch, physics.Position);
             base.Draw(gameTime, spriteBatch);
         }
+
+        public override void Fall()
+        {
+            if (state != PedestrianState.FALL)
+            {
+                draw.Reset();
+            }
+
+            state = PedestrianState.FALL;
+
+            physics.SetTargetValues(true, null, null, null);
+
+            return;
+        }
+
         #endregion
 
 
