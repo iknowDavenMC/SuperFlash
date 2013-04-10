@@ -199,17 +199,11 @@ namespace COMP476Proj
                 handleUserInput(gameTime);
             }
 
-            // Character will move kinematically after a collision (simulates an impulse)
-            physics.ToggleSteering(!isColliding);
-            isColliding = false;
-
-            physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds);
+            physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
             physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
-            pos = physics.Position;
 
             draw.Update(gameTime, this);
             UpdateStates(draw.animComplete);
-
 
             //Debugger.getInstance().pointsToDraw.Add(physics.position);
             base.Update(gameTime);
@@ -276,7 +270,7 @@ namespace COMP476Proj
             base.Draw(gameTime, spriteBatch);
         }
 
-        public void Fall()
+        public override void Fall()
         {
             if (charState != StreakerState.FALL)
             {
