@@ -44,10 +44,10 @@ namespace COMP476Proj
 
         /// <summary>
         /// Orientation in radians.
-        /// 0 points to the right of the screen
-        /// Pi points to the left of the screen
-        /// Pi/2 points to the bottom of the screen
-        /// -Pi/2 points to the top of the screen
+        /// 0 points to the bottom of the screen
+        /// Pi points to the top of the screen
+        /// Pi/2 points to the right of the screen
+        /// -Pi/2 points to the left of the screen
         /// </summary>
         protected float orientation;
 
