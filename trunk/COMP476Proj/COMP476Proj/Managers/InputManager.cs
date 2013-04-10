@@ -167,9 +167,9 @@ namespace COMP476Proj
 
             if (instance.controllerType == ControllerType.GamePad)
             {
-                foreach (KeyValuePair<PlayerIndex, GamePadState> pair in instance.gamePadStates)
+                for (int i = 0; i != instance.gamePadStates.Count; ++i)
                 {
-                    instance.gamePadStates[pair.Key] = GamePad.GetState(pair.Key);
+                    instance.gamePadStates[(PlayerIndex)i] = GamePad.GetState((PlayerIndex)i);
                 }
             }
             else
