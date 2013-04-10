@@ -100,17 +100,6 @@ namespace COMP476Proj
             {
                 pedestrian.Update(gameTime, this);
             }
-
-            /*
-            // Temp collision checks
-            if (streaker.BoundingRectangle.Collides(ped.BoundingRectangle))
-            {
-                ped.ResolveCollision(streaker);
-                streaker.ResolveCollision(ped);
-                streaker.Fall();
-            }
-            */
-
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -118,13 +107,10 @@ namespace COMP476Proj
             Vector2 drawPos = new Vector2(0, 0);
             spriteBatch.Draw(SpriteDatabase.GetAnimation("level_1").Texture, drawPos, Color.White);
 
-            // Draw streaker
-            streaker.Draw(gameTime, spriteBatch);
-
             // Draw all other moveable objects
-            foreach (Pedestrian pedestrian in pedestrians)
+            foreach (EntityMoveable moveable in moveableObjectsY)
             {
-                pedestrian.Draw(gameTime, spriteBatch);
+                moveable.Draw(gameTime, spriteBatch);
             }
             
         }
