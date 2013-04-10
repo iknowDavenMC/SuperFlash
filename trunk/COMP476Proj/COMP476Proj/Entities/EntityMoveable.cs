@@ -30,19 +30,38 @@ namespace COMP476Proj
         {
             isColliding = true;
 
+            Rectanglef overlap = Rectanglef.Intersect(rect.Bounds, other.BoundingRectangle.Bounds);
+
             // Handle collision
             if (other is EntityMoveable)
             {
-                physics.ResolveCollision(((EntityMoveable)other).physics);
+                float mass1 = ComponentPhysics.Mass;
+                float mass2 = ((EntityMoveable)other).ComponentPhysics.Mass;
+
+                if (mass1 > mass2)
+                {
+                    ((EntityMoveable)other).Fall();
+                }
+                if (mass1 < mass2)
+                {
+                    Fall();
+                }
+
+                physics.ResolveCollision(((EntityMoveable)other).physics, overlap);
             }
             else if (other is Wall)
             {
-                physics.ResolveWallCollision(Rectanglef.Intersect(rect.Bounds, other.BoundingRectangle.Bounds));
+                physics.ResolveWallCollision(overlap);
             }
 
             // Resolve inter penetration
-            physics.ResolveInterPenetration(Rectanglef.Intersect(rect.Bounds, other.BoundingRectangle.Bounds));
+            physics.ResolveInterPenetration(overlap);
         }
+
+        /// <summary>
+        /// Fall
+        /// </summary>
+        public virtual void Fall() { }
 
         #endregion
     }
