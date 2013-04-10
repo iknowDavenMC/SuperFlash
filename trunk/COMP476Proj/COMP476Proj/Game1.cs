@@ -178,10 +178,15 @@ namespace COMP476Proj
             ps2.Draw(gameTime, spriteBatch);
             ps.Draw(gameTime, spriteBatch);
             //Debugger.getInstance().Draw(spriteBatch);
-            world.ped.BoundingRectangle.Draw(graphics.GraphicsDevice, spriteBatch);
+
+            foreach (Pedestrian ped in world.pedestrians)
+            {
+                ped.BoundingRectangle.Draw(graphics.GraphicsDevice, spriteBatch);
+            }
+
             world.streaker.BoundingRectangle.Draw(graphics.GraphicsDevice, spriteBatch);
             spriteBatch.End();
-            // TODO: Add your drawing code here
+
 
 
 
