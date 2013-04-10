@@ -153,6 +153,11 @@ namespace COMP476Proj
 
         #region Properties
 
+        public float Mass
+        {
+            get { return mass; }
+        }
+
         public float MaxAcceleration
         {
             get { return maxAcceleration; }
@@ -459,6 +464,18 @@ namespace COMP476Proj
         }
 
         /// <summary>
+        /// Calculates current position based on velocity and acceleration
+        /// </summary>
+        /// <param name="time">Time elapsed (in seconds) since the last update of position</param>
+        /// <param name="position">New position</param>
+        public void UpdatePosition(double time, out Vector2 position)
+        {
+            UpdatePosition(time);
+
+            position = this.position;
+        }
+
+        /// <summary>
         /// Calculates current orientation based on rotation and angular acceleration if steering
         /// Else, orientation is interpolated over a few frames
         /// </summary>
@@ -480,48 +497,21 @@ namespace COMP476Proj
         /// Resolve collision between two moveable objects
         /// </summary>
         /// <param name="other">Other object colliding</param>
-        public void ResolveCollision(PhysicsComponent2D other)
+        /// <param name="overlap">Rectangle of intersection between bounding rectangles</param>
+        public void ResolveCollision(PhysicsComponent2D other, Rectanglef overlap)
         {
             // Normal
-            Vector2 contactNormal;
-            Vector2 contactNormal1 = position - other.position;
-            Vector2 contactNormal2 = -contactNormal1;
-
-            // If moving, work with your velocity
-            if (velocity.Length() > 0.005)
-            {
-                // If contact normal1 opposes velocity, use that contact normal
-                if (Vector2.Dot(contactNormal1, velocity) < Vector2.Dot(contactNormal2, velocity))
-                {
-                    contactNormal = contactNormal1;
-                }
-                else
-                {
-                    contactNormal = contactNormal2;
-                }
-            }
-            else
-            {
-                if (Vector2.Dot(contactNormal1, other.velocity) < Vector2.Dot(contactNormal2, other.velocity))
-                {
-                    contactNormal = contactNormal2;
-                }
-                else
-                {
-                    contactNormal = contactNormal1;
-                }
-            }
-
+            Vector2 contactNormal = position - overlap.Center;
             contactNormal.Normalize();
 
             // Steps outlined in the class slides
-            float Vs = -(1 + coefficientOfRestitution) * -Math.Abs(Vector2.Dot(velocity, contactNormal)) + Math.Abs(Vector2.Dot(other.velocity, contactNormal));
-            float deltaPD = 1 / mass + 1 / other.mass;
+            float Vs = -(1 + coefficientOfRestitution) * -(Math.Abs(Vector2.Dot(velocity, contactNormal)) + Math.Abs(Vector2.Dot(other.velocity, contactNormal)));
+            float deltaPD = (1 / mass) + (1 / other.mass);
             float g = Vs / deltaPD;
             contactNormal *= g;
 
             velocity += contactNormal / mass;
-            movementDirection = contactNormal;
+            movementDirection = velocity;
             movementDirection.Normalize();
         }
 
