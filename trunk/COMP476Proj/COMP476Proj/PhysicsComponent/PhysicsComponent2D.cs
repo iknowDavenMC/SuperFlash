@@ -289,12 +289,12 @@ namespace COMP476Proj
                 int signX = Math.Sign(velocity.X), signY = Math.Sign(velocity.Y);
                 velocity += acceleration * (float)time;
 
-                if (Math.Sign(velocity.X) != signX)
+                if (Math.Sign(velocity.X) != signX || Math.Abs(velocity.X) < 25)
                 {
                     velocity.X = 0;
                 }
 
-                if (Math.Sign(velocity.Y) != signY)
+                if (Math.Sign(velocity.Y) != signY || Math.Abs(velocity.Y) < 25)
                 {
                     velocity.Y = 0;
                 }
@@ -521,59 +521,48 @@ namespace COMP476Proj
         /// </summary>
         public void ResolveWallCollision(Rectanglef overlap)
         {
-            // If overlap has more height than width
-            if (overlap.Height > overlap.Width)
-            {
-                movementDirection.X *= -1;
-            }
-            // If overlap has less height than width
-            else if (overlap.Height < overlap.Width)
-            {
-                movementDirection.Y *= -1;
-            }
-            // If equal
-            else
-            {
-                movementDirection *= -1;
-            }
+            // Normal
+            Vector2 contactNormal = position - overlap.Center;
+            contactNormal.Normalize();
+
+            // Steps outlined in the class slides
+            float Vs = -(1 + coefficientOfRestitution) * -Math.Abs(Vector2.Dot(velocity, contactNormal));
+            float deltaPD = (1 / mass);
+            float g = Vs / deltaPD;
+            contactNormal *= g;
+
+            velocity += contactNormal / mass;
+            movementDirection = velocity;
+            movementDirection.Normalize();
         }
 
         /// <summary>
         /// Resolve inter penetration between two moveable objects
         /// </summary>
         /// <param name="overlap">Area of interpenetration</param>
-        public void ResolveInterPenetration(Rectanglef overlap)
+        /// <param name="playerRectangle">Rectangle of the player</param>
+        public void ResolveInterPenetration(Rectanglef overlap, Rectanglef playerRectangle)
         {
             if (overlap.Width < overlap.Height)
             {
-                if (movementDirection.X != 0)
+                if (Math.Abs(overlap.X - playerRectangle.X) < 0.0001)
                 {
-                    position.X += Math.Sign(movementDirection.X) * (overlap.Width);
-                }
-                else if (movementDirection.Y != 0)
-                {
-                    position.Y += Math.Sign(movementDirection.Y) * (overlap.Height);
+                    position.X += overlap.Width;
                 }
                 else
                 {
-                    // This should never happen
-                    Console.ReadLine();
+                    position.X -= overlap.Width;
                 }
             }
             else
             {
-                if (movementDirection.Y != 0)
+                if (Math.Abs(overlap.Y - playerRectangle.Y) < 0.0001)
                 {
-                    position.Y += Math.Sign(movementDirection.Y) * (overlap.Height);
-                }
-                else if (movementDirection.X != 0)
-                {
-                    position.X += Math.Sign(movementDirection.X) * (overlap.Width);
+                    position.Y += overlap.Height;
                 }
                 else
                 {
-                    // This should never happen
-                    Console.ReadLine();
+                    position.Y -= overlap.Height;
                 }
             }
         }
