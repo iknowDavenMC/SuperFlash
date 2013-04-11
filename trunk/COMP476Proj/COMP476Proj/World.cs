@@ -18,6 +18,7 @@ namespace COMP476Proj
         public List<Wall> walls;
         public List<EntityMoveable> moveableObjectsX;
         public List<EntityMoveable> moveableObjectsY;
+        public Map map;
         #endregion
 
         #region Init
@@ -27,19 +28,6 @@ namespace COMP476Proj
                 new DrawComponent(SpriteDatabase.GetAnimation("streaker_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f));
 
             pedestrians = new List<Pedestrian>();
-
-            pedestrians.Add(new Pedestrian(new PhysicsComponent2D(new Vector2(200, 200), 0, new Vector2(20, 20), 150, 750, 75, 1000, 8, 40, 0f, true), new MovementAIComponent2D(),
-                new DrawComponent(SpriteDatabase.GetAnimation("student3_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f),PedestrianState.WANDER));
-
-            pedestrians.Add(new Pedestrian(new PhysicsComponent2D(new Vector2(300, 300), 0, new Vector2(20, 20), 150, 750, 75, 1000, 8, 40, 0f, true), new MovementAIComponent2D(),
-                new DrawComponent(SpriteDatabase.GetAnimation("student2_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), PedestrianState.WANDER));
-
-            pedestrians.Add(new Pedestrian(new PhysicsComponent2D(new Vector2(200, 300), 0, new Vector2(20, 20), 150, 750, 75, 1000, 8, 40, 0f, true), new MovementAIComponent2D(),
-                new DrawComponent(SpriteDatabase.GetAnimation("student1_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), PedestrianState.WANDER));
-
-            pedestrians.Add(new Pedestrian(new PhysicsComponent2D(new Vector2(300, 200), 0, new Vector2(20, 20), 150, 750, 75, 1000, 8, 40, 0f, true), new MovementAIComponent2D(),
-                new DrawComponent(SpriteDatabase.GetAnimation("student2_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), PedestrianState.WANDER));
-
             moveableObjectsX = new List<EntityMoveable>();
             moveableObjectsY = new List<EntityMoveable>();
 
@@ -54,6 +42,23 @@ namespace COMP476Proj
 
             moveableObjectsX = moveableObjectsX.OrderBy(o => o.ComponentPhysics.Position.X).ToList();
             moveableObjectsY = moveableObjectsY.OrderBy(o => o.ComponentPhysics.Position.Y).ToList();
+
+            map = new Map();
+        }
+
+        public void LoadMap(string filename)
+        {
+            map.Load(filename);
+            foreach (NPC npc in map.startingNPCs)
+            {
+                if (npc is Pedestrian)
+                    pedestrians.Add((Pedestrian)npc);
+                moveableObjectsX.Add(npc);
+                moveableObjectsY.Add(npc);
+            }
+            moveableObjectsX = moveableObjectsX.OrderBy(o => o.ComponentPhysics.Position.X).ToList();
+            moveableObjectsY = moveableObjectsY.OrderBy(o => o.ComponentPhysics.Position.Y).ToList();
+            streaker.ComponentPhysics.Position = map.playerStart;
         }
         #endregion
 
@@ -82,6 +87,13 @@ namespace COMP476Proj
                     moveableObjectsY[i].ResolveCollision(moveableObjectsY[i + 1]);
                     moveableObjectsY[i + 1].ResolveCollision(moveableObjectsY[i]);
                 }
+                foreach (Wall wall in map.walls)
+                {
+                    if (moveableObjectsY[i].BoundingRectangle.Collides(wall.BoundingRectangle))
+                    {
+                        moveableObjectsY[i].ResolveCollision(wall);
+                    }
+                }
             }
 
             // Update streaker
@@ -100,6 +112,8 @@ namespace COMP476Proj
             {
                 pedestrian.Update(gameTime, this);
             }
+
+            AchievementManager.getInstance().Update(gameTime);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -107,12 +121,17 @@ namespace COMP476Proj
             Vector2 drawPos = new Vector2(0, 0);
             spriteBatch.Draw(SpriteDatabase.GetAnimation("level_1").Texture, drawPos, Color.White);
 
+            foreach (Wall wall in map.walls)
+            {
+                wall.BoundingRectangle.Draw(spriteBatch);
+            }
+
             // Draw all other moveable objects
             foreach (EntityMoveable moveable in moveableObjectsY)
             {
                 moveable.Draw(gameTime, spriteBatch);
             }
-            
+            AchievementManager.getInstance().Draw(gameTime, spriteBatch);
         }
         #endregion
     }

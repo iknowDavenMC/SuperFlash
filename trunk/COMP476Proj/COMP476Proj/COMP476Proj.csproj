@@ -84,7 +84,13 @@
     <Compile Include="Entities\Pedestrian.cs" />
     <Compile Include="Entities\Streaker.cs" />
     <Compile Include="Entities\Wall.cs" />
-    <Compile Include="HUD.cs" />
+    <Compile Include="Map.cs" />
+    <Compile Include="Managers\AchievementManager.cs" />
+    <Compile Include="Managers\FontManager.cs" />
+    <Compile Include="UI\AchievementToast.cs" />
+    <Compile Include="UI\Achievement.cs" />
+    <Compile Include="UI\ConcreteAchievements.cs" />
+    <Compile Include="UI\HUD.cs" />
     <Compile Include="IntelligenceComponent\MovementAIComponent2D.cs" />
     <Compile Include="Managers\LevelManager.cs" />
     <Compile Include="Managers\InputManager.cs" />
