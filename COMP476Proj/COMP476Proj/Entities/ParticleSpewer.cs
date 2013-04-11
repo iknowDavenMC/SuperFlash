@@ -82,14 +82,6 @@ namespace COMP476Proj
             emitters = Emitters;
             minAngle = MinAngle;
             maxAngle = MaxAngle;
-            if (minAngle < 0)
-                minAngle = 0;
-            if (minAngle > MathHelper.TwoPi)
-                minAngle = MathHelper.TwoPi;
-            if (maxAngle < 0)
-                maxAngle = 0;
-            if (maxAngle > MathHelper.TwoPi)
-                maxAngle = MathHelper.TwoPi;
             angleRange = MaxAngle - minAngle;
             minLifespan = MinLifespan;
             maxLifespan = MaxLifespan;

@@ -96,7 +96,7 @@ namespace CollisionBoxTool
             this.IsMouseVisible = true;
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            font = Content.Load<SpriteFont>("Font");
+            font = Content.Load<SpriteFont>("Fonts/AchievementText");
             blank = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             blank.SetData(new[] { Color.White });
             circle = new Texture2D(GraphicsDevice, circler * 2, circler * 2, false, SurfaceFormat.Color);

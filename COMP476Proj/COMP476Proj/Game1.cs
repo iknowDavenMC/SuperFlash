@@ -68,11 +68,14 @@ namespace COMP476Proj
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             spriteFont = Content.Load<SpriteFont>("Fonts/Game Over");
-
+            FontManager fontMan = FontManager.getInstance();
+            fontMan.addFont("GameOver", spriteFont);
+            fontMan.addFont("AchieveTitle", Content.Load<SpriteFont>("Fonts/AchievementTitle"));
+            fontMan.addFont("AchieveText", Content.Load<SpriteFont>("Fonts/AchievementText"));
             SpriteDatabase.loadSprites(Content);
             //Create World
             world = new World();
-
+            world.LoadMap("level.txt");
             Texture2D level = SpriteDatabase.GetAnimation("level_1").Texture;
 
             Camera.MaxX = level.Width;
@@ -181,10 +184,10 @@ namespace COMP476Proj
 
             foreach (Pedestrian ped in world.pedestrians)
             {
-                ped.BoundingRectangle.Draw(graphics.GraphicsDevice, spriteBatch);
+                ped.BoundingRectangle.Draw(spriteBatch);
             }
 
-            world.streaker.BoundingRectangle.Draw(graphics.GraphicsDevice, spriteBatch);
+            world.streaker.BoundingRectangle.Draw(spriteBatch);
             spriteBatch.End();
 
 
