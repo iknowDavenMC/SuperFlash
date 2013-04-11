@@ -61,13 +61,13 @@ EDGES
 6 7
 NPCS
 111 243 Civilian Static
-235 247 Civilian Static
+235 247 Civilian Wander
 355 245 Civilian Static
-355 369 Civilian Static
+355 369 Civilian Wander
 232 365 Civilian Static
-112 363 Civilian Static
+112 363 Civilian Wander
 106 485 Civilian Static
-237 487 Civilian Static
+237 487 Civilian Wander
 367 487 Civilian Static
 667 327 SmartCop Wander
 558 172 DumbCop Wander

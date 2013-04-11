@@ -175,6 +175,7 @@ namespace COMP476Proj
                         break;
                     default:
                         //state = PedestrianState.FALL;
+                        behavior = PedestrianBehavior.AWARE;
                         break;
                 }
             }
