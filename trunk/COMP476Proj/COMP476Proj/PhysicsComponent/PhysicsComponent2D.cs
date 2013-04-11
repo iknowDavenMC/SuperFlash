@@ -126,12 +126,12 @@ namespace COMP476Proj
         /// <summary>
         /// Max rotation
         /// </summary>
-        protected float maxRotation = MathHelper.ToRadians(720); // It takes about 1.5 seconds to do a full turn
+        protected float maxRotation = MathHelper.ToRadians(359); // It takes about 1.5 seconds to do a full turn
 
         /// <summary>
         /// Max angular acceleration
         /// </summary>
-        protected float maxAngularAcceleration = MathHelper.ToRadians(720); // Assuming it takes 0.5 seconds to reach max rotation speed
+        protected float maxAngularAcceleration = MathHelper.ToRadians(359); // Assuming it takes 0.5 seconds to reach max rotation speed
 
         #endregion
 
@@ -495,6 +495,15 @@ namespace COMP476Proj
         }
 
         /// <summary>
+        /// Sets orientation to instantly look where the player is moving
+        /// </summary>
+        /// <param name="time">Time elapsed (in seconds) since the last update of position</param>
+        public void UpdateOrientationInstant(double time)
+        {
+            orientation = orientationDirection;
+        }
+
+        /// <summary>
         /// Resolve collision between two moveable objects
         /// </summary>
         /// <param name="other">Other object colliding</param>
@@ -547,22 +556,22 @@ namespace COMP476Proj
             {
                 if (Math.Abs(overlap.X - playerRectangle.X) < 0.0001)
                 {
-                    position.X += overlap.Width;
+                    position.X += (overlap.Width + 1);
                 }
                 else
                 {
-                    position.X -= overlap.Width;
+                    position.X -= (overlap.Width + 1);
                 }
             }
             else
             {
                 if (Math.Abs(overlap.Y - playerRectangle.Y) < 0.0001)
                 {
-                    position.Y += overlap.Height;
+                    position.Y += (overlap.Height + 1);
                 }
                 else
                 {
-                    position.Y -= overlap.Height;
+                    position.Y -= (overlap.Height + 1);
                 }
             }
         }
