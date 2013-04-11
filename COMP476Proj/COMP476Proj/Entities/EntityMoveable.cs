@@ -55,7 +55,7 @@ namespace COMP476Proj
             }
 
             // Resolve inter penetration
-            physics.ResolveInterPenetration(overlap);
+            physics.ResolveInterPenetration(overlap, rect.Bounds);
         }
 
         /// <summary>
