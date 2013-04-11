@@ -71,7 +71,7 @@ namespace StreakerLibrary
             Texture2D student1 = Content.Load<Texture2D>("student1");
             Texture2D student2 = Content.Load<Texture2D>("student2");
             Texture2D student3 = Content.Load<Texture2D>("student3");
-            Texture2D level1 = Content.Load<Texture2D>("level_1");
+            Texture2D level1 = Content.Load<Texture2D>("levelDesign_Full");
             //Hud elements
             Texture2D banner = Content.Load<Texture2D>("Hud/banner");
             Texture2D notorietyBar = Content.Load<Texture2D>("Hud/notorietyBar");
