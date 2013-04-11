@@ -24,7 +24,7 @@ namespace COMP476Proj
         #region Init
         public World()
         {
-            streaker = new Streaker(new PhysicsComponent2D(new Vector2(100, 100), 0, new Vector2(20,20),150, 750, 150, 750, 8, 50, 0f, true),
+            streaker = new Streaker(new PhysicsComponent2D(new Vector2(100, 100), 0, new Vector2(20,20),150, 750, 150, 750, 8, 50, 0.25f, true),
                 new DrawComponent(SpriteDatabase.GetAnimation("streaker_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f));
 
             pedestrians = new List<Pedestrian>();
@@ -33,15 +33,6 @@ namespace COMP476Proj
 
             moveableObjectsX.Add(streaker);
             moveableObjectsY.Add(streaker);
-
-            foreach (Pedestrian pedestrian in pedestrians)
-            {
-                moveableObjectsX.Add(pedestrian);
-                moveableObjectsY.Add(pedestrian);
-            }
-
-            moveableObjectsX = moveableObjectsX.OrderBy(o => o.ComponentPhysics.Position.X).ToList();
-            moveableObjectsY = moveableObjectsY.OrderBy(o => o.ComponentPhysics.Position.Y).ToList();
 
             map = new Map();
         }
@@ -59,6 +50,9 @@ namespace COMP476Proj
             moveableObjectsX = moveableObjectsX.OrderBy(o => o.ComponentPhysics.Position.X).ToList();
             moveableObjectsY = moveableObjectsY.OrderBy(o => o.ComponentPhysics.Position.Y).ToList();
             streaker.ComponentPhysics.Position = map.playerStart;
+
+            // Set up map grid
+
         }
         #endregion
 
