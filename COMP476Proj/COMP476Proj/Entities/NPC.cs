@@ -11,7 +11,7 @@ namespace COMP476Proj
     {
         #region Fields
         protected MovementAIComponent2D movement;
-        protected float detectRadius = 500f;
+        protected float detectRadius = 200f;
         #endregion
 
         #region Properties
