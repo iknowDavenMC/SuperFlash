@@ -181,7 +181,7 @@ namespace COMP476Proj
             }
             movement.Look(ref physics);
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
-            physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
+            physics.UpdateOrientationInstant(gameTime.ElapsedGameTime.TotalSeconds);
             if (physics.Orientation > 0)
             {
                 draw.SpriteEffect = SpriteEffects.None;
