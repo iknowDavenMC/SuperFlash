@@ -19,6 +19,8 @@ namespace COMP476Proj
         public List<EntityMoveable> moveableObjectsX;
         public List<EntityMoveable> moveableObjectsY;
         public Map map;
+        public List<Wall>[,] grid;
+        public const int gridLength = 200;
         #endregion
 
         #region Init
@@ -52,7 +54,37 @@ namespace COMP476Proj
             streaker.ComponentPhysics.Position = map.playerStart;
 
             // Set up map grid
+            createMapGrid();
+        }
 
+        private void createMapGrid()
+        {
+            // Add walls to the grid
+            BoundingRectangle test = new BoundingRectangle(Vector2.Zero, gridLength/2);
+
+            grid = new List<Wall>[(int)Math.Ceiling((Map.HEIGHT + 100) / gridLength), (int)Math.Ceiling((Map.WIDTH + 100) / gridLength)];
+
+            int y = grid.GetLength(0);
+            int x = grid.GetLength(1);
+
+            for (int i = 0; i != y; ++i)
+            {
+                for (int j = 0; j != x; ++j)
+                {
+                    test.Update(new Vector2(j * test.Bounds.Height, i * test.Bounds.Width));
+
+                    grid[i, j] = new List<Wall>();
+
+                    // Check collision
+                    for (int k = 0; k != map.walls.Count; ++k)
+                    {
+                        if (test.Collides(map.walls[k].BoundingRectangle))
+                        {
+                            grid[i, j].Add(map.walls[k]);
+                        }
+                    }
+                }
+            }
         }
         #endregion
 
@@ -81,11 +113,41 @@ namespace COMP476Proj
                     moveableObjectsY[i].ResolveCollision(moveableObjectsY[i + 1]);
                     moveableObjectsY[i + 1].ResolveCollision(moveableObjectsY[i]);
                 }
-                foreach (Wall wall in map.walls)
+            }
+
+            // Check collision for walls
+            for (int i = 0; i != moveableObjectsX.Count; ++i)
+            {
+                int startX = (int)Math.Round(moveableObjectsX[i].BoundingRectangle.Bounds.X / gridLength);
+                int startY = (int)Math.Round(moveableObjectsX[i].BoundingRectangle.Bounds.Y / gridLength);
+                int endX = (int)Math.Round((moveableObjectsX[i].BoundingRectangle.Bounds.X + moveableObjectsX[i].BoundingRectangle.Bounds.Width) / gridLength);
+                int endY = (int)Math.Round((moveableObjectsX[i].BoundingRectangle.Bounds.Y + moveableObjectsX[i].BoundingRectangle.Bounds.Height) / gridLength);
+
+                // Make sure loops go from small values to larger ones
+                if (startY > endY)
                 {
-                    if (moveableObjectsY[i].BoundingRectangle.Collides(wall.BoundingRectangle))
+                    int temp = startY;
+                    startY = endY;
+                    endY = temp;
+                }
+                if (startX > endX)
+                {
+                    int temp = startX;
+                    startX = endX;
+                    endX = temp;
+                }
+
+                for (int k = startY; k != endY + 1; ++k)
+                {
+                    for (int l = startX; l != endX + 1; ++l)
                     {
-                        moveableObjectsY[i].ResolveCollision(wall);
+                        for (int j = 0; j != grid[k, l].Count; ++j)
+                        {
+                            if (moveableObjectsX[i].BoundingRectangle.Collides(grid[k, l][j].BoundingRectangle))
+                            {
+                                moveableObjectsX[i].ResolveCollision(grid[k, l][j]);
+                            }
+                        }
                     }
                 }
             }
@@ -107,6 +169,7 @@ namespace COMP476Proj
                 pedestrian.Update(gameTime, this);
             }
 
+            // Update achievements
             AchievementManager.getInstance().Update(gameTime);
         }
 

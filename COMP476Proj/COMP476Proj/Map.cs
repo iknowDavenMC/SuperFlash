@@ -10,6 +10,9 @@ namespace COMP476Proj
 {
     public class Map
     {
+        public const float WIDTH = 3436;
+        public const float HEIGHT = 1122;
+
         /// <summary>
         /// PLACEHOLDER. Should be redesigned properly when pathfinding is done
         /// </summary>
@@ -139,7 +142,7 @@ namespace COMP476Proj
                         if (mode.StartsWith("Static"))
                             pstate = PedestrianState.STATIC;
                         npc = new Pedestrian(
-                            new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), 150, 750, 75, 1000, 8, 50, 0.25f, true),
+                            new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), 150, 750, 75, 1000, 8, 40, 0.25f, true),
                             new MovementAIComponent2D(),
                             new DrawComponent(SpriteDatabase.GetAnimation("student"+pnum+"_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f),
                             pstate
