@@ -84,20 +84,6 @@ namespace COMP476Proj
             // Get input manager instance
             InputManager input = InputManager.GetInstance();
 
-            if (input.IsDoing("Fall", PlayerIndex.One))
-            {
-                if (charState != StreakerState.FALL)
-                {
-                    draw.Reset();
-                }
-
-                charState = StreakerState.FALL;
-
-                physics.SetTargetValues(true, null, null, null);
-
-                return;
-            }
-
             // Check input
             // Dance takes precedence
             if (input.IsDoing("Dance", PlayerIndex.One))
