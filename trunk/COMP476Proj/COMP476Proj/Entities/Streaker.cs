@@ -10,7 +10,7 @@ using StreakerLibrary;
 
 namespace COMP476Proj
 {
-    public enum StreakerState { STATIC, WALK, FALL, GET_UP, DANCE };
+    public enum StreakerState { STATIC, WALK, FALL, GET_UP, DANCE, SUPERFLASH };
 
     public class Streaker : EntityMoveable
     {
@@ -108,6 +108,18 @@ namespace COMP476Proj
                 }
 
                 charState = StreakerState.DANCE;
+
+                physics.SetTargetValues(true, null, null, null);
+            }
+            // Dance takes precedence
+            else if (input.IsDoing("Superflash", PlayerIndex.One))
+            {
+                if (charState != StreakerState.SUPERFLASH)
+                {
+                    draw.Reset();
+                }
+
+                charState = StreakerState.SUPERFLASH;
 
                 physics.SetTargetValues(true, null, null, null);
             }
@@ -259,6 +271,10 @@ namespace COMP476Proj
                     break;
                 case StreakerState.DANCE:
                     draw.animation = SpriteDatabase.GetAnimation("streaker_dance");
+                    draw.Play();
+                    break;
+                case StreakerState.SUPERFLASH:
+                    draw.animation = SpriteDatabase.GetAnimation("streaker_flash");
                     draw.Play();
                     break;
             }
