@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StreakerLibrary;
+using Microsoft.Xna.Framework.Content;
 #endregion
 
 namespace COMP476Proj
@@ -39,8 +40,10 @@ namespace COMP476Proj
             map = new Map();
         }
 
-        public void LoadMap(string filename)
+        public void LoadMap(string filename, ContentManager content)
         {
+            AchievementManager.getInstance().LoadContent(content);
+
             map.Load(filename);
             foreach (NPC npc in map.startingNPCs)
             {

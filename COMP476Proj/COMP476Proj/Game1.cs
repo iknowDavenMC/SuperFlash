@@ -75,7 +75,7 @@ namespace COMP476Proj
             SpriteDatabase.loadSprites(Content);
             //Create World
             world = new World();
-            world.LoadMap("level.txt");
+            world.LoadMap("level.txt", Content);
             Texture2D level = SpriteDatabase.GetAnimation("level_1").Texture;
 
             Camera.MaxX = level.Width;
