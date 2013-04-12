@@ -58,6 +58,7 @@ namespace COMP476Proj
             {
                 if (isColliding)
                 {
+                    
                     isColliding = false;
                     behavior = PedestrianBehavior.COLLIDE;
                     state = PedestrianState.FALL;
@@ -96,6 +97,7 @@ namespace COMP476Proj
             {
                 if (isColliding)
                 {
+                    
                     isColliding = false;
                     behavior = PedestrianBehavior.COLLIDE;
                     return;
@@ -154,6 +156,7 @@ namespace COMP476Proj
                         movement.Stop(ref physics);
                         if (isColliding)
                         {
+
                             isColliding = false;
                             behavior = PedestrianBehavior.COLLIDE;
                             state = PedestrianState.GET_UP;
@@ -209,7 +212,6 @@ namespace COMP476Proj
             {
                 draw.Reset();
             }
-
             state = PedestrianState.FALL;
 
             physics.SetTargetValues(true, null, null, null);

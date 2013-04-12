@@ -24,7 +24,7 @@ namespace COMP476Proj
         SpriteFont spriteFont;
         World world;
         public HUD hud;
-
+        public static float elapsedTime;
         FrameRate frameRate;
 
         ParticleSpewer ps;
@@ -89,8 +89,7 @@ namespace COMP476Proj
             Texture2D banner = Content.Load<Texture2D>("Hud/banner");
             Texture2D notorietyBar = Content.Load<Texture2D>("Hud/notorietyBar");
             Texture2D notorietyMeter = Content.Load<Texture2D>("Hud/notorietyMeter");
-            hud = new HUD(this, spriteBatch, spriteFont, banner, notorietyBar, notorietyMeter);
-
+            HUD.getInstance().loadContent(banner, notorietyMeter, notorietyMeter, spriteFont);
             Texture2D blank = new Texture2D(GraphicsDevice, 1, 1);
             blank.SetData(new[] { Color.White });
             SpriteDatabase.AddAnimation(new Animation("blank", blank, 1, 1, 1, 0, 1));
@@ -151,7 +150,6 @@ namespace COMP476Proj
             }
             else ps2.Stop();
             world.Update(gameTime);
-            hud.Update(gameTime);
             ps.Update(gameTime);
             ps2.X = world.streaker.X;
             ps2.Y = world.streaker.Y - 25;
@@ -162,7 +160,8 @@ namespace COMP476Proj
                 this.Window.Title = frameRate.CurrentFramesPerSecond.ToString() + " frames per second";
             }
 #endif
-
+            elapsedTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            HUD.getInstance().Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -177,7 +176,7 @@ namespace COMP476Proj
             Matrix transform = Matrix.CreateTranslation(-(Camera.X), -(Camera.Y), 0) * Matrix.CreateScale(Camera.Scale) * Matrix.CreateTranslation(center);
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, null, null, null, transform);
             world.Draw(gameTime, spriteBatch);
-            hud.Draw(gameTime);
+            HUD.getInstance().Draw(gameTime, spriteBatch);
             ps2.Draw(gameTime, spriteBatch);
             ps.Draw(gameTime, spriteBatch);
             //Debugger.getInstance().Draw(spriteBatch);

@@ -13,11 +13,12 @@ using Microsoft.Xna.Framework.Media;
 namespace COMP476Proj
 {
 
-    public class HUD : Microsoft.Xna.Framework.DrawableGameComponent
+    public class HUD
     {
 
         /*-------------------------------------------------------------------------*/
         #region Fields
+        private static volatile HUD instance = null;
         private Texture2D banner;
         private Texture2D notorietyBar;
         private Texture2D notorietyMeter;
@@ -31,60 +32,58 @@ namespace COMP476Proj
         private SpriteFont spriteFont;
         private int windowHeight = 600;
         private int windowWidth = 800;
-        private int score;
+        private int currentScore;
         private float seconds, minutes;
-        float elapsedTime, timer;
+        float elapsedTime, timer, timerInterval;
+        private int scoreIncrement;
         #endregion
 
         /*-------------------------------------------------------------------------*/
         #region Constructor
-        public HUD(Game game, SpriteBatch spriteBatch, SpriteFont spriteFont, Texture2D banner, Texture2D nororietyBar, Texture2D notorietyMeter)
-            : base(game)
+        private HUD()
         {
-            this.spriteBatch = spriteBatch;
-            this.spriteFont = spriteFont;
-            this.banner = banner;
-            this.notorietyBar = nororietyBar;
-            this.notorietyMeter = notorietyMeter;
             positionBanner = new Vector2(0, windowHeight - 45);
             positionNotorietyBar = new Vector2(positionBanner.X + 120, positionBanner.Y + 15);
             positionNotorietyMeter = new Vector2(positionBanner.X + 118, positionBanner.Y + 11);
             positionScore = new Vector2(positionBanner.X, positionBanner.Y + 1);
             positionTime = new Vector2(positionBanner.X + 750, positionBanner.Y + 1);
-            score = 0;
+            currentScore = 0;
+            timerInterval = 20;
+            timer = 0;
+            scoreIncrement = 5;
+        }
+        public void loadContent(Texture2D banner, Texture2D notorietyBar, Texture2D notorietyMeter, SpriteFont spriteFont)
+        {
+            this.spriteFont = spriteFont;
+            this.banner = banner;
+            this.notorietyBar = notorietyBar;
+            this.notorietyMeter = notorietyMeter;
+        }
+        public static HUD getInstance()
+        {
+            if (instance == null)
+            {
+                instance = new HUD();
+            }
+            return instance;
         }
         #endregion
 
-        /*-------------------------------------------------------------------------*/
-        #region Init
-        public override void Initialize()
-        {
 
-
-            base.Initialize();
-        }
-
-        protected override void LoadContent()
-        {
-            base.LoadContent();
-        }
-        #endregion
 
         /*-------------------------------------------------------------------------*/
         #region Update & Draw
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
-            float elapsedTime = (float)gameTime.ElapsedGameTime.Milliseconds;
+            float elapsedTime = Game1.elapsedTime;
             if (elapsedTime >= 60.0f)
             {
                 elapsedTime = 0;
                 seconds++;
             }
-            //seconds += (int)gameTime.ElapsedGameTime.Seconds;
-            base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             float scale = 1 / Camera.Scale;
 
@@ -95,10 +94,27 @@ namespace COMP476Proj
             spriteBatch.Draw(banner, positionBanner * scale + offset, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0f);
             spriteBatch.Draw(notorietyBar, positionNotorietyBar * scale + offset, new Rectangle(0, 0, notorietyBarLength, 12), Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0f);
             spriteBatch.Draw(notorietyMeter, positionNotorietyMeter * scale + offset, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0f);
-
-            spriteBatch.DrawString(spriteFont, "10899", positionScore * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(spriteFont, ""+currentScore, positionScore * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             spriteBatch.DrawString(spriteFont, "" + seconds, positionTime * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-            base.Draw(gameTime);
+
+        }
+        #endregion
+
+        /*-------------------------------------------------------------------------*/
+        #region ScoreFunctions
+        public void increaseScore(int amount)
+        {
+            int increasedAmount = 0;
+            while (increasedAmount < amount)
+            {
+                timer += Game1.elapsedTime;
+                if (timer > timerInterval)
+                {
+                    timer = 0;
+                    currentScore += scoreIncrement;
+                    increasedAmount += scoreIncrement;
+                }
+            }
         }
         #endregion
     }
