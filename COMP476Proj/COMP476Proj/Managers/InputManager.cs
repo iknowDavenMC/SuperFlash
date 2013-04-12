@@ -32,7 +32,7 @@ namespace COMP476Proj
         /// <summary>
         /// States of the different gamepads
         /// </summary>
-        private Dictionary<PlayerIndex, GamePadState> gamePadStates;
+        private GamePadState gamePadState;
         
         /// <summary>
         /// States of the keyboard
@@ -56,31 +56,16 @@ namespace COMP476Proj
         /// <summary>
         /// Constuctor
         /// </summary>
-        /// <param name="game">Current game instance</param>
-        /// <param name="type">Type of controller to check for input</param>
-        /// <param name="numberOfPlayers">Number of players whose inputs must be checked</param>
-        private InputManager(ControllerType type)
-	    {
-            controllerType = type;
-
-            if (controllerType == ControllerType.GamePad)
+        private InputManager()
+        {
+            if (GamePad.GetState(PlayerIndex.One).IsConnected)
             {
-                gamePadStates = new Dictionary<PlayerIndex, GamePadState>();
-
-                PlayerIndex index = PlayerIndex.One;
-
-                for (int i = 0; i != 4; ++i, ++index)
-                {
-                    if (GamePad.GetState(index).IsConnected)
-                    {
-                        gamePadStates.Add(index, GamePad.GetState(index));
-                    }
-                }
-
+                controllerType = ControllerType.GamePad;
                 gamePadMapping = new Dictionary<string, Buttons[]>();
             }
-            else 
+            else
             {
+                controllerType = ControllerType.Keyboard;
                 keyboardMapping = new Dictionary<string, Keys[]>();
             }
 
@@ -131,27 +116,13 @@ namespace COMP476Proj
         /// </summary>
         /// <param name="type">Type of the controller to be used</param>
         /// <returns>The only instance of input manager</returns>
-        public static InputManager GetInstance(ControllerType type)
-        {
-            if (instance == null || type != instance.controllerType)
-            {
-                instance = new InputManager(type);
-            }
-            
-            return instance;
-        }
-
-        /// <summary>
-        /// Allows the instance to be retrieved. If the instance is null, a new one is instantiated assuming keyboard input.
-        /// </summary>
-        /// <returns>The only instance of input manager</returns>
         public static InputManager GetInstance()
         {
             if (instance == null)
             {
-                instance = new InputManager(ControllerType.Keyboard);
+                instance = new InputManager();
             }
-
+            
             return instance;
         }
 
@@ -168,14 +139,25 @@ namespace COMP476Proj
 
             if (instance.controllerType == ControllerType.GamePad)
             {
-                for (int i = 0; i != instance.gamePadStates.Count; ++i)
+                if (GamePad.GetState(PlayerIndex.One).IsConnected)
                 {
-                    instance.gamePadStates[(PlayerIndex)i] = GamePad.GetState((PlayerIndex)i);
+                    instance.gamePadState = GamePad.GetState(PlayerIndex.One);
+                }
+                else
+                {
+                    instance = null;
                 }
             }
             else
             {
-                instance.keyboardState = Keyboard.GetState();
+                if (GamePad.GetState(PlayerIndex.One).IsConnected)
+                {
+                    instance = null;
+                }
+                else
+                {
+                    instance.keyboardState = Keyboard.GetState();
+                }
             }
         }
 
@@ -199,7 +181,7 @@ namespace COMP476Proj
                 {
                     for (int i = 0; i != instance.gamePadMapping[key].GetLength(0); ++i)
                     {
-                        if (instance.gamePadStates[index].IsButtonDown(instance.gamePadMapping[key][i]))
+                        if (instance.gamePadState.IsButtonDown(instance.gamePadMapping[key][i]))
                         {
                             return true;
                         }
