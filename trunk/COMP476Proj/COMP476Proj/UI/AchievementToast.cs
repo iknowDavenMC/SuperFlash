@@ -55,6 +55,7 @@ namespace COMP476Proj
             this.position = position;
             this.width = width;
             this.height = height;
+            banner = SpriteDatabase.GetAnimation("achievement_banner").Texture;
 
             leftSpewer = new ParticleSpewer(
                 position.X+53, position.Y + 52,
@@ -69,11 +70,6 @@ namespace COMP476Proj
                 0, 500, 2, 120, 60, 60, 0, 1, 1, 1, true, 0.5f);
             rightSpewer.Absolute = true;
             rightSpewer.Start();
-        }
-
-        public static void LoadContent(ContentManager content)
-        {
-            banner = content.Load<Texture2D>("AchievementUnlocked");
         }
 
         public void Kill()
@@ -97,17 +93,10 @@ namespace COMP476Proj
             offset *= scale;
             offset.X += Camera.X;
             offset.Y += Camera.Y;
-
-            Texture2D banner = SpriteDatabase.GetAnimation("achievement_banner").Texture;
-            //Vector2 borderPos = new Vector2(X + offset.X, Y + offset.Y);
-            //Vector2 borderScale = new Vector2(width * scale, height * scale);
-            //Vector2 innerPos = new Vector2(X + borderWidth + offset.X, Y + borderWidth + offset.Y);
-            //Vector2 innerScale = new Vector2((width - borderWidth * 2) * scale, (height - borderWidth * 2) * scale);
             Vector2 bannerPos =  new Vector2(X + offset.X, Y + 4 + offset.Y);
             
             leftSpewer.Draw(gameTime, spriteBatch);
             rightSpewer.Draw(gameTime, spriteBatch);
-            //spriteBatch.Draw(blank, borderPos, null, Color.Black, 0f, Vector2.Zero, borderScale, SpriteEffects.None, 0);
             spriteBatch.Draw(banner, bannerPos, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0);
 
             FontManager fontMan = FontManager.getInstance();
@@ -119,10 +108,9 @@ namespace COMP476Proj
             Vector2 titlePos = new Vector2(
                 X + 125 + (width-125) / 2 - titleSize.X / 2 + offset.X,
                 Y + 40 + borderWidth * 2 + offset.Y);
-            //Vector2 textPos = new Vector2(X + width / 2 - textSize.X / 2 + offset.X, titlePos.Y + titleSize.Y);
 
-            spriteBatch.DrawString(titleFont, title, titlePos, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
-            //spriteBatch.DrawString(textFont, description, textPos, Color.Black, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
+            spriteBatch.DrawString(titleFont, title, titlePos, Color.Black, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
+            spriteBatch.DrawString(titleFont, title, titlePos + new Vector2(2,-2), Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
         }
     }
 }

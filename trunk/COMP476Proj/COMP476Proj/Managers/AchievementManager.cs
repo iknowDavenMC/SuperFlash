@@ -34,11 +34,6 @@ namespace COMP476Proj
             return instance;
         }
 
-        public void LoadContent(ContentManager content)
-        {
-            AchievementToast.LoadContent(content);
-        }
-
         public bool AddAchievement(Achievement achv)
         {
             if (!achievList.Contains(achv))

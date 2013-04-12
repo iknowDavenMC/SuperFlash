@@ -42,8 +42,6 @@ namespace COMP476Proj
 
         public void LoadMap(string filename, ContentManager content)
         {
-            AchievementManager.getInstance().LoadContent(content);
-
             map.Load(filename);
             foreach (NPC npc in map.startingNPCs)
             {
