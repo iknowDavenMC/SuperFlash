@@ -68,6 +68,8 @@ namespace StreakerLibrary
         {
             Texture2D streaker = Content.Load<Texture2D>("streaker");
             Texture2D cop = Content.Load<Texture2D>("cop");
+            Texture2D smartCop = Content.Load<Texture2D>("smartCop");
+            Texture2D roboCop = Content.Load<Texture2D>("roboCop");
             Texture2D student1 = Content.Load<Texture2D>("student1");
             Texture2D student2 = Content.Load<Texture2D>("student2");
             Texture2D student3 = Content.Load<Texture2D>("student3");
@@ -89,21 +91,31 @@ namespace StreakerLibrary
             SpriteDatabase.AddAnimation(new Animation("streaker_dance", streaker, 5, 143, 184, 736, dance));
             SpriteDatabase.AddAnimation(new Animation("streaker_flash", streaker, 8, 143, 184, 920, flash));
 
-            SpriteDatabase.AddAnimation(new Animation("cop_static", cop, 2, 143, 184, 0, notMoving));
-            SpriteDatabase.AddAnimation(new Animation("cop_walk", cop, 5, 143, 184, 184, walk));
-            SpriteDatabase.AddAnimation(new Animation("cop_fall", cop, 7, 143, 184, 368, fall));
-            SpriteDatabase.AddAnimation(new Animation("cop_getup", cop, 7, 143, 184, 552, getUp));
-            SpriteDatabase.AddAnimation(new Animation("cop_attack", cop, 5, 143, 184, 736, attack));
+            SpriteDatabase.AddAnimation(new Animation("cop_static", cop, 2, 143, 183, 0, notMoving));
+            SpriteDatabase.AddAnimation(new Animation("cop_walk", cop, 5, 143, 183, 183, walk));
+            SpriteDatabase.AddAnimation(new Animation("cop_fall", cop, 7, 143, 183, 366, fall));
+            SpriteDatabase.AddAnimation(new Animation("cop_getup", cop, 7, 143, 183, 549, getUp));
+            SpriteDatabase.AddAnimation(new Animation("cop_attack", cop, 4, 143, 183, 732, attack));
+
+            SpriteDatabase.AddAnimation(new Animation("smartCop_static", smartCop, 2, 143, 183, 0, notMoving));
+            SpriteDatabase.AddAnimation(new Animation("smartCop_walk", smartCop, 5, 143, 183, 183, walk));
+            SpriteDatabase.AddAnimation(new Animation("smartCop_fall", smartCop, 7, 143, 183, 366, fall));
+            SpriteDatabase.AddAnimation(new Animation("smartCop_getup", smartCop, 7, 143, 183, 549, getUp));
+            SpriteDatabase.AddAnimation(new Animation("smartCop_attack", smartCop, 4, 143, 183, 732, attack));
+
+            SpriteDatabase.AddAnimation(new Animation("roboCop_static", roboCop, 2, 137, 158, 0, notMoving));
+            SpriteDatabase.AddAnimation(new Animation("roboCop_walk", roboCop, 5, 137, 158, 158, walk));
+            SpriteDatabase.AddAnimation(new Animation("roboCop_attack", roboCop, 4, 137, 158, 316, attack));
 
             SpriteDatabase.AddAnimation(new Animation("student1_static", student1, 2, 137, 155, 0, notMoving));
             SpriteDatabase.AddAnimation(new Animation("student1_walk", student1, 5, 137, 155, 155, walk));
             SpriteDatabase.AddAnimation(new Animation("student1_fall", student1, 6, 137, 155, 310, fall));
             SpriteDatabase.AddAnimation(new Animation("student1_getup", student1, 7, 137, 155, 465, getUp));
 
-            SpriteDatabase.AddAnimation(new Animation("student2_static", student2, 2, 137, 155, 0, notMoving));
-            SpriteDatabase.AddAnimation(new Animation("student2_walk", student2, 5, 137, 155, 155, walk));
-            SpriteDatabase.AddAnimation(new Animation("student2_fall", student2, 8, 137, 155, 310, fall));
-            SpriteDatabase.AddAnimation(new Animation("student2_getup", student2, 7, 137, 155, 465, getUp));
+            SpriteDatabase.AddAnimation(new Animation("student2_static", student2, 2, 137, 152, 0, notMoving));
+            SpriteDatabase.AddAnimation(new Animation("student2_walk", student2, 5, 137, 152, 152, walk));
+            SpriteDatabase.AddAnimation(new Animation("student2_fall", student2, 8, 137, 152, 304, fall));
+            SpriteDatabase.AddAnimation(new Animation("student2_getup", student2, 7, 137, 152, 456, getUp));
 
             SpriteDatabase.AddAnimation(new Animation("student3_static", student3, 2, 145, 164, 0, notMoving));
             SpriteDatabase.AddAnimation(new Animation("student3_walk", student3, 5, 145, 164, 164, walk));
