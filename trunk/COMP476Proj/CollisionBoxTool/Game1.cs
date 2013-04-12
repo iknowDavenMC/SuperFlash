@@ -35,17 +35,18 @@ namespace CollisionBoxTool
         Texture2D scene;
         SpriteFont font;
 
-        List<Rectangle> boxes;
+        List<Box> boxes;
         List<Node> nodes;
         List<Edge> edges;
         List<NPC> NPCs;
         NPC player;
 
         Color boxColor;
+        Color wallColor;
         Color nodeColor;
         Color edgeColor;
         Vector2 startPos, endPos;
-        Rectangle mouseRect;
+        Box mouseBox;
         Node selected;
         Node mouseNode;
         Edge mouseEdge;
@@ -92,7 +93,7 @@ namespace CollisionBoxTool
             // Create a new SpriteBatch, which can be used to draw textures.
             graphics.PreferredBackBufferWidth = WIDTH;
             graphics.PreferredBackBufferHeight = HEIGHT;
-            graphics.IsFullScreen = true;
+            //graphics.IsFullScreen = true;
             graphics.ApplyChanges();
             this.IsMouseVisible = true;
 
@@ -120,20 +121,21 @@ namespace CollisionBoxTool
 
             startPos = new Vector2();
             endPos = new Vector2();
-            mouseRect = new Rectangle();
+            mouseBox = new Box(0, 0, 0, 0, false);
             selected = null;
             mouseNode = new Node(0, 0);
             mouseEdge = new Edge(null, null);
             mouseNPC = new NPC(0, 0, npcType, npcMode);
             mousePlayer = new NPC(0, 0, NPC.Type.Streaker, NPC.Mode.Static);
 
-            boxes = new List<Rectangle>();
+            boxes = new List<Box>();
             nodes = new List<Node>();
             edges = new List<Edge>();
             NPCs = new List<NPC>();
             player = null;
 
-            boxColor = new Color(0.35f, 0.5f, 0.85f, 0.75f);
+            boxColor = new Color(1f, 0.5f, 0.05f, 0.5f);
+            wallColor = new Color(1f, 0.0f, 0.0f, 0.5f);
             nodeColor = new Color(0f, 0.2f, 1f, 0.75f);
             edgeColor = new Color(0.33f, 1f, 0f, 1f);
 
@@ -227,11 +229,18 @@ namespace CollisionBoxTool
 
             if (ks.IsKeyDown(Keys.W) && !wpressed)
             {
-                if (npcMode == NPC.Mode.Static)
-                    npcMode = NPC.Mode.Wander;
-                else if (npcMode == NPC.Mode.Wander)
-                    npcMode = NPC.Mode.Static;
-                mouseNPC.mode = npcMode;
+                if (mode == DrawModes.Box)
+                {
+                    mouseBox.seeThrough = !mouseBox.seeThrough;
+                }
+                else if (mode == DrawModes.NPC)
+                {
+                    if (npcMode == NPC.Mode.Static)
+                        npcMode = NPC.Mode.Wander;
+                    else if (npcMode == NPC.Mode.Wander)
+                        npcMode = NPC.Mode.Static;
+                    mouseNPC.mode = npcMode;
+                }
                 wpressed = true;
             }
 
@@ -256,10 +265,10 @@ namespace CollisionBoxTool
                     }
                     endPos.X = ms.X + Camera.X;
                     endPos.Y = ms.Y + Camera.Y;
-                    mouseRect.X = (int)Math.Min(startPos.X, endPos.X);
-                    mouseRect.Y = (int)Math.Min(startPos.Y, endPos.Y);
-                    mouseRect.Width = (int)Math.Abs(startPos.X - endPos.X);
-                    mouseRect.Height = (int)Math.Abs(startPos.Y - endPos.Y);
+                    mouseBox.rect.X = (int)Math.Min(startPos.X, endPos.X);
+                    mouseBox.rect.Y = (int)Math.Min(startPos.Y, endPos.Y);
+                    mouseBox.rect.Width = (int)Math.Abs(startPos.X - endPos.X);
+                    mouseBox.rect.Height = (int)Math.Abs(startPos.Y - endPos.Y);
                 }
                 else if (mode == DrawModes.Node)
                 {
@@ -312,7 +321,7 @@ namespace CollisionBoxTool
                 if (mode == DrawModes.Box)
                 {
                     drawing = false;
-                    boxes.Add(new Rectangle(mouseRect.X, mouseRect.Y, mouseRect.Width, mouseRect.Height));
+                    boxes.Add(new Box(mouseBox.rect.X, mouseBox.rect.Y, mouseBox.rect.Width, mouseBox.rect.Height, mouseBox.seeThrough));
                 }
                 else if (mode == DrawModes.Node)
                 {
@@ -361,8 +370,8 @@ namespace CollisionBoxTool
                 {
                     for (int i = 0; i != boxes.Count; i++)
                     {
-                        Rectangle r = boxes[i];
-                        if (r.Contains(ms.X + Camera.X, ms.Y + Camera.Y))
+                        Box r = boxes[i];
+                        if (r.rect.Contains(ms.X + Camera.X, ms.Y + Camera.Y))
                         {
                             boxes.Remove(r);
                             i--;
@@ -438,10 +447,10 @@ namespace CollisionBoxTool
 
             spriteBatch.Begin();
             spriteBatch.Draw(scene, new Vector2(-Camera.X, -Camera.Y), Color.White);
-            foreach (Rectangle box in boxes)
+            foreach (Box box in boxes)
             {
-                Rectangle draw = new Rectangle(box.X - Camera.X, box.Y - Camera.Y, box.Width, box.Height);
-                spriteBatch.Draw(blank, draw, boxColor);
+                Rectangle draw = new Rectangle(box.rect.X - Camera.X, box.rect.Y - Camera.Y, box.rect.Width, box.rect.Height);
+                spriteBatch.Draw(blank, draw, box.seeThrough ? boxColor : wallColor);
             }
             foreach (Node node in nodes)
             {
@@ -458,7 +467,7 @@ namespace CollisionBoxTool
                 switch (npc.mode)
                 {
                     case NPC.Mode.Static:
-                        drawBordered(spriteBatch, npc.X-Camera.X, npc.Y-Camera.Y, "S", Color.Black, Color.White);
+                        drawBordered(spriteBatch, npc.X - Camera.X, npc.Y - Camera.Y, "S", Color.Black, Color.White);
                         break;
                     case NPC.Mode.Wander:
                         drawBordered(spriteBatch, npc.X - Camera.X, npc.Y - Camera.Y, "W", Color.Black, Color.White);
@@ -471,8 +480,8 @@ namespace CollisionBoxTool
             {
                 if (mode == DrawModes.Box)
                 {
-                    Rectangle mouseDraw = new Rectangle(mouseRect.X - Camera.X, mouseRect.Y - Camera.Y, mouseRect.Width, mouseRect.Height);
-                    spriteBatch.Draw(blank, mouseDraw, boxColor);
+                    Rectangle mouseDraw = new Rectangle(mouseBox.rect.X - Camera.X, mouseBox.rect.Y - Camera.Y, mouseBox.rect.Width, mouseBox.rect.Height);
+                    spriteBatch.Draw(blank, mouseDraw, mouseBox.seeThrough ? boxColor : wallColor);
                 }
                 else if (mode == DrawModes.Node)
                 {
@@ -489,6 +498,10 @@ namespace CollisionBoxTool
             }
             String modestr = "MODE: " + mode.ToString();
             drawBordered(spriteBatch, 10, 10, modestr, Color.Black, Color.White);
+            if (mode == DrawModes.Box)
+            {
+                drawBordered(spriteBatch, 10, 28, "[W]    " + (mouseBox.seeThrough ? "See Through" : "Wall"), Color.Black, Color.White);
+            }
             if (mode == DrawModes.NPC)
             {
                 drawBordered(spriteBatch, 10, 28, "[1,2,3]", Color.Black, Color.White);
@@ -525,9 +538,9 @@ namespace CollisionBoxTool
             Stream fs = File.Open("out.txt", FileMode.Create);
             StreamWriter writer = new StreamWriter(fs);
             writer.WriteLine("RECTANGLES");
-            foreach (Rectangle box in boxes)
+            foreach (Box box in boxes)
             {
-                string line = box.X + " " + box.Y + " " + box.Width + " " + box.Height;
+                string line = box.rect.X + " " + box.rect.Y + " " + box.rect.Width + " " + box.rect.Height + " " + (box.seeThrough ? "true" : "false");
 
                 writer.WriteLine(line);
             }
@@ -572,6 +585,7 @@ namespace CollisionBoxTool
                 do
                 {
                     int x, y, w, h;
+                    bool seeThrough;
                     int spacei = line.IndexOf(' ');
                     x = int.Parse(line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
@@ -581,8 +595,11 @@ namespace CollisionBoxTool
                     spacei = line.IndexOf(' ');
                     w = int.Parse(line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
-                    h = int.Parse(line);
-                    boxes.Add(new Rectangle(x, y, w, h));
+                    spacei = line.IndexOf(' ');
+                    h = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    seeThrough = bool.Parse(line);
+                    boxes.Add(new Box(x, y, w, h, seeThrough));
                     line = reader.ReadLine();
                 } while (reader.Peek() != -1
                     && !line.StartsWith("NODES")

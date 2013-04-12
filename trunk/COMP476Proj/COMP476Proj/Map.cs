@@ -42,6 +42,7 @@ namespace COMP476Proj
                 do
                 {
                     int x, y, w, h;
+                    bool seeThrough;
                     int spacei = line.IndexOf(' ');
                     x = int.Parse(line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
@@ -51,8 +52,11 @@ namespace COMP476Proj
                     spacei = line.IndexOf(' ');
                     w = int.Parse(line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
-                    h = int.Parse(line);
-                    walls.Add(new Wall(new Vector2(x,y), new BoundingRectangle(x, y, w, h)));
+                    spacei = line.IndexOf(' ');
+                    h = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    seeThrough = bool.Parse(line);
+                    walls.Add(new Wall(new Vector2(x,y), new BoundingRectangle(x, y, w, h), seeThrough));
                     line = reader.ReadLine();
                 } while (reader.Peek() != -1
                     && !line.StartsWith("NODES")

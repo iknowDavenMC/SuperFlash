@@ -59,6 +59,7 @@ namespace COMP476Proj
 
         private SpriteFont spriteFont;
 
+        public float Height { get { return bannerScale.Y; } }
         #endregion
 
         /*-------------------------------------------------------------------------*/

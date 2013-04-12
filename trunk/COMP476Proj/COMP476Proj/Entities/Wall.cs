@@ -7,10 +7,13 @@ namespace COMP476Proj
 {
     public class Wall : Entity
     {
-        public Wall(Vector2 pos, BoundingRectangle boundRect)
+        private bool seeThrough;
+        public bool IsSeeThrough { get { return seeThrough; } }
+        public Wall(Vector2 pos, BoundingRectangle boundRect, bool seeThrough = false)
         {
             this.pos = pos;
             this.rect = boundRect;
+            this.seeThrough = seeThrough;
         }
 
         public override void ResolveCollision(Entity other)

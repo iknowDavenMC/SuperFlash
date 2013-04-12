@@ -17,8 +17,8 @@ namespace COMP476Proj
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        public const int SCREEN_WIDTH = 1280;
-        public const int SCREEN_HEIGHT = 1024;
+        public const int SCREEN_WIDTH = 1024;
+        public const int SCREEN_HEIGHT = 768;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont spriteFont;
@@ -61,7 +61,7 @@ namespace COMP476Proj
         {
             graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
             graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
-            this.graphics.IsFullScreen = true;
+            //this.graphics.IsFullScreen = true;
             graphics.ApplyChanges();
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -78,7 +78,7 @@ namespace COMP476Proj
             Texture2D level = SpriteDatabase.GetAnimation("level_1").Texture;
 
             Camera.MaxX = level.Width;
-            Camera.MaxY = level.Height + 45;
+            Camera.MaxY = level.Height;
             Camera.Target = world.streaker;
             Camera.Scale = 1f;
 
@@ -89,6 +89,7 @@ namespace COMP476Proj
             Texture2D notorietyBar = Content.Load<Texture2D>("Hud/notorietyBar");
             Texture2D notorietyMeter = Content.Load<Texture2D>("Hud/notorietyMeter");
             HUD.getInstance().loadContent(banner, notorietyBar, notorietyMeter, spriteFont);
+
             Texture2D blank = new Texture2D(GraphicsDevice, 1, 1);
             blank.SetData(new[] { Color.White });
             SpriteDatabase.AddAnimation(new Animation("blank", blank, 1, 1, 1, 0, 1));

@@ -35,8 +35,8 @@ namespace COMP476Proj
             get { return maxY; }
             set
             {
-                value -= (int)(Height / 2 / scale); // Keeps Y centered without going past the intended Y
-                maxY = (value < Height / 2 / scale ? (int)(Height / 2 / scale) : value);
+                value -= (int)((Height) / 2 / scale - HUD.getInstance().Height); // Keeps Y centered without going past the intended Y
+                maxY = (value < (Height) / 2 / scale - HUD.getInstance().Height ? (int)((Height) / 2 / scale - HUD.getInstance().Height) : value);
             }
         }
         public static float Scale
