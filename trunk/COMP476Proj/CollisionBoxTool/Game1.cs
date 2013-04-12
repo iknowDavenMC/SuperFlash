@@ -23,8 +23,8 @@ namespace CollisionBoxTool
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        const int WIDTH = 800;
-        const int HEIGHT = 600;
+        const int WIDTH = 1280;
+        const int HEIGHT = 1024;
 
         int maxW, maxH, camSpeed;
 
@@ -90,8 +90,9 @@ namespace CollisionBoxTool
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 600;
+            graphics.PreferredBackBufferWidth = WIDTH;
+            graphics.PreferredBackBufferHeight = HEIGHT;
+            graphics.IsFullScreen = true;
             graphics.ApplyChanges();
             this.IsMouseVisible = true;
 
@@ -111,7 +112,7 @@ namespace CollisionBoxTool
                     circleData[i] = Color.Transparent;
             }
             circle.SetData(circleData);
-            scene = Content.Load<Texture2D>("level_1");
+            scene = Content.Load<Texture2D>("levelDesign_Full");
 
             maxW = scene.Width;
             maxH = scene.Height;
