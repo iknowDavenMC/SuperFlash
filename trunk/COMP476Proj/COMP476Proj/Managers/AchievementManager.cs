@@ -13,8 +13,8 @@ namespace COMP476Proj
         private static AchievementManager instance;
         private List<Achievement> achievList;
         private List<AchievementToast> toasts;
-        private int toastWidth = 300;
-        private int toastHeight = 50;
+        private int toastWidth = 411;
+        private int toastHeight = 83;
         private float dropSpeed = 250;
 
         private AchievementManager()
