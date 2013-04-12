@@ -61,7 +61,7 @@ namespace COMP476Proj
         {
             graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
             graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
-            //this.graphics.IsFullScreen = true;
+            this.graphics.IsFullScreen = true;
             graphics.ApplyChanges();
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
