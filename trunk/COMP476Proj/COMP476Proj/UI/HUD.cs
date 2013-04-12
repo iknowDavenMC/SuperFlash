@@ -20,9 +20,12 @@ namespace COMP476Proj
         #region Fields
         private static volatile HUD instance = null;
         private Texture2D banner;
+        private Vector2 bannerScale = new Vector2(800, 45);
         private Texture2D notorietyBar;
         private Texture2D notorietyMeter;
         private int notorietyBarLength = 400;
+        private int notorietyBarLengthMax = 580;
+        private int health;
         private Vector2 positionBanner;
         private Vector2 positionNotorietyBar;
         private Vector2 positionNotorietyMeter;
@@ -44,7 +47,7 @@ namespace COMP476Proj
         #region Constructor
         private HUD()
         {
-            positionBanner = new Vector2(0, windowHeight - 45);
+            positionBanner = new Vector2(windowWidth/2, windowHeight - 45);
             positionNotorietyBar = new Vector2(positionBanner.X + 120, positionBanner.Y + 15);
             positionNotorietyMeter = new Vector2(positionBanner.X + 118, positionBanner.Y + 11);
             positionScore = new Vector2(positionBanner.X, positionBanner.Y + 1);
@@ -53,6 +56,7 @@ namespace COMP476Proj
             timerInterval = 500;
             timer = 0;
             scoreIncrement = 10;
+            health = 100;
         }
         public void loadContent(Texture2D banner, Texture2D notorietyBar, Texture2D notorietyMeter, SpriteFont spriteFont)
         {
@@ -77,18 +81,6 @@ namespace COMP476Proj
         #region Update & Draw
         public void Update(GameTime gameTime)
         {
-            //Update the timer
-            /*gameTimer = Game1.elapsedTime;
-            if (gameTimer >= 1000.0f)
-            {
-                gameTimer = 0;
-                seconds++;
-                if (seconds >= 60)
-                {
-                    minutes++;
-                    seconds = 0;
-                }
-            }*/
             totalTime = (float)gameTime.TotalGameTime.Seconds;
             minutes = (float)gameTime.TotalGameTime.Minutes;
             //Updating the displayed score
@@ -101,9 +93,9 @@ namespace COMP476Proj
                     displayedScore += scoreIncrement;
                     
                 }
+                updateHealthBar();
             }
         }
-
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             float scale = 1 / Camera.Scale;
@@ -112,20 +104,24 @@ namespace COMP476Proj
             offset *= scale;
             offset.X += Camera.X;
             offset.Y += Camera.Y;
-            spriteBatch.Draw(banner, positionBanner * scale + offset, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(notorietyBar, positionNotorietyBar * scale + offset, new Rectangle(0, 0, notorietyBarLength, 12), Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(banner, positionBanner * scale + offset, null, Color.White, 0.0f, new Vector2(bannerScale.X/2, bannerScale.Y/2), scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(notorietyBar, positionNotorietyBar * scale + offset, new Rectangle(0, 0, updateHealthBar(), 12), Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0f);
             spriteBatch.Draw(notorietyMeter, positionNotorietyMeter * scale + offset, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(spriteFont, ""+displayedScore, positionScore * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(spriteFont, displayedScore.ToString(), positionScore * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             spriteBatch.DrawString(spriteFont, minutes+":"+totalTime, positionTime * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-
         }
         #endregion
 
         /*-------------------------------------------------------------------------*/
-        #region ScoreFunctions
+        #region Functions
         public void increaseScore(int amount)
         {
             currentScore += amount;
+        }
+
+        public int updateHealthBar()
+        {
+            return notorietyBarLength = (health / 100) * notorietyBarLengthMax;
         }
         #endregion
     }
