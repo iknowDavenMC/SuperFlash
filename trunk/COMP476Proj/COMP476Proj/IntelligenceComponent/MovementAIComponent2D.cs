@@ -486,14 +486,10 @@ namespace COMP476Proj
             {
                 do
                 {
-                    angle = MathHelper.ToRadians(30 * (float)normallyDistributedRandomNumber());
+                    angle = MathHelper.ToRadians(5 * (float)normallyDistributedRandomNumber());
                     Vector2 previousDirection = physics.Direction;
                     direction.X = (float)Math.Cos(angle) * previousDirection.X - (float)Math.Sin(angle) * previousDirection.Y;
                     direction.Y = (float)Math.Sin(angle) * previousDirection.X + (float)Math.Cos(angle) * previousDirection.Y;
-                    /*
-                    direction.X = (float)Math.Cos(physics.Orientation + angle);
-                    direction.Y = (float)Math.Sin(physics.Orientation + angle);
-                     * */
                     direction.Normalize();
                 }
                 while (direction.Length() == 0);
