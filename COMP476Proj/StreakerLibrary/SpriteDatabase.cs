@@ -77,6 +77,8 @@ namespace StreakerLibrary
             Texture2D notorietyBar = Content.Load<Texture2D>("Hud/notorietyBar");
             Texture2D notorietyMeter = Content.Load<Texture2D>("Hud/notorietyMeter");
 
+            Texture2D achieveBanner = Content.Load<Texture2D>("AchievementUnlocked");
+
             //Animation elements 
             int notMoving = 150, walk = 60, fall = 60, getUp = 100, dance = 100, attack = 50, flash = 60;
 
@@ -109,6 +111,8 @@ namespace StreakerLibrary
             SpriteDatabase.AddAnimation(new Animation("student3_getup", student3, 7, 145, 164, 492, getUp));
 
             SpriteDatabase.AddAnimation(new Animation("level_1", level1));
+
+            SpriteDatabase.AddAnimation(new Animation("achievement_banner", achieveBanner));
 
         }
 
