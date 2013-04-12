@@ -39,6 +39,7 @@ namespace COMP476Proj
             : base("Easiest achievement ever 2", "Exist for 3 seconds", 1000)
         {
             timePlayed = 0;
+            
         }
 
         public override void Update(GameTime gameTime)

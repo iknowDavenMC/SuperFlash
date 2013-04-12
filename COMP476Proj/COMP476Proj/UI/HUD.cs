@@ -34,8 +34,10 @@ namespace COMP476Proj
         private int windowWidth = 800;
         private int currentScore;
         private float seconds, minutes;
-        float elapsedTime, timer, timerInterval;
+        float gameTimer, timer, timerInterval;
+        float totalTime;
         private int scoreIncrement;
+        private int displayedScore;
         #endregion
 
         /*-------------------------------------------------------------------------*/
@@ -48,9 +50,9 @@ namespace COMP476Proj
             positionScore = new Vector2(positionBanner.X, positionBanner.Y + 1);
             positionTime = new Vector2(positionBanner.X + 750, positionBanner.Y + 1);
             currentScore = 0;
-            timerInterval = 20;
+            timerInterval = 500;
             timer = 0;
-            scoreIncrement = 5;
+            scoreIncrement = 10;
         }
         public void loadContent(Texture2D banner, Texture2D notorietyBar, Texture2D notorietyMeter, SpriteFont spriteFont)
         {
@@ -75,11 +77,30 @@ namespace COMP476Proj
         #region Update & Draw
         public void Update(GameTime gameTime)
         {
-            float elapsedTime = Game1.elapsedTime;
-            if (elapsedTime >= 60.0f)
+            //Update the timer
+            /*gameTimer = Game1.elapsedTime;
+            if (gameTimer >= 1000.0f)
             {
-                elapsedTime = 0;
+                gameTimer = 0;
                 seconds++;
+                if (seconds >= 60)
+                {
+                    minutes++;
+                    seconds = 0;
+                }
+            }*/
+            totalTime = (float)gameTime.TotalGameTime.Seconds;
+            minutes = (float)gameTime.TotalGameTime.Minutes;
+            //Updating the displayed score
+            if (displayedScore < currentScore)
+            {
+                timer += Game1.elapsedTime;
+                if (timer > timerInterval)
+                {
+                    timer = 0;
+                    displayedScore += scoreIncrement;
+                    
+                }
             }
         }
 
@@ -94,8 +115,8 @@ namespace COMP476Proj
             spriteBatch.Draw(banner, positionBanner * scale + offset, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0f);
             spriteBatch.Draw(notorietyBar, positionNotorietyBar * scale + offset, new Rectangle(0, 0, notorietyBarLength, 12), Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0f);
             spriteBatch.Draw(notorietyMeter, positionNotorietyMeter * scale + offset, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scale, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(spriteFont, ""+currentScore, positionScore * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(spriteFont, "" + seconds, positionTime * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(spriteFont, ""+displayedScore, positionScore * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(spriteFont, minutes+":"+totalTime, positionTime * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 
         }
         #endregion
@@ -104,17 +125,7 @@ namespace COMP476Proj
         #region ScoreFunctions
         public void increaseScore(int amount)
         {
-            int increasedAmount = 0;
-            while (increasedAmount < amount)
-            {
-                timer += Game1.elapsedTime;
-                if (timer > timerInterval)
-                {
-                    timer = 0;
-                    currentScore += scoreIncrement;
-                    increasedAmount += scoreIncrement;
-                }
-            }
+            currentScore += amount;
         }
         #endregion
     }
