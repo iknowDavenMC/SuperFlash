@@ -5,11 +5,19 @@ using System.Text;
 
 namespace COMP476Proj
 {
+    /// <summary>
+    /// Implementation of a MinHeap
+    /// </summary>
+    /// <typeparam name="T">T must implement IComparable</typeparam>
     class MinHeap<T> where T : IComparable<T>
     {
-        public List<T> data = new List<T>();
+        public List<T> data = new List<T>(); // Complete list of nodes
         public T Top { get { return data[0]; } }
 
+        /// <summary>
+        /// Add an item to the heap
+        /// </summary>
+        /// <param name="item">Item to add</param>
         public void Enqueue(T item)
         {
             data.Add(item);
@@ -26,6 +34,10 @@ namespace COMP476Proj
             }
         }
 
+        /// <summary>
+        /// Remove the top item in the heap (ie: the one with the lowest value)
+        /// </summary>
+        /// <returns>The removed item</returns>
         public T Dequeue()
         {
             int lastInd = data.Count - 1;
@@ -53,21 +65,21 @@ namespace COMP476Proj
             return top;
         }
 
+        /// <summary>
+        /// Check if the heap is empty
+        /// </summary>
+        /// <returns></returns>
         public bool IsEmpty()
         {
             return data.Count == 0;
         }
 
+        /// <summary>
+        /// Clear the heap of all data
+        /// </summary>
         public void Clear()
         {
             data.Clear();
-        }
-
-        public T Select(T obj)
-        {
-            if (data.Contains(obj))
-                return data[data.IndexOf(obj)];
-            return default(T);
         }
     }
 }

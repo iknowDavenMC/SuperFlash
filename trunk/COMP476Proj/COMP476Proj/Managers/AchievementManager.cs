@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.Content;
 
 namespace COMP476Proj
 {
+    /// <summary>
+    /// Manager to track and update achievements
+    /// </summary>
     class AchievementManager
     {
         private static AchievementManager instance;
@@ -17,6 +20,9 @@ namespace COMP476Proj
         private int toastHeight = 83;
         private float dropSpeed = 250;
 
+        /// <summary>
+        /// Constructor. Add achievements to track here.
+        /// </summary>
         private AchievementManager()
         {
             achievList = new List<Achievement>();
@@ -27,6 +33,10 @@ namespace COMP476Proj
             achievList.Add(new Achievement_PressSpace());
         }
 
+        /// <summary>
+        /// Get the instance of AchievementManager
+        /// </summary>
+        /// <returns>AchievementManager instance</returns>
         public static AchievementManager getInstance()
         {
             if (instance == null)
@@ -34,6 +44,11 @@ namespace COMP476Proj
             return instance;
         }
 
+        /// <summary>
+        /// Add an achievement (likely more easily done via the constructor though).
+        /// </summary>
+        /// <param name="achv"></param>
+        /// <returns></returns>
         public bool AddAchievement(Achievement achv)
         {
             if (!achievList.Contains(achv))
@@ -44,6 +59,10 @@ namespace COMP476Proj
             return false;
         }
 
+        /// <summary>
+        /// Update all achievements
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
             int time = gameTime.ElapsedGameTime.Milliseconds;
@@ -52,10 +71,11 @@ namespace COMP476Proj
                 if (achv.Locked)
                 {
                     achv.Update(gameTime);
+                    // If the achievement is earned, unlock it, add the value to the score and show a popup
                     if (achv.IsAchieved())
                     {
                         achv.Locked = false;
-                        HUD.getInstance().increaseScore(1000);
+                        HUD.getInstance().increaseScore(achv.Value);
                         int toastX = Game1.SCREEN_WIDTH/2 - toastWidth/2;
                         int toastY = Game1.SCREEN_HEIGHT - 45 - (toasts.Count+1)*toastHeight;
                         toasts.Add(new AchievementToast(achv, 3000, new Vector2(toastX, toastY), toastWidth, toastHeight));
@@ -63,6 +83,7 @@ namespace COMP476Proj
                 }
             }
 
+            // Update the popups. They stick around for 3 seconds, then drop away
             int toastCount = toasts.Count;
             bool drop = false;
             for(int i=0; i<toastCount; ++i) 
@@ -86,6 +107,11 @@ namespace COMP476Proj
             }
         }
 
+        /// <summary>
+        /// Draw the achievement popups
+        /// </summary>
+        /// <param name="gameTime"></param>
+        /// <param name="spriteBatch"></param>
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             foreach (AchievementToast toast in toasts)
