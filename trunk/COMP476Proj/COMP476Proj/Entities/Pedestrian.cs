@@ -95,13 +95,7 @@ namespace COMP476Proj
             //--------------------------------------------------------------------------
             if (behavior == PedestrianBehavior.DEFAULT)
             {
-                if (isColliding)
-                {
-                    isColliding = false;
-                    behavior = PedestrianBehavior.KNOCKEDUP;
-                    transitionToState(PedestrianState.FALL);
-                }
-                else if (Vector2.Distance(w.streaker.Position, pos) < detectRadius)
+                if (Vector2.Distance(w.streaker.Position, pos) < detectRadius)
                 {
                     behavior = PedestrianBehavior.AWARE;
                     transitionToState(PedestrianState.FLEE);
@@ -112,13 +106,7 @@ namespace COMP476Proj
             //--------------------------------------------------------------------------
             else if (behavior == PedestrianBehavior.AWARE)
             {
-                if (isColliding)
-                {
-                    isColliding = false;
-                    behavior = PedestrianBehavior.KNOCKEDUP;
-                    return;
-                }
-                else if (Vector2.Distance(w.streaker.Position, pos) > farRadius)
+                if (Vector2.Distance(w.streaker.Position, pos) > detectRadius)
                 {
                     behavior = PedestrianBehavior.DEFAULT;
                     transitionToState(PedestrianState.WANDER);
@@ -138,10 +126,15 @@ namespace COMP476Proj
                         }
                         break;
                     case PedestrianState.GET_UP:
-                        if (draw.animComplete)
+                        if (draw.animComplete && Vector2.Distance(w.streaker.Position, pos) < detectRadius)
                         {
                             behavior = PedestrianBehavior.AWARE;
                             transitionToState(PedestrianState.FLEE);
+                        }
+                        else if (draw.animComplete && Vector2.Distance(w.streaker.Position, pos) >= detectRadius)
+                        {
+                            behavior = PedestrianBehavior.DEFAULT;
+                            transitionToState(PedestrianState.WANDER);
                         }
                         break;
                 }
@@ -176,134 +169,7 @@ namespace COMP476Proj
                     break;
             }
             
-           
-
         }
-
-        //private void updateState(World w)
-        //{
-        //    //--------------------------------------------------------------------------
-        //    //               DEFAULT BEHAVIOR --> Before aware of streaker
-        //    //--------------------------------------------------------------------------
-        //    if (behavior == PedestrianBehavior.DEFAULT)
-        //    {
-        //        //Behavior Changes
-        //        if (isColliding)
-        //        {
-        //            isColliding = false;
-        //            behavior = PedestrianBehavior.COLLIDE;
-        //            transitionToState(PedestrianState.FALL);
-        //        }
-        //        else if (Vector2.Distance(w.streaker.Position, pos) < detectRadius)
-        //        {
-        //            behavior = PedestrianBehavior.AWARE;
-        //            state = PedestrianState.FLEE;
-        //            draw.animation = SpriteDatabase.GetAnimation(studentType + "_walk");
-        //            draw.Play();
-        //        }
-
-
-        //    }
-        //    //--------------------------------------------------------------------------
-        //    //               AWARE BEHAVIOR --> Knows about streaker
-        //    //--------------------------------------------------------------------------
-        //    else if (behavior == PedestrianBehavior.AWARE)
-        //    {
-        //        //Behavior Changes
-        //        if (isColliding)
-        //        {
-        //            isColliding = false;
-        //            behavior = PedestrianBehavior.COLLIDE;
-        //            return;
-        //        }
-
-        //        switch (state)
-        //        {
-        //            case PedestrianState.WANDER:
-        //                if (Vector2.Distance(w.streaker.Position, pos) < detectRadius)
-        //                {
-        //                    state = PedestrianState.FLEE;
-
-        //                }
-        //                else
-        //                {
-        //                    movement.Wander(ref physics);
-        //                }
-        //                break;
-        //            case PedestrianState.FLEE:
-        //                if (Vector2.Distance(w.streaker.ComponentPhysics.Position, physics.Position) >= detectRadius)
-        //                {
-        //                    state = PedestrianState.WANDER;
-        //                }
-        //                else
-        //                {
-        //                    movement.SetTarget(w.streaker.ComponentPhysics.Position);
-        //                    movement.Flee(ref physics);
-        //                }
-        //                break;
-        //            default:
-        //                state = PedestrianState.WANDER;
-        //                break;
-        //        }
-        //    }
-        //    //--------------------------------------------------------------------------
-        //    //                                 COLLIDE BEHAVIOR
-        //    //--------------------------------------------------------------------------
-        //    else
-        //    {
-        //        switch (state)
-        //        {
-        //            case PedestrianState.FALL:
-        //                //movement.Stop(ref physics);
-
-        //                if (draw.animComplete)
-        //                {
-        //                    draw.animation = SpriteDatabase.GetAnimation(studentType + "_getup");
-        //                    state = PedestrianState.GET_UP;
-        //                    draw.Reset();
-        //                }
-        //                else
-        //                {
-        //                    draw.animation = SpriteDatabase.GetAnimation(studentType + "_fall");
-        //                    draw.Play();
-        //                }
-
-        //                break;
-        //            case PedestrianState.GET_UP:
-        //                movement.Stop(ref physics);
-        //                if (isColliding)
-        //                {
-        //                    isColliding = false;
-        //                    behavior = PedestrianBehavior.COLLIDE;
-        //                    state = PedestrianState.GET_UP;
-        //                    draw.animation = SpriteDatabase.GetAnimation(studentType + "_getup");
-        //                    draw.Reset();
-        //                    return;
-        //                }
-        //                else if (draw.animComplete)
-        //                {
-        //                    behavior = PedestrianBehavior.AWARE;
-        //                    state = PedestrianState.FLEE;
-        //                    draw.animation = SpriteDatabase.GetAnimation(studentType + "_walk");
-        //                    draw.Reset();
-        //                }
-        //                else
-        //                {
-        //                    draw.animation = SpriteDatabase.GetAnimation(studentType + "_getup");
-        //                    draw.Play();
-        //                }
-
-        //                break;
-        //            default:
-        //                //state = PedestrianState.FALL;
-        //                behavior = PedestrianBehavior.AWARE;
-        //                state = PedestrianState.FLEE;
-        //                draw.animation = SpriteDatabase.GetAnimation(studentType + "_walk");
-        //                draw.Play();
-        //                break;
-        //        }
-        //    }
-        //}
         #endregion
         
         #region Public Methods
@@ -325,12 +191,15 @@ namespace COMP476Proj
             {
                 draw.SpriteEffect = SpriteEffects.FlipHorizontally;
             }
+            
             draw.Update(gameTime, this);
+            if (draw.animComplete && state == PedestrianState.FALL)
+            {
+                draw.GoToPrevFrame();
+            }
             base.Update(gameTime);
             
         }
-
-        
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -340,16 +209,12 @@ namespace COMP476Proj
 
         public override void Fall()
         {
+            behavior = PedestrianBehavior.KNOCKEDUP;
             if (state != PedestrianState.FALL)
             {
-                draw.Reset();
+                transitionToState(PedestrianState.FALL);
             }
-
-            state = PedestrianState.FALL;
-
-            physics.SetTargetValues(true, null, null, null);
-
-            return;
+            movement.Stop(ref physics);
         }
 
         #endregion

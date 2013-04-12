@@ -168,6 +168,15 @@ namespace COMP476Proj
             paused = true;
         }
 
+        public void GoToPrevFrame()
+        {
+            currentFrame = (currentFrame - 1) % animation.NumOfColumns;
+            while (currentFrame < 0)
+            {
+                currentFrame += animation.NumOfColumns;
+            }
+        }
+
         #endregion
     }
 }
