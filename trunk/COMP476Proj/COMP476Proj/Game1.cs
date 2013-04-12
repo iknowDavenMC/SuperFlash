@@ -78,7 +78,7 @@ namespace COMP476Proj
             Texture2D level = SpriteDatabase.GetAnimation("level_1").Texture;
 
             Camera.MaxX = level.Width;
-            Camera.MaxY = level.Height;
+            Camera.MaxY = level.Height + 45;
             Camera.Target = world.streaker;
             Camera.Scale = 1f;
 
@@ -147,10 +147,8 @@ namespace COMP476Proj
             {
                 ps2.Start();
             }
-            if(Keyboard.GetState().IsKeyDown(Keys.D1)){
-                int i = 0;
-            }
             else ps2.Stop();
+
             world.Update(gameTime);
             ps.Update(gameTime);
             ps2.X = world.streaker.X;

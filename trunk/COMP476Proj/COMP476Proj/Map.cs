@@ -12,23 +12,7 @@ namespace COMP476Proj
     {
         public const float WIDTH = 3436;
         public const float HEIGHT = 1122;
-
-        /// <summary>
-        /// PLACEHOLDER. Should be redesigned properly when pathfinding is done
-        /// </summary>
-        public class Node
-        {
-            public int id;
-            public Vector2 position;
-            public List<Node> connected;
-            public Node(float x, float y, int id)
-            {
-                this.id = id;
-                position = new Vector2(x, y);
-                connected = new List<Node>();
-            }
-        }
-
+        
         public List<NPC> startingNPCs;
         public List<Wall> walls;
         public List<Node> nodes;
@@ -106,10 +90,10 @@ namespace COMP476Proj
                     sid = int.Parse(line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
                     eid = int.Parse(line);
-                    Node n1 = nodes.Find(n => n.id == sid);
-                    Node n2 = nodes.Find(n => n.id == eid);
-                    n1.connected.Add(n2);
-                    n2.connected.Add(n1);
+                    Node n1 = nodes.Find(n => n.ID == sid);
+                    Node n2 = nodes.Find(n => n.ID == eid);
+                    n1.Edges.Add(new Edge(n1, n2));
+                    n2.Edges.Add(new Edge(n2, n1));
                     line = reader.ReadLine();
                 } while (reader.Peek() != -1
                     && !line.StartsWith("NPCS")
