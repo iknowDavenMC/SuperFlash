@@ -56,22 +56,22 @@ namespace COMP476Proj
         {
             if (behavior == PedestrianBehavior.DEFAULT)
             {
-                
-                if (rect.Collides(w.streaker.BoundingRectangle))
+                if (isColliding)
                 {
+                    isColliding = false;
                     behavior = PedestrianBehavior.COLLIDE;
                     state = PedestrianState.FALL;
                     draw.animation = SpriteDatabase.GetAnimation(studentType + "_fall");
                     draw.Reset();
-                    return;
+                    //return;
                 }
 
-                if(Vector2.Distance(w.streaker.Position, pos) < detectRadius){
+                else if(Vector2.Distance(w.streaker.Position, pos) < detectRadius){
                     behavior = PedestrianBehavior.AWARE;
                     state = PedestrianState.FLEE;
                     draw.animation = SpriteDatabase.GetAnimation(studentType + "_walk");
                     draw.Play();
-                    return;
+                    //return;
                 }
 
                 switch (state)
@@ -84,6 +84,8 @@ namespace COMP476Proj
                         break;
                     case PedestrianState.PATH:
                         //TO DO
+                        break;
+                    case PedestrianState.FALL:
                         break;
                     default:
                         state = PedestrianState.WANDER;
