@@ -100,6 +100,7 @@ namespace COMP476Proj
                     gamePadMapping.Add("Right", new Buttons[2] { Buttons.DPadRight, Buttons.LeftThumbstickRight });
                     gamePadMapping.Add("Left", new Buttons[2] { Buttons.DPadLeft, Buttons.LeftThumbstickLeft });
                     gamePadMapping.Add("Dance", new Buttons[1] { Buttons.A });
+                    gamePadMapping.Add("Superflash", new Buttons[1] { Buttons.X });
 
                     break;
 
@@ -114,7 +115,6 @@ namespace COMP476Proj
                     keyboardMapping.Add("Left", new Keys[1] { Keys.Left });
                     keyboardMapping.Add("Dance", new Keys[1] { Keys.D });
                     keyboardMapping.Add("Superflash", new Keys[1] { Keys.S });
-                    keyboardMapping.Add("Fall", new Keys[1] { Keys.F });
 
                     break;
             }
