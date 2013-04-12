@@ -532,7 +532,8 @@ namespace COMP476Proj
         {
             // Normal
             Vector2 contactNormal = position - overlap.Center;
-            contactNormal.Normalize();
+            if (contactNormal.LengthSquared() > 0)
+                contactNormal.Normalize();
 
             // Steps outlined in the class slides
             float Vs = -(1 + coefficientOfRestitution) * -Math.Abs(Vector2.Dot(velocity, contactNormal));
