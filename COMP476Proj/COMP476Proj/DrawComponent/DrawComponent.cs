@@ -135,7 +135,7 @@ namespace COMP476Proj
                 {
                     offset = new Vector2(PIXELS_LEFT_TO_CENTER * scale.X, PIXELS_HEAD_TO_TOE * scale.Y);
                 }
-
+                
                 Vector2 drawPos = new Vector2(pos.X, pos.Y) - offset;
                 spriteBatch.Draw(animation.Texture, drawPos, sourceRect, color, 0, Origin, scale, spriteEffects, depth);
             }
