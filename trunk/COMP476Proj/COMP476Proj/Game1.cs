@@ -17,8 +17,8 @@ namespace COMP476Proj
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        public const int SCREEN_WIDTH = 800;
-        public const int SCREEN_HEIGHT = 600;
+        public const int SCREEN_WIDTH = 1280;
+        public const int SCREEN_HEIGHT = 1024;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont spriteFont;
@@ -61,6 +61,7 @@ namespace COMP476Proj
         {
             graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
             graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
+            this.graphics.IsFullScreen = true;
             graphics.ApplyChanges();
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
