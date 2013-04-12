@@ -54,7 +54,7 @@ namespace COMP476Proj
         #region Constructors
 
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
         private InputManager()
         {

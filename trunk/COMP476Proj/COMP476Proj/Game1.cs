@@ -146,6 +146,9 @@ namespace COMP476Proj
             {
                 ps2.Start();
             }
+            if(Keyboard.GetState().IsKeyDown(Keys.D1)){
+                int i = 0;
+            }
             else ps2.Stop();
             world.Update(gameTime);
             ps.Update(gameTime);
