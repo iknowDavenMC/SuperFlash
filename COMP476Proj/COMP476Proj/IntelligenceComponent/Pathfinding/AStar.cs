@@ -54,7 +54,7 @@ namespace COMP476Proj
             AStarNode endNode = new AStarNode(FindClosestNode(end, graph));
 
             // If either the start or the end is null for some reason, return an empty list
-            if (startNode == null || endNode == null)
+            if (startNode.node == null || endNode.node == null)
                 return new List<Node>();
 
             List<AStarNode> closedList = new List<AStarNode>();
