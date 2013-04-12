@@ -87,7 +87,7 @@ namespace COMP476Proj
             Texture2D banner = Content.Load<Texture2D>("Hud/banner");
             Texture2D notorietyBar = Content.Load<Texture2D>("Hud/notorietyBar");
             Texture2D notorietyMeter = Content.Load<Texture2D>("Hud/notorietyMeter");
-            HUD.getInstance().loadContent(banner, notorietyMeter, notorietyMeter, spriteFont);
+            HUD.getInstance().loadContent(banner, notorietyBar, notorietyMeter, spriteFont);
             Texture2D blank = new Texture2D(GraphicsDevice, 1, 1);
             blank.SetData(new[] { Color.White });
             SpriteDatabase.AddAnimation(new Animation("blank", blank, 1, 1, 1, 0, 1));

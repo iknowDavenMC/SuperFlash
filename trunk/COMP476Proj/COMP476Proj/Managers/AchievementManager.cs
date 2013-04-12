@@ -55,6 +55,7 @@ namespace COMP476Proj
                     if (achv.IsAchieved())
                     {
                         achv.Locked = false;
+                        HUD.getInstance().increaseScore(1000);
                         int toastX = Game1.SCREEN_WIDTH/2 - toastWidth/2;
                         int toastY = Game1.SCREEN_HEIGHT - 45 - (toasts.Count+1)*toastHeight;
                         toasts.Add(new AchievementToast(achv, 3000, new Vector2(toastX, toastY), toastWidth, toastHeight));
