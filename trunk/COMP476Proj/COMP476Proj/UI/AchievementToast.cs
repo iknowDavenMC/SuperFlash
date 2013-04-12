@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 using StreakerLibrary;
 
 namespace COMP476Proj
@@ -20,6 +21,7 @@ namespace COMP476Proj
         private int width;
         private int height;
         private int borderWidth = 2;
+        public static Texture2D banner;
 
         public int Age { get { return age; } }
         public int Lifespan { get { return lifespan; } }
@@ -67,6 +69,11 @@ namespace COMP476Proj
                 0, 500, 2, 120, 60, 60, 0, 1, 1, 1, true, 0.5f);
             rightSpewer.Absolute = true;
             rightSpewer.Start();
+        }
+
+        public static void LoadContent(ContentManager content)
+        {
+            banner = content.Load<Texture2D>("AchievementUnlocked");
         }
 
         public void Kill()
