@@ -6,12 +6,18 @@ using Microsoft.Xna.Framework;
 
 namespace COMP476Proj
 {
+    /// <summary>
+    /// Static class to run the A* algorithm
+    /// </summary>
     public static class AStar
     {
+        /// <summary>
+        /// Helper class for A* noeds
+        /// </summary>
         private class AStarNode : IComparable<AStarNode>
         {
-            public Node node;
-            public AStarNode cameFrom;
+            public Node node;           // Represented path node
+            public AStarNode cameFrom;  // A* node that leads to this one
             public float totalCost;
             public float costSoFar;
 
@@ -23,6 +29,7 @@ namespace COMP476Proj
                 costSoFar = 0;
             }
 
+            // Used for comparing two nodes by the MinHeap
             public int CompareTo(AStarNode obj)
             {
                 return Math.Sign(totalCost - obj.totalCost);
@@ -46,7 +53,16 @@ namespace COMP476Proj
                 return l.node != r.node;
             }
         }
-        public static List<Node> GetPath(Vector2 start, Vector2 end, List<Node> graph, bool ignoreWeight = false)
+
+        /// <summary>
+        /// Get a path from a start point to an end point using a set list of nodes
+        /// </summary>
+        /// <param name="start">Position to start at</param>
+        /// <param name="end">Position to end at</param>
+        /// <param name="graph">List of nodes to use</param>
+        /// <param name="ignoreWeight">If true, extra weights will no be considered in the calculation or added to the edges</param>
+        /// <returns>A list of nodes representing the path to take</returns>
+        public static List<Node> GetPath(Vector2 start, Vector2 end, List<Node> graph, bool ignoreWeight = true)
         {
             List<Node> path = new List<Node>();
 
@@ -66,6 +82,7 @@ namespace COMP476Proj
             while (!openList.IsEmpty())
             {
                 AStarNode current = openList.Top;
+                // When the node being considered is the end node, stop
                 if (current == endNode)
                     if (ignoreWeight)
                         return constructPath(current, 0, 0);
@@ -79,18 +96,28 @@ namespace COMP476Proj
                 {
                     AStarNode neighbour = closedList.Find(n => n.node == e.end);
                     float costSoFar = current.costSoFar + e.Cost - (ignoreWeight ? 0 : e.Weight);
-                    if (neighbour != null && costSoFar >= neighbour.costSoFar)
-                        continue;
-                    else neighbour = new AStarNode(e.end);
-                    List<AStarNode> openData = openList.data;
-                    if (openData.Contains(neighbour))
+
+                    if (neighbour != null)
                     {
+                        // If the neighbouring node is already in the closed list and its 
+                        // cost is less than this one, skip it
+                        if (costSoFar >= neighbour.costSoFar)
+                            continue;
+                    }
+                    else neighbour = new AStarNode(e.end);
+
+                    // If the node is already in the open list, find it and replace it if the new cost is lower
+                    if (openList.data.Contains(neighbour))
+                    {
+                        List<AStarNode> openData = openList.data;
                         neighbour = openData.Find(n => n == neighbour);
                         if (costSoFar < neighbour.costSoFar)
                         {
                             neighbour.cameFrom = current;
                             neighbour.costSoFar = costSoFar;
                             neighbour.totalCost = costSoFar + getHeuristic(neighbour, endNode);
+
+                            // If the node is replaced, the heap has to be rebuilt
                             openList.Clear();
                             foreach (AStarNode n in openData)
                             {
@@ -111,14 +138,29 @@ namespace COMP476Proj
             throw new Exception("AStar is returning in an impossible way");
         }
 
+        /// <summary>
+        /// Get the heuristic value between two nodes (ie: Euclidean distance)
+        /// </summary>
+        /// <param name="n1"></param>
+        /// <param name="n2"></param>
+        /// <returns></returns>
         private static float getHeuristic(AStarNode n1, AStarNode n2)
         {
             return (n1.node.Position - n2.node.Position).Length();
         }
 
+        /// <summary>
+        /// Construct the path recursively starting with the last node
+        /// </summary>
+        /// <param name="n">Current node</param>
+        /// <param name="weight">Current weight value</param>
+        /// <param name="weightPer">Additional weight per node in the path</param>
+        /// <param name="next">Next node in the path</param>
+        /// <returns>The final path of nodes</returns>
         private static List<Node> constructPath(AStarNode n, float weight, float weightPer, AStarNode next = null)
         {
             List<Node> path;
+            // If this node didn't come from anywhere, it's the start.
             if (n.cameFrom == null)
             {
                 if (next != null)
@@ -130,6 +172,7 @@ namespace COMP476Proj
                 path.Add(n.node);
                 return path;
             }
+            // recursion
             path = constructPath(n.cameFrom, weight - weightPer, weightPer, n);
             if (next != null)
             {
@@ -140,6 +183,12 @@ namespace COMP476Proj
             return path;
         }
 
+        /// <summary>
+        /// Find the closest node to a point
+        /// </summary>
+        /// <param name="searchPos"></param>
+        /// <param name="nodes"></param>
+        /// <returns></returns>
         private static Node FindClosestNode(Vector2 searchPos, List<Node> nodes)
         {
             float minDist = float.MaxValue;

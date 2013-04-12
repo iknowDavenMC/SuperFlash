@@ -6,14 +6,18 @@ using Microsoft.Xna.Framework;
 
 namespace COMP476Proj
 {
+    /// <summary>
+    /// Node for use with pathfinding
+    /// </summary>
     public class Node
     {
+        // IDs should be unique and are only actually used by the map loader for attaching edges
         private static int nextID = 0;
         private int id;
         public int ID { get { return id; } }
         private Vector2 position;
         public Vector2 Position { get { return position; } }
-        public List<Edge> Edges;
+        public List<Edge> Edges; // All associated edges
 
         public Node(float x, float y, int id=0)
         {
@@ -33,6 +37,7 @@ namespace COMP476Proj
 
         public void Update(GameTime gameTime)
         {
+            // Make sure the edges erode
             foreach (Edge edge in Edges)
             {
                 edge.Update(gameTime);

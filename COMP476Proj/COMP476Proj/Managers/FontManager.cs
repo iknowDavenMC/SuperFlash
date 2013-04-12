@@ -6,6 +6,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace COMP476Proj
 {
+    /// <summary>
+    /// Manager to keep track of spritefonts
+    /// </summary>
     public class FontManager
     {
         private static FontManager instance;

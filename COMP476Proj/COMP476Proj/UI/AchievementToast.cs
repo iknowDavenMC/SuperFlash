@@ -9,6 +9,9 @@ using StreakerLibrary;
 
 namespace COMP476Proj
 {
+    /// <summary>
+    /// A popup for when an achievement is earned
+    /// </summary>
     public class AchievementToast
     {
         private string title;
@@ -46,6 +49,14 @@ namespace COMP476Proj
             }
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="achv">Associated achievement</param>
+        /// <param name="duration">Duration to stay visible (ms)</param>
+        /// <param name="position">Starting position</param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         public AchievementToast(Achievement achv, int duration, Vector2 position, int width, int height)
         {
             title = achv.Name;
@@ -57,6 +68,7 @@ namespace COMP476Proj
             this.height = height;
             banner = SpriteDatabase.GetAnimation("achievement_banner").Texture;
 
+            // Yellow particles spew out on the left and right in semi-circles away from the banner
             leftSpewer = new ParticleSpewer(
                 position.X+53, position.Y + 52,
                 10000, 30, MathHelper.ToRadians(90), MathHelper.ToRadians(270),
@@ -72,9 +84,13 @@ namespace COMP476Proj
             rightSpewer.Start();
         }
 
+        /// <summary>
+        /// Kill the popup (ie: the particle spewers)
+        /// </summary>
         public void Kill()
         {
             leftSpewer.Stop();
+            rightSpewer.Stop();
         }
 
         public void Update(GameTime gameTime)
