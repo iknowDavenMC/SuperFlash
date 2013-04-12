@@ -154,10 +154,9 @@ namespace COMP476Proj
             switch (state)
             {
                 case PedestrianState.STATIC:
-                    physics.SetTargetValues(true, null, null, null);
+                    movement.Stop(ref physics);
                     break;
                 case PedestrianState.WANDER:
-                    movement.SetTarget(w.streaker.ComponentPhysics.Position);
                     movement.Wander(ref physics);
                     break;
                 case PedestrianState.FLEE:
@@ -168,11 +167,12 @@ namespace COMP476Proj
                     //TO DO
                     break;
                 case PedestrianState.FALL:
+                    movement.Stop(ref physics);
                     break;
                 case PedestrianState.GET_UP:
+                    movement.Stop(ref physics);
                     break;
                 default:
-                    
                     break;
             }
             
