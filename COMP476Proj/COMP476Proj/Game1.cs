@@ -46,11 +46,9 @@ namespace COMP476Proj
         /// </summary>
         protected override void Initialize()
         {
-            InputManager.GetInstance(InputManager.ControllerType.Keyboard);
+            InputManager.GetInstance();
 
             frameRate = new FrameRate(this, 1);
-
-            Components.Add(frameRate);
 
             base.Initialize();
         }
@@ -171,6 +169,8 @@ namespace COMP476Proj
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            frameRate.Update(gameTime);
+
             GraphicsDevice.Clear(Color.CornflowerBlue);
             Vector3 center = new Vector3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0);
             Matrix transform = Matrix.CreateTranslation(-(Camera.X), -(Camera.Y), 0) * Matrix.CreateScale(Camera.Scale) * Matrix.CreateTranslation(center);
