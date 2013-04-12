@@ -26,7 +26,7 @@ namespace CollisionBoxTool
         public Node(float x, float y, int id)
         {
             if (count < id)
-                count = id;
+                count = id+1;
             ID = id;
             position = new Vector2(x, y);
         }

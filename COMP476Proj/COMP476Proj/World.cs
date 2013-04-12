@@ -21,6 +21,7 @@ namespace COMP476Proj
         public List<EntityMoveable> moveableObjectsY;
         public Map map;
         public List<Wall>[,] grid;
+        List<Node> path;
         public const int gridLength = 200;
         #endregion
 
@@ -56,6 +57,7 @@ namespace COMP476Proj
 
             // Set up map grid
             createMapGrid();
+            path = AStar.GetPath(streaker.ComponentPhysics.Position, Vector2.Zero, map.nodes);
         }
 
         private void createMapGrid()
@@ -188,6 +190,18 @@ namespace COMP476Proj
             foreach (EntityMoveable moveable in moveableObjectsY)
             {
                 moveable.Draw(gameTime, spriteBatch);
+            }
+
+            Texture2D blank = SpriteDatabase.GetAnimation("blank").Texture;
+            foreach (Node n in map.nodes)
+            {
+                Rectangle destRect = new Rectangle((int)n.Position.X - 3, (int)n.Position.Y - 3, 6,6);
+                spriteBatch.Draw(blank, destRect, Color.Cyan);
+            }
+            foreach (Node n in path)
+            {
+                Rectangle destRect = new Rectangle((int)n.Position.X - 3, (int)n.Position.Y - 3, 6, 6);
+                spriteBatch.Draw(blank, destRect, Color.DarkOrange);
             }
             AchievementManager.getInstance().Draw(gameTime, spriteBatch);
         }
