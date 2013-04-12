@@ -78,13 +78,14 @@ namespace StreakerLibrary
             Texture2D notorietyMeter = Content.Load<Texture2D>("Hud/notorietyMeter");
 
             //Animation elements 
-            int notMoving = 150, walk = 60, fall = 60, getUp = 100, dance = 100, attack = 50;
+            int notMoving = 150, walk = 60, fall = 60, getUp = 100, dance = 100, attack = 50, flash = 60;
 
             SpriteDatabase.AddAnimation(new Animation("streaker_static", streaker, 2, 143, 184, 0, notMoving));
             SpriteDatabase.AddAnimation(new Animation("streaker_walk", streaker, 5, 143, 184, 184, walk));
             SpriteDatabase.AddAnimation(new Animation("streaker_fall", streaker, 7, 143, 184, 368, fall));
             SpriteDatabase.AddAnimation(new Animation("streaker_getup", streaker, 7, 143, 184, 552, getUp));
             SpriteDatabase.AddAnimation(new Animation("streaker_dance", streaker, 5, 143, 184, 736, dance));
+            SpriteDatabase.AddAnimation(new Animation("streaker_flash", streaker, 8, 143, 184, 920, flash));
 
             SpriteDatabase.AddAnimation(new Animation("cop_static", cop, 2, 143, 184, 0, notMoving));
             SpriteDatabase.AddAnimation(new Animation("cop_walk", cop, 5, 143, 184, 184, walk));
