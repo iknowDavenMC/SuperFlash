@@ -30,6 +30,7 @@ namespace COMP476Proj
             Locked = true;
             this.name = name;
             this.description = description;
+            this.value = value;
         }
 
         public abstract void Update(GameTime gameTime);
