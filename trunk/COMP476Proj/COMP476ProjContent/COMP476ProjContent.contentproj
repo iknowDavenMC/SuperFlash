@@ -45,6 +45,171 @@
     <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.VideoImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Sound Effects\BlackBoy\Exclamation 1.wav">
+      <Name>Exclamation 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\BlackBoy\Exclamation 2.wav">
+      <Name>Exclamation 2</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\BlackBoy\Exclamation 3.wav">
+      <Name>Exclamation 3</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\BlackBoy\SuperFlash 1.wav">
+      <Name>SuperFlash 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\DumbCop\Exclamation 1.wav">
+      <Name>Exclamation 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\DumbCop\Exclamation 2.wav">
+      <Name>Exclamation 2</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\DumbCop\Exclamation 3.wav">
+      <Name>Exclamation 3</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\DumbCop\Exclamation 4.wav">
+      <Name>Exclamation 4</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\DumbCop\Exclamation 5.wav">
+      <Name>Exclamation 5</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\DumbCop\Exclamation 6.wav">
+      <Name>Exclamation 6</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\DumbCop\SuperFlash 1.wav">
+      <Name>SuperFlash 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\DumbCop\SuperFlash 2.wav">
+      <Name>SuperFlash 2</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\Girl\Exclamation 1.wav">
+      <Name>Exclamation 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\Girl\Exclamation 2.wav">
+      <Name>Exclamation 2</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\Girl\Exclamation 3.wav">
+      <Name>Exclamation 3</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\Girl\SuperFlash 1.wav">
+      <Name>SuperFlash 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\Other\Achievement 1.wav">
+      <Name>Achievement 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\Other\Meter 1.wav">
+      <Name>Meter 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\RoboCop\Activation 1.wav">
+      <Name>Activation 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\SmartCop\Exclamation 1.wav">
+      <Name>Exclamation 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\SmartCop\Exclamation 2.wav">
+      <Name>Exclamation 2</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\SmartCop\Exclamation 3.wav">
+      <Name>Exclamation 3</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\SmartCop\Exclamation 4.wav">
+      <Name>Exclamation 4</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\SmartCop\Exclamation 5.wav">
+      <Name>Exclamation 5</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\SmartCop\Exclamation 6.wav">
+      <Name>Exclamation 6</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\SmartCop\SuperFlash 1.wav">
+      <Name>SuperFlash 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\SmartCop\SuperFlash 2.wav">
+      <Name>SuperFlash 2</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\Streaker\Dance 1.wav">
+      <Name>Dance 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\Streaker\SuperFlash 1.wav">
+      <Name>SuperFlash 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\WhiteBoy\Exclamation 1.wav">
+      <Name>Exclamation 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\WhiteBoy\Exclamation 2.wav">
+      <Name>Exclamation 2</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\WhiteBoy\Exclamation 3.wav">
+      <Name>Exclamation 3</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\WhiteBoy\SuperFlash 1.wav">
+      <Name>SuperFlash 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
     <Compile Include="streaker.png">
       <Name>streaker</Name>
       <Importer>TextureImporter</Importer>
@@ -176,6 +341,45 @@
       <Name>SmartCop</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sound Effects\Common\Collide 1.wav">
+      <Name>Collide 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\Common\Fall 1.wav">
+      <Name>Fall 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound Effects\Common\Run 1.wav">
+      <Name>Run 1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Songs\Game Over.mp3">
+      <Name>Game Over</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+    <Compile Include="Songs\High Score.mp3">
+      <Name>High Score</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+    <Compile Include="Songs\Level.mp3">
+      <Name>Level</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+    <Compile Include="Songs\Main Menu.mp3">
+      <Name>Main Menu</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
