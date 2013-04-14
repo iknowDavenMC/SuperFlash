@@ -4,7 +4,7 @@ Move from found to fixed when fixed.
 
 BUGS FOUND
 
-If you run into a wall and move parallel to it, the player will occasionally shoot up or down the wall (extremely rare).
+There seems to be an invisible obstacle just outside of the classroom with all of the pedestrians in it (below the door).
 
 
 BUGS FIXED
@@ -16,3 +16,5 @@ Character state should be called streaker state, and should be in streaker class
 Logic of keyboard input to movement result needs to be fixed. Streaker should check keyboard state using input manager, input manager should not tell the streaker what to do.
 
 After colliding with the streaker, the NPC will run in a circle.
+
+If you run into a wall and move parallel to it, the player will occasionally shoot up or down the wall (extremely rare).
