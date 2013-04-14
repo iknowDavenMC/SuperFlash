@@ -4,8 +4,6 @@ Move from found to fixed when fixed.
 
 BUGS FOUND
 
-There seems to be an invisible obstacle just outside of the classroom with all of the pedestrians in it (below the door).
-
 
 BUGS FIXED
 
@@ -18,3 +16,5 @@ Logic of keyboard input to movement result needs to be fixed. Streaker should ch
 After colliding with the streaker, the NPC will run in a circle.
 
 If you run into a wall and move parallel to it, the player will occasionally shoot up or down the wall (extremely rare).
+
+There seems to be an invisible obstacle just outside of the classroom with all of the pedestrians in it (below the door).
