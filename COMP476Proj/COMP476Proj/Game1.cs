@@ -17,6 +17,8 @@ namespace COMP476Proj
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        public static Random random = new Random();
+
         public const int SCREEN_WIDTH = 1024;
         public const int SCREEN_HEIGHT = 768;
         GraphicsDeviceManager graphics;
@@ -59,6 +61,9 @@ namespace COMP476Proj
         /// </summary>
         protected override void LoadContent()
         {
+            SoundManager.GetInstance().LoadContent(Content);
+            SoundManager.GetInstance().PlaySong("Level");
+
             graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
             graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
             //this.graphics.IsFullScreen = true;
