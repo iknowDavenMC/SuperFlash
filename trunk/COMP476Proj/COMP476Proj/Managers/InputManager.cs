@@ -166,8 +166,8 @@ namespace COMP476Proj
         /// </summary>
         /// <param name="key">Name of the action to check for</param>
         /// <param name="index">Index of the player in question</param>
-        /// <returns></returns>
-        public bool IsDoing(String key, PlayerIndex index)
+        /// <returns>Whether or not the action exists</returns>
+        public bool IsDoing(string key, PlayerIndex index)
         {
             if (instance == null)
             {
