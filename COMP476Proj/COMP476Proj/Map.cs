@@ -56,7 +56,8 @@ namespace COMP476Proj
                     h = int.Parse(line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
                     seeThrough = bool.Parse(line);
-                    walls.Add(new Wall(new Vector2(x,y), new BoundingRectangle(x, y, w, h), seeThrough));
+                    if (w > 0 && h > 0)
+                        walls.Add(new Wall(new Vector2(x,y), new BoundingRectangle(x, y, w, h), seeThrough));
                     line = reader.ReadLine();
                 } while (reader.Peek() != -1
                     && !line.StartsWith("NODES")

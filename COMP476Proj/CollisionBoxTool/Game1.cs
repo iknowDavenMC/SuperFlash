@@ -321,7 +321,8 @@ namespace CollisionBoxTool
                 if (mode == DrawModes.Box)
                 {
                     drawing = false;
-                    boxes.Add(new Box(mouseBox.rect.X, mouseBox.rect.Y, mouseBox.rect.Width, mouseBox.rect.Height, mouseBox.seeThrough));
+                    if (mouseBox.rect.Width > 0 && mouseBox.rect.Height > 0)
+                        boxes.Add(new Box(mouseBox.rect.X, mouseBox.rect.Y, mouseBox.rect.Width, mouseBox.rect.Height, mouseBox.seeThrough));
                 }
                 else if (mode == DrawModes.Node)
                 {

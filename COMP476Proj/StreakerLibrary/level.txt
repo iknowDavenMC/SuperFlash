@@ -5,15 +5,13 @@ RECTANGLES
 2931 1062 20 51 false 
 1196 1094 1735 18 false 
 1034 1095 161 16 false 
-0 0 29 573 false 
-531 525 0 0 false 
+0 0 29 573 false  
 857 162 511 90 false 
 29 523 467 50 false 
 3382 90 19 219 false 
 2963 306 467 117 false 
 3401 422 29 640 false 
 2931 943 32 120 false 
-2963 1043 0 0 false 
 2963 1044 438 18 false 
 0 573 29 540 false 
 462 370 34 152 false 
@@ -22,7 +20,6 @@ RECTANGLES
 460 89 51 203 false 
 29 1094 1005 19 false 
 2918 161 46 659 false 
-800 255 0 0 false 
 721 157 43 690 false 
 721 847 342 91 false 
 1154 848 344 90 false 
@@ -48,9 +45,7 @@ RECTANGLES
 326 398 57 64 true
 882 347 464 85 true
 882 517 461 81 true
-897 704 0 0 true
 892 700 460 70 true
-514 1053 0 0 true
 NODES
 1 57 115
 2 172 113
