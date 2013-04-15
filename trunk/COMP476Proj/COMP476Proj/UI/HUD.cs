@@ -196,6 +196,11 @@ namespace COMP476Proj
                 }
                 float t = (float)timeSoFar / TimeToAnimate;
                 health = MathHelper.Lerp(health, healthActual, t);
+
+                if (health - healthActual < 0.25f)
+                {
+                    health = healthActual;
+                }
             }
             else if (health < healthActual)
             {
