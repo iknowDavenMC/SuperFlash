@@ -31,6 +31,7 @@ namespace COMP476Proj
             physics = phys;
             this.draw = draw;
             state = pState;
+            behavior = PedestrianBehavior.DEFAULT;
             studentType = draw.animation.animationId.Substring(0, 8);
             this.BoundingRectangle = new COMP476Proj.BoundingRectangle(phys.Position, 16, 6);
             draw.Play();
@@ -43,6 +44,7 @@ namespace COMP476Proj
             physics = phys;
             this.draw = draw;
             state = pState;
+            behavior = PedestrianBehavior.DEFAULT;
             detectRadius = radius;
             studentType = draw.animation.animationId.Substring(0, 8);
             this.BoundingRectangle = new COMP476Proj.BoundingRectangle(phys.Position, 16, 6);
@@ -101,7 +103,7 @@ namespace COMP476Proj
             //--------------------------------------------------------------------------
             if (behavior == PedestrianBehavior.DEFAULT)
             {
-                if (Vector2.Distance(w.streaker.Position, pos) < detectRadius)
+                if (Vector2.Distance(w.streaker.Position, pos) < detectRadius && LineOfSight())
                 {
                     playSound("Exclamation");
                     behavior = PedestrianBehavior.AWARE;
@@ -218,7 +220,7 @@ namespace COMP476Proj
             }
             
             draw.Update(gameTime, this);
-            if (draw.animComplete && state == PedestrianState.FALL)
+            if (draw.animComplete && (state == PedestrianState.FALL || state == PedestrianState.GET_UP))
             {
                 draw.GoToPrevFrame();
             }

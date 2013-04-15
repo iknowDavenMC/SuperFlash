@@ -211,7 +211,8 @@ namespace COMP476Proj
 
             if (velocity.Length() > physics.MaxVelocity)
             {
-                velocity.Normalize();
+                if(velocity.LengthSquared() > 0)
+                    velocity.Normalize();
                 velocity *= physics.MaxVelocity;
             }
 
@@ -244,7 +245,8 @@ namespace COMP476Proj
             }
 
             Vector2 velocity = direction;
-            velocity.Normalize();
+            if(velocity.LengthSquared() > 0)
+                velocity.Normalize();
             velocity *= speed;
 
             Vector2 targetAcceleration = velocity - physics.Velocity;
@@ -252,7 +254,8 @@ namespace COMP476Proj
 
             if (targetAcceleration.Length() > physics.MaxAcceleration)
             {
-                targetAcceleration.Normalize();
+                if (targetAcceleration.LengthSquared() > 0)
+                    targetAcceleration.Normalize();
                 targetAcceleration *= physics.MaxAcceleration;
             }
 
@@ -468,7 +471,8 @@ namespace COMP476Proj
                 } while (y == 0);
 
                 direction = new Vector2(x, y);
-                direction.Normalize();
+                if (direction.LengthSquared() > 0)
+                    direction.Normalize();
             }
             else
             {
@@ -478,7 +482,8 @@ namespace COMP476Proj
                     Vector2 previousDirection = physics.Direction;
                     direction.X = (float)Math.Cos(angle) * previousDirection.X - (float)Math.Sin(angle) * previousDirection.Y;
                     direction.Y = (float)Math.Sin(angle) * previousDirection.X + (float)Math.Cos(angle) * previousDirection.Y;
-                    direction.Normalize();
+                    if (direction.LengthSquared() > 0)
+                        direction.Normalize();
                 }
                 while (direction.Length() == 0);
             }

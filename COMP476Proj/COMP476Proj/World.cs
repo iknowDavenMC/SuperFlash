@@ -15,7 +15,7 @@ namespace COMP476Proj
     {
         #region Fields
         public Streaker streaker;
-        public List<Pedestrian> pedestrians;
+        public List<NPC> npcs;
         public List<Wall> walls;
         public List<EntityMoveable> moveableObjectsX;
         public List<EntityMoveable> moveableObjectsY;
@@ -32,7 +32,7 @@ namespace COMP476Proj
             streaker = new Streaker(new PhysicsComponent2D(new Vector2(-50, -50), 0, new Vector2(20,20),150, 750, 150, 750, 8, 50, 0.25f, true),
                 new DrawComponent(SpriteDatabase.GetAnimation("streaker_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f));
 
-            pedestrians = new List<Pedestrian>();
+            npcs = new List<NPC>();
             moveableObjectsX = new List<EntityMoveable>();
             moveableObjectsY = new List<EntityMoveable>();
 
@@ -48,8 +48,8 @@ namespace COMP476Proj
             map.Load(filename);
             foreach (NPC npc in map.startingNPCs)
             {
-                if (npc is Pedestrian)
-                    pedestrians.Add((Pedestrian)npc);
+                if (npc is Pedestrian || npc is DumbCop)
+                    npcs.Add(npc);
                 moveableObjectsX.Add(npc);
                 moveableObjectsY.Add(npc);
             }
@@ -180,9 +180,16 @@ namespace COMP476Proj
                 Camera.Y = 0;
 
             // Update all other moveable objects
-            foreach (Pedestrian pedestrian in pedestrians)
+            foreach (NPC myNPC in npcs)
             {
-                pedestrian.Update(gameTime, this);
+                if (myNPC is Pedestrian)
+                {
+                    ((Pedestrian)myNPC).Update(gameTime, this);
+                }
+                else if (myNPC is DumbCop)
+                {
+                    ((DumbCop)myNPC).Update(gameTime, this);
+                }
             }
 
             //for(int i=0; i!= 20; ++i)
