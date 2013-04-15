@@ -15,7 +15,6 @@ namespace COMP476Proj
     public class Streaker : EntityMoveable
     {
         #region Attributes
-
         /// <summary>
         /// Determines how many milliseconds have gone by since input was last checked
         /// </summary>
@@ -260,7 +259,6 @@ namespace COMP476Proj
                     break;
                 case StreakerState.DANCE:
                     draw.animation = SpriteDatabase.GetAnimation("streaker_dance");
-                    draw.Play();
                     break;
                 case StreakerState.SUPERFLASH:
                     draw.animation = SpriteDatabase.GetAnimation("streaker_flash");

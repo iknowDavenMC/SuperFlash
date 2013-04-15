@@ -37,14 +37,17 @@ namespace COMP476Proj
         private Vector2 positionHealthBarContainer;
         private Vector2 healthBarContainerScale; 
         
-        //Variables
-        private int health;
+        //Health Variables
+        private float health;
+        private int healthActual;
 
         //Score and Timer
         private int scoreIncrement;
         private int displayedScore;
         private Vector2 positionScore;
         private Vector2 positionTime;
+        private float scoreScale;
+        private float maxScoreScale;
         
         //Window size 
         private int windowHeight;
@@ -56,6 +59,11 @@ namespace COMP476Proj
         private float timer;
         private float timerInterval;
         private float seconds;
+        private string displaySeconds;           //Used to display the 0 when timer < 10 seconds
+
+        private float animationSpeed;           //Used to animate objects on the HUD
+        private float timeSoFar;
+        private float TimeToAnimate; 
 
         private SpriteFont spriteFont;
 
@@ -80,11 +88,13 @@ namespace COMP476Proj
             positionBanner = new Vector2(windowWidth/2, windowHeight - 20);
             positionHealthBar = new Vector2(positionBanner.X - 280, positionBanner.Y);
             positionHealthBarContainer = new Vector2(positionBanner.X + -284, positionBanner.Y+10);
-            positionScore = new Vector2(.0f, positionBanner.Y -12);
+            positionScore = new Vector2(positionBanner.X-(bannerScale.X/2)+10, positionBanner.Y+4);
             positionTime = new Vector2(positionBanner.X +355, positionBanner.Y-12);
             
             //Initialize current score
             currentScore = 0;
+            scoreScale = 1;
+            maxScoreScale = 4.0f;
             scoreIncrement = 10;
 
             //Set up Timers
@@ -93,6 +103,12 @@ namespace COMP476Proj
             
             //Set up current health
             health = 100;
+            healthActual = (int)health;
+
+            timeSoFar = 0;
+            TimeToAnimate = 0.4f;
+
+            animationSpeed = 0.005f;
         }
 
         public void loadContent(Texture2D banner, Texture2D notorietyBar, Texture2D notorietyMeter, SpriteFont spriteFont)
@@ -122,7 +138,14 @@ namespace COMP476Proj
             //Update the time variables
             seconds = (float)gameTime.TotalGameTime.Seconds;
             minutes = (float)gameTime.TotalGameTime.Minutes;
-            
+            if (seconds < 10)
+            {
+                displaySeconds = "0";
+            }
+            else
+            {
+                displaySeconds = "";
+            }
             //Updating the displayed score
             if (displayedScore < currentScore)
             {
@@ -133,6 +156,7 @@ namespace COMP476Proj
                     displayedScore += scoreIncrement;
                 }
             }
+            UpdateScoreSize(gameTime);
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
@@ -142,10 +166,10 @@ namespace COMP476Proj
             offset.X += Camera.X;
             offset.Y += Camera.Y;
             spriteBatch.Draw(banner, positionBanner * scale + offset, null, Color.White, 0.0f, new Vector2(bannerScale.X/2, bannerScale.Y/2), scale, SpriteEffects.None, 0f);
-            spriteBatch.Draw(healthBar, positionHealthBar * scale + offset, new Rectangle(0, 0, (int)updateHealthBar(), (int)healthBarScale.Y), Color.White, 0.0f, new Vector2(0, healthBarScale.Y / 2), scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(healthBar, positionHealthBar * scale + offset, new Rectangle(0, 0, (int)updateHealthBar(gameTime), (int)healthBarScale.Y), Color.White, 0.0f, new Vector2(0, healthBarScale.Y / 2), scale, SpriteEffects.None, 0f);
             spriteBatch.Draw(healthBarContainer, positionHealthBarContainer * scale + offset, null, Color.White, 0.0f, new Vector2(0.0f, healthBarContainerScale.Y), scale, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(spriteFont, displayedScore.ToString(), positionScore * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(spriteFont, minutes+":"+seconds, positionTime * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(spriteFont, displayedScore.ToString(), positionScore * scale + offset, Color.White, 0f, new Vector2(0, 15), scoreScale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(spriteFont, minutes+":"+displaySeconds+seconds, positionTime * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
         }
         #endregion
 
@@ -153,24 +177,59 @@ namespace COMP476Proj
         #region Functions
         public void increaseScore(int amount)
         {
+            scoreScale = maxScoreScale;
             currentScore += amount;
         }
 
-        public float updateHealthBar()
+        public float updateHealthBar(GameTime gameTime)
         {
+            if (health > healthActual)
+            {
+                if (timeSoFar < TimeToAnimate)
+                {
+                    timeSoFar += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    timeSoFar /= 1000.0f;
+                }
+                if (timeSoFar > TimeToAnimate)
+                {
+                    timeSoFar = TimeToAnimate;
+                }
+                float t = (float)timeSoFar / TimeToAnimate;
+                health = MathHelper.Lerp(health, healthActual, t);
+            }
+            else if (health < healthActual)
+            {
+                health = healthActual;
+                timeSoFar = 0.0f;
+            }
             return ((health / 100.0f) * healthBarScale.X);
         }
 
+        public void UpdateScoreSize(GameTime gameTime)
+        {
+            if (scoreScale > 1.0f)
+            {
+                scoreScale -= animationSpeed * gameTime.ElapsedGameTime.Milliseconds;
+            }
+            else if (scoreScale < 1.0f)
+            {
+                scoreScale = 1.0f;
+            }
+        }
+        public float lerp(float v0, float v1, float t)
+        {
+            return v0 + (v1 - v0) * t;
+        }
         public void decreaseHealth(int amount)
         {
             //Check for valid amount
             if (amount <= 100 &&
                 amount > 0)
             {
-                health -= amount;
-                if (health < 0)
+                healthActual -= amount;
+                if (healthActual < 0)
                 {
-                    health = 0;
+                    healthActual = 0;
                 }
             }
             else

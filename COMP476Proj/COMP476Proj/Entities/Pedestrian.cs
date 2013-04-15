@@ -235,6 +235,7 @@ namespace COMP476Proj
         public override void Fall()
         {
             behavior = PedestrianBehavior.KNOCKEDUP;
+            
             if (state != PedestrianState.FALL)
             {
                 transitionToState(PedestrianState.FALL);
