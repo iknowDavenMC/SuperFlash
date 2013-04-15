@@ -63,6 +63,36 @@ namespace COMP476Proj
         /// </summary>
         public virtual void Fall(bool isSuperFlash) { }
 
+        public virtual bool LineOfSight()
+        {
+            LineSegment test = new LineSegment(Position, Game1.world.streaker.Position);
+
+            // Check the grid for walls
+            int startX = (int)Math.Round(Math.Min(Position.X, Game1.world.streaker.Position.X) / World.gridLength);
+            int startY = (int)Math.Round(Math.Min(Position.Y, Game1.world.streaker.Position.Y) / World.gridLength);
+            int endX = (int)Math.Round(Math.Max(Position.X, Game1.world.streaker.Position.X) / World.gridLength);
+            int endY = (int)Math.Round(Math.Max(Position.Y, Game1.world.streaker.Position.Y) / World.gridLength);
+
+            for (int k = startY; k != endY + 1; ++k)
+            {
+                for (int l = startX; l != endX + 1; ++l)
+                {
+                    for (int j = 0; j != Game1.world.grid[k, l].Count; ++j)
+                    {
+                        if (Game1.world.grid[k, l][j].IsSeeThrough)
+                        {
+                            continue;
+                        }
+
+                        if (test.IntersectsBox(Game1.world.grid[k, l][j].BoundingRectangle))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
         #endregion
     }
 }

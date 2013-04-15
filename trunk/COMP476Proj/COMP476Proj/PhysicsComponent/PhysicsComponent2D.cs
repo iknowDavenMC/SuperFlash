@@ -281,7 +281,8 @@ namespace COMP476Proj
                 // Capped by max acceleration
                 if (acceleration.Length() > maxAcceleration)
                 {
-                    acceleration.Normalize();
+                    if(acceleration.LengthSquared() > 0)
+                        acceleration.Normalize();
                     acceleration *= maxAcceleration;
                 }
 
@@ -302,7 +303,8 @@ namespace COMP476Proj
                 // Capped by max velocity
                 if (velocity.Length() > maxVelocity)
                 {
-                    velocity.Normalize();
+                    if(velocity.LengthSquared() > 0)
+                        velocity.Normalize();
                     velocity *= maxVelocity;
                 }
             }
@@ -317,7 +319,8 @@ namespace COMP476Proj
                 // Capped by max velocity
                 if (velocity.Length() > maxVelocity)
                 {
-                    velocity.Normalize();
+                    if (velocity.LengthSquared() > 0)
+                        velocity.Normalize();
                     velocity *= maxVelocity;
                 }
             }
@@ -412,7 +415,8 @@ namespace COMP476Proj
             if (!targetDirection.Equals(null))
             {
                 movementDirection = (Vector2)targetDirection;
-                movementDirection.Normalize();
+                if(movementDirection.LengthSquared() > 0)
+                    movementDirection.Normalize();
             }
 
             if (!targetVelocity.Equals(null))
@@ -512,7 +516,8 @@ namespace COMP476Proj
         {
             // Normal
             Vector2 contactNormal = position - overlap.Center;
-            contactNormal.Normalize();
+            if(contactNormal.LengthSquared() > 0)
+                contactNormal.Normalize();
 
             // Steps outlined in the class slides
             float Vs = -(1 + coefficientOfRestitution) * -(Math.Abs(Vector2.Dot(velocity, contactNormal)) + Math.Abs(Vector2.Dot(other.velocity, contactNormal)));
@@ -522,7 +527,8 @@ namespace COMP476Proj
 
             velocity += contactNormal / mass;
             movementDirection = velocity;
-            movementDirection.Normalize();
+            if (movementDirection.LengthSquared() > 0)
+                movementDirection.Normalize();
         }
 
         /// <summary>
@@ -543,7 +549,8 @@ namespace COMP476Proj
 
             velocity += contactNormal / mass;
             movementDirection = velocity;
-            movementDirection.Normalize();
+            if (movementDirection.LengthSquared() > 0)
+                movementDirection.Normalize();
         }
 
         /// <summary>

@@ -130,7 +130,7 @@ namespace COMP476Proj
                     {
                         int pnum = Game1.random.Next(1, 4);
                         string pedAnim = "student" + pnum + "_static";
-                        Animation a = SpriteDatabase.GetAnimation("cop_static");
+                        //Animation a = SpriteDatabase.GetAnimation("cop_static");
                         PedestrianState pstate = PedestrianState.WANDER;
                         if (mode.StartsWith("Static"))
                         {
@@ -149,8 +149,32 @@ namespace COMP476Proj
                             );
                     }
                     // The cops are not in, so they are ignored for now
+
                     if (type.StartsWith("DumbCop"))
                     {
+                        DumbCopState dcState = DumbCopState.WANDER;
+                        if (mode.StartsWith("Static"))
+                        {
+                            dcState = DumbCopState.STATIC;
+                            animation = SpriteDatabase.GetAnimation("cop_static");
+                            
+                        }
+                        else if (mode.StartsWith("Wander"))
+                        {
+                            dcState = DumbCopState.WANDER;
+                            animation = SpriteDatabase.GetAnimation("cop_walk");
+                        }
+                        else
+                        {
+                            //TODO
+                            dcState = DumbCopState.WANDER;
+                            animation = SpriteDatabase.GetAnimation("cop_walk");
+                        }
+                        npc = new DumbCop(
+                            new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), 115, 750, 75, 1000, 8, 40, 0.25f, true),
+                            new MovementAIComponent2D(),
+                            new DrawComponent(animation, Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), dcState);
+
                     }
                     if (type.StartsWith("SmartCop"))
                     {

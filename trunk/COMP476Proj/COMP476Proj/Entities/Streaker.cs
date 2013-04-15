@@ -53,7 +53,7 @@ namespace COMP476Proj
         /// <summary>
         /// Superflash distance
         /// </summary>
-        private const int SUPER_FLASH_DISTANCE = 500;
+        private const int SUPER_FLASH_DISTANCE = 300;
 
         #endregion
 
@@ -376,6 +376,17 @@ namespace COMP476Proj
             physics.SetTargetValues(true, null, null, null);
 
             return;
+        }
+
+        public void GetHit()
+        {
+            if (charState != StreakerState.FALL && charState != StreakerState.GET_UP)
+            {
+                draw.Reset();
+                charState = StreakerState.FALL;
+                HUD.getInstance().decreaseHealth(5);
+                physics.SetTargetValues(true, null, null, null);
+            }
         }
 
         #endregion

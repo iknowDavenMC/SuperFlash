@@ -250,7 +250,7 @@ NPCS
 367 487 Civilian Static
 667 327 SmartCop Wander
 558 172 DumbCop Wander
-664 211 DumbCop Wander
+664 211 DumbCop Static
 667 403 DumbCop Wander
 575 487 DumbCop Wander
 TRIGGER
@@ -263,4 +263,4 @@ TRIGGER
 2964 91 416 212 7
 2964 424 437 620 8
 PLAYER
-3294 968
+1200 968

@@ -148,7 +148,7 @@ namespace COMP476Proj
             HUD.getInstance().Draw(gameTime, spriteBatch);
             //Debugger.getInstance().Draw(spriteBatch);
 
-            foreach (Pedestrian ped in world.pedestrians)
+            foreach (NPC ped in world.npcs)
             {
                 ped.BoundingRectangle.Draw(spriteBatch);
             }
