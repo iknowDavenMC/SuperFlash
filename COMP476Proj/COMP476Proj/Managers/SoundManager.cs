@@ -151,28 +151,6 @@ namespace COMP476Proj
         }
 
         /// <summary>
-        /// Plays the meter sound
-        /// </summary>
-        /// <returns>Does the sound effects exist</returns>
-        public bool PlayMeter(float health, float maxHealth)
-        {
-            try
-            {
-                float pitch = health / maxHealth;
-
-                soundEffects["Other"]["Meter"][0].Play(1, pitch, 0f);
-
-                return true;
-            }
-            catch (KeyNotFoundException e)
-            {
-                Console.WriteLine("Meter" + " is not a sound effect of " + "Other");
-                Console.WriteLine(e.Message);
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Plays the sound effect corresponding to the event
         /// </summary>
         /// <param name="soundSource">What is emitting the sound ex: Streaker</param>
