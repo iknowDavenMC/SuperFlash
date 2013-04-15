@@ -63,9 +63,11 @@ namespace COMP476Proj
 
             soundEffects["DumbCop"].Add("Exclamation", new List<SoundEffect>(6));
             soundEffects["DumbCop"].Add("SuperFlash", new List<SoundEffect>(2));
+            soundEffects["DumbCop"].Add("Hit", new List<SoundEffect>(4));
 
             soundEffects["SmartCop"].Add("Exclamation", new List<SoundEffect>(6));
             soundEffects["SmartCop"].Add("SuperFlash", new List<SoundEffect>(2));
+            soundEffects["SmartCop"].Add("Hit", new List<SoundEffect>(4));
 
             soundEffects["RoboCop"].Add("Activation", new List<SoundEffect>(1));
 
@@ -75,6 +77,7 @@ namespace COMP476Proj
             soundEffects["Common"].Add("Collide", new List<SoundEffect>(1));
             soundEffects["Common"].Add("Fall", new List<SoundEffect>(1));
             soundEffects["Common"].Add("Run", new List<SoundEffect>(1));
+            soundEffects["Common"].Add("Hit", new List<SoundEffect>(1));
 
             songs = new Dictionary<string, Song>();
 
@@ -145,11 +148,11 @@ namespace COMP476Proj
                 if (soundType != "Achievement")
                 {
                     float pitch = (float)(0.25 * Game1.random.NextDouble() - 0.125);
-                    soundEffects[soundSource][soundType][index].Play(0.5f, pitch, 0f);
+                    soundEffects[soundSource][soundType][index].Play(1, pitch, 0f);
                 }
                 else
                 {
-                    soundEffects[soundSource][soundType][index].Play(0.5f, 0f, 0f);
+                    soundEffects[soundSource][soundType][index].Play(1, 0f, 0f);
                 }
                 return true;
             }
