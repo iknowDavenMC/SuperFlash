@@ -97,26 +97,6 @@ namespace COMP476Proj
             moveableObjectsX = moveableObjectsX.OrderBy(o => o.ComponentPhysics.Position.X).ToList();
             moveableObjectsY = moveableObjectsY.OrderBy(o => o.ComponentPhysics.Position.Y).ToList();
 
-            // Check collision for X
-            for (int i = 0; i != moveableObjectsX.Count-1; ++i)
-            {
-                if (moveableObjectsX[i].BoundingRectangle.Collides(moveableObjectsX[i + 1].BoundingRectangle))
-                {
-                    moveableObjectsX[i + 1].ResolveCollision(moveableObjectsX[i]);
-                    moveableObjectsX[i].ResolveCollision(moveableObjectsX[i + 1]);
-                }
-            }
-
-            // Check collision for Y
-            for (int i = 0; i != moveableObjectsY.Count; ++i)
-            {
-                if (i < moveableObjectsY.Count-1 && moveableObjectsY[i].BoundingRectangle.Collides(moveableObjectsY[i + 1].BoundingRectangle))
-                {
-                    moveableObjectsY[i].ResolveCollision(moveableObjectsY[i + 1]);
-                    moveableObjectsY[i + 1].ResolveCollision(moveableObjectsY[i]);
-                }
-            }
-
             // Check collision for walls
             for (int i = 0; i != moveableObjectsX.Count; ++i)
             {
@@ -153,6 +133,28 @@ namespace COMP476Proj
                     }
                 }
             }
+
+            // Check collision for X
+            for (int i = 0; i != moveableObjectsX.Count-1; ++i)
+            {
+                if (moveableObjectsX[i].BoundingRectangle.Collides(moveableObjectsX[i + 1].BoundingRectangle))
+                {
+                    moveableObjectsX[i + 1].ResolveCollision(moveableObjectsX[i]);
+                    moveableObjectsX[i].ResolveCollision(moveableObjectsX[i + 1]);
+                }
+            }
+
+            // Check collision for Y
+            for (int i = 0; i != moveableObjectsY.Count; ++i)
+            {
+                if (i < moveableObjectsY.Count-1 && moveableObjectsY[i].BoundingRectangle.Collides(moveableObjectsY[i + 1].BoundingRectangle))
+                {
+                    moveableObjectsY[i].ResolveCollision(moveableObjectsY[i + 1]);
+                    moveableObjectsY[i + 1].ResolveCollision(moveableObjectsY[i]);
+                }
+            }
+
+            
 
             // Update streaker
             streaker.Update(gameTime);
