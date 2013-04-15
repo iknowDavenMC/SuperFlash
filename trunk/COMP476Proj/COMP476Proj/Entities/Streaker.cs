@@ -40,6 +40,11 @@ namespace COMP476Proj
         /// </summary>
         public StreakerState charState = StreakerState.STATIC;
 
+        /// <summary>
+        /// Superflash distance
+        /// </summary>
+        private const int SUPER_FLASH_DISTANCE = 500;
+
         #endregion
 
         #region Constructors
@@ -192,6 +197,11 @@ namespace COMP476Proj
             foreach (EntityMoveable entity in Game1.world.moveableObjectsX)
             {
                 if (entity is Streaker)
+                {
+                    continue;
+                }
+
+                if ((entity.Position - Position).Length() > SUPER_FLASH_DISTANCE)
                 {
                     continue;
                 }
