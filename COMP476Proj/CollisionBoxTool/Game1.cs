@@ -14,7 +14,7 @@ using StreakerLibrary;
 
 namespace CollisionBoxTool
 {
-    public enum DrawModes { Box, Node, NPC, Player }
+    public enum DrawModes { Box, Node, NPC, Trigger, Player }
     /// <summary>
     /// This is the main type for your game
     /// </summary>
@@ -23,8 +23,8 @@ namespace CollisionBoxTool
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        const int WIDTH = 1280;
-        const int HEIGHT = 1024;
+        const int WIDTH = 1024;
+        const int HEIGHT = 768;
 
         int maxW, maxH, camSpeed;
 
@@ -39,10 +39,12 @@ namespace CollisionBoxTool
         List<Node> nodes;
         List<Edge> edges;
         List<NPC> NPCs;
+        List<Trigger> triggers;
         NPC player;
 
         Color boxColor;
         Color wallColor;
+        Color triggerColor;
         Color nodeColor;
         Color edgeColor;
         Vector2 startPos, endPos;
@@ -132,10 +134,12 @@ namespace CollisionBoxTool
             nodes = new List<Node>();
             edges = new List<Edge>();
             NPCs = new List<NPC>();
+            triggers = new List<Trigger>();
             player = null;
 
             boxColor = new Color(1f, 0.5f, 0.05f, 0.5f);
             wallColor = new Color(1f, 0.0f, 0.0f, 0.5f);
+            triggerColor = new Color(0.5f, 1.0f, 0.0f, 0.5f);
             nodeColor = new Color(0f, 0.2f, 1f, 0.75f);
             edgeColor = new Color(0.33f, 1f, 0f, 1f);
 
@@ -215,6 +219,8 @@ namespace CollisionBoxTool
                 else if (mode == DrawModes.Node)
                     mode = DrawModes.NPC;
                 else if (mode == DrawModes.NPC)
+                    mode = DrawModes.Trigger;
+                else if (mode == DrawModes.Trigger)
                     mode = DrawModes.Player;
                 else if (mode == DrawModes.Player)
                     mode = DrawModes.Box;
@@ -255,7 +261,7 @@ namespace CollisionBoxTool
 
             if (ms.LeftButton == ButtonState.Pressed)
             {
-                if (mode == DrawModes.Box)
+                if (mode == DrawModes.Box || mode == DrawModes.Trigger)
                 {
                     if (!drawing)
                     {
@@ -356,6 +362,12 @@ namespace CollisionBoxTool
                     mouseNPC = new NPC(ms.X + Camera.X, ms.Y + Camera.Y, npcType, npcMode);
 
                 }
+                else if (mode == DrawModes.Trigger)
+                {
+                    drawing = false;
+                    if (mouseBox.rect.Width > 0 && mouseBox.rect.Height > 0)
+                        triggers.Add(new Trigger(mouseBox.rect.X, mouseBox.rect.Y, mouseBox.rect.Width, mouseBox.rect.Height));
+                }
                 else if (mode == DrawModes.Player)
                 {
                     drawing = false;
@@ -412,6 +424,18 @@ namespace CollisionBoxTool
                         }
                     }
                 }
+                else if (mode == DrawModes.Trigger)
+                {
+                    for (int i = 0; i != triggers.Count; i++)
+                    {
+                        Trigger t = triggers[i];
+                        if (t.rect.Contains(ms.X + Camera.X, ms.Y + Camera.Y))
+                        {
+                            triggers.Remove(t);
+                            i--;
+                        }
+                    }
+                }
                 else if (mode == DrawModes.Player)
                 {
                     if (player != null && player.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
@@ -453,6 +477,15 @@ namespace CollisionBoxTool
                 Rectangle draw = new Rectangle(box.rect.X - Camera.X, box.rect.Y - Camera.Y, box.rect.Width, box.rect.Height);
                 spriteBatch.Draw(blank, draw, box.seeThrough ? boxColor : wallColor);
             }
+            foreach (Trigger trigger in triggers)
+            {
+                Rectangle draw = new Rectangle(trigger.rect.X - Camera.X, trigger.rect.Y - Camera.Y, trigger.rect.Width, trigger.rect.Height);
+                spriteBatch.Draw(blank, draw, triggerColor);
+                drawBordered(spriteBatch,
+                    trigger.rect.X + trigger.rect.Width / 2 - Camera.X,
+                    trigger.rect.Y + trigger.rect.Height / 2 - Camera.Y,
+                    "" + trigger.id, Color.Black, Color.White);
+            }
             foreach (Node node in nodes)
             {
                 node.draw(spriteBatch, circle, nodeColor, Camera);
@@ -479,10 +512,10 @@ namespace CollisionBoxTool
                 player.draw(spriteBatch, circle, Camera);
             if (drawing)
             {
-                if (mode == DrawModes.Box)
+                if (mode == DrawModes.Box || mode == DrawModes.Trigger)
                 {
                     Rectangle mouseDraw = new Rectangle(mouseBox.rect.X - Camera.X, mouseBox.rect.Y - Camera.Y, mouseBox.rect.Width, mouseBox.rect.Height);
-                    spriteBatch.Draw(blank, mouseDraw, mouseBox.seeThrough ? boxColor : wallColor);
+                    spriteBatch.Draw(blank, mouseDraw, (mode == DrawModes.Box ? (mouseBox.seeThrough ? boxColor : wallColor) : triggerColor));
                 }
                 else if (mode == DrawModes.Node)
                 {
@@ -563,6 +596,13 @@ namespace CollisionBoxTool
                 string line = npc.X + " " + npc.Y + " " + npc.type.ToString() + " " + npc.mode.ToString();
                 writer.WriteLine(line);
             }
+            writer.WriteLine("TRIGGER");
+            foreach (Trigger trigger in triggers)
+            {
+                string line = trigger.rect.X + " " + trigger.rect.Y + " " + trigger.rect.Width + " " + trigger.rect.Height + " " + trigger.id;
+
+                writer.WriteLine(line);
+            }
             writer.WriteLine("PLAYER");
             writer.WriteLine(player.X + " " + player.Y);
             writer.Close();
@@ -606,6 +646,7 @@ namespace CollisionBoxTool
                     && !line.StartsWith("NODES")
                     && !line.StartsWith("EDGES")
                     && !line.StartsWith("NPCS")
+                    && !line.StartsWith("TRIGGER")
                     && !line.StartsWith("PLAYER")
                     );
 
@@ -626,6 +667,7 @@ namespace CollisionBoxTool
                 } while (reader.Peek() != -1
                     && !line.StartsWith("EDGES")
                     && !line.StartsWith("NPCS")
+                    && !line.StartsWith("TRIGGER")
                     && !line.StartsWith("PLAYER")
                     );
 
@@ -642,6 +684,7 @@ namespace CollisionBoxTool
                     line = reader.ReadLine();
                 } while (reader.Peek() != -1
                     && !line.StartsWith("NPCS")
+                    && !line.StartsWith("TRIGGER")
                     && !line.StartsWith("PLAYER")
                     );
 
@@ -666,6 +709,34 @@ namespace CollisionBoxTool
                     line = reader.ReadLine();
                 }
                 while (reader.Peek() != -1
+                    && !line.StartsWith("TRIGGER")
+                    && !line.StartsWith("PLAYER")
+                    );
+
+                if (line.StartsWith("TRIGGER"))
+                    line = reader.ReadLine();
+                do
+                {
+                    int x, y, w, h, id;
+                    int spacei = line.IndexOf(' ');
+                    x = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    y = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    w = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    h = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    id = int.Parse(line);
+                    triggers.Add(new Trigger(x, y, w, h, id));
+                    line = reader.ReadLine();
+                } while (reader.Peek() != -1
+                    && !line.StartsWith("NODES")
+                    && !line.StartsWith("EDGES")
+                    && !line.StartsWith("NPCS")
                     && !line.StartsWith("PLAYER")
                     );
 

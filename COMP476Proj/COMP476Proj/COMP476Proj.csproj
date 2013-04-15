@@ -92,6 +92,7 @@
     <Compile Include="Map.cs" />
     <Compile Include="Managers\AchievementManager.cs" />
     <Compile Include="Managers\FontManager.cs" />
+    <Compile Include="Trigger.cs" />
     <Compile Include="UI\AchievementToast.cs" />
     <Compile Include="UI\Achievement.cs" />
     <Compile Include="UI\ConcreteAchievements.cs" />
