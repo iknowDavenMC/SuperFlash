@@ -21,6 +21,7 @@ namespace COMP476Proj
         public List<EntityMoveable> moveableObjectsY;
         public Map map;
         public List<Wall>[,] grid;
+        public QuadTree qTree;
         List<Node> path;
         public const int gridLength = 200;
         #endregion
@@ -28,7 +29,7 @@ namespace COMP476Proj
         #region Init
         public World()
         {
-            streaker = new Streaker(new PhysicsComponent2D(new Vector2(100, 100), 0, new Vector2(20,20),150, 750, 150, 750, 8, 50, 0.25f, true),
+            streaker = new Streaker(new PhysicsComponent2D(new Vector2(100, 100), 0, new Vector2(20, 20), 150, 750, 150, 750, 8, 50, 0.25f, true),
                 new DrawComponent(SpriteDatabase.GetAnimation("streaker_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f));
 
             pedestrians = new List<Pedestrian>();
@@ -38,6 +39,7 @@ namespace COMP476Proj
             moveableObjectsX.Add(streaker);
             moveableObjectsY.Add(streaker);
 
+            qTree = new QuadTree((int)Map.WIDTH, (int)Map.HEIGHT, 3);
             map = new Map();
         }
 
@@ -55,6 +57,10 @@ namespace COMP476Proj
             moveableObjectsY = moveableObjectsY.OrderBy(o => o.ComponentPhysics.Position.Y).ToList();
             streaker.ComponentPhysics.Position = map.playerStart;
 
+            foreach (Wall w in map.walls)
+            {
+                qTree.insert(w);
+            }
             // Set up map grid
             createMapGrid();
         }
@@ -62,7 +68,7 @@ namespace COMP476Proj
         private void createMapGrid()
         {
             // Add walls to the grid
-            BoundingRectangle test = new BoundingRectangle(Vector2.Zero, gridLength/2);
+            BoundingRectangle test = new BoundingRectangle(Vector2.Zero, gridLength / 2);
 
             grid = new List<Wall>[(int)Math.Ceiling((Map.HEIGHT + 100) / gridLength), (int)Math.Ceiling((Map.WIDTH + 100) / gridLength)];
 
@@ -135,7 +141,7 @@ namespace COMP476Proj
             }
 
             // Check collision for X
-            for (int i = 0; i != moveableObjectsX.Count-1; ++i)
+            for (int i = 0; i != moveableObjectsX.Count - 1; ++i)
             {
                 if (moveableObjectsX[i].BoundingRectangle.Collides(moveableObjectsX[i + 1].BoundingRectangle))
                 {
@@ -147,20 +153,20 @@ namespace COMP476Proj
             // Check collision for Y
             for (int i = 0; i != moveableObjectsY.Count; ++i)
             {
-                if (i < moveableObjectsY.Count-1 && moveableObjectsY[i].BoundingRectangle.Collides(moveableObjectsY[i + 1].BoundingRectangle))
+                if (i < moveableObjectsY.Count - 1 && moveableObjectsY[i].BoundingRectangle.Collides(moveableObjectsY[i + 1].BoundingRectangle))
                 {
                     moveableObjectsY[i].ResolveCollision(moveableObjectsY[i + 1]);
                     moveableObjectsY[i + 1].ResolveCollision(moveableObjectsY[i]);
                 }
             }
 
-            
+
 
             // Update streaker
             streaker.Update(gameTime);
-            
+
             // Update camera
-            Camera.X = (int)streaker.ComponentPhysics.Position.X - Camera.Width/2;
+            Camera.X = (int)streaker.ComponentPhysics.Position.X - Camera.Width / 2;
             Camera.Y = (int)streaker.ComponentPhysics.Position.Y - Camera.Height / 2;
             if (Camera.X < 0)
                 Camera.X = 0;
@@ -173,8 +179,8 @@ namespace COMP476Proj
                 pedestrian.Update(gameTime, this);
             }
 
-            //for(int i=0; i!= 30; ++i)
-                path = AStar.GetPath(streaker.ComponentPhysics.Position, new Vector2(70,130), map.nodes, grid, true, false);
+            //for(int i=0; i!= 20; ++i)
+                path = AStar.GetPath(streaker.ComponentPhysics.Position, new Vector2(70, 130), map.nodes, qTree, true, false);
 
             // Update achievements
             AchievementManager.getInstance().Update(gameTime);
@@ -199,7 +205,7 @@ namespace COMP476Proj
             Texture2D blank = SpriteDatabase.GetAnimation("blank").Texture;
             foreach (Node n in map.nodes)
             {
-                Rectangle destRect = new Rectangle((int)n.Position.X - 3, (int)n.Position.Y - 3, 6,6);
+                Rectangle destRect = new Rectangle((int)n.Position.X - 3, (int)n.Position.Y - 3, 6, 6);
                 spriteBatch.Draw(blank, destRect, Color.Cyan);
             }
             foreach (Node n in path)

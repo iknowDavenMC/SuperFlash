@@ -106,6 +106,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Utility\LineSegment.cs" />
+    <Compile Include="Utility\QuadTree.cs" />
     <Compile Include="Utility\Rectanglef.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
