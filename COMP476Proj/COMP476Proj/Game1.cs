@@ -161,11 +161,11 @@ namespace COMP476Proj
             ps2.Y = world.streaker.Y - 25;
             ps2.Update(gameTime);
             Camera.Update(gameTime);
-#if (DEBUG)
+//#if (DEBUG)
             {
                 this.Window.Title = frameRate.CurrentFramesPerSecond.ToString() + " frames per second";
             }
-#endif
+//#endif
             elapsedTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             HUD.getInstance().Update(gameTime);
             base.Update(gameTime);

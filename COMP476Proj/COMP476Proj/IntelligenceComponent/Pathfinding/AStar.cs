@@ -62,7 +62,7 @@ namespace COMP476Proj
         /// <param name="graph">List of nodes to use</param>
         /// <param name="ignoreWeight">If true, extra weights will no be considered in the calculation or added to the edges</param>
         /// <returns>A list of nodes representing the path to take</returns>
-        public static List<Node> GetPath(Vector2 start, Vector2 end, List<Node> graph, List<Wall>[,] grid, bool checkWalls = true, bool ignoreWeight = true)
+        public static List<Node> GetPath(Vector2 start, Vector2 end, List<Node> graph, QuadTree grid, bool checkWalls = true, bool ignoreWeight = true)
         {
             List<Node> path = new List<Node>();
             AStarNode startNode = new AStarNode(FindClosestNode(start, ref graph, ref grid, checkWalls));
@@ -147,7 +147,7 @@ namespace COMP476Proj
         /// <returns></returns>
         private static float getHeuristic(AStarNode n1, AStarNode n2)
         {
-            return (n1.node.Position - n2.node.Position).Length();
+            return (n1.node.Position - n2.node.Position).LengthSquared();
         }
 
         /// <summary>
@@ -190,11 +190,12 @@ namespace COMP476Proj
         /// <param name="searchPos"></param>
         /// <param name="nodes"></param>
         /// <returns></returns>
-        private static Node FindClosestNode(Vector2 searchPos, ref List<Node> nodes, ref List<Wall>[,] grid, bool checkWalls)
+        private static Node FindClosestNode(Vector2 searchPos, ref List<Node> nodes, ref QuadTree grid, bool checkWalls)
         {
             float minDist = float.MaxValue;
             Node closest = null;
             int nodeC = nodes.Count;
+            List<Wall> check = new List<Wall>();
             for(int n=0; n!= nodeC; ++n)
             {
                 Node node = nodes[n];
@@ -202,6 +203,22 @@ namespace COMP476Proj
                 {
                     LineSegment line = new LineSegment(searchPos, node.Position);
                     bool blocked = false;
+
+                    // Check Quadtree
+                    check.Clear();
+                    grid.getEntities(searchPos, ref check);
+                    int checkC = check.Count;
+                    for (int i = 0; i != checkC; ++i)
+                    {
+                        //Wall w = check[i];
+                        if (check[i].IsSeeThrough)
+                            continue;
+                        if (line.IntersectsBox(check[i].BoundingRectangle))
+                        {
+                            blocked = true;
+                            break;
+                        }
+                    }
 
                     // Check every wall
                     //int wallC = grid.Count;
@@ -215,41 +232,41 @@ namespace COMP476Proj
                     //}
 
                     // Check the grid for walls
-                    int minGX = (int)Math.Min(searchPos.X, node.Position.X) / 200;
-                    int minGY = (int)Math.Min(searchPos.Y, node.Position.Y) / 200;
-                    int maxGX = (int)Math.Max(searchPos.X, node.Position.X) / 200;
-                    int maxGY = (int)Math.Max(searchPos.Y, node.Position.Y) / 200;
-                    if (minGX > 0)
-                        --minGX;
-                    if (minGY > 0)
-                        --minGY;
-                    if (maxGX > grid.GetUpperBound(1))
-                        ++maxGX;
-                    if (maxGY > grid.GetUpperBound(0))
-                        ++maxGY;
-                    for (int i = minGX; i <= maxGX; ++i)
-                    {
-                        for (int j = minGY; j <= maxGY; ++j)
-                        {
-                            List<Wall> walls = grid[j, i];
-                            int wallC = walls.Count;
-                            for (int k = 0; k != wallC; ++k)
-                            {
-                                Wall wall = walls[k];
-                                if (wall.IsSeeThrough)
-                                    continue;
-                                if (line.IntersectsBox(wall.BoundingRectangle))
-                                {
-                                    blocked = true;
-                                    break;
-                                }
-                            }
-                            if (blocked)
-                                break;
-                        }
-                        if (blocked)
-                            break;
-                    }
+                    //int minGX = (int)Math.Min(searchPos.X, node.Position.X) / 200;
+                    //int minGY = (int)Math.Min(searchPos.Y, node.Position.Y) / 200;
+                    //int maxGX = (int)Math.Max(searchPos.X, node.Position.X) / 200;
+                    //int maxGY = (int)Math.Max(searchPos.Y, node.Position.Y) / 200;
+                    //if (minGX > 0)
+                    //    --minGX;
+                    //if (minGY > 0)
+                    //    --minGY;
+                    //if (maxGX > grid.GetUpperBound(1))
+                    //    ++maxGX;
+                    //if (maxGY > grid.GetUpperBound(0))
+                    //    ++maxGY;
+                    //for (int i = minGX; i <= maxGX; ++i)
+                    //{
+                    //    for (int j = minGY; j <= maxGY; ++j)
+                    //    {
+                    //        List<Wall> walls = grid[j, i];
+                    //        int wallC = walls.Count;
+                    //        for (int k = 0; k != wallC; ++k)
+                    //        {
+                    //            Wall wall = walls[k];
+                    //            if (wall.IsSeeThrough)
+                    //                continue;
+                    //            if (line.IntersectsBox(wall.BoundingRectangle))
+                    //            {
+                    //                blocked = true;
+                    //                break;
+                    //            }
+                    //        }
+                    //        if (blocked)
+                    //            break;
+                    //    }
+                    //    if (blocked)
+                    //        break;
+                    //}
 
                     if (blocked)
                         continue;
