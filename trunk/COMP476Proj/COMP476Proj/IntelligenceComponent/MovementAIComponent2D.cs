@@ -99,7 +99,6 @@ namespace COMP476Proj
         /// <summary>
         /// Random number
         /// </summary>
-        static private Random random;
 
         #endregion
 
@@ -142,11 +141,6 @@ namespace COMP476Proj
 
             targetPosition = Vector2.Zero;
             targetVelocity = Vector2.Zero;
-
-            if (random == null)
-            {
-                random = new Random();
-            }
         }
 
         /// <summary>
@@ -181,11 +175,6 @@ namespace COMP476Proj
             targetVelocity = velocity;
 
             this.timeToTarget = timeToTarget;
-
-            if (random == null)
-            {
-                random = new Random();
-            }
         }
 
         #endregion
@@ -198,8 +187,8 @@ namespace COMP476Proj
         /// <returns>Approximately normally distributed number around 0</returns>
         private double normallyDistributedRandomNumber()
         {
-            double a = 2 * random.NextDouble() - 1;
-            double b = 2 * random.NextDouble() - 1;
+            double a = 2 * Game1.random.NextDouble() - 1;
+            double b = 2 * Game1.random.NextDouble() - 1;
 
             return a * b;
         }
@@ -466,17 +455,16 @@ namespace COMP476Proj
 
             if (physics.Direction.Length() == 0)
             {
-                Random random = new Random();
                 float x, y;
 
                 do
                 {
-                    x = random.Next(-10, 11);
+                    x = Game1.random.Next(-10, 11);
                 } while (x == 0);
 
                 do
                 {
-                    y = random.Next(-10, 11);
+                    y = Game1.random.Next(-10, 11);
                 } while (y == 0);
 
                 direction = new Vector2(x, y);

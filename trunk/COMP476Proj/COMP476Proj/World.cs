@@ -171,7 +171,8 @@ namespace COMP476Proj
                 pedestrian.Update(gameTime, this);
             }
 
-            path = AStar.GetPath(streaker.ComponentPhysics.Position, Vector2.Zero, map.nodes, false);
+            //for(int i=0; i!= 30; ++i)
+                path = AStar.GetPath(streaker.ComponentPhysics.Position, new Vector2(70,130), map.nodes, grid, true, false);
 
             // Update achievements
             AchievementManager.getInstance().Update(gameTime);

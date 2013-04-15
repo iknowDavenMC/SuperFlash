@@ -62,12 +62,11 @@ namespace COMP476Proj
         /// <param name="graph">List of nodes to use</param>
         /// <param name="ignoreWeight">If true, extra weights will no be considered in the calculation or added to the edges</param>
         /// <returns>A list of nodes representing the path to take</returns>
-        public static List<Node> GetPath(Vector2 start, Vector2 end, List<Node> graph, bool ignoreWeight = true)
+        public static List<Node> GetPath(Vector2 start, Vector2 end, List<Node> graph, List<Wall>[,] grid, bool checkWalls = true, bool ignoreWeight = true)
         {
             List<Node> path = new List<Node>();
-
-            AStarNode startNode = new AStarNode(FindClosestNode(start, graph));
-            AStarNode endNode = new AStarNode(FindClosestNode(end, graph));
+            AStarNode startNode = new AStarNode(FindClosestNode(start, ref graph, ref grid, checkWalls));
+            AStarNode endNode = new AStarNode(FindClosestNode(end, ref graph, ref grid, checkWalls));
 
             // If either the start or the end is null for some reason, return an empty list
             if (startNode.node == null || endNode.node == null)
@@ -92,8 +91,9 @@ namespace COMP476Proj
                 openList.Dequeue();
                 closedList.Add(current);
 
-                foreach (Edge e in current.node.Edges)
-                {
+                int edgeC = current.node.Edges.Count;
+                for(int i=0; i!= edgeC; ++i) {
+                    Edge e = current.node.Edges[i];
                     AStarNode neighbour = closedList.Find(n => n.node == e.end);
                     float costSoFar = current.costSoFar + e.Cost - (ignoreWeight ? 0 : e.Weight);
 
@@ -119,9 +119,10 @@ namespace COMP476Proj
 
                             // If the node is replaced, the heap has to be rebuilt
                             openList.Clear();
-                            foreach (AStarNode n in openData)
+                            int nodeC = openData.Count;
+                            for(int j=0; j!=nodeC; ++j)
                             {
-                                openList.Enqueue(n);
+                                openList.Enqueue(openData[j]);
                             }
                         }
                     }
@@ -189,17 +190,75 @@ namespace COMP476Proj
         /// <param name="searchPos"></param>
         /// <param name="nodes"></param>
         /// <returns></returns>
-        private static Node FindClosestNode(Vector2 searchPos, List<Node> nodes)
+        private static Node FindClosestNode(Vector2 searchPos, ref List<Node> nodes, ref List<Wall>[,] grid, bool checkWalls)
         {
             float minDist = float.MaxValue;
             Node closest = null;
-            foreach (Node n in nodes)
+            int nodeC = nodes.Count;
+            for(int n=0; n!= nodeC; ++n)
             {
-                float dist = (n.Position - searchPos).LengthSquared();
+                Node node = nodes[n];
+                if (grid != null && checkWalls)
+                {
+                    LineSegment line = new LineSegment(searchPos, node.Position);
+                    bool blocked = false;
+
+                    // Check every wall
+                    //int wallC = grid.Count;
+                    //for (int i = 0; i != wallC; ++i)
+                    //{
+                    //    if (line.IntersectsBox(grid[i].BoundingRectangle))
+                    //    {
+                    //        blocked = true;
+                    //        break;
+                    //    }
+                    //}
+
+                    // Check the grid for walls
+                    int minGX = (int)Math.Min(searchPos.X, node.Position.X) / 200;
+                    int minGY = (int)Math.Min(searchPos.Y, node.Position.Y) / 200;
+                    int maxGX = (int)Math.Max(searchPos.X, node.Position.X) / 200;
+                    int maxGY = (int)Math.Max(searchPos.Y, node.Position.Y) / 200;
+                    if (minGX > 0)
+                        --minGX;
+                    if (minGY > 0)
+                        --minGY;
+                    if (maxGX > grid.GetUpperBound(1))
+                        ++maxGX;
+                    if (maxGY > grid.GetUpperBound(0))
+                        ++maxGY;
+                    for (int i = minGX; i <= maxGX; ++i)
+                    {
+                        for (int j = minGY; j <= maxGY; ++j)
+                        {
+                            List<Wall> walls = grid[j, i];
+                            int wallC = walls.Count;
+                            for (int k = 0; k != wallC; ++k)
+                            {
+                                Wall wall = walls[k];
+                                if (wall.IsSeeThrough)
+                                    continue;
+                                if (line.IntersectsBox(wall.BoundingRectangle))
+                                {
+                                    blocked = true;
+                                    break;
+                                }
+                            }
+                            if (blocked)
+                                break;
+                        }
+                        if (blocked)
+                            break;
+                    }
+
+                    if (blocked)
+                        continue;
+                }
+                float dist = (node.Position - searchPos).LengthSquared();
                 if (dist < minDist)
                 {
                     minDist = dist;
-                    closest = n;
+                    closest = node;
                 }
             }
 
