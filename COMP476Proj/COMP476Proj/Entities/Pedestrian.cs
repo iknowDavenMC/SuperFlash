@@ -103,6 +103,7 @@ namespace COMP476Proj
             {
                 if (Vector2.Distance(w.streaker.Position, pos) < detectRadius)
                 {
+                    playSound("Exclamation", w);
                     behavior = PedestrianBehavior.AWARE;
                     transitionToState(PedestrianState.FLEE);
                 }
@@ -128,6 +129,7 @@ namespace COMP476Proj
                     case PedestrianState.FALL:
                         if (draw.animComplete)
                         {
+                            SoundManager.GetInstance().PlaySound("Common", "Fall", w.streaker.Position, Position);
                             transitionToState(PedestrianState.GET_UP);
                         }
                         break;
@@ -176,6 +178,23 @@ namespace COMP476Proj
             }
             
         }
+
+        private void playSound(string soundName, World w)
+        {
+            if (studentType == "student1")
+            {
+                SoundManager.GetInstance().PlaySound("WhiteBoy", soundName, w.streaker.Position, Position);
+            }
+            else if (studentType == "student2")
+            {
+                SoundManager.GetInstance().PlaySound("BlackBoy", soundName, w.streaker.Position, Position);
+            }
+            else if (studentType == "student3")
+            {
+                SoundManager.GetInstance().PlaySound("Girl", soundName, w.streaker.Position, Position);
+            }
+        }
+
         #endregion
         
         #region Public Methods
