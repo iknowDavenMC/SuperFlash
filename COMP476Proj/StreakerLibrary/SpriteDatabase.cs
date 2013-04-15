@@ -82,7 +82,7 @@ namespace StreakerLibrary
             Texture2D achieveBanner = Content.Load<Texture2D>("AchievementUnlocked");
 
             //Animation elements 
-            int notMoving = 150, walk = 60, fall = 60, getUp = 100, dance = 100, attack = 50, flash = 60;
+            int notMoving = 150, walk = 60, fall = 60, getUp = 100, dance = 100, attack = 50, flash = 60, slowWalk = 100;
 
             SpriteDatabase.AddAnimation(new Animation("streaker_static", streaker, 2, 143, 184, 0, notMoving));
             SpriteDatabase.AddAnimation(new Animation("streaker_walk", streaker, 5, 143, 184, 184, walk));
@@ -108,19 +108,22 @@ namespace StreakerLibrary
             SpriteDatabase.AddAnimation(new Animation("roboCop_attack", roboCop, 4, 137, 158, 316, attack));
 
             SpriteDatabase.AddAnimation(new Animation("student1_static", student1, 2, 137, 155, 0, notMoving));
-            SpriteDatabase.AddAnimation(new Animation("student1_walk", student1, 5, 137, 155, 155, walk));
+            SpriteDatabase.AddAnimation(new Animation("student1_flee", student1, 5, 137, 155, 155, walk));
             SpriteDatabase.AddAnimation(new Animation("student1_fall", student1, 6, 137, 155, 310, fall));
             SpriteDatabase.AddAnimation(new Animation("student1_getup", student1, 7, 137, 155, 465, getUp));
+            SpriteDatabase.AddAnimation(new Animation("student1_walk", student1, 4, 137, 155, 620, slowWalk));
 
             SpriteDatabase.AddAnimation(new Animation("student2_static", student2, 2, 137, 152, 0, notMoving));
-            SpriteDatabase.AddAnimation(new Animation("student2_walk", student2, 5, 137, 152, 152, walk));
+            SpriteDatabase.AddAnimation(new Animation("student2_flee", student2, 5, 137, 152, 152, walk));
             SpriteDatabase.AddAnimation(new Animation("student2_fall", student2, 8, 137, 152, 304, fall));
             SpriteDatabase.AddAnimation(new Animation("student2_getup", student2, 7, 137, 152, 456, getUp));
+            SpriteDatabase.AddAnimation(new Animation("student2_walk", student2, 4, 137, 152, 608, slowWalk));
 
             SpriteDatabase.AddAnimation(new Animation("student3_static", student3, 2, 145, 164, 0, notMoving));
-            SpriteDatabase.AddAnimation(new Animation("student3_walk", student3, 5, 145, 164, 164, walk));
+            SpriteDatabase.AddAnimation(new Animation("student3_flee", student3, 5, 145, 164, 164, walk));
             SpriteDatabase.AddAnimation(new Animation("student3_fall", student3, 8, 145, 164, 328, fall));
             SpriteDatabase.AddAnimation(new Animation("student3_getup", student3, 7, 145, 164, 492, getUp));
+            SpriteDatabase.AddAnimation(new Animation("student3_walk", student3, 4, 145, 164, 656, slowWalk));
 
             SpriteDatabase.AddAnimation(new Animation("level_1", level1));
 
