@@ -187,13 +187,69 @@ namespace COMP476Proj
             charState = StreakerState.WALK;
         }
 
+        private void superFlash()
+        {
+            foreach (EntityMoveable entity in Game1.world.moveableObjectsX)
+            {
+                if (entity is Streaker)
+                {
+                    continue;
+                }
+
+                bool canBeHit = true;
+
+                LineSegment test = new LineSegment(Position, entity.Position);
+
+                // Check the grid for walls
+                int startX = (int)Math.Round(Math.Min(Position.X, entity.Position.X) / World.gridLength);
+                int startY = (int)Math.Round(Math.Min(Position.Y, entity.Position.Y) / World.gridLength);
+                int endX = (int)Math.Round(Math.Max(Position.X, entity.Position.X) / World.gridLength);
+                int endY = (int)Math.Round(Math.Max(Position.Y, entity.Position.Y) / World.gridLength);
+
+                for (int k = startY; k != endY + 1; ++k)
+                {
+                    for (int l = startX; l != endX + 1; ++l)
+                    {
+                        for (int j = 0; j != Game1.world.grid[k, l].Count; ++j)
+                        {
+                            if (Game1.world.grid[k, l][j].IsSeeThrough)
+                            {
+                                continue;
+                            }
+
+                            if (test.IntersectsBox(Game1.world.grid[k, l][j].BoundingRectangle))
+                            {
+                                canBeHit = false;
+                                break;
+                            }
+                        }
+
+                        if (!canBeHit)
+                        {
+                            break;
+                        }
+                    }
+
+                    if (!canBeHit)
+                    {
+                        break;
+                    }
+                }
+
+                if (canBeHit)
+                {
+                    entity.Fall(true);
+                }
+            }
+        }
+
         #endregion
 
         #region Public Methods
 
         public override void Update(GameTime gameTime)
         {
-            if (charState != StreakerState.FALL && charState != StreakerState.GET_UP)
+            if (charState != StreakerState.FALL && charState != StreakerState.GET_UP && charState != StreakerState.SUPERFLASH)
             {
                 handleUserInput(gameTime);
             }
@@ -261,8 +317,18 @@ namespace COMP476Proj
                     draw.animation = SpriteDatabase.GetAnimation("streaker_dance");
                     break;
                 case StreakerState.SUPERFLASH:
-                    draw.animation = SpriteDatabase.GetAnimation("streaker_flash");
-                    draw.Play();
+                    if (animComplete)
+                    {
+                        superFlash();
+                        draw.animation = SpriteDatabase.GetAnimation("streaker_static");
+                        charState = StreakerState.STATIC;
+                        draw.Reset();
+                    }
+                    else
+                    {
+                        draw.animation = SpriteDatabase.GetAnimation("streaker_flash");
+                        draw.Play();
+                    }
                     break;
             }
         }
@@ -273,7 +339,7 @@ namespace COMP476Proj
             base.Draw(gameTime, spriteBatch);
         }
 
-        public override void Fall()
+        public override void Fall(bool isSuperFlash)
         {
             if (charState != StreakerState.FALL)
             {
