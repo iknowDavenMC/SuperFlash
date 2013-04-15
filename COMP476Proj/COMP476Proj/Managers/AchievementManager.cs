@@ -74,7 +74,7 @@ namespace COMP476Proj
                     // If the achievement is earned, unlock it, add the value to the score and show a popup
                     if (achv.IsAchieved())
                     {
-                        SoundManager.GetInstance().PlaySound("Other", "Achievement");
+                        SoundManager.GetInstance().PlayAchievement();
                         achv.Locked = false;
                         HUD.getInstance().increaseScore(achv.Value);
                         int toastX = Game1.SCREEN_WIDTH/2 - toastWidth/2;
