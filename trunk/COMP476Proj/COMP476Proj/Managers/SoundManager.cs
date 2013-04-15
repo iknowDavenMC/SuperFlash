@@ -83,7 +83,7 @@ namespace COMP476Proj
 
             songs = new Dictionary<string, Song>();
 
-            MediaPlayer.Volume = 1f;
+            MediaPlayer.Volume = 0.5f;
         }
 
         #endregion
