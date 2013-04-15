@@ -103,7 +103,7 @@ namespace COMP476Proj
             {
                 if (Vector2.Distance(w.streaker.Position, pos) < detectRadius)
                 {
-                    playSound("Exclamation", w);
+                    playSound("Exclamation");
                     behavior = PedestrianBehavior.AWARE;
                     transitionToState(PedestrianState.FLEE);
                 }
@@ -179,19 +179,19 @@ namespace COMP476Proj
             
         }
 
-        private void playSound(string soundName, World w)
+        private void playSound(string soundName)
         {
             if (studentType == "student1")
             {
-                SoundManager.GetInstance().PlaySound("WhiteBoy", soundName, w.streaker.Position, Position);
+                SoundManager.GetInstance().PlaySound("WhiteBoy", soundName, Game1.world.streaker.Position, Position);
             }
             else if (studentType == "student2")
             {
-                SoundManager.GetInstance().PlaySound("BlackBoy", soundName, w.streaker.Position, Position);
+                SoundManager.GetInstance().PlaySound("BlackBoy", soundName, Game1.world.streaker.Position, Position);
             }
             else if (studentType == "student3")
             {
-                SoundManager.GetInstance().PlaySound("Girl", soundName, w.streaker.Position, Position);
+                SoundManager.GetInstance().PlaySound("Girl", soundName, Game1.world.streaker.Position, Position);
             }
         }
 
@@ -232,12 +232,17 @@ namespace COMP476Proj
             base.Draw(gameTime, spriteBatch);
         }
 
-        public override void Fall()
+        public override void Fall(bool isSuperFlash)
         {
             behavior = PedestrianBehavior.KNOCKEDUP;
             
             if (state != PedestrianState.FALL)
             {
+                if (isSuperFlash)
+                {
+                    playSound("SuperFlash");
+                }
+
                 transitionToState(PedestrianState.FALL);
             }
             movement.Stop(ref physics);

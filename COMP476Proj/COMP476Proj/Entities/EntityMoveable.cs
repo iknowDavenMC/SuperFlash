@@ -40,11 +40,11 @@ namespace COMP476Proj
 
                 if (mass1 > mass2)
                 {
-                    ((EntityMoveable)other).Fall();
+                    ((EntityMoveable)other).Fall(false);
                 }
                 if (mass1 < mass2)
                 {
-                    Fall();
+                    Fall(false);
                 }
 
                 physics.ResolveCollision(((EntityMoveable)other).physics, overlap);
@@ -61,7 +61,7 @@ namespace COMP476Proj
         /// <summary>
         /// Fall
         /// </summary>
-        public virtual void Fall() { }
+        public virtual void Fall(bool isSuperFlash) { }
 
         #endregion
     }
