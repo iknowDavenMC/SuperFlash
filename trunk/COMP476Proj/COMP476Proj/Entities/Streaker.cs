@@ -41,6 +41,11 @@ namespace COMP476Proj
         private Vector2 direction;
 
         /// <summary>
+        /// Recover Timer
+        /// </summary>
+        private int recoverTimer;
+
+        /// <summary>
         /// Whether or not the image is flipped
         /// </summary>
         public bool flip = false;
@@ -54,6 +59,11 @@ namespace COMP476Proj
         /// Superflash distance
         /// </summary>
         private const int SUPER_FLASH_DISTANCE = 300;
+        
+        /// <summary>
+        /// Time to recover
+        /// </summary>
+        private const int TIME_TO_RECOVER = 500;
 
         #endregion
 
@@ -68,6 +78,7 @@ namespace COMP476Proj
             this.BoundingRectangle = new COMP476Proj.BoundingRectangle(phys.Position, 16, 6);
 
             inputTimer = 0;
+            recoverTimer = 0;
             inputDelay = 100;
             superFlashTimer = 0;
             superFlashDelay = 30000;
@@ -85,6 +96,7 @@ namespace COMP476Proj
         {
             inputTimer += gameTime.ElapsedGameTime.Milliseconds;
             superFlashTimer += gameTime.ElapsedGameTime.Milliseconds;
+            recoverTimer += gameTime.ElapsedGameTime.Milliseconds;
 
             if (inputTimer < inputDelay)
             {
@@ -380,8 +392,10 @@ namespace COMP476Proj
 
         public void GetHit()
         {
-            if (charState != StreakerState.FALL && charState != StreakerState.GET_UP)
+            if (charState != StreakerState.FALL && charState != StreakerState.GET_UP 
+                && recoverTimer > TIME_TO_RECOVER)
             {
+                recoverTimer = 0;
                 draw.Reset();
                 charState = StreakerState.FALL;
                 HUD.getInstance().decreaseHealth(5);
