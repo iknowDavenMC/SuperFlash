@@ -211,5 +211,10 @@ namespace COMP476Proj
                 Console.WriteLine(e.StackTrace);
             }
         }
+
+        public List<Trigger> getTriggerList()       //Needed for achievements by triggers
+        {
+            return triggers;
+        }
     }
 }

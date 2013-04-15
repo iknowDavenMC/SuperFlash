@@ -23,5 +23,6 @@ namespace CollisionBoxTool
             if (count < id)
                 count = id + 1;
         }
+        
     }
 }
