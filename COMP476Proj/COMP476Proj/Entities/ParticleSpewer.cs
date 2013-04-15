@@ -38,7 +38,6 @@ namespace COMP476Proj
         bool fade;
         float fadePercent;
         Texture2D tex;
-        Random rand;
         bool started;
         public bool Absolute = false; // If true, positions and sizes are absolute (ie: not relative to the camera);
         #endregion
@@ -132,7 +131,6 @@ namespace COMP476Proj
 
             tex = SpriteDatabase.GetAnimation("blank").Texture;
             particles = new List<Particle>();
-            rand = new Random();
         }
 
         #endregion
@@ -153,15 +151,15 @@ namespace COMP476Proj
                 for (int i = 0; i != emitters; ++i)
                 {
                     Particle p = new Particle();
-                    float angle = (float)rand.NextDouble() * angleRange + minAngle;
+                    float angle = (float)Game1.random.NextDouble() * angleRange + minAngle;
                     Vector2 velocity = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
                     if (velocity.LengthSquared() > 0)
                         velocity.Normalize();
                     velocity *= speed;
-                    int lifespan = rand.Next(minLifespan, maxLifespan);
-                    float hue = (float)rand.NextDouble() * hueRange + minHue;
-                    float sat = (float)rand.NextDouble() * satRange + minSat;
-                    float val = (float)rand.NextDouble() * valRange + minVal;
+                    int lifespan = Game1.random.Next(minLifespan, maxLifespan);
+                    float hue = (float)Game1.random.NextDouble() * hueRange + minHue;
+                    float sat = (float)Game1.random.NextDouble() * satRange + minSat;
+                    float val = (float)Game1.random.NextDouble() * valRange + minVal;
                     p.position = new Vector2(Position.X, Position.Y);
                     p.velocity = velocity;
                     p.scale = size;

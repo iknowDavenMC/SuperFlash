@@ -17,13 +17,11 @@ namespace COMP476Proj
         public List<Wall> walls;
         public List<Node> nodes;
         public Vector2 playerStart;
-        private Random r;
         public Map()
         {
             startingNPCs = new List<NPC>();
             walls = new List<Wall>();
             nodes = new List<Node>();
-            r = new Random();
         }
 
         public void Load(string filename)
@@ -125,7 +123,7 @@ namespace COMP476Proj
                     Animation animation;
                     if (type.StartsWith("Civilian"))
                     {
-                        int pnum = r.Next(1, 4);
+                        int pnum = Game1.random.Next(1, 4);
                         string pedAnim = "student" + pnum + "_static";
                         Animation a = SpriteDatabase.GetAnimation("cop_static");
                         PedestrianState pstate = PedestrianState.WANDER;

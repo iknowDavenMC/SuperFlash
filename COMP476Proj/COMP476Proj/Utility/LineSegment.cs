@@ -9,7 +9,7 @@ namespace COMP476Proj
     /// <summary>
     /// A line segment with a start and end point
     /// </summary>
-    class LineSegment
+    public class LineSegment
     {
         public Vector2 start { get; private set; }
         public Vector2 end { get; private set; }
@@ -82,54 +82,53 @@ namespace COMP476Proj
             return new Vector2(pX, pY);
         }
 
+        public float getXfromY(float y)
+        {
+            return (-C - B * y) / A;
+        }
+
+        public float getYfromX(float x)
+        {
+            return (-C - A * x) / B;
+        }
+
         /// <summary>
         ///  Check collision with a box
         /// </summary>
         /// <param name="rect">Bounding rectangle</param>
         /// <returns>True if there is a collision</returns>
-        private bool collidesBL(BoundingRectangle rect)
+        public bool IntersectsBox(BoundingRectangle box)
         {
-            Rectanglef box = rect.Bounds;
-            // Convert each side into a line
-            LineSegment l = new LineSegment(box.Left, box.Top, box.Left, box.Bottom);
-            LineSegment r = new LineSegment(box.Right, box.Bottom, box.Right, box.Top);
-            LineSegment t = new LineSegment(box.Right, box.Top, box.Left, box.Top);
-            LineSegment b = new LineSegment(box.Left, box.Bottom, box.Right, box.Bottom);
+            float left = box.Bounds.Left;
+            float right = box.Bounds.Right;
+            float top = box.Bounds.Top;
+            float bottom = box.Bounds.Bottom;
 
-            // Only check for collision if the lines are not parallel
-            if (!isParallel(l))
+            // if the line's endpoints are on the same side of the rectangle, there can't be an intersection
+            if ((left > start.X && left > end.X) ||
+                (right< start.X && right < end.X) ||
+                (top > start.Y && top > end.Y) ||
+                (bottom < start.Y && bottom < end.Y))
+                return false;
+
+            // Find the line's X and Y positions at the box's edges
+            float xTop = getXfromY(top);
+            float xBottom = getXfromY(bottom);
+            float yLeft = getYfromX(left);
+            float yRight = getYfromX(right);
+
+            // If all of the points are outside the rectangle, there is no intersection
+            if (
+                (xTop < left || xTop > right) &&
+                (xBottom < left || xBottom > right) &&
+                (yLeft < top || yLeft > bottom) &&
+                (yRight < top || yRight > bottom)
+                )
             {
-                float yPos = (-A * box.Left - C) / B;
-                if (yPos > box.Top && yPos < box.Bottom &&
-                    yPos > Math.Min(start.Y, end.Y) &&
-                    yPos < Math.Max(start.Y, end.Y))
-                    return true;
+                return false;
             }
-            if (!isParallel(r))
-            {
-                float yPos = (-A * box.Right - C) / B;
-                if (yPos > box.Top && yPos < box.Bottom &&
-                    yPos > Math.Min(start.Y, end.Y) &&
-                    yPos < Math.Max(start.Y, end.Y))
-                    return true;
-            }
-            if (!isParallel(t))
-            {
-                float xPos = (-B * box.Top - C) / A;
-                if (xPos > box.Left && xPos < box.Right &&
-                    xPos > Math.Min(start.X, end.X) &&
-                    xPos < Math.Max(start.X, end.X))
-                    return true;
-            }
-            if (!isParallel(b))
-            {
-                float xPos = (-B * box.Bottom - C) / A;
-                if (xPos > box.Left && xPos < box.Right &&
-                    xPos > Math.Min(start.X, end.X) &&
-                    xPos < Math.Max(start.X, end.X))
-                    return true;
-            }
-            return false;
+
+            return true;
         }
 
         /// <summary>
