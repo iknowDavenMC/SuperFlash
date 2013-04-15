@@ -26,6 +26,16 @@ namespace COMP476Proj
         private int inputDelay;
 
         /// <summary>
+        /// Determines how many milliseconds have gone by since last super flash
+        /// </summary>
+        private int superFlashTimer;
+
+        /// <summary>
+        /// Determines how many milliseconds must have gone by before super flash can be done
+        /// </summary>
+        private int superFlashDelay;
+
+        /// <summary>
         /// Direction the character is moving
         /// </summary>
         private Vector2 direction;
@@ -59,6 +69,8 @@ namespace COMP476Proj
 
             inputTimer = 0;
             inputDelay = 100;
+            superFlashTimer = 0;
+            superFlashDelay = 30000;
         }
 
         #endregion
@@ -72,6 +84,7 @@ namespace COMP476Proj
         private void handleUserInput(GameTime gameTime)
         {
             inputTimer += gameTime.ElapsedGameTime.Milliseconds;
+            superFlashTimer += gameTime.ElapsedGameTime.Milliseconds;
 
             if (inputTimer < inputDelay)
             {
@@ -103,8 +116,10 @@ namespace COMP476Proj
                 physics.SetTargetValues(true, null, null, null);
             }
             // Dance takes precedence
-            else if (input.IsDoing("Superflash", PlayerIndex.One))
+            else if (input.IsDoing("Superflash", PlayerIndex.One) && superFlashTimer > superFlashDelay)
             {
+                superFlashTimer = 0;
+
                 if (charState != StreakerState.SUPERFLASH)
                 {
                     draw.Reset();
