@@ -58,31 +58,37 @@ namespace COMP476Proj
                 case PedestrianState.STATIC:
                     state = PedestrianState.STATIC;
                     draw.animation = SpriteDatabase.GetAnimation(studentType + "_static");
+                    physics.SetPace(false);
                     draw.Reset();
                     break;
                 case PedestrianState.WANDER:
                     state = PedestrianState.WANDER;
                     draw.animation = SpriteDatabase.GetAnimation(studentType + "_walk");
+                    physics.SetPace(false);
                     draw.Reset();
                     break;
                 case PedestrianState.FLEE:
                     state = PedestrianState.FLEE;
-                    draw.animation = SpriteDatabase.GetAnimation(studentType + "_walk");
+                    draw.animation = SpriteDatabase.GetAnimation(studentType + "_flee");
+                    physics.SetPace(true);
                     draw.Reset();
                     break;
                 case PedestrianState.FALL:
                     state = PedestrianState.FALL;
                     draw.animation = SpriteDatabase.GetAnimation(studentType + "_fall");
+                    physics.SetPace(false);
                     draw.Reset();
                     break;
                 case PedestrianState.GET_UP:
                     state = PedestrianState.GET_UP;
                     draw.animation = SpriteDatabase.GetAnimation(studentType + "_getup");
+                    physics.SetPace(false);
                     draw.Reset();
                     break;
                 case PedestrianState.PATH:
                     state = PedestrianState.PATH;
                     draw.animation = SpriteDatabase.GetAnimation(studentType + "_walk");
+                    physics.SetPace(false);
                     draw.Reset();
                     break;
             }
