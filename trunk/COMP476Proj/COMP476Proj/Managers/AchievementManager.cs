@@ -31,6 +31,14 @@ namespace COMP476Proj
             achievList.Add(new Achievement_Playtime());
             achievList.Add(new Achievement_Playtime2());
             achievList.Add(new Achievement_PressSpace());
+            achievList.Add(new Achievement_PrincipalsOffice());
+            achievList.Add(new Achievement_Cafeteria());
+            achievList.Add(new Achievement_GirlsLockerRoom());
+            achievList.Add(new Achievement_BasketBallCourt());
+            achievList.Add(new Achievement_BoysLockerRoom());
+            achievList.Add(new Achievement_LowerClassRoom());
+            achievList.Add(new Achievement_UpperClassRoom());
+            achievList.Add(new Achievement_LectureHall());
         }
 
         /// <summary>
