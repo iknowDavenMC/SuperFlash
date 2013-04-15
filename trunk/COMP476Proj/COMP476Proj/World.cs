@@ -29,7 +29,7 @@ namespace COMP476Proj
         #region Init
         public World()
         {
-            streaker = new Streaker(new PhysicsComponent2D(new Vector2(100, 100), 0, new Vector2(20, 20), 150, 750, 150, 750, 8, 50, 0.25f, true),
+            streaker = new Streaker(new PhysicsComponent2D(new Vector2(-50, -50), 0, new Vector2(20,20),150, 750, 150, 750, 8, 50, 0.25f, true),
                 new DrawComponent(SpriteDatabase.GetAnimation("streaker_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f));
 
             pedestrians = new List<Pedestrian>();
@@ -161,7 +161,13 @@ namespace COMP476Proj
             }
 
 
-
+            foreach (Trigger trigger in map.triggers)
+            {
+                if (trigger.BoundingRectangle.Collides(streaker.BoundingRectangle))
+                {
+                    trigger.ResolveCollision(streaker);
+                }
+            }
             // Update streaker
             streaker.Update(gameTime);
 
