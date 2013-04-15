@@ -91,6 +91,7 @@ namespace COMP476Proj
                 if (charState != StreakerState.DANCE)
                 {
                     draw.Reset();
+                    SoundManager.GetInstance().PlaySound("Streaker", "Dance", Position, Position);
                 }
 
                 charState = StreakerState.DANCE;
@@ -103,6 +104,7 @@ namespace COMP476Proj
                 if (charState != StreakerState.SUPERFLASH)
                 {
                     draw.Reset();
+                    SoundManager.GetInstance().PlaySound("Streaker", "SuperFlash", Position, Position);
                 }
 
                 charState = StreakerState.SUPERFLASH;
@@ -231,6 +233,7 @@ namespace COMP476Proj
                
                     if (animComplete)
                     {
+                        SoundManager.GetInstance().PlaySound("Common", "Fall", Position, Position);
                         draw.animation = SpriteDatabase.GetAnimation("streaker_getup");
                         charState = StreakerState.GET_UP;
                         draw.Reset();
