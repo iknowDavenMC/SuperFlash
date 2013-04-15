@@ -24,7 +24,7 @@ namespace COMP476Proj
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont spriteFont;
-        World world;
+        public static World world;
         public HUD hud;
         public static float elapsedTime;
         FrameRate frameRate;
