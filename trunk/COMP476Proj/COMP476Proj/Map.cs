@@ -16,12 +16,14 @@ namespace COMP476Proj
         public List<NPC> startingNPCs;
         public List<Wall> walls;
         public List<Node> nodes;
+        public List<Trigger> triggers;
         public Vector2 playerStart;
         public Map()
         {
             startingNPCs = new List<NPC>();
             walls = new List<Wall>();
             nodes = new List<Node>();
+            triggers = new List<Trigger>();
         }
 
         public void Load(string filename)
@@ -61,6 +63,7 @@ namespace COMP476Proj
                     && !line.StartsWith("NODES")
                     && !line.StartsWith("EDGES")
                     && !line.StartsWith("NPCS")
+                    && !line.StartsWith("TRIGGER")
                     && !line.StartsWith("PLAYER")
                     );
 
@@ -81,6 +84,7 @@ namespace COMP476Proj
                 } while (reader.Peek() != -1
                     && !line.StartsWith("EDGES")
                     && !line.StartsWith("NPCS")
+                    && !line.StartsWith("TRIGGER")
                     && !line.StartsWith("PLAYER")
                     );
 
@@ -100,6 +104,7 @@ namespace COMP476Proj
                     line = reader.ReadLine();
                 } while (reader.Peek() != -1
                     && !line.StartsWith("NPCS")
+                    && !line.StartsWith("TRIGGER")
                     && !line.StartsWith("PLAYER")
                     );
 
@@ -155,6 +160,34 @@ namespace COMP476Proj
                     line = reader.ReadLine();
                 }
                 while (reader.Peek() != -1
+                    && !line.StartsWith("TRIGGER")
+                    && !line.StartsWith("PLAYER")
+                    );
+
+                if (line.StartsWith("TRIGGER"))
+                    line = reader.ReadLine();
+                do
+                {
+                    int x, y, w, h, id;
+                    int spacei = line.IndexOf(' ');
+                    x = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    y = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    w = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    h = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    id = int.Parse(line);
+                    triggers.Add(new Trigger(x, y, w, h, id));
+                    line = reader.ReadLine();
+                } while (reader.Peek() != -1
+                    && !line.StartsWith("NODES")
+                    && !line.StartsWith("EDGES")
+                    && !line.StartsWith("NPCS")
                     && !line.StartsWith("PLAYER")
                     );
 
