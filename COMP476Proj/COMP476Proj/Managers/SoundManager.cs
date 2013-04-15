@@ -28,6 +28,8 @@ namespace COMP476Proj
         /// </summary>
         private Dictionary<String, Song> songs;
 
+        private const float distanceThreshold = 300;
+
         #endregion
 
         #region Constructors
@@ -129,14 +131,61 @@ namespace COMP476Proj
         }
 
         /// <summary>
+        /// Plays the achievement sound
+        /// </summary>
+        /// <returns>Does the sound effects exist</returns>
+        public bool PlayAchievement()
+        {
+            try
+            {
+                soundEffects["Other"]["Achievement"][0].Play(1, 0f, 0f);
+
+                return true;
+            }
+            catch (KeyNotFoundException e)
+            {
+                Console.WriteLine("Achievement" + " is not a sound effect of " + "Other");
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Plays the meter sound
+        /// </summary>
+        /// <returns>Does the sound effects exist</returns>
+        public bool PlayMeter(float health, float maxHealth)
+        {
+            try
+            {
+                float pitch = health / maxHealth;
+
+                soundEffects["Other"]["Meter"][0].Play(1, pitch, 0f);
+
+                return true;
+            }
+            catch (KeyNotFoundException e)
+            {
+                Console.WriteLine("Meter" + " is not a sound effect of " + "Other");
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Plays the sound effect corresponding to the event
         /// </summary>
         /// <param name="soundSource">What is emitting the sound ex: Streaker</param>
         /// <param name="soundType">Type of sound emmited ex: SuperFlash</param>
         /// <returns>Does the sound effects exist</returns>
-        public bool PlaySound(string soundSource, string soundType)
+        public bool PlaySound(string soundSource, string soundType, Vector2 streakerPosition, Vector2 otherPosition)
         {
-            if (instance == null)
+            if ((streakerPosition - otherPosition).Length() > distanceThreshold)
+            {
+                return false;
+            }
+
+            if (!soundSource.Equals("Common") && !soundSource.Equals("Streaker") && Game1.random.NextDouble() < 0.8f)
             {
                 return false;
             }
@@ -145,15 +194,16 @@ namespace COMP476Proj
             {
                 int index = Game1.random.Next(0, soundEffects[soundSource][soundType].Count);
 
-                if (soundType != "Achievement")
-                {
-                    float pitch = (float)(0.25 * Game1.random.NextDouble() - 0.125);
-                    soundEffects[soundSource][soundType][index].Play(1, pitch, 0f);
-                }
-                else
+                if (soundSource.Equals("Streaker"))
                 {
                     soundEffects[soundSource][soundType][index].Play(1, 0f, 0f);
                 }
+                else
+                {
+                    float pitch = (float)(0.4 * Game1.random.NextDouble() - 0.2);
+                    soundEffects[soundSource][soundType][index].Play(1, pitch, 0f);
+                }
+                
                 return true;
             }
             catch (KeyNotFoundException e)
@@ -163,6 +213,8 @@ namespace COMP476Proj
                 return false;
             }
         }
+
+
 
         /// <summary>
         /// Plays a song
