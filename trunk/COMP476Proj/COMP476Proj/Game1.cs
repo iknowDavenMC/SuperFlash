@@ -87,6 +87,7 @@ namespace COMP476Proj
             Camera.MaxY = level.Height;
             Camera.Target = world.streaker;
             Camera.Scale = 1.0f;
+            Camera.Scale = 1f;
 
             Debugger.getInstance();
             //Hud

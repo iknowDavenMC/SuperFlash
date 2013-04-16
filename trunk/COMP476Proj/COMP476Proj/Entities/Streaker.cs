@@ -102,6 +102,7 @@ namespace COMP476Proj
         private float consumableTimer = 0;
 
         private ParticleSpewer superFlashParticles;
+        private ParticleSpewer danceParticles;
 
         private const int particleTimeout = 50;
         private int particleTimer = 0;
@@ -130,6 +131,11 @@ namespace COMP476Proj
                 phys.Position.X + draw.animation.FrameWidth / 2, phys.Position.Y + draw.animation.FrameHeight / 2,
                 10000, 100, 0, MathHelper.TwoPi,
                 500, 1000, 2, 600, 30, 60, 0.1f, 0.1f, 1, 1, true, 0.75f);
+
+            danceParticles = new ParticleSpewer(
+                phys.Position.X + draw.animation.FrameWidth / 2, phys.Position.Y + draw.animation.FrameHeight / 2,
+                10000, 100, 0, MathHelper.TwoPi,
+                50, 300, 2, 350, 180, 200, 0.25f, 0.5f, 1, 1, true, 0f);
         }
 
         #endregion
@@ -404,8 +410,10 @@ namespace COMP476Proj
             superFlashParticles.Y = physics.Position.Y - 020;
             superFlashParticles.Update(gameTime);
 
+            danceParticles.Stop();
             if (charState == StreakerState.DANCE)
             {
+                danceParticles.Start();
                 danceTimer += gameTime.ElapsedGameTime.Milliseconds;
                 if (danceTimer >= dancePointTimeout)
                 {
@@ -413,6 +421,9 @@ namespace COMP476Proj
                     DataManager.GetInstance().IncreaseScore(DataManager.Points.Dance, true, physics.Position.X, physics.Position.Y - 64);
                 }
             }
+            danceParticles.X = physics.Position.X;
+            danceParticles.Y = physics.Position.Y - 020;
+            danceParticles.Update(gameTime);
 
             //Debugger.getInstance().pointsToDraw.Add(physics.position);
             base.Update(gameTime);
@@ -498,6 +509,7 @@ namespace COMP476Proj
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             superFlashParticles.Draw(gameTime, spriteBatch);
+            danceParticles.Draw(gameTime, spriteBatch);
             draw.Draw(gameTime, spriteBatch, physics.Position);
             base.Draw(gameTime, spriteBatch);
         }
