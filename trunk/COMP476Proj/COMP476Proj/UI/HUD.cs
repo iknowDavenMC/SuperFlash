@@ -225,6 +225,8 @@ namespace COMP476Proj
             //If the game is over, draw the sprites
             if (isGameOver)
             {
+                Game1.world.streaker.Kill();
+
                 if (playGameOverMusic)
                 {
                     SoundManager.GetInstance().PlaySong("Game Over");
