@@ -29,7 +29,7 @@ namespace COMP476Proj
         #region Init
         public World()
         {
-            streaker = new Streaker(new PhysicsComponent2D(new Vector2(-50, -50), 0, new Vector2(20,20),150, 750, 150, 750, 8, 50, 0.25f, true),
+            streaker = new Streaker(new PhysicsComponent2D(new Vector2(-50, -50), 0, new Vector2(20, 20), 200, 1250, 150, 750, 8, 50, 0.25f, true),
                 new DrawComponent(SpriteDatabase.GetAnimation("streaker_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f));
 
             npcs = new List<NPC>();
@@ -53,9 +53,11 @@ namespace COMP476Proj
                 moveableObjectsX.Add(npc);
                 moveableObjectsY.Add(npc);
             }
+
+            streaker.ComponentPhysics.Position = map.playerStart;
             moveableObjectsX = moveableObjectsX.OrderBy(o => o.ComponentPhysics.Position.X).ToList();
             moveableObjectsY = moveableObjectsY.OrderBy(o => o.ComponentPhysics.Position.Y).ToList();
-            streaker.ComponentPhysics.Position = map.playerStart;
+            
 
             foreach (Wall w in map.walls)
             {
