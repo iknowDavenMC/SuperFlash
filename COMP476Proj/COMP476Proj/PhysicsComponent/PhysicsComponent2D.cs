@@ -303,9 +303,14 @@ namespace COMP476Proj
 
                 if (flockingEntity != null && flockingEntity.flock != null)
                 {
-                    velocity += flockingEntity.flock.computeAlignment(flockingEntity);
-                    velocity += flockingEntity.flock.computeCohesion(flockingEntity);
-                    velocity += flockingEntity.flock.computeSeparation(flockingEntity);
+                    float mult = 1;
+                    if (maxVelocity == maxVelocityRun)
+                    {
+                        mult = maxVelocityRun / maxVelocityWalk;
+                    }
+                    velocity += flockingEntity.flock.computeAlignment(flockingEntity) * mult;
+                    velocity += flockingEntity.flock.computeCohesion(flockingEntity) * mult;
+                    velocity += flockingEntity.flock.computeSeparation(flockingEntity) * mult;
                 }
 
                 // Capped by max velocity
@@ -326,9 +331,14 @@ namespace COMP476Proj
 
                 if (flockingEntity != null && flockingEntity.flock != null)
                 {
-                    velocity += flockingEntity.flock.computeAlignment(flockingEntity);
-                    //velocity += flockingEntity.flock.computeCohesion(flockingEntity);
-                    velocity += flockingEntity.flock.computeSeparation(flockingEntity);
+                    float mult = 1;
+                    if (maxVelocity == maxVelocityRun)
+                    {
+                        mult = maxVelocityRun / maxVelocityWalk;
+                    }
+                    velocity += flockingEntity.flock.computeAlignment(flockingEntity) * mult;
+                    velocity += flockingEntity.flock.computeCohesion(flockingEntity) * mult;
+                    velocity += flockingEntity.flock.computeSeparation(flockingEntity) * mult;
                 }
                 
                 // Capped by max velocity

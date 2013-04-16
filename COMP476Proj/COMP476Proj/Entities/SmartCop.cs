@@ -220,7 +220,7 @@ namespace COMP476Proj
                                 transitionToState(defaultState);
                             }
                             // If at next node, update node to seek
-                            else if ((Position - path[0].Position).Length() <= movement.ArrivalRadius)
+                            else if (path.Count > 0 && (Position - path[0].Position).Length() <= movement.ArrivalRadius)
                             {
                                 path.RemoveAt(0);
                             }
@@ -316,14 +316,16 @@ namespace COMP476Proj
                     if (closest == this)
                         movement.Seek(ref physics);
                     else
-                        movement.Pursue(ref physics);                    
+                        movement.Pursue(ref physics);
                     break;
                 case SmartCopState.PATROL:
-                    movement.SetTarget(path[0].Position);
+                    if (path.Count > 0)
+                        movement.SetTarget(path[0].Position);
                     movement.Arrive(ref physics);
                     break;
                 case SmartCopState.PATHFIND:
-                    movement.SetTarget(path[0].Position);
+                    if (path.Count > 0)
+                        movement.SetTarget(path[0].Position);
                     movement.Arrive(ref physics);
                     break;
                 case SmartCopState.FALL:
@@ -413,7 +415,7 @@ namespace COMP476Proj
                 }
 
                 behavior = SmartCopBehavior.KNOCKEDUP;
-                
+
                 transitionToState(SmartCopState.FALL);
 
                 movement.Stop(ref physics);

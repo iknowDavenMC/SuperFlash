@@ -12,8 +12,8 @@ namespace COMP476Proj
         public List<NPC> Members;
 
         private float alignmentWeight = 0f;
-        private float cohesionWeight = 10f;
-        private float separationWeight = 3f;
+        private float cohesionWeight = 9f;
+        private float separationWeight = 10f;
 
         public Flock()
         {
