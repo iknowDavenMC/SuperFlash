@@ -82,6 +82,30 @@ namespace COMP476Proj
             return new Vector2(pX, pY);
         }
 
+        public float? intersectionDistance(BoundingRectangle rect)
+        {
+            LineSegment[] side = new LineSegment[4]; 
+            side[0] = new LineSegment(rect.Bounds.Left, rect.Bounds.Top, rect.Bounds.Right, rect.Bounds.Top);
+            side[1] = new LineSegment(rect.Bounds.Left, rect.Bounds.Bottom, rect.Bounds.Right, rect.Bounds.Bottom);
+            side[2] = new LineSegment(rect.Bounds.Left, rect.Bounds.Top, rect.Bounds.Left, rect.Bounds.Bottom);
+            side[3] = new LineSegment(rect.Bounds.Right, rect.Bounds.Top, rect.Bounds.Right, rect.Bounds.Bottom);
+
+            Vector2 intersectPt = Vector2.Zero;
+            float? shortestDist = null;
+            float currDist;
+            for (int i = 0; i < 4; i++)
+            {
+                intersectPt = intersection(side[i]);
+                currDist = distance(intersectPt);
+                if (!intersectPt.Equals(Vector2.Zero) && (shortestDist == null || currDist < shortestDist))
+                {
+                    shortestDist = currDist;
+                }
+            }
+
+            return shortestDist;
+        }
+
         public float getXfromY(float y)
         {
             return (-C - B * y) / A;

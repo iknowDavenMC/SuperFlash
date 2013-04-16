@@ -409,7 +409,16 @@ namespace COMP476Proj
         /// </summary>
         public void Update(GameTime gameTime, World w)
         {
-            updateState(gameTime);
+            bool wallCollision = false;
+            if (state != SmartCopState.FALL || state != SmartCopState.GET_UP || state != SmartCopState.HIT )
+            {
+                wallCollision = testWallCollide();
+            }
+
+            if (!wallCollision)
+            {
+                updateState(gameTime);
+            }
 
             if (closest == this)
             {

@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DrawComponent\ScorePopup.cs" />
+    <Compile Include="Entities\ConsumableSpawnpoint.cs" />
     <Compile Include="Managers\DataManager.cs" />
     <Compile Include="UI\Button.cs" />
     <Compile Include="Debugger\Debugger.cs" />

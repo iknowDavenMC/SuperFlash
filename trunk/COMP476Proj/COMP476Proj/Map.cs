@@ -17,7 +17,7 @@ namespace COMP476Proj
         public List<Wall> walls;
         public List<Node> nodes;
         public List<Trigger> triggers;
-        public List<Consumable> consumables;
+        public List<ConsumableSpawnpoint> consumables;
         public Vector2 playerStart;
         public Map()
         {
@@ -25,7 +25,7 @@ namespace COMP476Proj
             walls = new List<Wall>();
             nodes = new List<Node>();
             triggers = new List<Trigger>();
-            consumables = new List<Consumable>();
+            consumables = new List<ConsumableSpawnpoint>();
         }
 
         public void Load(string filename)
@@ -216,7 +216,7 @@ namespace COMP476Proj
                             animation = SpriteDatabase.GetAnimation("smartCop_walk");
                         }
                         npc = new SmartCop(
-                            new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), 145, 750, 75, 1000, 8, 50, 0f, true),
+                            new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), 100, 750, 75, 1000, 8, 50, 0f, true),
                             new MovementAIComponent2D(),
                             new DrawComponent(animation, Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), dcState);
                     }
@@ -284,7 +284,7 @@ namespace COMP476Proj
                     y = int.Parse(line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
                     t = (ConsumableType)Enum.Parse(typeof(ConsumableType), line);
-                    consumables.Add(new Consumable(new Vector2(x, y), t));
+                    consumables.Add(new ConsumableSpawnpoint(new Vector2(x, y), t));
                     line = reader.ReadLine();
                 } while (reader.Peek() != -1
                     && !line.StartsWith("NODES")
