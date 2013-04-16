@@ -156,6 +156,7 @@ namespace COMP476Proj
         public float Mass
         {
             get { return mass; }
+            set { mass = value; }
         }
 
         public float MaxAcceleration
@@ -560,26 +561,33 @@ namespace COMP476Proj
         /// <param name="playerRectangle">Rectangle of the player</param>
         public void ResolveInterPenetration(Rectanglef overlap, Rectanglef playerRectangle)
         {
-            if (overlap.Width < overlap.Height)
+            // If this happens, we've gotten stuck
+            if (overlap.Contains(playerRectangle))
             {
-                if (Math.Abs(overlap.X - playerRectangle.X) < 0.0001)
-                {
-                    position.X += (overlap.Width + 1);
-                }
-                else
-                {
-                    position.X -= (overlap.Width + 1);
-                }
+                int i = 0;
             }
-            else
+            // If same width, collision is vertical
+            else if (Math.Abs(overlap.Width - playerRectangle.Width) < 0.5)
             {
-                if (Math.Abs(overlap.Y - playerRectangle.Y) < 0.0001)
+                if (Math.Abs(overlap.Y - playerRectangle.Y) < 0.5)
                 {
                     position.Y += (overlap.Height + 1);
                 }
                 else
                 {
                     position.Y -= (overlap.Height + 1);
+                }
+            }
+            // If same height, collision is horizontal
+            else if (Math.Abs(overlap.Height - playerRectangle.Height) < 0.5)
+            {
+                if (Math.Abs(overlap.X - playerRectangle.X) < 0.5)
+                {
+                    position.X += (overlap.Width + 1);
+                }
+                else
+                {
+                    position.X -= (overlap.Width + 1);
                 }
             }
         }
@@ -600,20 +608,34 @@ namespace COMP476Proj
         }
 
         /// <summary>
-        /// Sets the pace of the entity to use walk or run values
+        /// Sets the speed of the entity to use walk or run values
         /// </summary>
         /// <param name="isFast">Whether or not to set pace to the fast value</param>
-        public void SetPace(bool isFast)
+        public void SetSpeed(bool isFast)
         {
             if (isFast)
             {
-                maxAcceleration = maxAccelerationRun;
                 maxVelocity = maxVelocityRun;
             }
             else
             {
-                maxAcceleration = maxAccelerationWalk;
                 maxVelocity = maxVelocityWalk;
+            }
+        }
+
+        /// <summary>
+        /// Sets the acceleration of the entity to use walk or run values
+        /// </summary>
+        /// <param name="isFast">Whether or not to set pace to the fast value</param>
+        public void SetAcceleration(bool isFast)
+        {
+            if (isFast)
+            {
+                maxAcceleration = maxAccelerationRun;
+            }
+            else
+            {
+                maxAcceleration = maxAccelerationWalk;
             }
         }
 
