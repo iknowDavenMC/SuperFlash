@@ -11,8 +11,8 @@ namespace COMP476Proj
     {
         #region Fields
         protected MovementAIComponent2D movement;
-        protected float detectRadius = 150f;
-        protected float farRadius = 250f;
+        protected float detectRadius = 300f;
+        protected float farRadius = 500f;
         public Node patrolStart = null, patrolEnd = null;
         public Flock flock;
 

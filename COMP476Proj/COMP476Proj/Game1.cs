@@ -86,7 +86,7 @@ namespace COMP476Proj
             Camera.MaxX = level.Width;
             Camera.MaxY = level.Height;
             Camera.Target = world.streaker;
-            Camera.Scale = 1f;
+            Camera.Scale = 0.5f;
 
             Debugger.getInstance();
             //Hud
@@ -143,7 +143,7 @@ namespace COMP476Proj
         {
             frameRate.Update(gameTime);
 
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.ForestGreen);
             Vector3 center = new Vector3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0);
             Matrix transform = Matrix.CreateTranslation(-(Camera.X), -(Camera.Y), 0) * Matrix.CreateScale(Camera.Scale) * Matrix.CreateTranslation(center);
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, null, null, null, transform);

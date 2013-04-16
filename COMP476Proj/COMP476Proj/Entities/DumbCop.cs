@@ -203,6 +203,8 @@ namespace COMP476Proj
                             // If done path, go back to default
                             if (path.Count == 1 && (Position - path[0].Position).Length() <= movement.ArrivalRadius)
                             {
+                                DataManager.GetInstance().IncreaseScore(DataManager.Points.LoseCop,
+                                    true, Game1.world.streaker.Position.X, Game1.world.streaker.Position.Y - 64);
                                 path.Clear();
                                 behavior = DumbCopBehavior.DEFAULT;
                                 transitionToState(defaultState);
@@ -252,6 +254,8 @@ namespace COMP476Proj
                         // Else, go back to default
                         else
                         {
+                            DataManager.GetInstance().IncreaseScore(DataManager.Points.LoseCop,
+                                true, Game1.world.streaker.Position.X, Game1.world.streaker.Position.Y - 64);
                             behavior = DumbCopBehavior.DEFAULT;
                             transitionToState(defaultState);
                         }

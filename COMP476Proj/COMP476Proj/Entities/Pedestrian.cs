@@ -22,7 +22,9 @@ namespace COMP476Proj
         private PedestrianState state;
         private PedestrianBehavior behavior;
         private string studentType;
-
+        private int fleePointsTime = 500;
+        private const int fleePointsTimeout = 1000;
+        private bool fleePoints = false;
         public PedestrianState State { get { return state; } }
         #endregion
 
@@ -106,6 +108,7 @@ namespace COMP476Proj
 
         private void updateState(World w)
         {
+            fleePoints = false;
             //--------------------------------------------------------------------------
             //        DEFAULT BEHAVIOR TRANSITIONS --> Before aware of streaker
             //--------------------------------------------------------------------------
@@ -123,6 +126,10 @@ namespace COMP476Proj
             //--------------------------------------------------------------------------
             else if (behavior == PedestrianBehavior.AWARE)
             {
+                if (Vector2.Distance(w.streaker.Position, pos) < detectRadius && LineOfSight())
+                    fleePoints = true;
+                else
+                    fleePoints = false;
                 if (Vector2.Distance(w.streaker.Position, pos) > detectRadius)
                 {
                     behavior = PedestrianBehavior.DEFAULT;
@@ -186,6 +193,8 @@ namespace COMP476Proj
                 default:
                     break;
             }
+            if (!fleePoints)
+                fleePointsTime = 500;
             
         }
 
@@ -232,6 +241,17 @@ namespace COMP476Proj
             {
                 draw.GoToPrevFrame();
             }
+
+            if (fleePoints)
+            {
+                fleePointsTime += gameTime.ElapsedGameTime.Milliseconds;
+                if (fleePointsTime >= fleePointsTimeout)
+                {
+                    fleePointsTime = 0;
+                    DataManager.GetInstance().IncreaseScore(DataManager.Points.FleeProximity, true, physics.Position.X, physics.Position.Y - 64);
+                }
+            }
+
             base.Update(gameTime);
             
         }

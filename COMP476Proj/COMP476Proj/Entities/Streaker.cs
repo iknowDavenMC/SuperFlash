@@ -103,8 +103,10 @@ namespace COMP476Proj
 
         private ParticleSpewer superFlashParticles;
 
-        private int particleTimout = 50;
+        private const int particleTimeout = 50;
         private int particleTimer = 0;
+        private const int dancePointTimeout = 500;
+        private int danceTimer = 0;
 
         #endregion
 
@@ -332,7 +334,7 @@ namespace COMP476Proj
                 if (canBeHit)
                 {
                     entity.Fall(true);
-                    DataManager.GetInstance().IncreaseScore(10, true, entity.ComponentPhysics.Position.X, entity.ComponentPhysics.Position.Y - 64);
+                    DataManager.GetInstance().IncreaseScore(DataManager.Points.SuperFlashKnockDown, true, entity.ComponentPhysics.Position.X, entity.ComponentPhysics.Position.Y - 64);
                 }
             }
         }
@@ -392,7 +394,7 @@ namespace COMP476Proj
             if (superFlashParticles.IsStarted)
             {
                 particleTimer += gameTime.ElapsedGameTime.Milliseconds;
-                if (particleTimer >= particleTimout)
+                if (particleTimer >= particleTimeout)
                 {
                     particleTimer = 0;
                     superFlashParticles.Stop();
@@ -401,6 +403,17 @@ namespace COMP476Proj
             superFlashParticles.X = physics.Position.X;
             superFlashParticles.Y = physics.Position.Y - 020;
             superFlashParticles.Update(gameTime);
+
+            if (charState == StreakerState.DANCE)
+            {
+                danceTimer += gameTime.ElapsedGameTime.Milliseconds;
+                if (danceTimer >= dancePointTimeout)
+                {
+                    danceTimer = 0;
+                    DataManager.GetInstance().IncreaseScore(DataManager.Points.Dance, true, physics.Position.X, physics.Position.Y - 64);
+                }
+            }
+
             //Debugger.getInstance().pointsToDraw.Add(physics.position);
             base.Update(gameTime);
         }
@@ -513,7 +526,7 @@ namespace COMP476Proj
                 draw.Reset();
                 charState = StreakerState.FALL;
 
-                DataManager.GetInstance().DecreaseHealth(10);
+                HUD.getInstance().decreaseHealth(10);
 
                 physics.SetTargetValues(true, null, null, null);
             }

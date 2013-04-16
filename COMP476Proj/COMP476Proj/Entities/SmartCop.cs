@@ -16,6 +16,7 @@ namespace COMP476Proj
         #region Attributes
         public static SmartCop closest = null;
         public static float closestDistSq = float.MaxValue;
+        private static bool StreakerSeen = false;
         Node startNode;
         Node endNode;
         Node targetNode;
@@ -212,17 +213,25 @@ namespace COMP476Proj
                             }
                         }
                         // If timer is up, update path
-                        else if (pathTimer > pathDelay && copsWhoSeeTheStreaker > 0)
+                        else if (copsWhoSeeTheStreaker > 0)
                         {
-                            pathTimer = 0;
-
-                            path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
-
-                            // Optimize
-                            while (path.Count > 1 && IsVisible(path[1].Position))
+                            StreakerSeen = true;
+                            if (pathTimer > pathDelay)
                             {
-                                path.RemoveAt(0);
+                                pathTimer = 0;
+
+                                path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
                             }
+                                // Optimize
+                                while (path.Count > 1 && IsVisible(path[1].Position))
+                                {
+                                    path.RemoveAt(0);
+                                }
+                                if (hasSeenTheStreaker)
+                                {
+                                    hasSeenTheStreaker = false;
+                                    --copsWhoSeeTheStreaker;
+                                }
                         }
                         // Else, continue along path
                         else
@@ -230,11 +239,6 @@ namespace COMP476Proj
                             // If haven't seeked key point, do so
                             if (path.Count == 1 && (Position - path[0].Position).Length() <= movement.ArrivalRadius && !isSeekingKeyNode)
                             {
-                                if (hasSeenTheStreaker)
-                                {
-                                    hasSeenTheStreaker = false;
-                                    --copsWhoSeeTheStreaker;
-                                }
 
                                 isSeekingKeyNode = true;
 
@@ -251,6 +255,12 @@ namespace COMP476Proj
                             // If have seeked key point, go back to normal
                             else if (path.Count == 1 && (Position - path[0].Position).Length() <= movement.ArrivalRadius && isSeekingKeyNode)
                             {
+                                if (StreakerSeen)
+                                {
+                                    DataManager.GetInstance().IncreaseScore(DataManager.Points.LoseAllCops, true,
+                                        Game1.world.streaker.Position.X, Game1.world.streaker.Position.Y - 64);
+                                    StreakerSeen = false;
+                                }
                                 isSeekingKeyNode = false;
                                 path.Clear();
                                 behavior = SmartCopBehavior.DEFAULT;
