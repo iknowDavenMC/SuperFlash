@@ -192,7 +192,42 @@ namespace COMP476Proj
             }
         }
 
+        /// <summary>
+        /// Plays the sound effect corresponding to the event
+        /// </summary>
+        /// <param name="soundSource">What is emitting the sound ex: Streaker</param>
+        /// <param name="soundType">Type of sound emmited ex: SuperFlash</param>
+        /// <returns>Does the sound effects exist</returns>
+        public bool PlaySound(string soundSource, string soundType)
+        {
+            if (!soundSource.Equals("Common") && !soundSource.Equals("Streaker") && Game1.random.NextDouble() < 0.8f)
+            {
+                return false;
+            }
 
+            try
+            {
+                int index = Game1.random.Next(0, soundEffects[soundSource][soundType].Count);
+
+                if (soundSource.Equals("Streaker"))
+                {
+                    soundEffects[soundSource][soundType][index].Play(1, 0f, 0f);
+                }
+                else
+                {
+                    float pitch = (float)(0.4 * Game1.random.NextDouble() - 0.2);
+                    soundEffects[soundSource][soundType][index].Play(1, pitch, 0f);
+                }
+
+                return true;
+            }
+            catch (KeyNotFoundException e)
+            {
+                Console.WriteLine(soundType + " is not a sound effect of " + soundSource);
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
 
         /// <summary>
         /// Plays a song
