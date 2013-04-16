@@ -58,6 +58,7 @@ namespace CollisionBoxTool
         NPC mouseNPC;
         NPC mousePlayer;
 
+        bool nodeType = false;
         NPC.Type npcType = NPC.Type.Civilian;
         NPC.Mode npcMode = NPC.Mode.Static;
 
@@ -247,6 +248,11 @@ namespace CollisionBoxTool
                 {
                     mouseBox.seeThrough = !mouseBox.seeThrough;
                 }
+                else if (mode == DrawModes.Node)
+                {
+                    mouseNode.isKey = !mouseNode.isKey;
+                    nodeType = mouseNode.isKey;
+                }
                 else if (mode == DrawModes.NPC)
                 {
                     if (npcMode == NPC.Mode.Static)
@@ -377,6 +383,7 @@ namespace CollisionBoxTool
                     {
                         nodes.Add(mouseNode);
                         mouseNode = new Node(ms.X + Camera.X, ms.Y + Camera.Y);
+                        mouseNode.isKey = nodeType;
                     }
                 }
                 else if (mode == DrawModes.NPC && ms.RightButton == ButtonState.Released)
@@ -592,6 +599,8 @@ namespace CollisionBoxTool
             foreach (Node node in nodes)
             {
                 node.draw(spriteBatch, circle, nodeColor, Camera);
+                if (node.isKey)
+                    drawBordered(spriteBatch, (int)node.position.X - Camera.X, (int)node.position.Y - Camera.Y, "K", Color.Black, Color.White);
             }
 
             foreach (Edge edge in edges)
@@ -650,6 +659,10 @@ namespace CollisionBoxTool
             if (mode == DrawModes.Box)
             {
                 drawBordered(spriteBatch, 10, 28, "[W]    " + (mouseBox.seeThrough ? "See Through" : "Wall"), Color.Black, Color.White);
+            }
+            if (mode == DrawModes.Node)
+            {
+                drawBordered(spriteBatch, 10, 28, "[W]    " + (mouseNode.isKey ? "Key Node" : "Normal Node"), Color.Black, Color.White);
             }
             if (mode == DrawModes.NPC)
             {
@@ -712,7 +725,7 @@ namespace CollisionBoxTool
             writer.WriteLine("NODES");
             foreach (Node node in nodes)
             {
-                string line = node.ID + " " + node.position.X + " " + node.position.Y;
+                string line = node.ID + " " + node.position.X + " " + node.position.Y + " " + node.isKey.ToString();
                 writer.WriteLine(line);
             }
             writer.WriteLine("EDGES");
@@ -786,13 +799,17 @@ namespace CollisionBoxTool
                 do
                 {
                     int id, x, y;
+                    bool key;
                     int spacei = line.IndexOf(' ');
                     id = int.Parse(line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
                     spacei = line.IndexOf(' ');
                     x = int.Parse(line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
-                    y = int.Parse(line);
+                    spacei = line.IndexOf(' ');
+                    y = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    key = bool.Parse(line);
                     nodes.Add(new Node(x, y, id));
                     line = reader.ReadLine();
                 } while (reader.Peek() != -1

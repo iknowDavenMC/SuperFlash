@@ -331,7 +331,7 @@ namespace COMP476Proj
         /// Sets the position to target
         /// </summary>
         /// <param name="targetPosition">Desired position</param>
-        public void SetTarget(Vector2 targetPosition)
+        public void SetTarget(Vector2 targetPosition, NPC flockingEnt = null)
         {
             this.targetPosition = targetPosition;
         }

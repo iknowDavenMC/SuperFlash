@@ -24,6 +24,7 @@ namespace COMP476Proj
         public QuadTree qTree;
         List<Node> path;
         public const int gridLength = 200;
+        private Flock flock;
         #endregion
 
         #region Init
@@ -41,6 +42,7 @@ namespace COMP476Proj
 
             qTree = new QuadTree((int)Map.WIDTH, (int)Map.HEIGHT, 3);
             map = new Map();
+            flock = new Flock();
         }
 
         public void LoadMap(string filename, ContentManager content)
@@ -52,6 +54,12 @@ namespace COMP476Proj
                 npcs.Add(npc);
                 moveableObjectsX.Add(npc);
                 moveableObjectsY.Add(npc);
+                if (npc is SmartCop)
+                {
+                    flock.Members.Add(npc);
+                    npc.flock = flock;
+                }
+
             }
 
             streaker.ComponentPhysics.Position = map.playerStart;

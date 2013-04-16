@@ -87,6 +87,7 @@
     <Compile Include="Entities\SmartCop.cs" />
     <Compile Include="Entities\Streaker.cs" />
     <Compile Include="Entities\Wall.cs" />
+    <Compile Include="IntelligenceComponent\Flock.cs" />
     <Compile Include="IntelligenceComponent\Pathfinding\AStar.cs" />
     <Compile Include="IntelligenceComponent\Pathfinding\Edge.cs" />
     <Compile Include="IntelligenceComponent\Pathfinding\MinHeap.cs" />

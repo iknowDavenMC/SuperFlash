@@ -16,6 +16,7 @@ namespace CollisionBoxTool
         private float radius = 16;
         public float Radius { get { return radius; } }
         private Texture2D tex;
+        public bool isKey = false;
 
         public Node(float x, float y)
         {
