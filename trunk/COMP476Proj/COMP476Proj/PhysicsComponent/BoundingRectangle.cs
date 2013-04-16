@@ -117,11 +117,13 @@ namespace COMP476Proj
         /// <param name="spriteBatch">Sprite batch</param>
         public void Draw(SpriteBatch spriteBatch)
         {
+#if (DEBUG)
             Texture2D tex = SpriteDatabase.GetAnimation("blank").Texture;
 
             Vector2 drawPos = new Vector2(center.X - dimensionsFromCenter.X, center.Y - dimensionsFromCenter.Y);
             //Vector2 drawPos = new Vector2(boundingRectangle.X, boundingRectangle.Y);
             spriteBatch.Draw(tex, drawPos, null, new Color(1,0,0,0.5f), 0, Vector2.Zero, new Vector2(dimensionsFromCenter.X*2, dimensionsFromCenter.Y*2), SpriteEffects.None, 0);
+#endif
         }
 
         #endregion

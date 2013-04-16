@@ -41,33 +41,6 @@ namespace COMP476Proj
     }
 
     /// <summary>
-    /// Second achievement earned through playtime
-    /// </summary>
-    public class Achievement_Playtime2 : Achievement
-    {
-        private int timePlayed;
-        private const int maxTime = 3000;
-
-        public Achievement_Playtime2()
-            : base("Easiest achievement ever 2", "Exist for 3 seconds", 1000)
-        {
-            timePlayed = 0;
-
-        }
-
-        public override void Update(GameTime gameTime)
-        {
-            int time = gameTime.ElapsedGameTime.Milliseconds;
-            timePlayed += time;
-        }
-
-        public override bool IsAchieved()
-        {
-            return timePlayed >= maxTime;
-        }
-    }
-
-    /// <summary>
     /// Achievement earned by pressing space
     /// </summary>
     public class Achievement_PressSpace : Achievement

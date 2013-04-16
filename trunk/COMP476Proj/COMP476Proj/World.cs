@@ -228,6 +228,7 @@ namespace COMP476Proj
             Vector2 drawPos = new Vector2(0, 0);
             spriteBatch.Draw(SpriteDatabase.GetAnimation("level_1").Texture, drawPos, Color.White);
 
+            
             foreach (Wall wall in map.walls)
             {
                 wall.BoundingRectangle.Draw(spriteBatch);
@@ -240,6 +241,7 @@ namespace COMP476Proj
             }
 
             Texture2D blank = SpriteDatabase.GetAnimation("blank").Texture;
+
             foreach (Node n in map.nodes)
             {
                 Rectangle destRect = new Rectangle((int)n.Position.X - 3, (int)n.Position.Y - 3, 6, 6);
