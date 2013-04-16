@@ -239,20 +239,20 @@ EDGES
 73 69
 73 70
 NPCS
-111 243 Civilian Static
-235 247 Civilian Wander
-355 245 Civilian Static
-355 369 Civilian Wander
-232 365 Civilian Static
-112 363 Civilian Wander
-106 485 Civilian Static
-237 487 Civilian Wander
-367 487 Civilian Static
-667 327 SmartCop Wander
-558 172 DumbCop Wander
-664 211 DumbCop Static
-667 403 RoboCop Static
-575 487 DumbCop Wander
+111 243 Civilian Static 0 0
+235 247 Civilian Wander 0 0
+355 245 Civilian Static 0 0
+355 369 Civilian Wander 0 0
+232 365 Civilian Static 0 0
+112 363 Civilian Wander 0 0
+106 485 Civilian Static 0 0
+237 487 Civilian Wander 0 0
+367 487 Civilian Static 0 0
+667 327 SmartCop Wander 0 0
+558 172 DumbCop Wander 0 0
+664 211 DumbCop Static 0 0
+667 403 RoboCop Static 0 0
+575 487 DumbCop Wander 0 0
 TRIGGER
 29 89 433 434 1
 29 667 432 427 2

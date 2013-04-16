@@ -16,11 +16,13 @@ namespace CollisionBoxTool
         public int Y { get { return (int)position.Y; } }
         private float radius = 16;
         private Texture2D tex;
-        public enum Type { Civilian, DumbCop, SmartCop, Streaker }
-        public enum Mode { Wander, Static }
+        public enum Type { Civilian, DumbCop, SmartCop, RoboCop, Streaker }
+        public enum Mode { Wander, Static, Patrol }
         public Type type;
         public Mode mode;
         public Color color;
+        public Node patrolStart = null;
+        public Node patrolEnd = null;
 
         private const int PIXELS_HEAD_TO_TOE = 149;
         private const int PIXELS_LEFT_TO_CENTER = 88;
@@ -60,6 +62,10 @@ namespace CollisionBoxTool
                 case Type.Streaker:
                     anim = SpriteDatabase.GetAnimation("streaker_static");
                     color = Color.Goldenrod;
+                    break;
+                case Type.RoboCop:
+                    anim = SpriteDatabase.GetAnimation("roboCop_static");
+                    color = Color.Coral;
                     break;
                 default:
                     anim = SpriteDatabase.GetAnimation("student2_static");

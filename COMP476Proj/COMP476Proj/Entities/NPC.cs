@@ -13,6 +13,7 @@ namespace COMP476Proj
         protected MovementAIComponent2D movement;
         protected float detectRadius = 150f;
         protected float farRadius = 250f;
+        public Node patrolStart = null, patrolEnd = null;
         #endregion
 
         #region Properties
