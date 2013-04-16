@@ -16,6 +16,12 @@ namespace COMP476Proj
     {
         #region Attributes
         /// <summary>
+        /// Is the streaker dead
+        /// </summary>
+        private bool isDead;
+        private bool stayDown;
+
+        /// <summary>
         /// Determines how many milliseconds have gone by since input was last checked
         /// </summary>
         private int inputTimer;
@@ -365,7 +371,11 @@ namespace COMP476Proj
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
             physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
 
-            draw.Update(gameTime, this);
+            if (!stayDown)
+            {
+                draw.Update(gameTime, this);
+            }
+
             UpdateStates(draw.animComplete);
 
             //Debugger.getInstance().pointsToDraw.Add(physics.position);
@@ -420,6 +430,11 @@ namespace COMP476Proj
                         draw.animation = SpriteDatabase.GetAnimation("streaker_getup");
                         draw.Play();
                     }
+
+                    if (isDead)
+                    {
+                        stayDown = true;
+                    }
                     break;
                 case StreakerState.DANCE:
                     draw.animation = SpriteDatabase.GetAnimation("streaker_dance");
@@ -470,9 +485,14 @@ namespace COMP476Proj
                 recoverTimer = 0;
                 draw.Reset();
                 charState = StreakerState.FALL;
-                HUD.getInstance().decreaseHealth(5);
+                HUD.getInstance().decreaseHealth(20);
                 physics.SetTargetValues(true, null, null, null);
             }
+        }
+
+        public void Kill()
+        {
+            isDead = true;
         }
 
         public void SpeedBoost()
