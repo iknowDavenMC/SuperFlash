@@ -47,6 +47,8 @@ namespace COMP476Proj
             set { spriteEffects = value; }
         }
 
+        public int CurrentFrame { get { return currentFrame; } }
+
         #endregion
 
         /*-------------------------------------------------------------------------*/
