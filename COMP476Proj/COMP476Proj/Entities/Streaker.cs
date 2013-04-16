@@ -485,7 +485,9 @@ namespace COMP476Proj
                 recoverTimer = 0;
                 draw.Reset();
                 charState = StreakerState.FALL;
-                HUD.getInstance().decreaseHealth(20);
+
+                DataManager.GetInstance().DecreaseHealth(10);
+
                 physics.SetTargetValues(true, null, null, null);
             }
         }
