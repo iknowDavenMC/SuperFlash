@@ -217,7 +217,7 @@ namespace COMP476Proj
                             {
                                 path.Clear();
                                 behavior = SmartCopBehavior.DEFAULT;
-                                transitionToState(defaultState);
+                                transitionToState(SmartCopState.STATIC);
                             }
                             // If at next node, update node to seek
                             else if (path.Count > 0 && (Position - path[0].Position).Length() <= movement.ArrivalRadius)
@@ -261,9 +261,17 @@ namespace COMP476Proj
                         // Else, path find to key node
                         else
                         {
-                            // TODO
-                            behavior = SmartCopBehavior.DEFAULT;
-                            transitionToState(defaultState);
+                            Vector2 positionOfKeyNode = GetKeyNode();
+
+                            path = AStar.GetPath(Position, positionOfKeyNode, Game1.world.map.nodes, Game1.world.qTree, true, false);
+
+                            // Optimize
+                            while (path.Count > 1 && IsVisible(path[1].Position))
+                            {
+                                path.RemoveAt(0);
+                            }
+
+                            transitionToState(SmartCopState.PATHFIND);
                         }
 
                         break;
