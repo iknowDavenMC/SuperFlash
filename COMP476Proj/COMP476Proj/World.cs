@@ -231,6 +231,7 @@ namespace COMP476Proj
 
             // Update achievements
             AchievementManager.getInstance().Update(gameTime);
+            DataManager.GetInstance().Update(gameTime);
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -267,6 +268,7 @@ namespace COMP476Proj
                 c.Draw(gameTime,spriteBatch);
             }
             AchievementManager.getInstance().Draw(gameTime, spriteBatch);
+            DataManager.GetInstance().Draw(spriteBatch, gameTime);
         }
         #endregion
     }

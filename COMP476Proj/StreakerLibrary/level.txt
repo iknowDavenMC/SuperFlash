@@ -253,6 +253,9 @@ NPCS
 591 404 SmartCop Wander 0 0
 650 424 SmartCop Wander 0 0
 688 375 SmartCop Wander 0 0
+1421 977 Civilian Static 0 0
+1375 1045 Civilian Static 0 0
+1499 1056 Civilian Static 0 0
 TRIGGER
 29 89 433 434 1
 29 667 432 427 2

@@ -22,6 +22,8 @@ namespace COMP476Proj
         private PedestrianState state;
         private PedestrianBehavior behavior;
         private string studentType;
+
+        public PedestrianState State { get { return state; } }
         #endregion
 
         #region Constructors

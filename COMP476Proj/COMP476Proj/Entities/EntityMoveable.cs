@@ -46,10 +46,16 @@ namespace COMP476Proj
 
                 if (mass1 > mass2)
                 {
+                    if (other is Pedestrian && this is Streaker && ((Pedestrian)other).State != PedestrianState.FALL)
+                        DataManager.GetInstance().IncreaseScore(10, true,
+                            ((EntityMoveable)other).ComponentPhysics.Position.X,
+                            ((EntityMoveable)other).ComponentPhysics.Position.Y - 64);
                     ((EntityMoveable)other).Fall(false);
                 }
                 if (mass1 < mass2)
                 {
+                    if (other is Streaker && this is Pedestrian && ((Pedestrian)this).State != PedestrianState.FALL)
+                        DataManager.GetInstance().IncreaseScore(10, true, physics.Position.X, physics.Position.Y - 64);
                     Fall(false);
                 }
 

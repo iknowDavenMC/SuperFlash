@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace COMP476Proj
 {
@@ -14,6 +15,8 @@ namespace COMP476Proj
         /// Private instance
         /// </summary>
         private static volatile DataManager instance = null;
+
+        private const int popupTime = 1000;
 
         public int health;
 
@@ -40,6 +43,8 @@ namespace COMP476Proj
         private float timeDancing;
 
         public int numberofSuperFlash;
+
+        private List<ScorePopup> popups;
 
         #endregion
 
@@ -75,6 +80,8 @@ namespace COMP476Proj
             timeDancing = 0;
 
             numberofSuperFlash = 0;
+
+            popups = new List<ScorePopup>();
         }
 
         #endregion
@@ -107,6 +114,17 @@ namespace COMP476Proj
             {
                 timeDancing += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             }
+
+            for (int i = 0; i != popups.Count; ++i)
+            {
+                ScorePopup popup = popups[i];
+                popup.Update(gameTime);
+                if (popup.IsDone)
+                {
+                    popups.RemoveAt(i);
+                    --i;
+                }
+            }
         }
 
         public void DecreaseHealth(int amount)
@@ -119,10 +137,20 @@ namespace COMP476Proj
             }
         }
 
-        public void IncreaseScore(int amount)
+        public void IncreaseScore(int amount, bool popup = false, float x = 0, float y = 0)
         {
+            if (amount < 0)
+                amount = 0;
             score += amount;
             HUD.getInstance().increaseScore(amount);
+            if (popup)
+                popups.Add(new ScorePopup(x, y, amount, popupTime));
+        }
+
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        {
+            foreach (ScorePopup popup in popups)
+                popup.Draw(spriteBatch, gameTime);
         }
 
         #endregion
