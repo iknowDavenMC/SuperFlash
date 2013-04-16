@@ -8,7 +8,7 @@ using StreakerLibrary;
 
 namespace COMP476Proj
 {
-    public enum SmartCopState { STATIC, WANDER, PATH, SEEK, FALL, GET_UP, HIT };
+    public enum SmartCopState { STATIC, WANDER, PATHFIND, PURSUE, FALL, GET_UP, HIT, PATROL };
     public enum SmartCopBehavior { DEFAULT, AWARE, KNOCKEDUP };
 
     public class SmartCop : NPC
@@ -19,6 +19,14 @@ namespace COMP476Proj
         Node startNode;
         Node endNode;
         Node targetNode;
+
+        bool hasSeenTheStreaker = false;
+
+        List<Node> path;
+
+        float pathTimer = 0;
+        float pathDelay = 5000;
+
         private SmartCopState state;
         private SmartCopBehavior behavior;
         private SmartCopState defaultState;
@@ -62,6 +70,11 @@ namespace COMP476Proj
             switch (pState)
             {
                 case SmartCopState.STATIC:
+                    if (hasSeenTheStreaker)
+                    {
+                        hasSeenTheStreaker = false;
+                        --copsWhoSeeTheStreaker;
+                    }
                     behavior = SmartCopBehavior.DEFAULT;
                     state = SmartCopState.STATIC;
                     draw.animation = SpriteDatabase.GetAnimation("smartCop_static");
@@ -70,6 +83,11 @@ namespace COMP476Proj
                     draw.Reset();
                     break;
                 case SmartCopState.WANDER:
+                    if (hasSeenTheStreaker)
+                    {
+                        hasSeenTheStreaker = false;
+                        --copsWhoSeeTheStreaker;
+                    }
                     behavior = SmartCopBehavior.DEFAULT;
                     state = SmartCopState.WANDER;
                     draw.animation = SpriteDatabase.GetAnimation("smartCop_walk");
@@ -93,11 +111,23 @@ namespace COMP476Proj
                     physics.SetAcceleration(false);
                     draw.Reset();
                     break;
-                case SmartCopState.PATH:
-                    state = SmartCopState.PATH;
+                case SmartCopState.PATROL:
+                    if (hasSeenTheStreaker)
+                    {
+                        hasSeenTheStreaker = false;
+                        --copsWhoSeeTheStreaker;
+                    }
+                    state = SmartCopState.PATROL;
                     draw.animation = SpriteDatabase.GetAnimation("smartCop_walk");
                     physics.SetSpeed(false);
                     physics.SetAcceleration(false);
+                    draw.Reset();
+                    break;
+                case SmartCopState.PATHFIND:
+                    state = SmartCopState.PATHFIND;
+                    draw.animation = SpriteDatabase.GetAnimation("smartCop_walk");
+                    physics.SetSpeed(true);
+                    physics.SetAcceleration(true);
                     draw.Reset();
                     break;
                 case SmartCopState.HIT:
@@ -108,9 +138,14 @@ namespace COMP476Proj
                     physics.SetAcceleration(false);
                     draw.Reset();
                     break;
-                case SmartCopState.SEEK:
+                case SmartCopState.PURSUE:
+                    if (!hasSeenTheStreaker)
+                    {
+                        hasSeenTheStreaker = true;
+                        ++copsWhoSeeTheStreaker;
+                    }
                     behavior = SmartCopBehavior.AWARE;
-                    state = SmartCopState.SEEK;
+                    state = SmartCopState.PURSUE;
                     draw.animation = SpriteDatabase.GetAnimation("smartCop_walk");
                     physics.SetSpeed(true);
                     physics.SetAcceleration(true);
@@ -119,7 +154,7 @@ namespace COMP476Proj
             }
         }
 
-        public void updateState()
+        public void updateState(GameTime gameTime)
         {
 
             //--------------------------------------------------------------------------
@@ -131,7 +166,7 @@ namespace COMP476Proj
                 {
                     playSound("Exclamation");
                     behavior = SmartCopBehavior.AWARE;
-                    transitionToState(SmartCopState.SEEK);
+                    transitionToState(SmartCopState.PURSUE);
                 }
             }
             //--------------------------------------------------------------------------
@@ -139,27 +174,99 @@ namespace COMP476Proj
             //--------------------------------------------------------------------------
             else if (behavior == SmartCopBehavior.AWARE)
             {
-                if (LineOfSight())
+                bool canSee = LineOfSight();
+                float distance = Vector2.Distance(Game1.world.streaker.Position, pos);
+
+                switch (state)
                 {
-                    float distance = Vector2.Distance(Game1.world.streaker.Position, pos);
-                    if (Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
-                        Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
-                    {
-                        transitionToState(SmartCopState.HIT);
-                    }
-                    else if (distance > detectRadius)
-                    {
-                        behavior = SmartCopBehavior.DEFAULT;
-                        transitionToState(defaultState);
-                    }
-                    else
-                    {
-                        transitionToState(SmartCopState.SEEK);
-                    }
-                }
-                else
-                {
-                    transitionToState(SmartCopState.SEEK);
+                    case SmartCopState.PATHFIND:
+
+                        pathTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+                        // If sees, chases
+                        if (canSee && distance <= detectRadius)
+                        {
+                            if (Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
+                                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
+                            {
+                                transitionToState(SmartCopState.HIT);
+                            }
+                            else
+                            {
+                                transitionToState(SmartCopState.PURSUE);
+                            }
+                        }
+                        // If timer is up, update path
+                        else if (pathTimer > pathDelay)
+                        {
+                            pathTimer = 0;
+
+                            path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
+
+                            // Optimize
+                            while (path.Count > 1 && IsVisible(path[1].Position))
+                            {
+                                path.RemoveAt(0);
+                            }
+                        }
+                        // Else, continue along path
+                        else
+                        {
+                            // If done path, go back to default
+                            if (path.Count == 1 && (Position - path[0].Position).Length() <= movement.ArrivalRadius)
+                            {
+                                path.Clear();
+                                behavior = SmartCopBehavior.DEFAULT;
+                                transitionToState(defaultState);
+                            }
+                            // If at next node, update node to seek
+                            else if ((Position - path[0].Position).Length() <= movement.ArrivalRadius)
+                            {
+                                path.RemoveAt(0);
+                            }
+                            // else, Do no updating
+                        }
+
+                        break;
+
+                    case SmartCopState.HIT:
+                    case SmartCopState.PURSUE:
+
+                        // If sees, chases or hits
+                        if (canSee && distance <= detectRadius)
+                        {
+                            if (Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
+                                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
+                            {
+                                transitionToState(SmartCopState.HIT);
+                            }
+                            else
+                            {
+                                transitionToState(SmartCopState.PURSUE);
+                            }
+                        }
+                        // If anyone else sees, path find
+                        else if (copsWhoSeeTheStreaker > 0)
+                        {
+                            path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
+
+                            // Optimize
+                            while (path.Count > 1 && IsVisible(path[1].Position))
+                            {
+                                path.RemoveAt(0);
+                            }
+
+                            transitionToState(SmartCopState.PATHFIND);
+                        }
+                        // Else, path find to key node
+                        else
+                        {
+                            // TODO
+                            behavior = SmartCopBehavior.DEFAULT;
+                            transitionToState(defaultState);
+                        }
+
+                        break;
                 }
             }
             //--------------------------------------------------------------------------
@@ -180,7 +287,7 @@ namespace COMP476Proj
                         if (draw.animComplete && Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius)
                         {
                             behavior = SmartCopBehavior.AWARE;
-                            transitionToState(SmartCopState.SEEK);
+                            transitionToState(SmartCopState.PURSUE);
                         }
                         else if (draw.animComplete && Vector2.Distance(Game1.world.streaker.Position, pos) >= detectRadius)
                         {
@@ -203,7 +310,7 @@ namespace COMP476Proj
                 case SmartCopState.WANDER:
                     movement.Wander(ref physics);
                     break;
-                case SmartCopState.SEEK:
+                case SmartCopState.PURSUE:
                     movement.SetTarget(Game1.world.streaker.Position);
                     movement.SetTargetVelocity(Game1.world.streaker.ComponentPhysics.Velocity);
                     if (closest == this)
@@ -211,8 +318,13 @@ namespace COMP476Proj
                     else
                         movement.Pursue(ref physics);                    
                     break;
-                case SmartCopState.PATH:
-                    //TO DO
+                case SmartCopState.PATROL:
+                    movement.SetTarget(path[0].Position);
+                    movement.Arrive(ref physics);
+                    break;
+                case SmartCopState.PATHFIND:
+                    movement.SetTarget(path[0].Position);
+                    movement.Arrive(ref physics);
                     break;
                 case SmartCopState.FALL:
                     movement.Stop(ref physics);
@@ -240,7 +352,7 @@ namespace COMP476Proj
         /// </summary>
         public void Update(GameTime gameTime, World w)
         {
-            updateState();
+            updateState(gameTime);
 
             if (closest == this)
             {

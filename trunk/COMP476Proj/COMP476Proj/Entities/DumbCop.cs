@@ -7,16 +7,22 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 namespace COMP476Proj
 {
-    public enum DumbCopState { STATIC, WANDER, PATH, SEEK, FALL, GET_UP, HIT };
+    public enum DumbCopState { STATIC, WANDER, PATROL, SEEK, FALL, GET_UP, HIT, PATHFIND };
     public enum DumbCopBehavior { DEFAULT, AWARE, KNOCKEDUP };
 
     public class DumbCop : NPC
     {
         #region Attributes
 
+        bool hasSeenTheStreaker = false;
+
         Node startNode;
         Node endNode;
         Node targetNode;
+
+        Vector2? lastStreakerPosition;
+        List<Node> path;
+
         private DumbCopState state;
         private DumbCopBehavior behavior;
         private DumbCopState defaultState;
@@ -60,6 +66,11 @@ namespace COMP476Proj
             switch (pState)
             {
                 case DumbCopState.STATIC:
+                    if (hasSeenTheStreaker)
+                    {
+                        hasSeenTheStreaker = false;
+                        --copsWhoSeeTheStreaker;
+                    }
                     behavior = DumbCopBehavior.DEFAULT;
                     state = DumbCopState.STATIC;
                     draw.animation = SpriteDatabase.GetAnimation("cop_static");
@@ -68,6 +79,11 @@ namespace COMP476Proj
                     draw.Reset();
                     break;
                 case DumbCopState.WANDER:
+                    if (hasSeenTheStreaker)
+                    {
+                        hasSeenTheStreaker = false;
+                        --copsWhoSeeTheStreaker;
+                    }
                     behavior = DumbCopBehavior.DEFAULT;
                     state = DumbCopState.WANDER;
                     draw.animation = SpriteDatabase.GetAnimation("cop_walk");
@@ -91,11 +107,28 @@ namespace COMP476Proj
                     physics.SetAcceleration(false);
                     draw.Reset();
                     break;
-                case DumbCopState.PATH:
-                    state = DumbCopState.PATH;
+                case DumbCopState.PATROL:
+                    if (hasSeenTheStreaker)
+                    {
+                        hasSeenTheStreaker = false;
+                        --copsWhoSeeTheStreaker;
+                    }
+                    state = DumbCopState.PATROL;
                     draw.animation = SpriteDatabase.GetAnimation("cop_walk");
                     physics.SetSpeed(false);
                     physics.SetAcceleration(false);
+                    draw.Reset();
+                    break;
+                case DumbCopState.PATHFIND:
+                    if (hasSeenTheStreaker)
+                    {
+                        hasSeenTheStreaker = false;
+                        --copsWhoSeeTheStreaker;
+                    }
+                    state = DumbCopState.PATHFIND;
+                    draw.animation = SpriteDatabase.GetAnimation("cop_walk");
+                    physics.SetSpeed(true);
+                    physics.SetAcceleration(true);
                     draw.Reset();
                     break;
                 case DumbCopState.HIT:
@@ -107,6 +140,11 @@ namespace COMP476Proj
                     draw.Reset();
                     break;
                 case DumbCopState.SEEK:
+                    if (!hasSeenTheStreaker)
+                    {
+                        hasSeenTheStreaker = true;
+                        ++copsWhoSeeTheStreaker;
+                    }
                     behavior = DumbCopBehavior.AWARE;
                     state = DumbCopState.SEEK;
                     draw.animation = SpriteDatabase.GetAnimation("cop_walk");
@@ -137,25 +175,88 @@ namespace COMP476Proj
             //--------------------------------------------------------------------------
             else if (behavior == DumbCopBehavior.AWARE)
             {
-                if(LineOfSight()){
-                    float distance = Vector2.Distance(Game1.world.streaker.Position, pos);
-                    if (Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
-                        Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
-                    {
-                        transitionToState(DumbCopState.HIT);
-                    }
-                    else if (distance > detectRadius)
-                    {
-                        behavior = DumbCopBehavior.DEFAULT;
-                        transitionToState(defaultState);
-                    }
-                    else
-                    {
-                        transitionToState(DumbCopState.SEEK);
-                    }
-                }
-                else{
-                    transitionToState(DumbCopState.SEEK);
+                bool canSee = LineOfSight();
+                float distance = Vector2.Distance(Game1.world.streaker.Position, pos);
+
+                switch (state)
+                {
+                    case DumbCopState.PATHFIND:
+
+                        // If sees, chases
+                        if (canSee && distance <= detectRadius)
+                        {
+                            lastStreakerPosition = Game1.world.streaker.Position;
+
+                            if (Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
+                                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
+                            {
+                                transitionToState(DumbCopState.HIT);
+                            }
+                            else
+                            {
+                                transitionToState(DumbCopState.SEEK);
+                            }
+                        }
+                        // Path
+                        else
+                        {
+                            // If done path, go back to default
+                            if (path.Count == 1 && (Position - path[0].Position).Length() <= movement.ArrivalRadius)
+                            {
+                                path.Clear();
+                                behavior = DumbCopBehavior.DEFAULT;
+                                transitionToState(defaultState);
+                            }
+                            // If at next node, update node to seek
+                            else if ((Position - path[0].Position).Length() <= movement.ArrivalRadius)
+                            {
+                                path.RemoveAt(0);
+                            }
+                            // else, Do no updating
+                        }
+
+                        break;
+
+                    case DumbCopState.HIT:
+                    case DumbCopState.SEEK:
+
+                        // If sees, chases or hits
+                        if (canSee && distance <= detectRadius)
+                        {
+                            lastStreakerPosition = Game1.world.streaker.Position;
+
+                            if (Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
+                                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
+                            {
+                                transitionToState(DumbCopState.HIT);
+                            }
+                            else
+                            {
+                                transitionToState(DumbCopState.SEEK);
+                            }
+                        }
+                        // Can't see and hasn't path found already, path find to last known position
+                        else if (!canSee && lastStreakerPosition != null)
+                        {
+                            path = AStar.GetPath(Position, (Vector2)lastStreakerPosition, Game1.world.map.nodes, Game1.world.qTree, true, false);
+                            
+                            // Optimize
+                            while (path.Count > 1 && IsVisible(path[1].Position))
+                            {
+                                path.RemoveAt(0);
+                            }
+
+                            transitionToState(DumbCopState.PATHFIND);
+                            lastStreakerPosition = null;
+                        }
+                        // Else, go back to default
+                        else
+                        {
+                            behavior = DumbCopBehavior.DEFAULT;
+                            transitionToState(defaultState);
+                        }
+
+                        break;
                 }
             }
             //--------------------------------------------------------------------------
@@ -203,8 +304,13 @@ namespace COMP476Proj
                     movement.SetTarget(Game1.world.streaker.Position);
                     movement.Seek(ref physics);
                     break;
-                case DumbCopState.PATH:
-                    //TO DO
+                case DumbCopState.PATROL:
+                    movement.SetTarget(path[0].Position);
+                    movement.Arrive(ref physics);
+                    break;
+                case DumbCopState.PATHFIND:
+                    movement.SetTarget(path[0].Position);
+                    movement.Arrive(ref physics);
                     break;
                 case DumbCopState.FALL:
                     movement.Stop(ref physics);
@@ -286,6 +392,5 @@ namespace COMP476Proj
         }
 
         #endregion
-
     }
 }

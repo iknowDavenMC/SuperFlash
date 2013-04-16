@@ -75,6 +75,7 @@ namespace COMP476Proj
                     draw.Reset();
                     break;
                 case RoboCopState.PURSUE:
+                    playSound("Activation");
                     state = RoboCopState.PURSUE;
                     draw.animation = SpriteDatabase.GetAnimation("roboCop_walk");
                     physics.SetSpeed(true);
@@ -179,7 +180,6 @@ namespace COMP476Proj
             {
                 Game1.world.streaker.GetHit();
                 Game1.world.streaker.ResolveCollision(this);
-                playSound("Hit");
             }
             base.Update(gameTime);
 

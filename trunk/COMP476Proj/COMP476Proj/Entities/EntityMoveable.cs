@@ -99,6 +99,34 @@ namespace COMP476Proj
             }
             return true;
         }
+
+        public virtual bool IsVisible(Vector2 position)
+        {
+            LineSegment test = new LineSegment(Position, position);
+
+            // Check the grid for walls
+            int startX = (int)Math.Round(Math.Min(Position.X, position.X) / World.gridLength);
+            int startY = (int)Math.Round(Math.Min(Position.Y, position.Y) / World.gridLength);
+            int endX = (int)Math.Round(Math.Max(Position.X, position.X) / World.gridLength);
+            int endY = (int)Math.Round(Math.Max(Position.Y, position.Y) / World.gridLength);
+
+            for (int k = startY; k != endY + 1; ++k)
+            {
+                for (int l = startX; l != endX + 1; ++l)
+                {
+                    for (int j = 0; j != Game1.world.grid[k, l].Count; ++j)
+                    {
+                        if (test.IntersectsBox(Game1.world.grid[k, l][j].BoundingRectangle))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+
         #endregion
     }
 }
