@@ -863,6 +863,7 @@ namespace CollisionBoxTool
                     && !line.StartsWith("EDGES")
                     && !line.StartsWith("NPCS")
                     && !line.StartsWith("TRIGGER")
+                    && !line.StartsWith("CONSUMABLE")
                     && !line.StartsWith("PLAYER")
                     );
 
@@ -890,6 +891,7 @@ namespace CollisionBoxTool
                     && !line.StartsWith("EDGES")
                     && !line.StartsWith("NPCS")
                     && !line.StartsWith("TRIGGER")
+                    && !line.StartsWith("CONSUMABLE")
                     && !line.StartsWith("PLAYER")
                     );
 
@@ -907,6 +909,7 @@ namespace CollisionBoxTool
                 } while (reader.Peek() != -1
                     && !line.StartsWith("NPCS")
                     && !line.StartsWith("TRIGGER")
+                    && !line.StartsWith("CONSUMABLE")
                     && !line.StartsWith("PLAYER")
                     );
 
@@ -943,6 +946,7 @@ namespace CollisionBoxTool
                     line = reader.ReadLine();
                 }
                 while (reader.Peek() != -1
+                    && !line.StartsWith("CONSUMABLE")
                     && !line.StartsWith("TRIGGER")
                     && !line.StartsWith("PLAYER")
                     );
@@ -968,8 +972,31 @@ namespace CollisionBoxTool
                     triggers.Add(new Trigger(x, y, w, h, id));
                     line = reader.ReadLine();
                 } while (reader.Peek() != -1
+                    && !line.StartsWith("CONSUMABLE")
                     && !line.StartsWith("PLAYER")
                     );
+
+                if (line.StartsWith("CONSUMABLE"))
+                    line = reader.ReadLine();
+                do
+                {
+                    int x, y;
+                    Consumable.Type t;
+                    int spacei = line.IndexOf(' ');
+                    x = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    y = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    t = (Consumable.Type)Enum.Parse(typeof(Consumable.Type), line);
+                    consumables.Add(new Consumable(x, y, t));
+                    line = reader.ReadLine();
+                } while (reader.Peek() != -1
+                    && !line.StartsWith("NODES")
+                    && !line.StartsWith("EDGES")
+                    && !line.StartsWith("NPCS")
+                    && !line.StartsWith("TRIGGER")
+                    && !line.StartsWith("PLAYER"));
 
                 if (line.StartsWith("PLAYER"))
                     line = reader.ReadLine();
