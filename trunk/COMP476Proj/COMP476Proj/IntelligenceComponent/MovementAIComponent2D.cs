@@ -126,7 +126,7 @@ namespace COMP476Proj
         public MovementAIComponent2D()
         {
             slowDownRadius = 75;
-            arrivalRadius = 10;
+            arrivalRadius = 20;
 
             slowDownRadiusRotation = MathHelper.ToRadians(45);
             arrivalRadiusRotation = MathHelper.ToRadians(1);
