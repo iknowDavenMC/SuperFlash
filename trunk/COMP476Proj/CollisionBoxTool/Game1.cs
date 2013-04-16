@@ -428,6 +428,10 @@ namespace CollisionBoxTool
                     }
                     else
                     {
+                        if (nodes.Keys.Contains(mouseNode.ID)){
+                            mouseNode.ID = nodes.Keys.Max() + 1;
+                            Node.FixID(mouseNode.ID + 1);
+                        }
                         nodes.Add(mouseNode.ID, mouseNode);
                         mouseNode = new Node(ms.X + Camera.X, ms.Y + Camera.Y);
                         mouseNode.isKey = nodeType;

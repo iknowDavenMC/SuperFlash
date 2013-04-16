@@ -44,5 +44,10 @@ namespace CollisionBoxTool
             Vector2 drawPos = new Vector2(position.X - radius - camera.X, position.Y - radius - camera.Y);
             sb.Draw(tex, drawPos, color);
         }
+
+        public static void FixID(int newCount)
+        {
+            count = newCount;
+        }
     }
 }
