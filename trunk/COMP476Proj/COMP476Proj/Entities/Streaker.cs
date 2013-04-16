@@ -69,7 +69,7 @@ namespace COMP476Proj
         /// <summary>
         /// Time to recover
         /// </summary>
-        private const int TIME_TO_RECOVER = 500;
+        private const int TIME_TO_RECOVER = 300;
 
         /// <summary>
         /// Is the player running faster
@@ -101,6 +101,11 @@ namespace COMP476Proj
         /// </summary>
         private float consumableTimer = 0;
 
+        private ParticleSpewer superFlashParticles;
+
+        private int particleTimout = 50;
+        private int particleTimer = 0;
+
         #endregion
 
         #region Constructors
@@ -117,7 +122,12 @@ namespace COMP476Proj
             recoverTimer = 0;
             inputDelay = 100;
             superFlashTimer = 0;
-            superFlashDelay = 30000;
+            superFlashDelay = 300;
+
+            superFlashParticles = new ParticleSpewer(
+                phys.Position.X + draw.animation.FrameWidth / 2, phys.Position.Y + draw.animation.FrameHeight / 2,
+                10000, 100, 0, MathHelper.TwoPi,
+                500, 1000, 2, 600, 30, 60, 0.1f, 0.1f, 1, 1, true, 0.75f);
         }
 
         #endregion
@@ -321,6 +331,7 @@ namespace COMP476Proj
                 if (canBeHit)
                 {
                     entity.Fall(true);
+                    DataManager.GetInstance().IncreaseScore(10, true, entity.ComponentPhysics.Position.X, entity.ComponentPhysics.Position.Y - 64);
                 }
             }
         }
@@ -377,7 +388,18 @@ namespace COMP476Proj
             }
 
             UpdateStates(draw.animComplete);
-
+            if (superFlashParticles.IsStarted)
+            {
+                particleTimer += gameTime.ElapsedGameTime.Milliseconds;
+                if (particleTimer >= particleTimout)
+                {
+                    particleTimer = 0;
+                    superFlashParticles.Stop();
+                }
+            }
+            superFlashParticles.X = physics.Position.X;
+            superFlashParticles.Y = physics.Position.Y - 020;
+            superFlashParticles.Update(gameTime);
             //Debugger.getInstance().pointsToDraw.Add(physics.position);
             base.Update(gameTime);
         }
@@ -402,8 +424,7 @@ namespace COMP476Proj
                     draw.animation = SpriteDatabase.GetAnimation("streaker_walk");
                     draw.Play();
                     break;
-                case StreakerState.FALL:
-               
+                case StreakerState.FALL:            
                     if (animComplete)
                     {
                         SoundManager.GetInstance().PlaySound("Common", "Fall", Position, Position);
@@ -449,6 +470,9 @@ namespace COMP476Proj
                     }
                     else
                     {
+                        if (draw.CurrentFrame == 4)
+                            superFlashParticles.Start();
+
                         draw.animation = SpriteDatabase.GetAnimation("streaker_flash");
                         draw.Play();
                     }
@@ -458,6 +482,7 @@ namespace COMP476Proj
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            superFlashParticles.Draw(gameTime, spriteBatch);
             draw.Draw(gameTime, spriteBatch, physics.Position);
             base.Draw(gameTime, spriteBatch);
         }

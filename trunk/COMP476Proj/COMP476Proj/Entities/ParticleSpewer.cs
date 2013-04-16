@@ -25,20 +25,21 @@ namespace COMP476Proj
 
         #region Members
         List<Particle> particles;
-        int maxParticles;
-        int emitters;
-        float minAngle, maxAngle, angleRange;
-        int minLifespan, maxLifespan;
+        private int maxParticles;
+        private int emitters;
+        private float minAngle, maxAngle, angleRange;
+        private int minLifespan, maxLifespan;
         // By using HSV instead  of RGB it's easier to vary colours randomly without looking like crap
-        float minHue, maxHue, hueRange;
-        float minSat, maxSat, satRange;
-        float minVal, maxVal, valRange;
-        int size;
-        float speed;
-        bool fade;
-        float fadePercent;
-        Texture2D tex;
-        bool started;
+        private float minHue, maxHue, hueRange;
+        private float minSat, maxSat, satRange;
+        private float minVal, maxVal, valRange;
+        private int size;
+        private float speed;
+        private bool fade;
+        private float fadePercent;
+        private Texture2D tex;
+        private bool started;
+        public bool IsStarted { get { return started; } }
         public bool Absolute = false; // If true, positions and sizes are absolute (ie: not relative to the camera);
         #endregion
 
@@ -187,7 +188,6 @@ namespace COMP476Proj
                 {
                     p.age += time;
                     Vector2 dp = p.velocity * (float)time / 1000f;
-                    p.position += p.velocity * (float)time / 1000f;
                     if (fade)
                     {
                         float agePct = (float)p.age / (float)p.lifespan;
@@ -197,8 +197,10 @@ namespace COMP476Proj
                         {
                             float fadeDist = 100 - fadePercent;
                             p.color.A = (byte)((255 - (agePct - fadePercent) / (1 - fadePercent)) * 255);
+                            dp *= (float)(p.color.A ) / 255f;
                         }
                     }
+                    p.position += dp;
                     particles[i] = p;
                 }
             }
