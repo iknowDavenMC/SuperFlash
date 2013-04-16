@@ -90,7 +90,7 @@ namespace COMP476Proj
        /*-------------------------------------------------------------------------*/
         #region Update and Draw
 
-        public virtual void Update(GameTime gameTime, Entity e)
+        public virtual void Update(GameTime gameTime)
         {
             if (animation != null)
                 timePerFrame = animation.TimePerFrame;
@@ -138,6 +138,7 @@ namespace COMP476Proj
                 
                 Vector2 drawPos = new Vector2(pos.X, pos.Y) - offset;
                 spriteBatch.Draw(animation.Texture, drawPos, sourceRect, color, 0, Origin, scale, spriteEffects, depth);
+                
             }
         }
 

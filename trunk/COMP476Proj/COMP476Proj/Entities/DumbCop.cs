@@ -353,7 +353,7 @@ namespace COMP476Proj
                 draw.SpriteEffect = SpriteEffects.FlipHorizontally;
             }
 
-            draw.Update(gameTime, this);
+            draw.Update(gameTime);
             if (draw.animComplete && (state == DumbCopState.FALL || state == DumbCopState.GET_UP))
             {
                 draw.GoToPrevFrame();

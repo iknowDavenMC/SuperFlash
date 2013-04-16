@@ -19,6 +19,7 @@ namespace COMP476Proj
         public List<Wall> walls;
         public List<EntityMoveable> moveableObjectsX;
         public List<EntityMoveable> moveableObjectsY;
+        public List<Consumable> consumables;
         public Map map;
         public List<Wall>[,] grid;
         public QuadTree qTree;
@@ -43,6 +44,7 @@ namespace COMP476Proj
             qTree = new QuadTree((int)Map.WIDTH, (int)Map.HEIGHT, 3);
             map = new Map();
             flock = new Flock();
+            consumables = new List<Consumable>();
         }
 
         public void LoadMap(string filename, ContentManager content)
@@ -65,8 +67,9 @@ namespace COMP476Proj
             streaker.ComponentPhysics.Position = map.playerStart;
             moveableObjectsX = moveableObjectsX.OrderBy(o => o.ComponentPhysics.Position.X).ToList();
             moveableObjectsY = moveableObjectsY.OrderBy(o => o.ComponentPhysics.Position.Y).ToList();
-            
 
+            consumables = map.consumables;
+            //consumables = consumables.OrderBy(o => ((DrawOscillate)o.ComponentDraw).)ToList();
             foreach (Wall w in map.walls)
             {
                 qTree.insert(w);
@@ -216,6 +219,13 @@ namespace COMP476Proj
                 }
             }
 
+            //Update consumables
+            foreach (Consumable c in consumables)
+            {
+                c.Update(gameTime);
+            }
+            consumables.RemoveAll(o => o.isConsumed);
+
             //for(int i=0; i!= 20; ++i)
                 path = AStar.GetPath(streaker.ComponentPhysics.Position, new Vector2(70, 130), map.nodes, qTree, true, false);
 
@@ -251,6 +261,10 @@ namespace COMP476Proj
             {
                 Rectangle destRect = new Rectangle((int)n.Position.X - 3, (int)n.Position.Y - 3, 6, 6);
                 spriteBatch.Draw(blank, destRect, Color.DarkOrange);
+            }
+            foreach (Consumable c in consumables)
+            {
+                c.Draw(gameTime,spriteBatch);
             }
             AchievementManager.getInstance().Draw(gameTime, spriteBatch);
         }
