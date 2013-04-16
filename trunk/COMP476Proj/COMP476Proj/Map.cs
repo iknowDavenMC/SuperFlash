@@ -158,7 +158,7 @@ namespace COMP476Proj
                             animation = SpriteDatabase.GetAnimation("student" + pnum + "_walk");
                         }
                         npc = new Pedestrian(
-                            new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), 115, 750, 75, 1000, 8, 40, 0.25f, true),
+                            new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), 115, 750, 75, 1000, 8, 40, 0f, true),
                             new MovementAIComponent2D(),
                             new DrawComponent(animation, Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f),
                             pstate
@@ -187,7 +187,7 @@ namespace COMP476Proj
                             animation = SpriteDatabase.GetAnimation("cop_walk");
                         }
                         npc = new DumbCop(
-                            new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), 135, 750, 75, 1000, 8, 50, 0.25f, true),
+                            new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), 135, 750, 75, 1000, 8, 50, 0f, true),
                             new MovementAIComponent2D(),
                             new DrawComponent(animation, Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), dcState);
 
@@ -213,7 +213,7 @@ namespace COMP476Proj
                             animation = SpriteDatabase.GetAnimation("smartCop_walk");
                         }
                         npc = new SmartCop(
-                            new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), 145, 750, 75, 1000, 8, 50, 0.25f, true),
+                            new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), 145, 750, 75, 1000, 8, 50, 0f, true),
                             new MovementAIComponent2D(),
                             new DrawComponent(animation, Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), dcState);
                     }
