@@ -50,6 +50,9 @@ namespace CollisionBoxTool
         Vector2 startPos, endPos;
         Box mouseBox;
         Node selected;
+        NPC selectedNPC;
+        Node selectedStart;
+        Node selectedEnd;
         Node mouseNode;
         Edge mouseEdge;
         NPC mouseNPC;
@@ -141,7 +144,7 @@ namespace CollisionBoxTool
             wallColor = new Color(1f, 0.0f, 0.0f, 0.5f);
             triggerColor = new Color(0.5f, 1.0f, 0.0f, 0.5f);
             nodeColor = new Color(0f, 0.2f, 1f, 0.75f);
-            edgeColor = new Color(0.33f, 1f, 0f, 1f);
+            edgeColor = Color.LightCyan;
 
             SpriteDatabase.loadSprites(Content);
 
@@ -205,6 +208,11 @@ namespace CollisionBoxTool
                 npcType = NPC.Type.SmartCop;
                 mouseNPC.type = NPC.Type.SmartCop;
             }
+            if (ks.IsKeyDown(Keys.D4) && mode == DrawModes.NPC)
+            {
+                npcType = NPC.Type.RoboCop;
+                mouseNPC.type = NPC.Type.RoboCop;
+            }
 
             if (ks.IsKeyDown(Keys.L) && !lpressed)
             {
@@ -244,6 +252,8 @@ namespace CollisionBoxTool
                     if (npcMode == NPC.Mode.Static)
                         npcMode = NPC.Mode.Wander;
                     else if (npcMode == NPC.Mode.Wander)
+                        npcMode = NPC.Mode.Patrol;
+                    else if (npcMode == NPC.Mode.Patrol)
                         npcMode = NPC.Mode.Static;
                     mouseNPC.mode = npcMode;
                 }
@@ -307,10 +317,23 @@ namespace CollisionBoxTool
                         {
                             if (npc.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
                             {
+                                selectedNPC = npc;
                                 break;
                             }
                         }
                         drawing = true;
+                    }
+                    else if (selectedNPC != null)
+                    {
+
+                        foreach (Node node in nodes)
+                        {
+                            if (node.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
+                            {
+                                selectedStart = node;
+                                break;
+                            }
+                        }
                     }
                 }
                 else if (mode == DrawModes.Player)
@@ -322,6 +345,7 @@ namespace CollisionBoxTool
                     }
                 }
             }
+
             if (ms.LeftButton == ButtonState.Released && drawing)
             {
                 if (mode == DrawModes.Box)
@@ -333,7 +357,7 @@ namespace CollisionBoxTool
                 else if (mode == DrawModes.Node)
                 {
                     drawing = false;
-                    if (selected != null)
+                    if (selectedNPC != null)
                     {
                         foreach (Node node in nodes)
                         {
@@ -355,11 +379,30 @@ namespace CollisionBoxTool
                         mouseNode = new Node(ms.X + Camera.X, ms.Y + Camera.Y);
                     }
                 }
-                else if (mode == DrawModes.NPC)
+                else if (mode == DrawModes.NPC && ms.RightButton == ButtonState.Released)
                 {
                     drawing = false;
-                    NPCs.Add(mouseNPC);
-                    mouseNPC = new NPC(ms.X + Camera.X, ms.Y + Camera.Y, npcType, npcMode);
+                    if (ms.RightButton == ButtonState.Released && selectedEnd == null)
+                    {
+                        if (selectedNPC != null)
+                        {
+                            foreach (Node node in nodes)
+                            {
+                                if (node == selectedStart && node.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
+                                {
+                                    selectedNPC.patrolStart = node;
+                                    break;
+                                }
+                            }
+                            selectedStart = null;
+                            mouseEdge = new Edge(null, null);
+                        }
+                        else
+                        {
+                            NPCs.Add(mouseNPC);
+                            mouseNPC = new NPC(ms.X + Camera.X, ms.Y + Camera.Y, npcType, npcMode);
+                        }
+                    }
 
                 }
                 else if (mode == DrawModes.Trigger)
@@ -377,70 +420,130 @@ namespace CollisionBoxTool
                 }
             }
 
-            if (ms.RightButton == ButtonState.Pressed && !drawing)
+            if (ms.RightButton == ButtonState.Pressed)
             {
-                if (mode == DrawModes.Box)
+                if (mode == DrawModes.NPC)
                 {
-                    for (int i = 0; i != boxes.Count; i++)
+                    mouseNPC.position = new Vector2(ms.X + Camera.X, ms.Y + Camera.Y);
+                    if (!drawing)
                     {
-                        Box r = boxes[i];
-                        if (r.rect.Contains(ms.X + Camera.X, ms.Y + Camera.Y))
+                        foreach (NPC npc in NPCs)
                         {
-                            boxes.Remove(r);
-                            i--;
-                        }
-                    }
-                }
-                else if (mode == DrawModes.Node)
-                {
-                    for (int i = 0; i != nodes.Count; i++)
-                    {
-                        Node n = nodes[i];
-                        if (n.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
-                        {
-                            nodes.Remove(n);
-                            for (int j = 0; j != edges.Count; j++)
+                            if (npc.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
                             {
-                                Edge e = edges[j];
-                                if (e.start == n || e.end == n)
-                                {
-                                    edges.Remove(e);
-                                    j--;
-                                }
+                                selectedNPC = npc;
+                                break;
                             }
-                            i--;
                         }
+                        drawing = true;
                     }
-                }
-                else if (mode == DrawModes.NPC)
-                {
-                    for (int i = 0; i != NPCs.Count; i++)
+                    else if (selectedNPC != null)
                     {
-                        NPC n = NPCs[i];
-                        if (n.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
+                        foreach (Node node in nodes)
                         {
-                            NPCs.Remove(n);
-                            i--;
+                            if (node.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
+                            {
+                                selectedEnd = node;
+                                break;
+                            }
                         }
                     }
                 }
-                else if (mode == DrawModes.Trigger)
+                else if (!drawing)
                 {
-                    for (int i = 0; i != triggers.Count; i++)
+                    if (mode == DrawModes.Box)
                     {
-                        Trigger t = triggers[i];
-                        if (t.rect.Contains(ms.X + Camera.X, ms.Y + Camera.Y))
+                        for (int i = 0; i != boxes.Count; i++)
                         {
-                            triggers.Remove(t);
-                            i--;
+                            Box r = boxes[i];
+                            if (r.rect.Contains(ms.X + Camera.X, ms.Y + Camera.Y))
+                            {
+                                boxes.Remove(r);
+                                i--;
+                            }
+                        }
+                    }
+                    else if (mode == DrawModes.Node)
+                    {
+                        for (int i = 0; i != nodes.Count; i++)
+                        {
+                            Node n = nodes[i];
+                            if (n.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
+                            {
+                                nodes.Remove(n);
+                                for (int j = 0; j != edges.Count; j++)
+                                {
+                                    Edge e = edges[j];
+                                    if (e.start == n || e.end == n)
+                                    {
+                                        edges.Remove(e);
+                                        j--;
+                                    }
+                                }
+                                i--;
+                            }
+                        }
+                    }
+                    //else if (mode == DrawModes.NPC)
+                    //{
+                    //    for (int i = 0; i != NPCs.Count; i++)
+                    //    {
+                    //        NPC n = NPCs[i];
+                    //        if (n.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
+                    //        {
+                    //            NPCs.Remove(n);
+                    //            i--;
+                    //        }
+                    //    }
+                    //}
+                    else if (mode == DrawModes.Trigger)
+                    {
+                        for (int i = 0; i != triggers.Count; i++)
+                        {
+                            Trigger t = triggers[i];
+                            if (t.rect.Contains(ms.X + Camera.X, ms.Y + Camera.Y))
+                            {
+                                triggers.Remove(t);
+                                i--;
+                            }
+                        }
+                    }
+                    else if (mode == DrawModes.Player)
+                    {
+                        if (player != null && player.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
+                        {
+                            player = null;
                         }
                     }
                 }
-                else if (mode == DrawModes.Player)
+            }
+
+            if (ms.RightButton == ButtonState.Released)
+            {
+                if (mode == DrawModes.NPC && ms.LeftButton == ButtonState.Released)
                 {
-                    if (player != null && player.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
+                    if (selectedNPC != null)
                     {
-                        player = null;
+                        for (int i = 0; i != NPCs.Count; i++)
+                        {
+                            NPC n = NPCs[i];
+                            if (n.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
+                            {
+                                NPCs.Remove(n);
+                                i--;
+                            }
+                        }
+                        foreach (Node node in nodes)
+                        {
+                            if (node == selectedEnd && node.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
+                            {
+                                selectedNPC.patrolEnd = node;
+                                break;
+                            }
+                        }
+                        selectedEnd = null;
+                        selectedNPC= null;
+                        mouseEdge = new Edge(null, null);
                     }
                 }
             }
@@ -498,14 +601,23 @@ namespace CollisionBoxTool
             foreach (NPC npc in NPCs)
             {
                 npc.draw(spriteBatch, circle, Camera);
-                switch (npc.mode)
+                drawBordered(spriteBatch, npc.X - Camera.X, npc.Y - Camera.Y, npc.mode.ToString().Substring(0,1), Color.Black, Color.White);
+                //switch (npc.mode)
+                //{
+                //    case NPC.Mode.Static:
+                //        drawBordered(spriteBatch, npc.X - Camera.X, npc.Y - Camera.Y, "S", Color.Black, Color.White);
+                //        break;
+                //    case NPC.Mode.Wander:
+                //        drawBordered(spriteBatch, npc.X - Camera.X, npc.Y - Camera.Y, "W", Color.Black, Color.White);
+                //        break;
+                //}
+                if (npc.patrolStart != null)
                 {
-                    case NPC.Mode.Static:
-                        drawBordered(spriteBatch, npc.X - Camera.X, npc.Y - Camera.Y, "S", Color.Black, Color.White);
-                        break;
-                    case NPC.Mode.Wander:
-                        drawBordered(spriteBatch, npc.X - Camera.X, npc.Y - Camera.Y, "W", Color.Black, Color.White);
-                        break;
+                    drawLine(spriteBatch, npc.position, npc.patrolStart.position, Color.LightGreen);
+                }
+                if (npc.patrolEnd != null)
+                {
+                    drawLine(spriteBatch, npc.position, npc.patrolEnd.position, Color.Pink);
                 }
             }
             if (player != null)
@@ -523,6 +635,9 @@ namespace CollisionBoxTool
                 }
                 else if (mode == DrawModes.NPC)
                 {
+                    if (selectedNPC != null)
+                        drawLine(spriteBatch, mouseNPC.position, selectedNPC.position, Color.LightBlue);
+                    else 
                     mouseNPC.draw(spriteBatch, circle, Camera);
                 }
                 else if (mode == DrawModes.Player)
@@ -538,10 +653,11 @@ namespace CollisionBoxTool
             }
             if (mode == DrawModes.NPC)
             {
-                drawBordered(spriteBatch, 10, 28, "[1,2,3]", Color.Black, Color.White);
+                drawBordered(spriteBatch, 10, 28, "[1,2,3,4]", Color.Black, Color.White);
                 drawBordered(spriteBatch, 110, 28, "Civilian", Color.Black, (npcType == NPC.Type.Civilian ? Color.LimeGreen : Color.White));
                 drawBordered(spriteBatch, 210, 28, "Dumb Cop", Color.Black, (npcType == NPC.Type.DumbCop ? Color.Crimson : Color.White));
                 drawBordered(spriteBatch, 310, 28, "SmartCop", Color.Black, (npcType == NPC.Type.SmartCop ? Color.Orange : Color.White));
+                drawBordered(spriteBatch, 410, 28, "RoboCop", Color.Black, (npcType == NPC.Type.RoboCop ? Color.Coral : Color.White));
                 drawBordered(spriteBatch, 10, 46, "[W]", Color.Black, Color.White);
                 drawBordered(spriteBatch, 50, 46, npcMode.ToString(), Color.Black, Color.White);
             }
@@ -565,6 +681,21 @@ namespace CollisionBoxTool
             spriteBatch.DrawString(font, str, new Vector2(x + 1, y - 1), border);
             spriteBatch.DrawString(font, str, new Vector2(x, y - 1), border);
             spriteBatch.DrawString(font, str, new Vector2(x, y), text);
+        }
+
+        public void drawLine(SpriteBatch spriteBatch, Vector2 start, Vector2 end, Color color)
+        {
+            float dx = start.X - end.X;
+            float dy = start.Y - end.Y;
+            double length = Math.Sqrt(dx * dx + dy * dy);
+            Vector2 mid = new Vector2(end.X + dx / 2, end.Y + dy / 2);
+            float angle = (float)Math.Atan2(dy, dx);
+            Rectangle drawRect = new Rectangle(
+                (int)end.X - Camera.X,
+                (int)end.Y - Camera.Y,
+                (int)length, 3);
+            //sb.Draw(tex, drawRect, color);
+            spriteBatch.Draw(blank, drawRect, null, color, angle, Vector2.Zero, SpriteEffects.None, 0);
         }
 
         protected void save()
@@ -593,7 +724,7 @@ namespace CollisionBoxTool
             writer.WriteLine("NPCS");
             foreach (NPC npc in NPCs)
             {
-                string line = npc.X + " " + npc.Y + " " + npc.type.ToString() + " " + npc.mode.ToString();
+                string line = npc.X + " " + npc.Y + " " + npc.type.ToString() + " " + npc.mode.ToString() + " " + (npc.patrolStart == null ? 0 : npc.patrolStart.ID ) + " "  + (npc.patrolEnd == null ? 0 : npc.patrolEnd.ID);
                 writer.WriteLine(line);
             }
             writer.WriteLine("TRIGGER");
@@ -692,7 +823,7 @@ namespace CollisionBoxTool
                     line = reader.ReadLine();
                 do
                 {
-                    int x, y;
+                    int x, y, sid, eid;
                     NPC.Type type;
                     NPC.Mode mode;
                     int spacei = line.IndexOf(' ');
@@ -704,8 +835,20 @@ namespace CollisionBoxTool
                     spacei = line.IndexOf(' ');
                     type = (NPC.Type)Enum.Parse(typeof(NPC.Type), line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
-                    mode = (NPC.Mode)Enum.Parse(typeof(NPC.Mode), line);
-                    NPCs.Add(new NPC(x, y, type, mode));
+                    spacei = line.IndexOf(' ');
+                    mode = (NPC.Mode)Enum.Parse(typeof(NPC.Mode), line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    sid = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    eid = int.Parse(line);
+                    NPC npc = new NPC(x, y, type, mode);
+                    if (sid > 0 && eid > 0)
+                    {
+                        npc.patrolStart = nodes.Find(n => n.ID == sid);
+                        npc.patrolEnd = nodes.Find(n => n.ID == sid); 
+                    }
+                    NPCs.Add(npc);
                     line = reader.ReadLine();
                 }
                 while (reader.Peek() != -1
@@ -734,9 +877,6 @@ namespace CollisionBoxTool
                     triggers.Add(new Trigger(x, y, w, h, id));
                     line = reader.ReadLine();
                 } while (reader.Peek() != -1
-                    && !line.StartsWith("NODES")
-                    && !line.StartsWith("EDGES")
-                    && !line.StartsWith("NPCS")
                     && !line.StartsWith("PLAYER")
                     );
 

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CollisionBoxTool
 {
-    class Node
+    public class Node
     {
         private static int count;
         public int ID;

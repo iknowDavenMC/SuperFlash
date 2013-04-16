@@ -112,7 +112,7 @@ namespace COMP476Proj
                     line = reader.ReadLine();
                 do
                 {
-                    int x, y;
+                    int x, y, sid, eid;
                     string type, mode;
                     int spacei = line.IndexOf(' ');
                     x = int.Parse(line.Substring(0, spacei));
@@ -123,7 +123,19 @@ namespace COMP476Proj
                     spacei = line.IndexOf(' ');
                     type = line.Substring(0, spacei);
                     line = line.Substring(spacei + 1);
-                    mode = line;
+                    spacei = line.IndexOf(' ');
+                    mode = line.Substring(0, spacei);
+                    line = line.Substring(spacei + 1);
+                    spacei = line.IndexOf(' ');
+                    sid = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    eid = int.Parse(line);
+                    Node pStart = null, pEnd = null;
+                    if (sid > 0 && eid > 0)
+                    {
+                        pStart = nodes.Find(n => n.ID == sid);
+                        pEnd = nodes.Find(n => n.ID == sid);
+                    }
                     NPC npc = null;
                     Animation animation;
                     if (type.StartsWith("Civilian"))
@@ -209,8 +221,15 @@ namespace COMP476Proj
                             new DrawComponent(SpriteDatabase.GetAnimation("roboCop_static"), Color.White, 
                                               Vector2.Zero, new Vector2(.4f, .4f), .5f));
                     }
-                    if (npc!=null)
+                    if (npc != null)
+                    {
+                        if (pStart != null && pEnd != null)
+                        {
+                            npc.patrolStart = pStart;
+                            npc.patrolEnd = pEnd;
+                        }
                         startingNPCs.Add(npc);
+                    }
                     line = reader.ReadLine();
                 }
                 while (reader.Peek() != -1
