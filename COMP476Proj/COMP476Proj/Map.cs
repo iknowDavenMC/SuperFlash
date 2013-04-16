@@ -276,11 +276,15 @@ namespace COMP476Proj
                 do
                 {
                     int x, y;
+                    ConsumableType t;
                     int spacei = line.IndexOf(' ');
                     x = int.Parse(line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
-                    y = int.Parse(line);
-                    consumables.Add(new Consumable(new Vector2(x, y)));
+                    spacei = line.IndexOf(' ');
+                    y = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    t = (ConsumableType)Enum.Parse(typeof(ConsumableType), line);
+                    consumables.Add(new Consumable(new Vector2(x, y), t));
                     line = reader.ReadLine();
                 } while (reader.Peek() != -1
                     && !line.StartsWith("NODES")
