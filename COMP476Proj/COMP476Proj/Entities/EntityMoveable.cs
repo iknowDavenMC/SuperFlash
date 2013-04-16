@@ -150,25 +150,9 @@ namespace COMP476Proj
 
                 if (IsVisible(node.Position) && (Position - Position).Length() < distance)
                 {
-                    foreach (NPC npc in Game1.world.npcs)
-                    {
-                        if ((npc.Position - node.Position).Length() < 15)
-                        {
-                            fail = true;
-                            break;
-                        }
-                    }
-
-                    if (fail) break;
-
                     distance = (Position - Position).Length();
                     position = node.Position;
                 }
-            }
-
-            if (position == Vector2.Zero)
-            {
-                int i = 0;
             }
 
             return position;
