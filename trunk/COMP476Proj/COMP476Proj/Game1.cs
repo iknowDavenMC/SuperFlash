@@ -94,9 +94,9 @@ namespace COMP476Proj
             Texture2D banner = Content.Load<Texture2D>("Hud/banner");
             Texture2D notorietyBar = Content.Load<Texture2D>("Hud/notorietyBar");
             Texture2D notorietyMeter = Content.Load<Texture2D>("Hud/notorietyMeter");
-            //Texture2D fadeToBlack = Content.Load<Texture2D>("Hud/blackScreen");
             Texture2D gameOverText = Content.Load<Texture2D>("Hud/gameOverText");
-            HUD.getInstance().loadContent(banner, notorietyBar, notorietyMeter, spriteFont, blank, gameOverText);
+            Texture2D superFlashIcon = Content.Load<Texture2D>("Hud/superFlashButton");
+            HUD.getInstance().loadContent(banner, notorietyBar, notorietyMeter, spriteFont, blank, gameOverText, superFlashIcon);
 
         }
 
