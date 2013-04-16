@@ -74,7 +74,11 @@ namespace COMP476Proj
             fontMan.addFont("AchieveTitle", Content.Load<SpriteFont>("Fonts/AchievementTitle"));
             fontMan.addFont("AchieveText", Content.Load<SpriteFont>("Fonts/AchievementText"));
             SpriteDatabase.loadSprites(Content);
+            Texture2D blank = new Texture2D(GraphicsDevice, 1, 1);
+            blank.SetData(new[] { Color.White });
+            SpriteDatabase.AddAnimation(new Animation("blank", blank, 1, 1, 1, 0, 1));
             //Create World
+
             world = new World();
             world.LoadMap("level.txt", Content);
             Texture2D level = SpriteDatabase.GetAnimation("level_1").Texture;
@@ -92,9 +96,6 @@ namespace COMP476Proj
             Texture2D notorietyMeter = Content.Load<Texture2D>("Hud/notorietyMeter");
             HUD.getInstance().loadContent(banner, notorietyBar, notorietyMeter, spriteFont);
 
-            Texture2D blank = new Texture2D(GraphicsDevice, 1, 1);
-            blank.SetData(new[] { Color.White });
-            SpriteDatabase.AddAnimation(new Animation("blank", blank, 1, 1, 1, 0, 1));
         }
 
         /// <summary>
