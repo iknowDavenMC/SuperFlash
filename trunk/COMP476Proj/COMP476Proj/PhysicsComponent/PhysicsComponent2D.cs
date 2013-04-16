@@ -604,6 +604,28 @@ namespace COMP476Proj
                     position.X -= (overlap.Width + 1);
                 }
             }
+            else if (overlap.Width < overlap.Height)
+            {
+                if (Math.Abs(overlap.X - playerRectangle.X) < 0.0001)
+                {
+                    position.X += (overlap.Width + 1);
+                }
+                else
+                {
+                    position.X -= (overlap.Width + 1);
+                }
+            }
+            else
+            {
+                if (Math.Abs(overlap.Y - playerRectangle.Y) < 0.0001)
+                {
+                    position.Y += (overlap.Height + 1);
+                }
+                else
+                {
+                    position.Y -= (overlap.Height + 1); 
+                } 
+            } 
         }
 
         /// <summary>
