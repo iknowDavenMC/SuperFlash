@@ -25,6 +25,7 @@ namespace COMP476Proj
         HudComponent bannerComponent;
         HudComponent healthBarComponent;
         HudComponent healthBarContainerComponent;
+        HudComponent superFlashIconComponent;
 
         //Health Variables
         private float health;
@@ -96,7 +97,7 @@ namespace COMP476Proj
             healthBarComponent.setOriginLeft();
             healthBarContainerComponent = new HudComponent(new Vector2(bannerComponent.getPosition().X + -284, bannerComponent.getPosition().Y + 10), new Vector2(590, 19));
             healthBarContainerComponent.setOriginBottomLeft();
-
+            superFlashIconComponent = new HudComponent(new Vector2((bannerComponent.getPosition().X - bannerComponent.getSize().X/2) - 25, bannerComponent.getPosition().Y-2), new Vector2(45.0f, 45.0f));
             //Score Positions
             positionScore = new Vector2(bannerComponent.getPosition().X - (bannerComponent.getSize().X / 2) + 10, bannerComponent.getPosition().Y + 4);
             positionTime = new Vector2(bannerComponent.getPosition().X + 355, bannerComponent.getPosition().Y - 12);
@@ -144,7 +145,13 @@ namespace COMP476Proj
             
         }
 
-        public void loadContent(Texture2D banner, Texture2D notorietyBar, Texture2D notorietyMeter, SpriteFont spriteFont, Texture2D fadeToBlack, Texture2D gameOverText)
+        public void loadContent(Texture2D banner, 
+            Texture2D notorietyBar, 
+            Texture2D notorietyMeter, 
+            SpriteFont spriteFont, 
+            Texture2D fadeToBlack, 
+            Texture2D gameOverText,
+            Texture2D superFlashIcon)
         {
             this.spriteFont = spriteFont;
             this.fadeToBlack = fadeToBlack;
@@ -154,9 +161,11 @@ namespace COMP476Proj
             this.bannerComponent.LoadContent(banner);
             this.healthBarComponent.LoadContent(notorietyBar);
             this.healthBarContainerComponent.LoadContent(notorietyMeter);
+            this.superFlashIconComponent.LoadContent(superFlashIcon);
             hudComponents.Add(bannerComponent);
             hudComponents.Add(healthBarComponent);
             hudComponents.Add(healthBarContainerComponent);
+            hudComponents.Add(superFlashIconComponent);
         }
 
         public static HUD getInstance()
@@ -198,7 +207,7 @@ namespace COMP476Proj
             }
             particleBar.Update(gameTime);
             UpdateScoreSize(gameTime);
-
+            updateSuperFlashIcon();
             //Update health bar size
             healthBarComponent.setXScale((int)updateHealthBar(gameTime));
         }
@@ -256,6 +265,17 @@ namespace COMP476Proj
             scoreScale = maxScoreScale;
         }
 
+        public void updateSuperFlashIcon()
+        {
+            if (Game1.world.streaker.hasSuperFlash())
+            {
+                superFlashIconComponent.setAlpha(1.0f);
+            }
+            else
+            {
+                superFlashIconComponent.setAlpha(0.3f);
+            }
+        }
         //Decreases the score by the desired amount 
         public void decreaseHealth(int amount)
         {

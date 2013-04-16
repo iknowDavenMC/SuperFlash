@@ -81,5 +81,9 @@ namespace COMP476Proj
             this.origin.Y = size.Y;
             this.origin.X = 0.0f;
         }
+        public void setAlpha(float alpha)
+        {
+            this.alpha = alpha;
+        }
     }
 }

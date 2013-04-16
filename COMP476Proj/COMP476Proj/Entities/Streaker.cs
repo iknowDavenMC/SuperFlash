@@ -122,7 +122,7 @@ namespace COMP476Proj
             recoverTimer = 0;
             inputDelay = 100;
             superFlashTimer = 0;
-            superFlashDelay = 300;
+            superFlashDelay = 30000;
 
             superFlashParticles = new ParticleSpewer(
                 phys.Position.X + draw.animation.FrameWidth / 2, phys.Position.Y + draw.animation.FrameHeight / 2,
@@ -138,7 +138,10 @@ namespace COMP476Proj
         {
             get { return isMassBoost; }
         }
-
+        public bool hasSuperFlash()
+        {
+            return (superFlashTimer >= superFlashDelay);
+        }
         #endregion
 
         #region Private Methods
