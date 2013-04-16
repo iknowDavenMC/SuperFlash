@@ -77,6 +77,8 @@
     <Compile Include="Debugger\FrameRate.cs" />
     <Compile Include="DrawComponent\Camera.cs" />
     <Compile Include="DrawComponent\DrawComponent.cs" />
+    <Compile Include="DrawComponent\DrawOscillate.cs" />
+    <Compile Include="Entities\Consumable.cs" />
     <Compile Include="Entities\DumbCop.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\EntityMoveable.cs" />

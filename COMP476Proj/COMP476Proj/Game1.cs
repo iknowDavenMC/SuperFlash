@@ -155,6 +155,10 @@ namespace COMP476Proj
             {
                 ped.BoundingRectangle.Draw(spriteBatch);
             }
+            foreach (Consumable c in world.consumables)
+            {
+                c.BoundingRectangle.Draw(spriteBatch);
+            }
 
             world.streaker.BoundingRectangle.Draw(spriteBatch);
             spriteBatch.End();

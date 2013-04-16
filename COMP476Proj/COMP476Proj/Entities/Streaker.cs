@@ -94,7 +94,7 @@ namespace COMP476Proj
         /// <summary>
         /// Time for consumable object to run out
         /// </summary>
-        private float consumableDelay = 10000;
+        private float consumableDelay = 15000;
 
         /// <summary>
         /// Timer for consumable object
@@ -373,7 +373,7 @@ namespace COMP476Proj
 
             if (!stayDown)
             {
-                draw.Update(gameTime, this);
+                draw.Update(gameTime);
             }
 
             UpdateStates(draw.animComplete);

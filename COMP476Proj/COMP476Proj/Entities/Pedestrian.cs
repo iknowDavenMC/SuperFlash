@@ -225,7 +225,7 @@ namespace COMP476Proj
                 draw.SpriteEffect = SpriteEffects.FlipHorizontally;
             }
             
-            draw.Update(gameTime, this);
+            draw.Update(gameTime);
             if (draw.animComplete && (state == PedestrianState.FALL || state == PedestrianState.GET_UP))
             {
                 draw.GoToPrevFrame();

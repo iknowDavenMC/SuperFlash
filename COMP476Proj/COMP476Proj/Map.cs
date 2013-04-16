@@ -17,6 +17,7 @@ namespace COMP476Proj
         public List<Wall> walls;
         public List<Node> nodes;
         public List<Trigger> triggers;
+        public List<Consumable> consumables;
         public Vector2 playerStart;
         public Map()
         {
@@ -24,6 +25,7 @@ namespace COMP476Proj
             walls = new List<Wall>();
             nodes = new List<Node>();
             triggers = new List<Trigger>();
+            consumables = new List<Consumable>();
         }
 
         public void Load(string filename)
@@ -31,6 +33,7 @@ namespace COMP476Proj
             walls.Clear();
             nodes.Clear();
             startingNPCs.Clear();
+            consumables.Clear();
             playerStart = new Vector2();
 
             StreamReader reader = new StreamReader(filename);
@@ -266,7 +269,25 @@ namespace COMP476Proj
                     && !line.StartsWith("EDGES")
                     && !line.StartsWith("NPCS")
                     && !line.StartsWith("PLAYER")
-                    );
+                    && !line.StartsWith("CONSUMABLE"));
+
+                if (line.StartsWith("CONSUMABLE"))
+                    line = reader.ReadLine();
+                do
+                {
+                    int x, y;
+                    int spacei = line.IndexOf(' ');
+                    x = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    y = int.Parse(line);
+                    consumables.Add(new Consumable(new Vector2(x, y)));
+                    line = reader.ReadLine();
+                } while (reader.Peek() != -1
+                    && !line.StartsWith("NODES")
+                    && !line.StartsWith("EDGES")
+                    && !line.StartsWith("NPCS")
+                    && !line.StartsWith("TRIGGER")
+                    && !line.StartsWith("PLAYER"));
 
                 if (line.StartsWith("PLAYER"))
                     line = reader.ReadLine();
