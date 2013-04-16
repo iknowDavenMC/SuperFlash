@@ -157,7 +157,7 @@ namespace COMP476Proj
 
         public void updateState()
         {
-            
+
             //--------------------------------------------------------------------------
             //        DEFAULT BEHAVIOR TRANSITIONS --> Before aware of streaker
             //--------------------------------------------------------------------------
@@ -208,7 +208,7 @@ namespace COMP476Proj
                                 transitionToState(defaultState);
                             }
                             // If at next node, update node to seek
-                            else if ((Position - path[0].Position).Length() <= movement.ArrivalRadius)
+                            else if (path.Count > 0 && (Position - path[0].Position).Length() <= movement.ArrivalRadius)
                             {
                                 path.RemoveAt(0);
                             }
@@ -239,7 +239,7 @@ namespace COMP476Proj
                         else if (!canSee && lastStreakerPosition != null)
                         {
                             path = AStar.GetPath(Position, (Vector2)lastStreakerPosition, Game1.world.map.nodes, Game1.world.qTree, true, false);
-                            
+
                             // Optimize
                             while (path.Count > 1 && IsVisible(path[1].Position))
                             {
@@ -305,11 +305,13 @@ namespace COMP476Proj
                     movement.Seek(ref physics);
                     break;
                 case DumbCopState.PATROL:
-                    movement.SetTarget(path[0].Position);
+                    if (path.Count > 0)
+                        movement.SetTarget(path[0].Position);
                     movement.Arrive(ref physics);
                     break;
                 case DumbCopState.PATHFIND:
-                    movement.SetTarget(path[0].Position);
+                    if (path.Count > 0)
+                        movement.SetTarget(path[0].Position);
                     movement.Arrive(ref physics);
                     break;
                 case DumbCopState.FALL:
