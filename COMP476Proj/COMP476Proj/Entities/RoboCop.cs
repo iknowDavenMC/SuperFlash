@@ -8,7 +8,7 @@ using StreakerLibrary;
 namespace COMP476Proj
 {
     
-    public enum RoboCopState { STATIC, PURSUE, HIT };
+    public enum RoboCopState { STATIC, PURSUE, HIT, PATHFIND };
 
     public class RoboCop : NPC
     {
@@ -18,6 +18,11 @@ namespace COMP476Proj
         Node endNode;
         Node targetNode;
         private RoboCopState state;
+
+        List<Node> path;
+
+        float pathTimer = 0;
+        float pathDelay = 5000;
 
         private bool lineOfSight = false;
         private bool withinHitRadius = false;
@@ -82,10 +87,17 @@ namespace COMP476Proj
                     physics.SetAcceleration(true);
                     draw.Reset();
                     break;
+                case RoboCopState.PATHFIND:
+                    state = RoboCopState.PATHFIND;
+                    draw.animation = SpriteDatabase.GetAnimation("roboCop_walk");
+                    physics.SetSpeed(true);
+                    physics.SetAcceleration(true);
+                    draw.Reset();
+                    break;
             }
         }
 
-        public void updateState()
+        public void updateState(GameTime gameTime)
         {
             lineOfSight = LineOfSight();
             withinHitRadius = Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
@@ -94,7 +106,6 @@ namespace COMP476Proj
             {
                 if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && lineOfSight)
                 {
-                    playSound("Activation");
                     transitionToState(RoboCopState.PURSUE);
                 }
             }
@@ -107,6 +118,64 @@ namespace COMP476Proj
                 if (withinHitRadius)
                 {
                     transitionToState(RoboCopState.HIT);
+                }
+                else
+                {
+                    path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
+
+                    // Optimize
+                    while (path.Count > 1 && IsVisible(path[1].Position))
+                    {
+                        path.RemoveAt(0);
+                    }
+
+                    transitionToState(RoboCopState.PATHFIND);
+                }
+            }
+            else if (state == RoboCopState.PATHFIND)
+            {
+                pathTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+                // If sees, chase
+                if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && lineOfSight)
+                {
+                    transitionToState(RoboCopState.PURSUE);
+                }
+                // If timer is up, update path
+                else if (pathTimer > pathDelay)
+                {
+                    pathTimer = 0;
+
+                    path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
+
+                    // Optimize
+                    while (path.Count > 1 && IsVisible(path[1].Position))
+                    {
+                        path.RemoveAt(0);
+                    }
+                }
+                // Else, continue along path
+                else
+                {
+                    // If done path, create a new path
+                    if (path.Count == 1 && (Position - path[0].Position).Length() <= movement.ArrivalRadius)
+                    {
+                        pathTimer = 0;
+
+                        path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
+
+                        // Optimize
+                        while (path.Count > 1 && IsVisible(path[1].Position))
+                        {
+                            path.RemoveAt(0);
+                        }
+                    }
+                    // If at next node, update node to seek
+                    else if (path.Count > 0 && (Position - path[0].Position).Length() <= movement.ArrivalRadius)
+                    {
+                        path.RemoveAt(0);
+                    }
+                    // else, Do no updating
                 }
             }
             //--------------------------------------------------------------------------
@@ -130,18 +199,16 @@ namespace COMP476Proj
                     movement.Stop(ref physics);
                     break;
                 case RoboCopState.PURSUE:
-                    if (lineOfSight)
-                    {
-                        movement.SetTarget(Game1.world.streaker.Position);
-                    }
-                    else
-                    {
-
-                    }
-                    movement.Seek(ref physics);
+                    movement.SetTarget(Game1.world.streaker.Position);
+                    movement.Pursue(ref physics);
                     break;
                 case RoboCopState.HIT:
                     movement.Stop(ref physics);
+                    break;
+                case RoboCopState.PATHFIND:
+                    if (path.Count > 0)
+                        movement.SetTarget(path[0].Position);
+                    movement.Arrive(ref physics);
                     break;
                 default:
                     break;
@@ -160,7 +227,7 @@ namespace COMP476Proj
         /// </summary>
         public void Update(GameTime gameTime, World w)
         {
-            updateState();
+            updateState(gameTime);
             movement.Look(ref physics);
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
             physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
