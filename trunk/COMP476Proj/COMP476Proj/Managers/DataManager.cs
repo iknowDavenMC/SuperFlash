@@ -11,6 +11,15 @@ namespace COMP476Proj
     {
         #region Attributes
 
+        public struct Points
+        {
+            public const int KnockDown = 100;
+            public const int SuperFlashKnockDown = 150;
+            public const int FleeProximity = 10;
+            public const int Dance = 20;
+            public const int LoseCop = 300;
+            public const int LoseAllCops = 1000;
+        }
         /// <summary>
         /// Private instance
         /// </summary>
