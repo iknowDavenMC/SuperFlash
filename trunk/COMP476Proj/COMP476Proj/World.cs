@@ -109,6 +109,12 @@ namespace COMP476Proj
         #region Update & Draw
         public void Update(GameTime gameTime)
         {
+            // Update node costs
+            foreach (Node node in map.nodes)
+            {
+                node.Update(gameTime);
+            }
+
             // Update lists
             moveableObjectsX = moveableObjectsX.OrderBy(o => o.ComponentPhysics.Position.X).ToList();
             moveableObjectsY = moveableObjectsY.OrderBy(o => o.ComponentPhysics.Position.Y).ToList();
