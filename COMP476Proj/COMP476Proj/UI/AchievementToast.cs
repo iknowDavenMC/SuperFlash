@@ -109,7 +109,7 @@ namespace COMP476Proj
             offset *= scale;
             offset.X += Camera.X;
             offset.Y += Camera.Y;
-            Vector2 bannerPos =  new Vector2(X + offset.X, Y + 4 + offset.Y);
+            Vector2 bannerPos =  new Vector2(X*scale + offset.X, Y*scale + 4 + offset.Y);
             
             leftSpewer.Draw(gameTime, spriteBatch);
             rightSpewer.Draw(gameTime, spriteBatch);
@@ -122,8 +122,8 @@ namespace COMP476Proj
             Vector2 titleSize = titleFont.MeasureString(title);
             Vector2 textSize = textFont.MeasureString(description);
             Vector2 titlePos = new Vector2(
-                X + 125 + (width-125) / 2 - titleSize.X / 2 + offset.X,
-                Y + 40 + borderWidth * 2 + offset.Y);
+                (X + 125 + (width-125) / 2 - titleSize.X / 2)*scale + offset.X,
+                (Y + 40 + borderWidth * 2)*scale + offset.Y);
 
             spriteBatch.DrawString(titleFont, title, titlePos, Color.Black, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
             spriteBatch.DrawString(titleFont, title, titlePos + new Vector2(2,-2), Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);

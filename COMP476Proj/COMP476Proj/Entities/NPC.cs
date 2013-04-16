@@ -14,6 +14,7 @@ namespace COMP476Proj
         protected float detectRadius = 150f;
         protected float farRadius = 250f;
         public Node patrolStart = null, patrolEnd = null;
+        public Flock flock;
 
         public static int copsWhoSeeTheStreaker = 0;
 

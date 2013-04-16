@@ -219,7 +219,7 @@ namespace COMP476Proj
         {
             get { return rotation; }
         }
-
+        
         #endregion
 
         #region Constructors
@@ -271,7 +271,7 @@ namespace COMP476Proj
         /// Position update if steering
         /// </summary>
         /// <param name="time">Time since last update call</param>
-        private void updatePositionSteering(double time)
+        private void updatePositionSteering(double time, NPC flockingEntity = null)
         {
             // If stopping
             if (isStopping)
@@ -301,6 +301,13 @@ namespace COMP476Proj
                     velocity.Y = 0;
                 }
 
+                if (flockingEntity != null && flockingEntity.flock != null)
+                {
+                    velocity += flockingEntity.flock.computeAlignment(flockingEntity);
+                    velocity += flockingEntity.flock.computeCohesion(flockingEntity);
+                    velocity += flockingEntity.flock.computeSeparation(flockingEntity);
+                }
+
                 // Capped by max velocity
                 if (velocity.Length() > maxVelocity)
                 {
@@ -317,6 +324,13 @@ namespace COMP476Proj
 
                 velocity += acceleration * (float)time;
 
+                if (flockingEntity != null && flockingEntity.flock != null)
+                {
+                    velocity += flockingEntity.flock.computeAlignment(flockingEntity);
+                    //velocity += flockingEntity.flock.computeCohesion(flockingEntity);
+                    velocity += flockingEntity.flock.computeSeparation(flockingEntity);
+                }
+                
                 // Capped by max velocity
                 if (velocity.Length() > maxVelocity)
                 {
@@ -331,7 +345,7 @@ namespace COMP476Proj
         /// Position update if kinematic
         /// </summary>
         /// <param name="time">Time since last update call</param>
-        private void updatePositionKinematic(double time)
+        private void updatePositionKinematic(double time, NPC flockingEntity = null)
         {
             // If stopping
             if (isStopping)
@@ -453,16 +467,16 @@ namespace COMP476Proj
         /// Calculates current position based on velocity and acceleration
         /// </summary>
         /// <param name="time">Time elapsed (in seconds) since the last update of position</param>
-        public void UpdatePosition(double time)
+        public void UpdatePosition(double time, NPC flockingEntity = null)
         {
             // Steering
             if (isSteering)
             {
-                updatePositionSteering(time);
+                updatePositionSteering(time, flockingEntity);
             }
             else
             {
-                updatePositionKinematic(time);
+                updatePositionKinematic(time, flockingEntity);
             }
 
             // Calculates position
@@ -474,9 +488,9 @@ namespace COMP476Proj
         /// </summary>
         /// <param name="time">Time elapsed (in seconds) since the last update of position</param>
         /// <param name="position">New position</param>
-        public void UpdatePosition(double time, out Vector2 position)
+        public void UpdatePosition(double time, out Vector2 position, NPC flockingEntity = null)
         {
-            UpdatePosition(time);
+            UpdatePosition(time, flockingEntity);
 
             position = this.position;
         }

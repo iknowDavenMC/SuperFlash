@@ -16,10 +16,12 @@ namespace COMP476Proj
         private int id;
         public int ID { get { return id; } }
         private Vector2 position;
+        private bool isKey;
+        public bool IsKey { get { return isKey; } }
         public Vector2 Position { get { return position; } }
         public List<Edge> Edges; // All associated edges
 
-        public Node(float x, float y, int id=0)
+        public Node(float x, float y, bool isKey=false, int id=0)
         {
             if (id < 1)
             {
@@ -33,6 +35,7 @@ namespace COMP476Proj
             }
             position = new Vector2(x, y);
             Edges = new List<Edge>();
+            this.isKey = isKey;
         }
 
         public void Update(GameTime gameTime)

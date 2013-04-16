@@ -311,7 +311,7 @@ namespace COMP476Proj
                     movement.Wander(ref physics);
                     break;
                 case SmartCopState.PURSUE:
-                    movement.SetTarget(Game1.world.streaker.Position);
+                    movement.SetTarget(Game1.world.streaker.Position, this);
                     movement.SetTargetVelocity(Game1.world.streaker.ComponentPhysics.Velocity);
                     if (closest == this)
                         movement.Seek(ref physics);
@@ -363,12 +363,13 @@ namespace COMP476Proj
                 float distSq = (Game1.world.streaker.ComponentPhysics.Position - physics.Position).LengthSquared();
                 if (distSq < closestDistSq)
                 {
-
+                    closest = this;
+                    closestDistSq = distSq;
                 }
             }
 
             movement.Look(ref physics);
-            physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
+            physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos, this);
             physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
             if (physics.Orientation > 0)
             {

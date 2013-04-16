@@ -72,14 +72,18 @@ namespace COMP476Proj
                 do
                 {
                     int id, x, y;
+                    bool key;
                     int spacei = line.IndexOf(' ');
                     id = int.Parse(line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
                     spacei = line.IndexOf(' ');
                     x = int.Parse(line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
-                    y = int.Parse(line);
-                    nodes.Add(new Node(x, y, id));
+                    spacei = line.IndexOf(' ');
+                    y = int.Parse(line.Substring(0, spacei));
+                    line = line.Substring(spacei + 1);
+                    key = bool.Parse(line);
+                    nodes.Add(new Node(x, y, key, id));
                     line = reader.ReadLine();
                 } while (reader.Peek() != -1
                     && !line.StartsWith("EDGES")
