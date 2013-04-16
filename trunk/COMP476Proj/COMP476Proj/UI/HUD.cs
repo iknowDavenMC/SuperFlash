@@ -20,7 +20,7 @@ namespace COMP476Proj
         #region Attributes
 
         private static volatile HUD instance = null;
-
+        //Would be a lot easier to move all of these variables into their own classes called HUDElements or smth
         //Black Bar
         private Texture2D banner;
         private Vector2 positionBanner;
@@ -40,6 +40,21 @@ namespace COMP476Proj
         //Health Variables
         private float health;
         private int healthActual;
+
+        //Fade to Black contents
+        private Texture2D fadeToBlack;
+        private Vector2 fadeToBlackPosition;
+        private float fadeToBlackAlpha;
+        private float fadeToBlackDesiredAlpha;
+        private float fadeToBlackCurrentTime; 
+
+        //Game Over contents
+        private bool isGameOver;
+        private Texture2D gameOverText;
+        private Vector2 gameOverTextPosition;
+        private Rectangle gameOverTextSize;
+        private float gameOverTextScale;
+        private float gameOverCurrentTime; 
 
         //Score and Timer
         private int scoreIncrement;
@@ -61,9 +76,13 @@ namespace COMP476Proj
         private float seconds;
         private string displaySeconds;           //Used to display the 0 when timer < 10 seconds
 
+        //Animate Variables
         private float animationSpeed;           //Used to animate objects on the HUD
         private float timeSoFar;
         private float TimeToAnimate;
+
+        //Boolean variables
+        private bool playGameOverMusic;
 
         private SpriteFont spriteFont;
 
@@ -107,24 +126,41 @@ namespace COMP476Proj
             health = 100;
             healthActual = (int)health;
 
+            //Animate timer 
             timeSoFar = 0;
             TimeToAnimate = 0.4f;
-
             animationSpeed = 0.005f;
+
+            //Game over initializations 
+            isGameOver = false; 
+            gameOverTextPosition = new Vector2(windowWidth / 2, windowHeight / 2);
+            gameOverTextScale = 5.0f;
+            gameOverTextSize = new Rectangle(0, 0, 556, 126);
+            gameOverCurrentTime = 0.0f; 
+
+            //Fade To Black initialization 
+            fadeToBlackAlpha = 0.0f;
+            fadeToBlackDesiredAlpha = 0.8f;
+            fadeToBlackPosition = new Vector2(0.0f, 0.0f);
+            fadeToBlackCurrentTime = 0.0f;
+
+            playGameOverMusic = true;
 
             particleBar = new ParticleSpewer(
                 positionHealthBar.X + health / 100f * healthBarScale.X - 1, positionHealthBar.Y,
-                50, 3, MathHelper.ToRadians(-90), MathHelper.ToRadians(90),
+                50, 20, MathHelper.ToRadians(-90), MathHelper.ToRadians(90),
                 50, 200, 2, 200, 90, 90, 0.5f, 1, 1, 1, true, 0.75f);
             particleBar.Absolute = true;
         }
 
-        public void loadContent(Texture2D banner, Texture2D notorietyBar, Texture2D notorietyMeter, SpriteFont spriteFont)
+        public void loadContent(Texture2D banner, Texture2D notorietyBar, Texture2D notorietyMeter, SpriteFont spriteFont, Texture2D fadeToBlack, Texture2D gameOverText)
         {
             this.spriteFont = spriteFont;
             this.banner = banner;
             this.healthBar = notorietyBar;
             this.healthBarContainer = notorietyMeter;
+            this.fadeToBlack = fadeToBlack;
+            this.gameOverText = gameOverText;
         }
 
         public static HUD getInstance()
@@ -167,6 +203,7 @@ namespace COMP476Proj
             particleBar.Update(gameTime);
             UpdateScoreSize(gameTime);
         }
+
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             float scale = 1 / Camera.Scale;
@@ -180,49 +217,86 @@ namespace COMP476Proj
             spriteBatch.DrawString(spriteFont, displayedScore.ToString(), positionScore * scale + offset, Color.White, 0f, new Vector2(0, 15), scoreScale, SpriteEffects.None, 0f);
             spriteBatch.DrawString(spriteFont, minutes + ":" + displaySeconds + seconds, positionTime * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             particleBar.Draw(gameTime, spriteBatch);
+            drawGameOver(gameTime, spriteBatch, offset, scale);
+        }
+
+        public void drawGameOver(GameTime gameTime, SpriteBatch spriteBatch, Vector2 offset, float scale)
+        {
+            //If the game is over, draw the sprites
+            if (isGameOver)
+            {
+                if (playGameOverMusic)
+                {
+                    SoundManager.GetInstance().PlaySong("Game Over");
+                    playGameOverMusic = false;
+                }
+                //Draw black Alpha
+                animateFadeToBlack(gameTime);
+                spriteBatch.Draw(fadeToBlack, fadeToBlackPosition * scale + offset, Color.White*fadeToBlackAlpha);
+
+                //Draw Game Over Text
+                interpolate(ref gameOverTextScale, 1.0f, ref gameOverCurrentTime, 0.7f, gameTime);
+                spriteBatch.Draw(gameOverText, gameOverTextPosition * scale + offset, gameOverTextSize, Color.White, 0.0f, new Vector2(gameOverTextSize.Right / 2, gameOverTextSize.Bottom / 2), gameOverTextScale, SpriteEffects.None, 1.0f);
+            }
         }
         #endregion
 
         /*-------------------------------------------------------------------------*/
-        #region Functions
+        #region Hud Manipulation Functions
+        
+        //Increases the score by the desired amount
         public void increaseScore(int amount)
         {
             scoreScale = maxScoreScale;
             currentScore += amount;
         }
 
+        //Decreases the score by the desired amount 
+        public void decreaseHealth(int amount)
+        {
+            
+            if (amount <= 100 &&
+                amount > 0)
+            {
+                particleBar.Start();
+                healthActual -= amount;
+                if (healthActual <= 0)
+                {
+                    healthActual = 0;
+                    isGameOver = true;
+                }
+            }
+            else
+            {
+                Console.WriteLine("INVALID HEALTH DECREMENT");
+            }
+        }
+            
+
+        
+        
+        #endregion
+
+        /*-------------------------------------------------------------------------*/
+        #region Animation Functions
+        
+        //Fade the Screen to Black
+        private void animateFadeToBlack(GameTime gameTime)
+        {
+            interpolate(ref fadeToBlackAlpha, fadeToBlackDesiredAlpha, ref fadeToBlackCurrentTime, 2.0f, gameTime);
+        }
+
+        //Update the Health Bar Length
         public float updateHealthBar(GameTime gameTime)
         {
             particleBar.Stop();
-            if (health > healthActual)
-            {
-                particleBar.Start();
-                if (timeSoFar < TimeToAnimate)
-                {
-                    timeSoFar += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-                    timeSoFar /= 1000.0f;
-                }
-                if (timeSoFar > TimeToAnimate)
-                {
-                    timeSoFar = TimeToAnimate;
-                }
-                float t = (float)timeSoFar / TimeToAnimate;
-                health = MathHelper.Lerp(health, healthActual, t);
-
-                if (health - healthActual < 0.25f)
-                {
-                    health = healthActual;
-                }
-            }
-            else if (health < healthActual)
-            {
-                health = healthActual;
-                timeSoFar = 0.0f;
-            }
+            interpolate(ref health, healthActual, ref timeSoFar, TimeToAnimate, gameTime);
             particleBar.X = positionHealthBar.X + (health / 100.0f) * healthBarScale.X - 1;
+            
             return ((health / 100.0f) * healthBarScale.X);
         }
 
+        //Update the score size 
         public void UpdateScoreSize(GameTime gameTime)
         {
             if (scoreScale > 1.0f)
@@ -234,25 +308,45 @@ namespace COMP476Proj
                 scoreScale = 1.0f;
             }
         }
-        public float lerp(float v0, float v1, float t)
+        #endregion
+        
+        /*-------------------------------------------------------------------------*/
+        #region HelperMethods
+
+        /// <summary>
+        /// Interpolates between two numbers, automatically adjusts the first one passed
+        /// </summary>
+        /// <param name="v1">Current state of value</param>
+        /// <param name="v2">Final state of value</param>
+        /// <param name="currentTime">the current timer</param>
+        /// <param name="totalTime">How long the animation should take place for</param>
+        /// <param name="gameTime">The current Game time</param>
+        private void interpolate(ref float v1, float v2, ref float currentTime, float totalTime, GameTime gameTime)
         {
-            return v0 + (v1 - v0) * t;
-        }
-        public void decreaseHealth(int amount)
-        {
-            //Check for valid amount
-            if (amount <= 100 &&
-                amount > 0)
+            if (v2 != v1)
             {
-                healthActual -= amount;
-                if (healthActual < 0)
+                updateAnimationTimer(gameTime, ref currentTime, totalTime);
+                float t = (float)currentTime / totalTime;
+                v1 = MathHelper.Lerp(v1, v2, t);
+                if (Math.Abs(v1 - v2) <= 0.01f)
                 {
-                    healthActual = 0;
+                    v1 = v2;
+                    currentTime = 0.0f;
                 }
             }
-            else
+        }
+
+        //Use this to update the timer used for interpolation
+        private void updateAnimationTimer(GameTime gameTime, ref float currentTime, float timeToAnimate)
+        {
+            if (currentTime < timeToAnimate)
             {
-                Console.WriteLine("INVALID HEALTH DECREMENT");
+                currentTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                currentTime /= 1000.0f;
+            }
+            if (currentTime > timeToAnimate)
+            {
+                currentTime = timeToAnimate;
             }
         }
         #endregion
