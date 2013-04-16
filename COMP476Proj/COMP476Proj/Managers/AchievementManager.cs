@@ -29,7 +29,6 @@ namespace COMP476Proj
             toasts = new List<AchievementToast>();
 
             achievList.Add(new Achievement_Playtime());
-            achievList.Add(new Achievement_Playtime2());
             achievList.Add(new Achievement_PressSpace());
             achievList.Add(new Achievement_PrincipalsOffice());
             achievList.Add(new Achievement_Cafeteria());
