@@ -2,42 +2,43 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using StreakerLibrary;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StreakerLibrary;
+
 namespace COMP476Proj
 {
-    public enum DumbCopState { STATIC, WANDER, PATH, SEEK, FALL, GET_UP, HIT };
-    public enum DumbCopBehavior { DEFAULT, AWARE, KNOCKEDUP };
+    public enum SmartCopState { STATIC, WANDER, PATH, SEEK, FALL, GET_UP, HIT };
+    public enum SmartCopBehavior { DEFAULT, AWARE, KNOCKEDUP };
 
-    public class DumbCop : NPC
+    public class SmartCop : NPC
     {
         #region Attributes
 
         Node startNode;
         Node endNode;
         Node targetNode;
-        private DumbCopState state;
-        private DumbCopBehavior behavior;
-        private DumbCopState defaultState;
+        private SmartCopState state;
+        private SmartCopBehavior behavior;
+        private SmartCopState defaultState;
         private const int HIT_DISTANCE_X = 40;
         private const int HIT_DISTANCE_Y = 15;
         #endregion
 
         #region Constructors
-        public DumbCop(PhysicsComponent2D phys, MovementAIComponent2D move, DrawComponent draw, DumbCopState pState)
+        public SmartCop(PhysicsComponent2D phys, MovementAIComponent2D move, DrawComponent draw, SmartCopState pState)
         {
             detectRadius = 400;
             movement = move;
             physics = phys;
             this.draw = draw;
-            behavior = DumbCopBehavior.DEFAULT;
+            behavior = SmartCopBehavior.DEFAULT;
             state = defaultState = pState;
             this.BoundingRectangle = new COMP476Proj.BoundingRectangle(phys.Position, 16, 6);
             draw.Play();
         }
 
-        public DumbCop(PhysicsComponent2D phys, MovementAIComponent2D move, DrawComponent draw, DumbCopState pState,
+        public SmartCop(PhysicsComponent2D phys, MovementAIComponent2D move, DrawComponent draw, SmartCopState pState,
             float radius)
         {
             movement = move;
@@ -51,7 +52,7 @@ namespace COMP476Proj
         #endregion
 
         #region Private Methods
-        private void transitionToState(DumbCopState pState)
+        private void transitionToState(SmartCopState pState)
         {
             if (state == pState)
             {
@@ -59,51 +60,51 @@ namespace COMP476Proj
             }
             switch (pState)
             {
-                case DumbCopState.STATIC:
-                    behavior = DumbCopBehavior.DEFAULT;
-                    state = DumbCopState.STATIC;
-                    draw.animation = SpriteDatabase.GetAnimation("cop_static");
+                case SmartCopState.STATIC:
+                    behavior = SmartCopBehavior.DEFAULT;
+                    state = SmartCopState.STATIC;
+                    draw.animation = SpriteDatabase.GetAnimation("smartCop_static");
                     physics.SetPace(false);
                     draw.Reset();
                     break;
-                case DumbCopState.WANDER:
-                    behavior = DumbCopBehavior.DEFAULT;
-                    state = DumbCopState.WANDER;
-                    draw.animation = SpriteDatabase.GetAnimation("cop_walk");
+                case SmartCopState.WANDER:
+                    behavior = SmartCopBehavior.DEFAULT;
+                    state = SmartCopState.WANDER;
+                    draw.animation = SpriteDatabase.GetAnimation("smartCop_walk");
                     physics.SetPace(false);
                     draw.Reset();
                     break;
-                case DumbCopState.FALL:
-                    behavior = DumbCopBehavior.KNOCKEDUP;
-                    state = DumbCopState.FALL;
-                    draw.animation = SpriteDatabase.GetAnimation("cop_fall");
+                case SmartCopState.FALL:
+                    behavior = SmartCopBehavior.KNOCKEDUP;
+                    state = SmartCopState.FALL;
+                    draw.animation = SpriteDatabase.GetAnimation("smartCop_fall");
                     physics.SetPace(false);
                     draw.Reset();
                     break;
-                case DumbCopState.GET_UP:
-                    behavior = DumbCopBehavior.KNOCKEDUP;
-                    state = DumbCopState.GET_UP;
-                    draw.animation = SpriteDatabase.GetAnimation("cop_getup");
+                case SmartCopState.GET_UP:
+                    behavior = SmartCopBehavior.KNOCKEDUP;
+                    state = SmartCopState.GET_UP;
+                    draw.animation = SpriteDatabase.GetAnimation("smartCop_getup");
                     physics.SetPace(false);
                     draw.Reset();
                     break;
-                case DumbCopState.PATH:
-                    state = DumbCopState.PATH;
-                    draw.animation = SpriteDatabase.GetAnimation("cop_walk");
+                case SmartCopState.PATH:
+                    state = SmartCopState.PATH;
+                    draw.animation = SpriteDatabase.GetAnimation("smartCop_walk");
                     physics.SetPace(false);
                     draw.Reset();
                     break;
-                case DumbCopState.HIT:
-                    behavior = DumbCopBehavior.AWARE;
-                    state = DumbCopState.HIT;
-                    draw.animation = SpriteDatabase.GetAnimation("cop_attack");
+                case SmartCopState.HIT:
+                    behavior = SmartCopBehavior.AWARE;
+                    state = SmartCopState.HIT;
+                    draw.animation = SpriteDatabase.GetAnimation("smartCop_attack");
                     physics.SetPace(false);
                     draw.Reset();
                     break;
-                case DumbCopState.SEEK:
-                    behavior = DumbCopBehavior.AWARE;
-                    state = DumbCopState.SEEK;
-                    draw.animation = SpriteDatabase.GetAnimation("cop_walk");
+                case SmartCopState.SEEK:
+                    behavior = SmartCopBehavior.AWARE;
+                    state = SmartCopState.SEEK;
+                    draw.animation = SpriteDatabase.GetAnimation("smartCop_walk");
                     physics.SetPace(true);
                     draw.Reset();
                     break;
@@ -112,68 +113,70 @@ namespace COMP476Proj
 
         public void updateState()
         {
-            
+
             //--------------------------------------------------------------------------
             //        DEFAULT BEHAVIOR TRANSITIONS --> Before aware of streaker
             //--------------------------------------------------------------------------
-            if (behavior == DumbCopBehavior.DEFAULT)
+            if (behavior == SmartCopBehavior.DEFAULT)
             {
                 if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && LineOfSight())
                 {
                     playSound("Exclamation");
-                    behavior = DumbCopBehavior.AWARE;
-                    transitionToState(DumbCopState.SEEK);
+                    behavior = SmartCopBehavior.AWARE;
+                    transitionToState(SmartCopState.SEEK);
                 }
             }
             //--------------------------------------------------------------------------
             //               AWARE BEHAVIOR TRANSITION --> Knows about streaker
             //--------------------------------------------------------------------------
-            else if (behavior == DumbCopBehavior.AWARE)
+            else if (behavior == SmartCopBehavior.AWARE)
             {
-                if(LineOfSight()){
+                if (LineOfSight())
+                {
                     float distance = Vector2.Distance(Game1.world.streaker.Position, pos);
                     if (Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
                         Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
                     {
-                        transitionToState(DumbCopState.HIT);
+                        transitionToState(SmartCopState.HIT);
                     }
                     else if (distance > detectRadius)
                     {
-                        behavior = DumbCopBehavior.DEFAULT;
+                        behavior = SmartCopBehavior.DEFAULT;
                         transitionToState(defaultState);
                     }
                     else
                     {
-                        transitionToState(DumbCopState.SEEK);
+                        transitionToState(SmartCopState.SEEK);
                     }
                 }
-                else{
-                    transitionToState(DumbCopState.SEEK);
+                else
+                {
+                    transitionToState(SmartCopState.SEEK);
                 }
             }
             //--------------------------------------------------------------------------
             //               COLLIDE BEHAVIOR TRANSITION
             //--------------------------------------------------------------------------
-            else if (behavior == DumbCopBehavior.KNOCKEDUP)
+            else if (behavior == SmartCopBehavior.KNOCKEDUP)
             {
                 switch (state)
                 {
-                    case DumbCopState.FALL:
+                    case SmartCopState.FALL:
                         if (draw.animComplete)
                         {
                             SoundManager.GetInstance().PlaySound("Common", "Fall", Game1.world.streaker.Position, Position);
-                            transitionToState(DumbCopState.GET_UP);
+                            transitionToState(SmartCopState.GET_UP);
                         }
                         break;
-                    case DumbCopState.GET_UP:
+                    case SmartCopState.GET_UP:
                         if (draw.animComplete && Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius)
                         {
-                            behavior = DumbCopBehavior.AWARE;
-                            transitionToState(DumbCopState.SEEK);
+                            behavior = SmartCopBehavior.AWARE;
+                            transitionToState(SmartCopState.SEEK);
                         }
                         else if (draw.animComplete && Vector2.Distance(Game1.world.streaker.Position, pos) >= detectRadius)
                         {
-                            behavior = DumbCopBehavior.DEFAULT;
+                            behavior = SmartCopBehavior.DEFAULT;
                             transitionToState(defaultState);
                         }
                         break;
@@ -186,26 +189,26 @@ namespace COMP476Proj
 
             switch (state)
             {
-                case DumbCopState.STATIC:
+                case SmartCopState.STATIC:
                     movement.Stop(ref physics);
                     break;
-                case DumbCopState.WANDER:
+                case SmartCopState.WANDER:
                     movement.Wander(ref physics);
                     break;
-                case DumbCopState.SEEK:
+                case SmartCopState.SEEK:
                     movement.SetTarget(Game1.world.streaker.Position);
                     movement.Seek(ref physics);
                     break;
-                case DumbCopState.PATH:
+                case SmartCopState.PATH:
                     //TO DO
                     break;
-                case DumbCopState.FALL:
+                case SmartCopState.FALL:
                     movement.Stop(ref physics);
                     break;
-                case DumbCopState.HIT:
+                case SmartCopState.HIT:
                     movement.Stop(ref physics);
                     break;
-                case DumbCopState.GET_UP:
+                case SmartCopState.GET_UP:
                     movement.Stop(ref physics);
                     break;
                 default:
@@ -215,7 +218,7 @@ namespace COMP476Proj
 
         private void playSound(string soundName)
         {
-            SoundManager.GetInstance().PlaySound("DumbCop", soundName, Game1.world.streaker.Position, Position);
+            SoundManager.GetInstance().PlaySound("SmartCop", soundName, Game1.world.streaker.Position, Position);
         }
         #endregion
 
@@ -239,11 +242,11 @@ namespace COMP476Proj
             }
 
             draw.Update(gameTime, this);
-            if (draw.animComplete && (state == DumbCopState.FALL || state == DumbCopState.GET_UP))
+            if (draw.animComplete && (state == SmartCopState.FALL || state == SmartCopState.GET_UP))
             {
                 draw.GoToPrevFrame();
             }
-            if (draw.animComplete && state == DumbCopState.HIT &&
+            if (draw.animComplete && state == SmartCopState.HIT &&
                 Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
                 Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
             {
@@ -262,12 +265,12 @@ namespace COMP476Proj
 
         public override void Fall(bool isSuperFlash)
         {
-            
-            if (state != DumbCopState.FALL && isSuperFlash)
+
+            if (state != SmartCopState.FALL && isSuperFlash)
             {
-                behavior = DumbCopBehavior.KNOCKEDUP;
+                behavior = SmartCopBehavior.KNOCKEDUP;
                 playSound("SuperFlash");
-                transitionToState(DumbCopState.FALL);
+                transitionToState(SmartCopState.FALL);
             }
             movement.Stop(ref physics);
         }
@@ -275,3 +278,4 @@ namespace COMP476Proj
 
     }
 }
+
