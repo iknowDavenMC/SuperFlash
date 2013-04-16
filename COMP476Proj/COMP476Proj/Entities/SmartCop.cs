@@ -64,48 +64,55 @@ namespace COMP476Proj
                     behavior = SmartCopBehavior.DEFAULT;
                     state = SmartCopState.STATIC;
                     draw.animation = SpriteDatabase.GetAnimation("smartCop_static");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case SmartCopState.WANDER:
                     behavior = SmartCopBehavior.DEFAULT;
                     state = SmartCopState.WANDER;
                     draw.animation = SpriteDatabase.GetAnimation("smartCop_walk");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case SmartCopState.FALL:
                     behavior = SmartCopBehavior.KNOCKEDUP;
                     state = SmartCopState.FALL;
                     draw.animation = SpriteDatabase.GetAnimation("smartCop_fall");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case SmartCopState.GET_UP:
                     behavior = SmartCopBehavior.KNOCKEDUP;
                     state = SmartCopState.GET_UP;
                     draw.animation = SpriteDatabase.GetAnimation("smartCop_getup");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case SmartCopState.PATH:
                     state = SmartCopState.PATH;
                     draw.animation = SpriteDatabase.GetAnimation("smartCop_walk");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case SmartCopState.HIT:
                     behavior = SmartCopBehavior.AWARE;
                     state = SmartCopState.HIT;
                     draw.animation = SpriteDatabase.GetAnimation("smartCop_attack");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case SmartCopState.SEEK:
                     behavior = SmartCopBehavior.AWARE;
                     state = SmartCopState.SEEK;
                     draw.animation = SpriteDatabase.GetAnimation("smartCop_walk");
-                    physics.SetPace(true);
+                    physics.SetSpeed(true);
+                    physics.SetAcceleration(true);
                     draw.Reset();
                     break;
             }
@@ -197,7 +204,8 @@ namespace COMP476Proj
                     break;
                 case SmartCopState.SEEK:
                     movement.SetTarget(Game1.world.streaker.Position);
-                    movement.Seek(ref physics);
+                    movement.SetTargetVelocity(Game1.world.streaker.ComponentPhysics.Velocity);
+                    movement.Pursue(ref physics);                    
                     break;
                 case SmartCopState.PATH:
                     //TO DO
@@ -231,7 +239,7 @@ namespace COMP476Proj
             updateState();
             movement.Look(ref physics);
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
-            physics.UpdateOrientationInstant(gameTime.ElapsedGameTime.TotalSeconds);
+            physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
             if (physics.Orientation > 0)
             {
                 draw.SpriteEffect = SpriteEffects.None;
@@ -251,6 +259,7 @@ namespace COMP476Proj
                 Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
             {
                 Game1.world.streaker.GetHit();
+                Game1.world.streaker.ResolveCollision(this);
                 playSound("Hit");
             }
             base.Update(gameTime);
@@ -265,15 +274,21 @@ namespace COMP476Proj
 
         public override void Fall(bool isSuperFlash)
         {
-
-            if (state != SmartCopState.FALL && isSuperFlash)
+            if (state != SmartCopState.FALL)
             {
+                if (isSuperFlash)
+                {
+                    playSound("SuperFlash");
+                }
+
                 behavior = SmartCopBehavior.KNOCKEDUP;
-                playSound("SuperFlash");
+                
                 transitionToState(SmartCopState.FALL);
+
+                movement.Stop(ref physics);
             }
-            movement.Stop(ref physics);
         }
+
         #endregion
 
     }

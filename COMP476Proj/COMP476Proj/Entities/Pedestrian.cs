@@ -60,37 +60,43 @@ namespace COMP476Proj
                 case PedestrianState.STATIC:
                     state = PedestrianState.STATIC;
                     draw.animation = SpriteDatabase.GetAnimation(studentType + "_static");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case PedestrianState.WANDER:
                     state = PedestrianState.WANDER;
                     draw.animation = SpriteDatabase.GetAnimation(studentType + "_walk");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case PedestrianState.FLEE:
                     state = PedestrianState.FLEE;
                     draw.animation = SpriteDatabase.GetAnimation(studentType + "_flee");
-                    physics.SetPace(true);
+                    physics.SetSpeed(true);
+                    physics.SetAcceleration(true);
                     draw.Reset();
                     break;
                 case PedestrianState.FALL:
                     state = PedestrianState.FALL;
                     draw.animation = SpriteDatabase.GetAnimation(studentType + "_fall");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case PedestrianState.GET_UP:
                     state = PedestrianState.GET_UP;
                     draw.animation = SpriteDatabase.GetAnimation(studentType + "_getup");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case PedestrianState.PATH:
                     state = PedestrianState.PATH;
                     draw.animation = SpriteDatabase.GetAnimation(studentType + "_walk");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
             }
@@ -209,7 +215,7 @@ namespace COMP476Proj
             updateState(w);
             movement.Look(ref physics);
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
-            physics.UpdateOrientationInstant(gameTime.ElapsedGameTime.TotalSeconds);
+            physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
             if (physics.Orientation > 0)
             {
                 draw.SpriteEffect = SpriteEffects.None;
