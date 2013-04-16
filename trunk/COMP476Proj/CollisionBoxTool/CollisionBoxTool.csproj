@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Box.cs" />
+    <Compile Include="Consumable.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="NPC.cs" />
     <Compile Include="Node.cs" />

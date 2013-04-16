@@ -14,7 +14,7 @@ using StreakerLibrary;
 
 namespace CollisionBoxTool
 {
-    public enum DrawModes { Box, Node, NPC, Trigger, Player }
+    public enum DrawModes { Box, Node, NPC, Trigger, Consumable, Player }
     /// <summary>
     /// This is the main type for your game
     /// </summary>
@@ -36,9 +36,10 @@ namespace CollisionBoxTool
         SpriteFont font;
 
         List<Box> boxes;
-        List<Node> nodes;
+        Dictionary<int, Node> nodes;
         List<Edge> edges;
         List<NPC> NPCs;
+        List<Consumable> consumables;
         List<Trigger> triggers;
         NPC player;
 
@@ -57,11 +58,12 @@ namespace CollisionBoxTool
         Edge mouseEdge;
         NPC mouseNPC;
         NPC mousePlayer;
+        Consumable mouseConsumable;
 
         bool nodeType = false;
         NPC.Type npcType = NPC.Type.Civilian;
         NPC.Mode npcMode = NPC.Mode.Static;
-
+        Consumable.Type consType = Consumable.Type.TURN;
         DrawModes mode = DrawModes.Box;
 
         public int circler = 16;
@@ -132,12 +134,14 @@ namespace CollisionBoxTool
             mouseNode = new Node(0, 0);
             mouseEdge = new Edge(null, null);
             mouseNPC = new NPC(0, 0, npcType, npcMode);
+            mouseConsumable = new Consumable(0, 0, consType);
             mousePlayer = new NPC(0, 0, NPC.Type.Streaker, NPC.Mode.Static);
 
             boxes = new List<Box>();
-            nodes = new List<Node>();
+            nodes = new Dictionary<int, Node>();
             edges = new List<Edge>();
             NPCs = new List<NPC>();
+            consumables = new List<Consumable>();
             triggers = new List<Trigger>();
             player = null;
 
@@ -194,25 +198,57 @@ namespace CollisionBoxTool
                 dy = camSpeed;
             }
 
-            if (ks.IsKeyDown(Keys.D1) && mode == DrawModes.NPC)
+            if (ks.IsKeyDown(Keys.D1))
             {
-                npcType = NPC.Type.Civilian;
-                mouseNPC.type = NPC.Type.Civilian;
+                if (mode == DrawModes.NPC)
+                {
+                    npcType = NPC.Type.Civilian;
+                    mouseNPC.type = NPC.Type.Civilian;
+                }
+                if (mode == DrawModes.Consumable)
+                {
+                    consType = Consumable.Type.TURN;
+                    mouseConsumable.type = Consumable.Type.TURN;
+                }
             }
-            if (ks.IsKeyDown(Keys.D2) && mode == DrawModes.NPC)
+            if (ks.IsKeyDown(Keys.D2))
             {
-                npcType = NPC.Type.DumbCop;
-                mouseNPC.type = NPC.Type.DumbCop;
+                if (mode == DrawModes.NPC)
+                {
+                    npcType = NPC.Type.DumbCop;
+                    mouseNPC.type = NPC.Type.DumbCop;
+                }
+                if (mode == DrawModes.Consumable)
+                {
+                    consType = Consumable.Type.MASS;
+                    mouseConsumable.type = Consumable.Type.MASS;
+                }
             }
-            if (ks.IsKeyDown(Keys.D3) && mode == DrawModes.NPC)
+            if (ks.IsKeyDown(Keys.D3))
             {
-                npcType = NPC.Type.SmartCop;
-                mouseNPC.type = NPC.Type.SmartCop;
+                if (mode == DrawModes.NPC)
+                {
+                    npcType = NPC.Type.SmartCop;
+                    mouseNPC.type = NPC.Type.SmartCop;
+                }
+                if (mode == DrawModes.Consumable)
+                {
+                    consType = Consumable.Type.SLIP;
+                    mouseConsumable.type = Consumable.Type.SLIP;
+                }
             }
-            if (ks.IsKeyDown(Keys.D4) && mode == DrawModes.NPC)
+            if (ks.IsKeyDown(Keys.D4))
             {
-                npcType = NPC.Type.RoboCop;
-                mouseNPC.type = NPC.Type.RoboCop;
+                if (mode == DrawModes.NPC)
+                {
+                    npcType = NPC.Type.RoboCop;
+                    mouseNPC.type = NPC.Type.RoboCop;
+                }
+                if (mode == DrawModes.Consumable)
+                {
+                    consType = Consumable.Type.SPEED;
+                    mouseConsumable.type = Consumable.Type.SPEED;
+                }
             }
 
             if (ks.IsKeyDown(Keys.L) && !lpressed)
@@ -230,6 +266,8 @@ namespace CollisionBoxTool
                 else if (mode == DrawModes.NPC)
                     mode = DrawModes.Trigger;
                 else if (mode == DrawModes.Trigger)
+                    mode = DrawModes.Consumable;
+                else if (mode == DrawModes.Consumable)
                     mode = DrawModes.Player;
                 else if (mode == DrawModes.Player)
                     mode = DrawModes.Box;
@@ -297,7 +335,7 @@ namespace CollisionBoxTool
                     mouseNode.position = new Vector2(ms.X + Camera.X, ms.Y + Camera.Y);
                     if (!drawing)
                     {
-                        foreach (Node node in nodes)
+                        foreach (Node node in nodes.Values)
                         {
                             if (node.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
                             {
@@ -332,7 +370,7 @@ namespace CollisionBoxTool
                     else if (selectedNPC != null)
                     {
 
-                        foreach (Node node in nodes)
+                        foreach (Node node in nodes.Values)
                         {
                             if (node.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
                             {
@@ -340,6 +378,15 @@ namespace CollisionBoxTool
                                 break;
                             }
                         }
+                    }
+                }
+                else if (mode == DrawModes.Consumable)
+                {
+                    mouseConsumable.rect.X = ms.X + Camera.X;
+                    mouseConsumable.rect.Y =  ms.Y + Camera.Y;
+                    if (!drawing)
+                    {
+                        drawing = true;
                     }
                 }
                 else if (mode == DrawModes.Player)
@@ -363,9 +410,9 @@ namespace CollisionBoxTool
                 else if (mode == DrawModes.Node)
                 {
                     drawing = false;
-                    if (selectedNPC != null)
+                    if (selected != null)
                     {
-                        foreach (Node node in nodes)
+                        foreach (Node node in nodes.Values)
                         {
                             if (node != selected && node.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
                             {
@@ -381,7 +428,7 @@ namespace CollisionBoxTool
                     }
                     else
                     {
-                        nodes.Add(mouseNode);
+                        nodes.Add(mouseNode.ID, mouseNode);
                         mouseNode = new Node(ms.X + Camera.X, ms.Y + Camera.Y);
                         mouseNode.isKey = nodeType;
                     }
@@ -393,7 +440,7 @@ namespace CollisionBoxTool
                     {
                         if (selectedNPC != null)
                         {
-                            foreach (Node node in nodes)
+                            foreach (Node node in nodes.Values)
                             {
                                 if (node == selectedStart && node.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
                                 {
@@ -411,6 +458,12 @@ namespace CollisionBoxTool
                         }
                     }
 
+                }
+                else if (mode == DrawModes.Consumable)
+                {
+                    drawing = false;
+                    consumables.Add(mouseConsumable);
+                    mouseConsumable = new Consumable(ms.X + Camera.X, ms.Y + Camera.Y, consType);
                 }
                 else if (mode == DrawModes.Trigger)
                 {
@@ -446,7 +499,7 @@ namespace CollisionBoxTool
                     }
                     else if (selectedNPC != null)
                     {
-                        foreach (Node node in nodes)
+                        foreach (Node node in nodes.Values)
                         {
                             if (node.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
                             {
@@ -472,12 +525,13 @@ namespace CollisionBoxTool
                     }
                     else if (mode == DrawModes.Node)
                     {
-                        for (int i = 0; i != nodes.Count; i++)
+                        for (int i = 0; i != nodes.Keys.Count; i++)
                         {
-                            Node n = nodes[i];
+                            int ind = nodes.Keys.ElementAt(i);
+                            Node n = nodes[ind];
                             if (n.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
                             {
-                                nodes.Remove(n);
+                                nodes.Remove(n.ID);
                                 for (int j = 0; j != edges.Count; j++)
                                 {
                                     Edge e = edges[j];
@@ -503,6 +557,17 @@ namespace CollisionBoxTool
                     //        }
                     //    }
                     //}
+                    else if (mode == DrawModes.Consumable){
+                        for (int i = 0; i != consumables.Count; i++)
+                        {
+                            Consumable c = consumables[i];
+                            if (c.rect.Contains(ms.X + Camera.X, ms.Y + Camera.Y))
+                            {
+                                consumables.Remove(c);
+                                i--;
+                            }
+                        }
+                    }
                     else if (mode == DrawModes.Trigger)
                     {
                         for (int i = 0; i != triggers.Count; i++)
@@ -540,7 +605,7 @@ namespace CollisionBoxTool
                                 i--;
                             }
                         }
-                        foreach (Node node in nodes)
+                        foreach (Node node in nodes.Values)
                         {
                             if (node == selectedEnd && node.pointInside(ms.X + Camera.X, ms.Y + Camera.Y))
                             {
@@ -549,7 +614,7 @@ namespace CollisionBoxTool
                             }
                         }
                         selectedEnd = null;
-                        selectedNPC= null;
+                        selectedNPC = null;
                         mouseEdge = new Edge(null, null);
                     }
                 }
@@ -596,13 +661,12 @@ namespace CollisionBoxTool
                     trigger.rect.Y + trigger.rect.Height / 2 - Camera.Y,
                     "" + trigger.id, Color.Black, Color.White);
             }
-            foreach (Node node in nodes)
+            foreach (Node node in nodes.Values)
             {
                 node.draw(spriteBatch, circle, nodeColor, Camera);
                 if (node.isKey)
                     drawBordered(spriteBatch, (int)node.position.X - Camera.X, (int)node.position.Y - Camera.Y, "K", Color.Black, Color.White);
             }
-
             foreach (Edge edge in edges)
             {
                 edge.draw(spriteBatch, blank, edgeColor, Camera);
@@ -610,7 +674,7 @@ namespace CollisionBoxTool
             foreach (NPC npc in NPCs)
             {
                 npc.draw(spriteBatch, circle, Camera);
-                drawBordered(spriteBatch, npc.X - Camera.X, npc.Y - Camera.Y, npc.mode.ToString().Substring(0,1), Color.Black, Color.White);
+                drawBordered(spriteBatch, npc.X - Camera.X, npc.Y - Camera.Y, npc.mode.ToString().Substring(0, 1), Color.Black, Color.White);
                 //switch (npc.mode)
                 //{
                 //    case NPC.Mode.Static:
@@ -629,6 +693,10 @@ namespace CollisionBoxTool
                     drawLine(spriteBatch, npc.position, npc.patrolEnd.position, Color.Pink);
                 }
             }
+            foreach (Consumable c in consumables)
+            {
+                c.draw(spriteBatch, blank, Camera);
+            }
             if (player != null)
                 player.draw(spriteBatch, circle, Camera);
             if (drawing)
@@ -646,8 +714,8 @@ namespace CollisionBoxTool
                 {
                     if (selectedNPC != null)
                         drawLine(spriteBatch, mouseNPC.position, selectedNPC.position, Color.LightBlue);
-                    else 
-                    mouseNPC.draw(spriteBatch, circle, Camera);
+                    else
+                        mouseNPC.draw(spriteBatch, circle, Camera);
                 }
                 else if (mode == DrawModes.Player)
                 {
@@ -719,11 +787,10 @@ namespace CollisionBoxTool
             foreach (Box box in boxes)
             {
                 string line = box.rect.X + " " + box.rect.Y + " " + box.rect.Width + " " + box.rect.Height + " " + (box.seeThrough ? "true" : "false");
-
                 writer.WriteLine(line);
             }
             writer.WriteLine("NODES");
-            foreach (Node node in nodes)
+            foreach (Node node in nodes.Values)
             {
                 string line = node.ID + " " + node.position.X + " " + node.position.Y + " " + node.isKey.ToString();
                 writer.WriteLine(line);
@@ -737,14 +804,19 @@ namespace CollisionBoxTool
             writer.WriteLine("NPCS");
             foreach (NPC npc in NPCs)
             {
-                string line = npc.X + " " + npc.Y + " " + npc.type.ToString() + " " + npc.mode.ToString() + " " + (npc.patrolStart == null ? 0 : npc.patrolStart.ID ) + " "  + (npc.patrolEnd == null ? 0 : npc.patrolEnd.ID);
+                string line = npc.X + " " + npc.Y + " " + npc.type.ToString() + " " + npc.mode.ToString() + " " + (npc.patrolStart == null ? 0 : npc.patrolStart.ID) + " " + (npc.patrolEnd == null ? 0 : npc.patrolEnd.ID);
                 writer.WriteLine(line);
             }
             writer.WriteLine("TRIGGER");
             foreach (Trigger trigger in triggers)
             {
                 string line = trigger.rect.X + " " + trigger.rect.Y + " " + trigger.rect.Width + " " + trigger.rect.Height + " " + trigger.id;
-
+                writer.WriteLine(line);
+            }
+            writer.WriteLine("CONSUMABLE");
+            foreach (Consumable c in consumables)
+            {
+                string line = c.position.X + " " + c.position.Y + " " + c.type.ToString();
                 writer.WriteLine(line);
             }
             writer.WriteLine("PLAYER");
@@ -810,7 +882,9 @@ namespace CollisionBoxTool
                     y = int.Parse(line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
                     key = bool.Parse(line);
-                    nodes.Add(new Node(x, y, id));
+                    Node n = new Node(x, y, id);
+                    n.isKey = key;
+                    nodes.Add(id, n);
                     line = reader.ReadLine();
                 } while (reader.Peek() != -1
                     && !line.StartsWith("EDGES")
@@ -828,7 +902,7 @@ namespace CollisionBoxTool
                     sid = int.Parse(line.Substring(0, spacei));
                     line = line.Substring(spacei + 1);
                     eid = int.Parse(line);
-                    edges.Add(new Edge(nodes.Find(n => n.ID == sid), nodes.Find(n => n.ID == eid)));
+                    edges.Add(new Edge(nodes[sid], nodes[eid]));
                     line = reader.ReadLine();
                 } while (reader.Peek() != -1
                     && !line.StartsWith("NPCS")
@@ -862,8 +936,8 @@ namespace CollisionBoxTool
                     NPC npc = new NPC(x, y, type, mode);
                     if (sid > 0 && eid > 0)
                     {
-                        npc.patrolStart = nodes.Find(n => n.ID == sid);
-                        npc.patrolEnd = nodes.Find(n => n.ID == sid); 
+                        npc.patrolStart = nodes[sid];
+                        npc.patrolEnd = nodes[eid];
                     }
                     NPCs.Add(npc);
                     line = reader.ReadLine();
