@@ -48,8 +48,8 @@ namespace COMP476Proj
             map.Load(filename);
             foreach (NPC npc in map.startingNPCs)
             {
-                if (npc is Pedestrian || npc is DumbCop)
-                    npcs.Add(npc);
+                //if (npc is Pedestrian || npc is DumbCop)
+                npcs.Add(npc);
                 moveableObjectsX.Add(npc);
                 moveableObjectsY.Add(npc);
             }
@@ -189,6 +189,14 @@ namespace COMP476Proj
                 else if (myNPC is DumbCop)
                 {
                     ((DumbCop)myNPC).Update(gameTime, this);
+                }
+                if (myNPC is SmartCop)
+                {
+                    ((SmartCop)myNPC).Update(gameTime, this);
+                }
+                else if (myNPC is RoboCop)
+                {
+                    ((RoboCop)myNPC).Update(gameTime, this);
                 }
             }
 

@@ -251,7 +251,7 @@ NPCS
 667 327 SmartCop Wander
 558 172 DumbCop Wander
 664 211 DumbCop Static
-667 403 DumbCop Wander
+667 403 RoboCop Static
 575 487 DumbCop Wander
 TRIGGER
 29 89 433 434 1
