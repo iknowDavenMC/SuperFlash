@@ -28,9 +28,15 @@ namespace COMP476Proj
 
         public override void ResolveCollision(Entity other)
         {
-            isColliding = true;
-
             Rectanglef overlap = Rectanglef.Intersect(rect.Bounds, other.BoundingRectangle.Bounds);
+
+            if (overlap.X == 0 && overlap.Y == 0 && overlap.Width == 0 && overlap.Height == 0)
+            {
+                // No collision
+                return;
+            }
+
+            isColliding = true;
 
             // Handle collision
             if (other is EntityMoveable)

@@ -63,48 +63,55 @@ namespace COMP476Proj
                     behavior = DumbCopBehavior.DEFAULT;
                     state = DumbCopState.STATIC;
                     draw.animation = SpriteDatabase.GetAnimation("cop_static");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case DumbCopState.WANDER:
                     behavior = DumbCopBehavior.DEFAULT;
                     state = DumbCopState.WANDER;
                     draw.animation = SpriteDatabase.GetAnimation("cop_walk");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case DumbCopState.FALL:
                     behavior = DumbCopBehavior.KNOCKEDUP;
                     state = DumbCopState.FALL;
                     draw.animation = SpriteDatabase.GetAnimation("cop_fall");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case DumbCopState.GET_UP:
                     behavior = DumbCopBehavior.KNOCKEDUP;
                     state = DumbCopState.GET_UP;
                     draw.animation = SpriteDatabase.GetAnimation("cop_getup");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case DumbCopState.PATH:
                     state = DumbCopState.PATH;
                     draw.animation = SpriteDatabase.GetAnimation("cop_walk");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case DumbCopState.HIT:
                     behavior = DumbCopBehavior.AWARE;
                     state = DumbCopState.HIT;
                     draw.animation = SpriteDatabase.GetAnimation("cop_attack");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case DumbCopState.SEEK:
                     behavior = DumbCopBehavior.AWARE;
                     state = DumbCopState.SEEK;
                     draw.animation = SpriteDatabase.GetAnimation("cop_walk");
-                    physics.SetPace(true);
+                    physics.SetSpeed(true);
+                    physics.SetAcceleration(true);
                     draw.Reset();
                     break;
             }
@@ -228,7 +235,7 @@ namespace COMP476Proj
             updateState();
             movement.Look(ref physics);
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
-            physics.UpdateOrientationInstant(gameTime.ElapsedGameTime.TotalSeconds);
+            physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
             if (physics.Orientation > 0)
             {
                 draw.SpriteEffect = SpriteEffects.None;
@@ -248,6 +255,7 @@ namespace COMP476Proj
                 Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
             {
                 Game1.world.streaker.GetHit();
+                Game1.world.streaker.ResolveCollision(this);
                 playSound("Hit");
             }
             base.Update(gameTime);
@@ -262,15 +270,21 @@ namespace COMP476Proj
 
         public override void Fall(bool isSuperFlash)
         {
-            
-            if (state != DumbCopState.FALL && isSuperFlash)
+            if (state != DumbCopState.FALL)
             {
+                if (isSuperFlash)
+                {
+                    playSound("SuperFlash");
+                }
+
                 behavior = DumbCopBehavior.KNOCKEDUP;
-                playSound("SuperFlash");
+
                 transitionToState(DumbCopState.FALL);
+
+                movement.Stop(ref physics);
             }
-            movement.Stop(ref physics);
         }
+
         #endregion
 
     }

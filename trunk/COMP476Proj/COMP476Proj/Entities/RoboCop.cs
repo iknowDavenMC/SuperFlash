@@ -63,19 +63,22 @@ namespace COMP476Proj
                 case RoboCopState.STATIC:
                     state = RoboCopState.STATIC;
                     draw.animation = SpriteDatabase.GetAnimation("roboCop_static");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case RoboCopState.HIT:
                     state = RoboCopState.HIT;
                     draw.animation = SpriteDatabase.GetAnimation("roboCop_attack");
-                    physics.SetPace(false);
+                    physics.SetSpeed(false);
+                    physics.SetAcceleration(false);
                     draw.Reset();
                     break;
                 case RoboCopState.PURSUE:
                     state = RoboCopState.PURSUE;
                     draw.animation = SpriteDatabase.GetAnimation("roboCop_walk");
-                    physics.SetPace(true);
+                    physics.SetSpeed(true);
+                    physics.SetAcceleration(true);
                     draw.Reset();
                     break;
             }
@@ -159,7 +162,7 @@ namespace COMP476Proj
             updateState();
             movement.Look(ref physics);
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
-            physics.UpdateOrientationInstant(gameTime.ElapsedGameTime.TotalSeconds);
+            physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
             if (physics.Orientation > 0)
             {
                 draw.SpriteEffect = SpriteEffects.None;
@@ -175,6 +178,7 @@ namespace COMP476Proj
                 Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
             {
                 Game1.world.streaker.GetHit();
+                Game1.world.streaker.ResolveCollision(this);
                 playSound("Hit");
             }
             base.Update(gameTime);

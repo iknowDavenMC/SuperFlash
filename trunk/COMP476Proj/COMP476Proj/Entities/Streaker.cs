@@ -65,6 +65,36 @@ namespace COMP476Proj
         /// </summary>
         private const int TIME_TO_RECOVER = 500;
 
+        /// <summary>
+        /// Is the player running faster
+        /// </summary>
+        private bool isSpeedBoost = false;
+
+        /// <summary>
+        /// Is the player heavier
+        /// </summary>
+        private bool isMassBoost = false;
+
+        /// <summary>
+        /// Is the player turning more quickly
+        /// </summary>
+        private bool isGripBoost = false;
+
+        /// <summary>
+        /// Is the player turning more quickly
+        /// </summary>
+        private bool isSlickBoost = false;
+
+        /// <summary>
+        /// Time for consumable object to run out
+        /// </summary>
+        private float consumableDelay = 10000;
+
+        /// <summary>
+        /// Timer for consumable object
+        /// </summary>
+        private float consumableTimer = 0;
+
         #endregion
 
         #region Constructors
@@ -82,6 +112,15 @@ namespace COMP476Proj
             inputDelay = 100;
             superFlashTimer = 0;
             superFlashDelay = 30000;
+        }
+
+        #endregion
+
+        #region Properties
+
+        public bool IsMassBoost
+        {
+            get { return isMassBoost; }
         }
 
         #endregion
@@ -280,12 +319,44 @@ namespace COMP476Proj
             }
         }
 
+        private void undoConsumable()
+        {
+            if (isGripBoost)
+            {
+                GripBoost();
+            }
+            else if (isSlickBoost)
+            {
+                SlickBoost();
+            }
+            else if (isMassBoost)
+            {
+                MassBoost();
+            }
+            else if (isSpeedBoost)
+            {
+                SpeedBoost();
+            }
+        }
+
         #endregion
 
         #region Public Methods
 
         public override void Update(GameTime gameTime)
         {
+            if (isGripBoost || isMassBoost || isSlickBoost || isSpeedBoost)
+            {
+                consumableTimer += gameTime.ElapsedGameTime.Milliseconds;
+            }
+
+            if (consumableTimer >= consumableDelay)
+            {
+                consumableTimer = 0;
+
+                undoConsumable();
+            }
+
             if (charState != StreakerState.FALL && charState != StreakerState.GET_UP && charState != StreakerState.SUPERFLASH)
             {
                 handleUserInput(gameTime);
@@ -392,14 +463,73 @@ namespace COMP476Proj
 
         public void GetHit()
         {
-            if (charState != StreakerState.FALL && charState != StreakerState.GET_UP 
+            if (!isSlickBoost && charState != StreakerState.FALL && charState != StreakerState.GET_UP 
                 && recoverTimer > TIME_TO_RECOVER)
             {
+                SoundManager.GetInstance().PlaySound("Common", "Hit");
                 recoverTimer = 0;
                 draw.Reset();
                 charState = StreakerState.FALL;
                 HUD.getInstance().decreaseHealth(5);
                 physics.SetTargetValues(true, null, null, null);
+            }
+        }
+
+        public void SpeedBoost()
+        {
+            if (isSpeedBoost)
+            {
+                isSpeedBoost = false;
+                physics.SetSpeed(false);
+            }
+            else
+            {
+                undoConsumable();
+                isSpeedBoost = true;
+                physics.SetSpeed(true);
+            }
+        }
+
+        public void MassBoost()
+        {
+            if (isMassBoost)
+            {
+                isMassBoost = false;
+                physics.Mass = 50;
+            }
+            else
+            {
+                undoConsumable();
+                isMassBoost = true;
+                physics.Mass = 70;
+            }
+        }
+
+        public void GripBoost()
+        {
+            if (isGripBoost)
+            {
+                isGripBoost = false;
+                physics.SetAcceleration(false);
+            }
+            else
+            {
+                undoConsumable();
+                isGripBoost = true;
+                physics.SetAcceleration(true);
+            }
+        }
+
+        public void SlickBoost()
+        {
+            if (isSlickBoost)
+            {
+                isSlickBoost = false;
+            }
+            else
+            {
+                undoConsumable();
+                isSlickBoost = true;
             }
         }
 
