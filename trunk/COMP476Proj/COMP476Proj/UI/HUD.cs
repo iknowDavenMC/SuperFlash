@@ -28,7 +28,7 @@ namespace COMP476Proj
 
         //Health Variables
         private float health;
-        private int healthActual;
+        //private int healthActual;
 
         //Fade to Black contents
         private Texture2D fadeToBlack;
@@ -56,7 +56,7 @@ namespace COMP476Proj
         //Window size 
         private int windowHeight;
         private int windowWidth;
-        private int currentScore;
+        //private int currentScore;
 
         //Timer Variables
         private float minutes;
@@ -102,7 +102,7 @@ namespace COMP476Proj
             positionTime = new Vector2(bannerComponent.getPosition().X + 355, bannerComponent.getPosition().Y - 12);
 
             //Initialize current score
-            currentScore = 0;
+            //currentScore = 0;
             scoreScale = 1;
             maxScoreScale = 4.0f;
             scoreIncrement = 10;
@@ -113,7 +113,7 @@ namespace COMP476Proj
 
             //Set up current health
             health = 100;
-            healthActual = (int)health;
+            //healthActual = (int)health;
 
             //Animate timer 
             timeSoFar = 0;
@@ -187,7 +187,7 @@ namespace COMP476Proj
                 displaySeconds = "";
             }
             //Updating the displayed score
-            if (displayedScore < currentScore)
+            if (displayedScore < DataManager.GetInstance().score)
             {
                 timer += Game1.elapsedTime;
                 if (timer > timerInterval)
@@ -254,7 +254,6 @@ namespace COMP476Proj
         public void increaseScore(int amount)
         {
             scoreScale = maxScoreScale;
-            currentScore += amount;
         }
 
         //Decreases the score by the desired amount 
@@ -265,10 +264,9 @@ namespace COMP476Proj
                 amount > 0)
             {
                 particleBar.Start();
-                healthActual -= amount;
-                if (healthActual <= 0)
+                DataManager.GetInstance().DecreaseHealth(amount);
+                if (DataManager.GetInstance().health <= 0)
                 {
-                    healthActual = 0;
                     isGameOver = true;
                 }
             }
@@ -296,7 +294,7 @@ namespace COMP476Proj
         public float updateHealthBar(GameTime gameTime)
         {
             particleBar.Stop();
-            interpolate(ref health, healthActual, ref timeSoFar, TimeToAnimate, gameTime);
+            interpolate(ref health, DataManager.GetInstance().health, ref timeSoFar, TimeToAnimate, gameTime);
             particleBar.X = healthBarComponent.getPosition().X + (health / 100.0f) * healthBarComponent.getSize().X - 1;
 
             return ((health / 100.0f) * healthBarComponent.getSize().X);
