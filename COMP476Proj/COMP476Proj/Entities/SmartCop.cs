@@ -14,7 +14,8 @@ namespace COMP476Proj
     public class SmartCop : NPC
     {
         #region Attributes
-
+        public static SmartCop closest = null;
+        public static float closestDistSq = float.MaxValue;
         Node startNode;
         Node endNode;
         Node targetNode;
@@ -205,7 +206,10 @@ namespace COMP476Proj
                 case SmartCopState.SEEK:
                     movement.SetTarget(Game1.world.streaker.Position);
                     movement.SetTargetVelocity(Game1.world.streaker.ComponentPhysics.Velocity);
-                    movement.Pursue(ref physics);                    
+                    if (closest == this)
+                        movement.Seek(ref physics);
+                    else
+                        movement.Pursue(ref physics);                    
                     break;
                 case SmartCopState.PATH:
                     //TO DO
@@ -237,6 +241,20 @@ namespace COMP476Proj
         public void Update(GameTime gameTime, World w)
         {
             updateState();
+
+            if (closest == this)
+            {
+                closestDistSq = (Game1.world.streaker.ComponentPhysics.Position - physics.Position).LengthSquared();
+            }
+            else
+            {
+                float distSq = (Game1.world.streaker.ComponentPhysics.Position - physics.Position).LengthSquared();
+                if (distSq < closestDistSq)
+                {
+
+                }
+            }
+
             movement.Look(ref physics);
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
             physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
