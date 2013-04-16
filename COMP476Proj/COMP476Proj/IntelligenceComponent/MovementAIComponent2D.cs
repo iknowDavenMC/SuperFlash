@@ -267,7 +267,7 @@ namespace COMP476Proj
         /// Code is based on the code in the AI book
         /// </summary>
         /// <param name="physics">Physics component of the target</param>
-        private void allign(ref PhysicsComponent2D physics)
+        private void align(ref PhysicsComponent2D physics)
         {
             float rotation = MathHelper.WrapAngle(targetOrientation - physics.Orientation);
             float rotationSize = Math.Abs(rotation);
@@ -524,7 +524,7 @@ namespace COMP476Proj
 
             targetOrientation = (float)Math.Atan2(physics.Velocity.X, physics.Velocity.Y);
 
-            allign(ref physics);
+            align(ref physics);
         }
 
         /// <summary>
@@ -543,7 +543,7 @@ namespace COMP476Proj
 
             targetOrientation = (float)Math.Atan2(direction.X, direction.Y);
 
-            allign(ref physics);
+            align(ref physics);
         }
 
         /// <summary>
@@ -561,7 +561,7 @@ namespace COMP476Proj
 
             targetOrientation = (float)Math.Atan2(direction.X, direction.Y);
 
-            allign(ref physics);
+            align(ref physics);
         }
 
         #endregion

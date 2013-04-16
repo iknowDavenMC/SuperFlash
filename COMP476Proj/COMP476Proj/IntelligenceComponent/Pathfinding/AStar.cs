@@ -210,7 +210,6 @@ namespace COMP476Proj
                     int checkC = check.Count;
                     for (int i = 0; i != checkC; ++i)
                     {
-                        //Wall w = check[i];
                         if (check[i].IsSeeThrough)
                             continue;
                         if (line.IntersectsBox(check[i].BoundingRectangle))

@@ -20,23 +20,23 @@ namespace COMP476Proj
         #region Attributes
 
         private static volatile HUD instance = null;
-        
+
         //Black Bar
         private Texture2D banner;
         private Vector2 positionBanner;
         private Vector2 bannerScale;
-        
+
         //Health Container
         private Texture2D healthBar;
         private Vector2 positionHealthBar;
         private Vector2 healthBarScale;
         private const int healthBarLengthMax = 580;
-        
+
         //Green Meter
         private Texture2D healthBarContainer;
         private Vector2 positionHealthBarContainer;
-        private Vector2 healthBarContainerScale; 
-        
+        private Vector2 healthBarContainerScale;
+
         //Health Variables
         private float health;
         private int healthActual;
@@ -48,12 +48,12 @@ namespace COMP476Proj
         private Vector2 positionTime;
         private float scoreScale;
         private float maxScoreScale;
-        
+
         //Window size 
         private int windowHeight;
         private int windowWidth;
         private int currentScore;
-        
+
         //Timer Variables
         private float minutes;
         private float timer;
@@ -63,9 +63,11 @@ namespace COMP476Proj
 
         private float animationSpeed;           //Used to animate objects on the HUD
         private float timeSoFar;
-        private float TimeToAnimate; 
+        private float TimeToAnimate;
 
         private SpriteFont spriteFont;
+
+        private ParticleSpewer particleBar;
 
         public float Height { get { return bannerScale.Y; } }
         #endregion
@@ -78,19 +80,19 @@ namespace COMP476Proj
             //Set window size 
             windowWidth = Game1.SCREEN_WIDTH;
             windowHeight = Game1.SCREEN_HEIGHT;
-           
+
             //Set scale of the textures
             bannerScale = new Vector2(800, 45);
             healthBarScale = new Vector2(580, 12);
             healthBarContainerScale = new Vector2(590, 19);
 
             //Set positions of Textures 
-            positionBanner = new Vector2(windowWidth/2, windowHeight - 20);
+            positionBanner = new Vector2(windowWidth / 2, windowHeight - 20);
             positionHealthBar = new Vector2(positionBanner.X - 280, positionBanner.Y);
-            positionHealthBarContainer = new Vector2(positionBanner.X + -284, positionBanner.Y+10);
-            positionScore = new Vector2(positionBanner.X-(bannerScale.X/2)+10, positionBanner.Y+4);
-            positionTime = new Vector2(positionBanner.X +355, positionBanner.Y-12);
-            
+            positionHealthBarContainer = new Vector2(positionBanner.X + -284, positionBanner.Y + 10);
+            positionScore = new Vector2(positionBanner.X - (bannerScale.X / 2) + 10, positionBanner.Y + 4);
+            positionTime = new Vector2(positionBanner.X + 355, positionBanner.Y - 12);
+
             //Initialize current score
             currentScore = 0;
             scoreScale = 1;
@@ -100,7 +102,7 @@ namespace COMP476Proj
             //Set up Timers
             timer = 0;
             timerInterval = 500;
-            
+
             //Set up current health
             health = 100;
             healthActual = (int)health;
@@ -109,6 +111,12 @@ namespace COMP476Proj
             TimeToAnimate = 0.4f;
 
             animationSpeed = 0.005f;
+
+            particleBar = new ParticleSpewer(
+                positionHealthBar.X + health / 100f * healthBarScale.X - 1, positionHealthBar.Y,
+                50, 3, MathHelper.ToRadians(-90), MathHelper.ToRadians(90),
+                50, 200, 2, 200, 90, 90, 0.5f, 1, 1, 1, true, 0.75f);
+            particleBar.Absolute = true;
         }
 
         public void loadContent(Texture2D banner, Texture2D notorietyBar, Texture2D notorietyMeter, SpriteFont spriteFont)
@@ -118,7 +126,7 @@ namespace COMP476Proj
             this.healthBar = notorietyBar;
             this.healthBarContainer = notorietyMeter;
         }
-        
+
         public static HUD getInstance()
         {
             if (instance == null)
@@ -156,6 +164,7 @@ namespace COMP476Proj
                     displayedScore += scoreIncrement;
                 }
             }
+            particleBar.Update(gameTime);
             UpdateScoreSize(gameTime);
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -165,11 +174,12 @@ namespace COMP476Proj
             offset *= scale;
             offset.X += Camera.X;
             offset.Y += Camera.Y;
-            spriteBatch.Draw(banner, positionBanner * scale + offset, null, Color.White, 0.0f, new Vector2(bannerScale.X/2, bannerScale.Y/2), scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(banner, positionBanner * scale + offset, null, Color.White, 0.0f, new Vector2(bannerScale.X / 2, bannerScale.Y / 2), scale, SpriteEffects.None, 0f);
             spriteBatch.Draw(healthBar, positionHealthBar * scale + offset, new Rectangle(0, 0, (int)updateHealthBar(gameTime), (int)healthBarScale.Y), Color.White, 0.0f, new Vector2(0, healthBarScale.Y / 2), scale, SpriteEffects.None, 0f);
             spriteBatch.Draw(healthBarContainer, positionHealthBarContainer * scale + offset, null, Color.White, 0.0f, new Vector2(0.0f, healthBarContainerScale.Y), scale, SpriteEffects.None, 0f);
             spriteBatch.DrawString(spriteFont, displayedScore.ToString(), positionScore * scale + offset, Color.White, 0f, new Vector2(0, 15), scoreScale, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(spriteFont, minutes+":"+displaySeconds+seconds, positionTime * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(spriteFont, minutes + ":" + displaySeconds + seconds, positionTime * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            particleBar.Draw(gameTime, spriteBatch);
         }
         #endregion
 
@@ -183,8 +193,10 @@ namespace COMP476Proj
 
         public float updateHealthBar(GameTime gameTime)
         {
+            particleBar.Stop();
             if (health > healthActual)
             {
+                particleBar.Start();
                 if (timeSoFar < TimeToAnimate)
                 {
                     timeSoFar += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -207,6 +219,7 @@ namespace COMP476Proj
                 health = healthActual;
                 timeSoFar = 0.0f;
             }
+            particleBar.X = positionHealthBar.X + (health / 100.0f) * healthBarScale.X - 1;
             return ((health / 100.0f) * healthBarScale.X);
         }
 
