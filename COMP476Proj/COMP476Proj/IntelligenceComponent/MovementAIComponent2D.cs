@@ -337,6 +337,15 @@ namespace COMP476Proj
         }
 
         /// <summary>
+        /// Sets the position to target
+        /// </summary>
+        /// <param name="targetPosition">Desired position</param>
+        public void SetTargetVelocity(Vector2 targetVelocity)
+        {
+            this.targetVelocity = targetVelocity;
+        }
+
+        /// <summary>
         /// Seek movement
         /// </summary>
         /// <param name="physics">The physics component of the thinking character</param>
@@ -372,7 +381,7 @@ namespace COMP476Proj
         {
             if (targetVelocity.Length() == 0)
             {
-                Flee(ref physics);
+                Seek(ref physics);
                 return;
             }
 
@@ -395,7 +404,7 @@ namespace COMP476Proj
 
             Vector2 targetPos = targetPosition;
             targetPos += targetVelocity * prediction;
-            physics.SetTargetValues(false, targetPos, null, null);
+            physics.SetTargetValues(false, targetPos - physics.Position, null, null);
         }
 
         /// <summary>
@@ -442,8 +451,8 @@ namespace COMP476Proj
             Vector2 targetPos = targetPosition;
             targetPos += targetVelocity * prediction;
 
-            // Flee normally
-            targetPos = (physics.Position - targetPos);
+            // Pursue normally
+            targetPos = (targetPos - physics.Position);
             physics.SetTargetValues(false, targetPos, null, null);
         }
 
