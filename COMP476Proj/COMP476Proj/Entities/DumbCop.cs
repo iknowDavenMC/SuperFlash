@@ -344,7 +344,15 @@ namespace COMP476Proj
         /// </summary>
         public void Update(GameTime gameTime, World w)
         {
-            updateState();
+            bool wallCollision = false;
+            if(state != DumbCopState.FALL || state != DumbCopState.GET_UP || state != DumbCopState.HIT){
+                wallCollision = testWallCollide();
+            }
+            
+            if(!wallCollision){
+                updateState();
+            }
+
             movement.Look(ref physics);
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
             physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);

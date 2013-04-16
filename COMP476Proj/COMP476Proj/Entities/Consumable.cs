@@ -118,5 +118,11 @@ namespace COMP476Proj
             }
         }
 
+        public void ResetConsumable()
+        {
+            consumed = false;
+            fadeTimer = 0;
+        }
+
     }
 }

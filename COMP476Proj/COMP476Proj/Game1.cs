@@ -86,7 +86,7 @@ namespace COMP476Proj
             Camera.MaxX = level.Width;
             Camera.MaxY = level.Height;
             Camera.Target = world.streaker;
-            Camera.Scale = 0.5f;
+            Camera.Scale = 1.0f;
 
             Debugger.getInstance();
             //Hud
@@ -154,10 +154,6 @@ namespace COMP476Proj
             foreach (NPC ped in world.npcs)
             {
                 ped.BoundingRectangle.Draw(spriteBatch);
-            }
-            foreach (Consumable c in world.consumables)
-            {
-                c.BoundingRectangle.Draw(spriteBatch);
             }
 
             world.streaker.BoundingRectangle.Draw(spriteBatch);

@@ -81,18 +81,28 @@ namespace COMP476Proj
                     break;
                 case RoboCopState.PURSUE:
                     playSound("Activation");
+                    if (state != RoboCopState.PATHFIND)
+                    {
+                        draw.Reset();
+                    }
                     state = RoboCopState.PURSUE;
                     draw.animation = SpriteDatabase.GetAnimation("roboCop_walk");
                     physics.SetSpeed(true);
                     physics.SetAcceleration(true);
-                    draw.Reset();
+                    
                     break;
                 case RoboCopState.PATHFIND:
+                    if (state != RoboCopState.PURSUE)
+                    {
+                        draw.Reset();
+                    }
                     state = RoboCopState.PATHFIND;
                     draw.animation = SpriteDatabase.GetAnimation("roboCop_walk");
                     physics.SetSpeed(true);
                     physics.SetAcceleration(true);
-                    draw.Reset();
+                    
+                    
+                    
                     break;
             }
         }
@@ -227,7 +237,17 @@ namespace COMP476Proj
         /// </summary>
         public void Update(GameTime gameTime, World w)
         {
-            updateState(gameTime);
+            bool wallCollision = false;
+            if (state != RoboCopState.HIT)
+            {
+                wallCollision = testWallCollide();
+            }
+
+            if (!wallCollision)
+            {
+                updateState(gameTime);
+            }
+
             movement.Look(ref physics);
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
             physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);

@@ -19,7 +19,8 @@ namespace COMP476Proj
         public List<Wall> walls;
         public List<EntityMoveable> moveableObjectsX;
         public List<EntityMoveable> moveableObjectsY;
-        public List<Consumable> consumables;
+        //public List<Consumable> consumables;
+        public List<ConsumableSpawnpoint> consumableSpawns;
         public Map map;
         public List<Wall>[,] grid;
         public QuadTree qTree;
@@ -44,7 +45,7 @@ namespace COMP476Proj
             qTree = new QuadTree((int)Map.WIDTH, (int)Map.HEIGHT, 3);
             map = new Map();
             flock = new Flock();
-            consumables = new List<Consumable>();
+            consumableSpawns = new List<ConsumableSpawnpoint>();
         }
 
         public void LoadMap(string filename, ContentManager content)
@@ -52,7 +53,6 @@ namespace COMP476Proj
             map.Load(filename);
             foreach (NPC npc in map.startingNPCs)
             {
-                //if (npc is Pedestrian || npc is DumbCop)
                 npcs.Add(npc);
                 moveableObjectsX.Add(npc);
                 moveableObjectsY.Add(npc);
@@ -61,14 +61,13 @@ namespace COMP476Proj
                     flock.Members.Add(npc);
                     npc.flock = flock;
                 }
-
             }
 
             streaker.ComponentPhysics.Position = map.playerStart;
             moveableObjectsX = moveableObjectsX.OrderBy(o => o.ComponentPhysics.Position.X).ToList();
             moveableObjectsY = moveableObjectsY.OrderBy(o => o.ComponentPhysics.Position.Y).ToList();
 
-            consumables = map.consumables;
+            consumableSpawns = map.consumables;
             //consumables = consumables.OrderBy(o => ((DrawOscillate)o.ComponentDraw).)ToList();
             foreach (Wall w in map.walls)
             {
@@ -219,12 +218,17 @@ namespace COMP476Proj
                 }
             }
 
-            //Update consumables
-            foreach (Consumable c in consumables)
+            //Update consumables --> if we want random consumable drops
+            //foreach (Consumable c in consumables)
+            //{
+            //    c.Update(gameTime);
+            //}
+            //consumables.RemoveAll(o => o.isConsumed);
+
+            foreach (ConsumableSpawnpoint c in consumableSpawns)
             {
                 c.Update(gameTime);
             }
-            consumables.RemoveAll(o => o.isConsumed);
 
             //for(int i=0; i!= 20; ++i)
                 path = AStar.GetPath(streaker.ComponentPhysics.Position, new Vector2(70, 130), map.nodes, qTree, true, false);
@@ -263,7 +267,7 @@ namespace COMP476Proj
                 Rectangle destRect = new Rectangle((int)n.Position.X - 3, (int)n.Position.Y - 3, 6, 6);
                 spriteBatch.Draw(blank, destRect, Color.DarkOrange);
             }
-            foreach (Consumable c in consumables)
+            foreach (ConsumableSpawnpoint c in consumableSpawns)
             {
                 c.Draw(gameTime,spriteBatch);
             }
