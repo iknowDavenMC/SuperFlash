@@ -188,8 +188,6 @@ namespace COMP476Proj
             // Dance takes precedence
             else if (input.IsDoing("Superflash", PlayerIndex.One) && superFlashTimer > superFlashDelay)
             {
-                superFlashTimer = 0;
-
                 if (charState != StreakerState.SUPERFLASH)
                 {
                     draw.Reset();
@@ -466,6 +464,7 @@ namespace COMP476Proj
                 case StreakerState.SUPERFLASH:
                     if (animComplete)
                     {
+                        superFlashTimer = 0;
                         superFlash();
                         draw.animation = SpriteDatabase.GetAnimation("streaker_static");
                         charState = StreakerState.STATIC;
