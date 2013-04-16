@@ -56,7 +56,7 @@ namespace CollisionBoxTool
                     color = Color.Crimson;
                     break;
                 case Type.SmartCop:
-                    anim = SpriteDatabase.GetAnimation("cop_static");
+                    anim = SpriteDatabase.GetAnimation("smartCop_static");
                     color = Color.Orange;
                     break;
                 case Type.Streaker:
