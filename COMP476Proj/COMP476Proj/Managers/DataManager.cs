@@ -57,6 +57,13 @@ namespace COMP476Proj
 
         #endregion
 
+        #region Properties
+        public int PowerUpCount
+        {
+            get { return numberOfGrease + numberOfRedBull + numberOfSneakers + numberOfSteroids; }
+        }
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -162,6 +169,26 @@ namespace COMP476Proj
                 popup.Draw(spriteBatch, gameTime);
         }
 
+        public void IncreasePowerUp(ConsumableType cType)
+        {
+            switch (cType)
+            {
+                case ConsumableType.MASS:
+                    numberOfSteroids++;
+                    break;
+                case ConsumableType.SLIP:
+                    numberOfGrease++;
+                    break;
+                case ConsumableType.SPEED:
+                    numberOfRedBull++;
+                    break;
+                case ConsumableType.TURN:
+                    numberOfSneakers++;
+                    break;
+            }
+        }
+
+        
         #endregion
     }
 }

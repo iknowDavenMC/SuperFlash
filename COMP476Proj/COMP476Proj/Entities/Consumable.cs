@@ -115,6 +115,8 @@ namespace COMP476Proj
                         ((Streaker)other).GripBoost();
                         break;
                 }
+                DataManager.GetInstance().IncreasePowerUp(cType);
+                SoundManager.GetInstance().PlaySound("Other", "Consumable");
             }
         }
 

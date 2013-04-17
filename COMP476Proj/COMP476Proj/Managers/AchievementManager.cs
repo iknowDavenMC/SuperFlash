@@ -38,6 +38,26 @@ namespace COMP476Proj
             achievList.Add(new Achievement_LowerClassRoom());
             achievList.Add(new Achievement_UpperClassRoom());
             achievList.Add(new Achievement_LectureHall());
+            achievList.Add(new Achievement_Slick(1,1));
+            achievList.Add(new Achievement_Slick(2,5));
+            achievList.Add(new Achievement_Slick(3,10));
+            achievList.Add(new Achievement_Slick(4,10));
+            achievList.Add(new Achievement_Mass(1,1));
+            achievList.Add(new Achievement_Mass(2,5));
+            achievList.Add(new Achievement_Mass(3,10));
+            achievList.Add(new Achievement_Mass(4,20));
+            achievList.Add(new Achievement_Speed(1,1));
+            achievList.Add(new Achievement_Speed(2,5));
+            achievList.Add(new Achievement_Speed(3,10));
+            achievList.Add(new Achievement_Speed(4,20));
+            achievList.Add(new Achievement_Turn(1,1));
+            achievList.Add(new Achievement_Turn(2,5));
+            achievList.Add(new Achievement_Turn(3,10));
+            achievList.Add(new Achievement_Turn(4,20));
+            achievList.Add(new Achievement_PowerUp(1,5));
+            achievList.Add(new Achievement_PowerUp(2,15));
+            achievList.Add(new Achievement_PowerUp(3,30));
+            achievList.Add(new Achievement_PowerUp(4,50));
         }
 
         /// <summary>
