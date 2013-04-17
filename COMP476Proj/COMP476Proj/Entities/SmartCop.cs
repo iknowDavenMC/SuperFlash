@@ -54,6 +54,7 @@ namespace COMP476Proj
         public SmartCop(PhysicsComponent2D phys, MovementAIComponent2D move, DrawComponent draw, SmartCopState pState,
             float radius)
         {
+            behavior = SmartCopBehavior.DEFAULT;
             movement = move;
             physics = phys;
             this.draw = draw;
