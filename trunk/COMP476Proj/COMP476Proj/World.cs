@@ -171,7 +171,7 @@ namespace COMP476Proj
             {
                 if (moveableObjectsX[i].BoundingRectangle.Collides(moveableObjectsX[i + 1].BoundingRectangle))
                 {
-                    moveableObjectsX[i + 1].ResolveCollision(moveableObjectsX[i]);
+                    //moveableObjectsX[i + 1].ResolveCollision(moveableObjectsX[i]);
                     moveableObjectsX[i].ResolveCollision(moveableObjectsX[i + 1]);
                 }
             }
@@ -182,7 +182,7 @@ namespace COMP476Proj
                 if (i < moveableObjectsY.Count - 1 && moveableObjectsY[i].BoundingRectangle.Collides(moveableObjectsY[i + 1].BoundingRectangle))
                 {
                     moveableObjectsY[i].ResolveCollision(moveableObjectsY[i + 1]);
-                    moveableObjectsY[i + 1].ResolveCollision(moveableObjectsY[i]);
+                    //moveableObjectsY[i + 1].ResolveCollision(moveableObjectsY[i]);
                 }
             }
 
