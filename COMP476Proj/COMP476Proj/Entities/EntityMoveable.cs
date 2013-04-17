@@ -94,17 +94,26 @@ namespace COMP476Proj
                 if (mass1 > mass2)
                 {
                     if (other is Pedestrian && this is Streaker && ((Pedestrian)other).State != PedestrianState.FALL)
+                    {
                         DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownPed, true,
                             ((EntityMoveable)other).ComponentPhysics.Position.X,
                             ((EntityMoveable)other).ComponentPhysics.Position.Y - 64);
+                        DataManager.GetInstance().numberPedestriansKnockedOver++;
+                    }
                     if (other is DumbCop && this is Streaker && ((DumbCop)other).State != DumbCopState.FALL)
+                    {
                         DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownCop, true,
                             ((EntityMoveable)other).ComponentPhysics.Position.X,
                             ((EntityMoveable)other).ComponentPhysics.Position.Y - 64);
+                        DataManager.GetInstance().numberCopsKnockedOver++;
+                    }
                     if (other is SmartCop && this is Streaker && ((SmartCop)other).State != SmartCopState.FALL)
+                    {
                         DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownCop, true,
                             ((EntityMoveable)other).ComponentPhysics.Position.X,
                             ((EntityMoveable)other).ComponentPhysics.Position.Y - 64);
+                        DataManager.GetInstance().numberCopsKnockedOver++;
+                    }
 
                     if (!(other is Streaker && ((Streaker)other).IsGhost))
                     {
@@ -114,12 +123,21 @@ namespace COMP476Proj
                 if (mass1 < mass2)
                 {
                     if (other is Streaker && this is Pedestrian && ((Pedestrian)this).State != PedestrianState.FALL)
+                    {
                         DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownPed, true, physics.Position.X, physics.Position.Y - 64);
+                        DataManager.GetInstance().numberPedestriansKnockedOver++;
+                    }
                     if (other is Streaker && this is DumbCop && ((DumbCop)this).State != DumbCopState.FALL)
+                    {
                         DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownCop, true, physics.Position.X, physics.Position.Y - 64);
+                        DataManager.GetInstance().numberCopsKnockedOver++;
+                    }
                     if (other is Streaker && this is SmartCop && ((SmartCop)this).State != SmartCopState.FALL)
+                    {
                         DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownCop, true, physics.Position.X, physics.Position.Y - 64);
-                    
+                        DataManager.GetInstance().numberCopsKnockedOver++;
+                    }
+
 
                     if (!(this is Streaker && ((Streaker)this).IsGhost))
                     {

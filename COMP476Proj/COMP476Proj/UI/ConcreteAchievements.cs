@@ -407,7 +407,7 @@ namespace COMP476Proj
     {
         private int targetCount;
         public Achievement_KnockDownCop(int victimCount, int points)
-            : base("Ramming Speed! x " + victimCount, "Knock over " + victimCount + " pedestrian" + (victimCount == 1 ? "" : "s"), points)
+            : base("Obstruction of Justice x " + victimCount, "Knock over " + victimCount + " cop" + (victimCount == 1 ? "" : "s"), points)
         {
             targetCount = victimCount;
         }
@@ -415,7 +415,7 @@ namespace COMP476Proj
 
         public override bool IsAchieved()
         {
-            return DataManager.GetInstance().numberPedestriansKnockedOver >= targetCount;
+            return DataManager.GetInstance().numberCopsKnockedOver >= targetCount;
         }
     }
 
