@@ -35,6 +35,7 @@ namespace COMP476Proj
         FontComponent timerText;
         FontComponent mainMenuText;
         FontComponent scoreDisplayText;
+        FontComponent highScoreText;
 
         //Game Over Buttons
         Button replayButton;
@@ -82,6 +83,7 @@ namespace COMP476Proj
         private float timeSoFar;
         private float TimeToAnimate;
 
+        private bool newHighScore;
         //Boolean variables
         private bool playGameOverMusic;
 
@@ -164,6 +166,8 @@ namespace COMP476Proj
                 50, 200, 2, 200, 90, 90, 0.5f, 1, 1, 1, true, 0.75f);
             particleBar.Absolute = true;
 
+            newHighScore = false;
+
             //Test for a font component
             replayText = new FontComponent(new Vector2(gameOverTextPosition.X-250, gameOverTextPosition.Y + 40), new Vector2(100, 100));
             timerText = new FontComponent(new Vector2(bannerComponent.getPosition().X + 355, bannerComponent.getPosition().Y - 12), new Vector2(100, 100));
@@ -181,6 +185,10 @@ namespace COMP476Proj
             scoreDisplayText.setFontScale(2.0f);
             scoreDisplayText.alpha = 0.0f;
             scoreDisplayText.setOriginCenter();
+
+            highScoreText = new FontComponent(new Vector2(windowWidth/2-150, windowHeight/2 - 300), new Vector2(300, 300));
+            highScoreText.setFontScale(6.0f);
+            highScoreText.setOriginCenter();
         }
 
         public void loadContent(Texture2D banner, 
@@ -210,6 +218,7 @@ namespace COMP476Proj
             this.timerText.LoadContent(spriteFont);
             this.mainMenuText.LoadContent(spriteFont);
             this.scoreDisplayText.LoadContent(spriteFont);
+            this.highScoreText.LoadContent(spriteFont);
         }
 
         public static HUD getInstance()
@@ -223,6 +232,7 @@ namespace COMP476Proj
 
         public void resetHud()
         {
+            newHighScore = false;
             //Initialize current score
             //currentScore = 0;
             scoreScale = 1;
@@ -262,7 +272,7 @@ namespace COMP476Proj
             displaySeconds = "0";
 
             replayText.alpha = 0;
-            
+            mainMenuText.alpha = 0;
         }
         #endregion
         
@@ -341,12 +351,8 @@ namespace COMP476Proj
             {
                 MouseState mouse = Mouse.GetState();
                 Game1.world.streaker.Kill();
-
-                if (playGameOverMusic)
-                {
-                    SoundManager.GetInstance().PlaySong("Game Over");
-                    playGameOverMusic = false;
-                }
+                
+                
                 //          Draw black Alpha
                 animateFadeToBlack(gameTime);
                 spriteBatch.Draw(fadeToBlack, new Rectangle((int)(0 + offset.X), (int)(0 + offset.Y), (int)(windowWidth * scale + offset.X), (int)(windowHeight * scale + offset.Y)), Color.Black * fadeToBlackAlpha);
@@ -381,8 +387,35 @@ namespace COMP476Proj
                 interpolate(ref scoreDisplayText.alpha, 1.0f, ref scoreDisplayText.timer, 1.0f, gameTime);
                 //interpolate(ref scoreDisplayText.size.Y, 2.0f, ref scoreDisplayText.timer, 2.0f, gameTime);
                 scoreDisplayText.Draw(gameTime, spriteBatch, scale, offset);
-                
-                
+
+
+                if (DataManager.GetInstance().score > DataManager.GetInstance().highScore)
+                {
+                    newHighScore = true;
+                    DataManager.GetInstance().highScore = DataManager.GetInstance().score;
+                }
+
+
+                if (newHighScore)
+                {
+
+                    if (playGameOverMusic)
+                    {
+                        SoundManager.GetInstance().PlaySong("High Score");
+                        playGameOverMusic = false;
+                    }
+                    interpolate(ref highScoreText.scale, 2.0f, ref highScoreText.timer, 0.2f, gameTime);
+                    highScoreText.setText("NEW HIGHSCORE!");
+                    highScoreText.Draw(gameTime, spriteBatch, scale, offset);
+                }
+                else
+                {
+                    if (playGameOverMusic)
+                    {
+                        SoundManager.GetInstance().PlaySong("Game Over");
+                        playGameOverMusic = false;
+                    }
+                }
                 if (replayButton.isClicked)
                 {
  

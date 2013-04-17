@@ -22,7 +22,7 @@ namespace COMP476Proj
         private Vector2 position;
         private Vector2 origin;
         public Vector2 size;
-        private float scale;
+        public float scale;
         private Rectangle rectangle;
         public float alpha;
         public float timer;
