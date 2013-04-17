@@ -24,7 +24,6 @@ namespace COMP476Proj
         public Map map;
         public List<Wall>[,] grid;
         public QuadTree qTree;
-        List<Node> path;
         public const int gridLength = 200;
         private Flock flock;
         #endregion
@@ -129,6 +128,15 @@ namespace COMP476Proj
                 int endX = (int)Math.Round((moveableObjectsX[i].BoundingRectangle.Bounds.X + moveableObjectsX[i].BoundingRectangle.Bounds.Width) / gridLength);
                 int endY = (int)Math.Round((moveableObjectsX[i].BoundingRectangle.Bounds.Y + moveableObjectsX[i].BoundingRectangle.Bounds.Height) / gridLength);
 
+                if (startX < 0)
+                    startX = 0;
+                if (startY < 0)
+                    startY = 0;
+                if (endX > Game1.world.grid.GetUpperBound(1))
+                    endX = Game1.world.grid.GetUpperBound(1);
+                if (endY > Game1.world.grid.GetUpperBound(0))
+                    endY = Game1.world.grid.GetUpperBound(0);
+
                 // Make sure loops go from small values to larger ones
                 if (startY > endY)
                 {
@@ -229,10 +237,7 @@ namespace COMP476Proj
             {
                 c.Update(gameTime);
             }
-
-            //for(int i=0; i!= 20; ++i)
-                path = AStar.GetPath(streaker.ComponentPhysics.Position, new Vector2(70, 130), map.nodes, qTree, true, false);
-
+            
             // Update achievements
             AchievementManager.getInstance().Update(gameTime);
             DataManager.GetInstance().Update(gameTime);
@@ -257,16 +262,13 @@ namespace COMP476Proj
 
             Texture2D blank = SpriteDatabase.GetAnimation("blank").Texture;
 
+#if (DEBUG)
             foreach (Node n in map.nodes)
             {
                 Rectangle destRect = new Rectangle((int)n.Position.X - 3, (int)n.Position.Y - 3, 6, 6);
                 spriteBatch.Draw(blank, destRect, Color.Cyan);
             }
-            foreach (Node n in path)
-            {
-                Rectangle destRect = new Rectangle((int)n.Position.X - 3, (int)n.Position.Y - 3, 6, 6);
-                spriteBatch.Draw(blank, destRect, Color.DarkOrange);
-            }
+#endif
             foreach (ConsumableSpawnpoint c in consumableSpawns)
             {
                 c.Draw(gameTime,spriteBatch);
