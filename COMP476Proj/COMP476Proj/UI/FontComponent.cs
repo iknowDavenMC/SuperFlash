@@ -60,7 +60,7 @@ namespace COMP476Proj
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, float scale, Vector2 offset)
         {
-            spriteBatch.DrawString(font, text, position * scale + offset, Color.White*alpha, 0f, Vector2.Zero, this.scale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, text, position * scale + offset, Color.White*alpha, 0f, Vector2.Zero, this.scale * scale, SpriteEffects.None, 0f);
         }
         #endregion
 
