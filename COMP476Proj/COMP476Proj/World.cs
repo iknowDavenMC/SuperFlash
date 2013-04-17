@@ -40,7 +40,12 @@ namespace COMP476Proj
         private Flock smartFlock;
         private Flock dumbFlock;
         protected int copSpawnTimer = 0;
-        protected int copSpawnDelay = 30000;
+        protected int copSpawnDelay = 10000;
+        protected int spawnCount = 0;
+        protected float smartCopThreshold = 0.0f;
+        protected float dumbCopThreshold = 1.0f;
+        protected float roboCopThreshold = 0.0f;
+        
         #endregion
 
         #region Init
@@ -61,6 +66,7 @@ namespace COMP476Proj
             smartFlock = new Flock(300);
             dumbFlock = new Flock(150);
             consumableSpawns = new List<ConsumableSpawnpoint>();
+            updateSpawnData();
         }
 
         public void LoadMap(string filename)
@@ -75,11 +81,16 @@ namespace COMP476Proj
                 {
                     smartFlock.Members.Add(npc);
                     npc.flock = smartFlock;
+                    spawnCount++;
                 }
                 if (npc is DumbCop)
                 {
                     dumbFlock.Members.Add(npc);
                     npc.flock = dumbFlock;
+                }
+                if (npc is RoboCop || npc is DumbCop)
+                {
+                    spawnCount++;
                 }
             }
 
@@ -138,13 +149,63 @@ namespace COMP476Proj
             {
                 randNum = Game1.random.Next(map.nodes.Count);
                 randNode = map.nodes.ElementAt(randNum);
-            }   
-            SmartCop newNpc = new SmartCop(
-                            new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20),
-                                100, 750, 75, 1000, 8, 50, 0.25f, true),
-                            new MovementAIComponent2D(3, 2, MathHelper.ToRadians(45), 0.5f, 50, 25, Vector2.Zero, Vector2.Zero, 0.1f),
-                            new DrawComponent(SpriteDatabase.GetAnimation("smartCop_walk"), Color.White, Vector2.Zero,
-                                new Vector2(.4f, .4f), .5f), SmartCopState.WANDER);
+            }
+            double randFloat = Game1.random.NextDouble();
+            randNum = Game1.random.Next(2);
+            
+            NPC newNpc;
+
+            if (randFloat <= dumbCopThreshold)
+            {
+                Animation animation;
+                DumbCopState dcState;
+                if (randNum == 1)
+                {
+                    dcState = DumbCopState.STATIC;
+                    animation = SpriteDatabase.GetAnimation("cop_static");
+
+                }
+                else
+                {
+                    dcState = DumbCopState.WANDER;
+                    animation = SpriteDatabase.GetAnimation("cop_walk");
+                }
+                newNpc = new DumbCop(
+                    new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20), 135, 750, 75, 1000, 8, 50, 0.25f, true),
+                    new MovementAIComponent2D(),
+                    new DrawComponent(animation, Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), dcState);
+            }
+            else if (randFloat <= smartCopThreshold)
+            {
+                Animation animation;
+                SmartCopState scState;
+                if (randNum == 1)
+                {
+                    scState = SmartCopState.STATIC;
+                    animation = SpriteDatabase.GetAnimation("smartCop_static");
+
+                }
+                else
+                {
+                    scState = SmartCopState.WANDER;
+                    animation = SpriteDatabase.GetAnimation("smartCop_walk");
+                }
+                newNpc = new SmartCop(
+                                new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20),
+                                    100, 750, 75, 1000, 8, 50, 0.25f, true),
+                                new MovementAIComponent2D(3, 2, MathHelper.ToRadians(45), 0.5f, 50, 25, Vector2.Zero, Vector2.Zero, 0.1f),
+                                new DrawComponent(animation, Color.White, Vector2.Zero,
+                                    new Vector2(.4f, .4f), .5f), scState);
+            }
+            else
+            {
+                newNpc = new RoboCop(
+                            new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20), 100, 750, 75, 1000, 8, 70, 0.25f, true),
+                            new MovementAIComponent2D(),
+                            new DrawComponent(SpriteDatabase.GetAnimation("roboCop_static"), Color.White,
+                                              Vector2.Zero, new Vector2(.4f, .4f), .5f));
+            }
+            
             npcs.Add(newNpc);
             moveableObjectsX.Add(newNpc);
             moveableObjectsY.Add(newNpc);
@@ -160,6 +221,81 @@ namespace COMP476Proj
                 dumbFlock.Members.Add(newNpc);
                 newNpc.flock = dumbFlock;
             }
+
+            updateSpawnData();
+        }
+
+        public void updateSpawnData()
+        {
+            switch (Game1.difficulty)
+            {
+                case Difficulty.EASY:
+                    if (spawnCount > 5)
+                    {
+                        dumbCopThreshold = .75f;
+                        smartCopThreshold = 0.25f;
+                        copSpawnDelay = 15000;
+                    }
+                    else if (spawnCount > 10)
+                    {
+                        dumbCopThreshold = .75f;
+                        smartCopThreshold = 0.25f;
+                        copSpawnDelay = 20000;
+                    }
+                    else if (spawnCount > 25)
+                    {
+                        dumbCopThreshold = .5f;
+                        smartCopThreshold = 0.5f;
+                        copSpawnDelay = 50000;
+                    }
+                    break;
+                case Difficulty.MEDIUM:
+                    if (spawnCount > 5)
+                    {
+                        dumbCopThreshold = .75f;
+                        smartCopThreshold = 0.25f;
+                        copSpawnDelay = 10000;
+                    }
+                    else if (spawnCount > 10)
+                    {
+                        dumbCopThreshold = .5f;
+                        smartCopThreshold = 0.5f;
+                        copSpawnDelay = 20000;
+                    }
+                    else if (spawnCount > 25)
+                    {
+                        dumbCopThreshold = .5f;
+                        smartCopThreshold = 0.49f;
+                        copSpawnDelay = 50000;
+                    }
+                    break;
+                case Difficulty.HARD:
+                    if (spawnCount > 5)
+                    {
+                        dumbCopThreshold = .75f;
+                        smartCopThreshold = 0.25f;
+                        copSpawnDelay = 10000;
+                    }
+                    else if (spawnCount > 10)
+                    {
+                        dumbCopThreshold = .75f;
+                        smartCopThreshold = 0.25f;
+                        copSpawnDelay = 20000;
+                    }
+                    else if (spawnCount > 25)
+                    {
+                        dumbCopThreshold = .25f;
+                        smartCopThreshold = 0.74f;
+                        copSpawnDelay = 45000;
+                    }
+                    break;
+                case Difficulty.IMPOSSIBLE:
+                    dumbCopThreshold = 0.0f;
+                    smartCopThreshold = 0.65f;
+                    copSpawnDelay = 5000;
+                    break;
+            }
+            
         }
         #endregion
 
