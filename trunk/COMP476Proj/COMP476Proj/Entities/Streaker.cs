@@ -102,6 +102,7 @@ namespace COMP476Proj
 
         private ParticleSpewer superFlashParticles;
         private ParticleSpewer danceParticles;
+        private ParticleSpewer powerParticles;
 
         private const int particleTimeout = 50;
         private int particleTimer = 0;
@@ -135,6 +136,12 @@ namespace COMP476Proj
                 phys.Position.X + draw.animation.FrameWidth / 2, phys.Position.Y + draw.animation.FrameHeight / 2,
                 10000, 100, 0, MathHelper.TwoPi,
                 50, 300, 2, 350, 180, 200, 0.25f, 0.5f, 1, 1, true, 0f);
+
+            powerParticles = new ParticleSpewer(
+                phys.Position.X + draw.animation.FrameWidth / 2, phys.Position.Y + draw.animation.FrameHeight / 2,
+                10000, 10, 0, MathHelper.TwoPi,
+                50, 300, 2, 350, 180, 200, 0.5f, 1f, 0.5f, 1, true, 0f);
+            powerParticles.Start();
         }
 
         #endregion
@@ -471,6 +478,21 @@ namespace COMP476Proj
             danceParticles.Y = physics.Position.Y - 020;
             danceParticles.Update(gameTime);
 
+            powerParticles.Start();
+            if (isGripBoost)
+                powerParticles.ChangeColor(0, 30, 0.5f, 1, 0.75f, 1);
+            else if (IsMassBoost)
+                powerParticles.ChangeColor(45, 75, 0.5f, 1, 0.75f, 1);
+            else if (isSlickBoost)
+                powerParticles.ChangeColor(105, 135, 0.5f, 1, 0.75f, 1);
+            else if (IsSpeedBoost)
+                powerParticles.ChangeColor(210, 240, 0.5f, 1, 0.75f, 1);
+            else
+                powerParticles.Stop();
+            powerParticles.X = physics.Position.X;
+            powerParticles.Y = physics.Position.Y - 020;
+            powerParticles.Update(gameTime);
+
             //Debugger.getInstance().pointsToDraw.Add(physics.position);
             base.Update(gameTime);
         }
@@ -556,6 +578,7 @@ namespace COMP476Proj
         {
             superFlashParticles.Draw(gameTime, spriteBatch);
             danceParticles.Draw(gameTime, spriteBatch);
+            powerParticles.Draw(gameTime, spriteBatch);
             draw.Draw(gameTime, spriteBatch, physics.Position);
             base.Draw(gameTime, spriteBatch);
         }
@@ -613,6 +636,7 @@ namespace COMP476Proj
                 undoConsumable();
                 isSpeedBoost = true;
                 physics.SetSpeed(true);
+                consumableTimer = 0;
             }
         }
 
@@ -628,6 +652,7 @@ namespace COMP476Proj
                 undoConsumable();
                 isMassBoost = true;
                 physics.Mass = 70;
+                consumableTimer = 0;
             }
         }
 
@@ -643,6 +668,7 @@ namespace COMP476Proj
                 undoConsumable();
                 isGripBoost = true;
                 physics.SetAcceleration(true);
+                consumableTimer = 0;
             }
         }
 
@@ -656,6 +682,7 @@ namespace COMP476Proj
             {
                 undoConsumable();
                 isSlickBoost = true;
+                consumableTimer = 0;
             }
         }
 
