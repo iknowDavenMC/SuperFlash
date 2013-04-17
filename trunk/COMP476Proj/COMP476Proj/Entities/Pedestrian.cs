@@ -16,6 +16,9 @@ namespace COMP476Proj
     {
         #region Attributes
 
+        private bool canSee = false;
+        private bool canReach = false;
+
         /// <summary>
         /// Direction the character is moving
         /// </summary>
@@ -108,13 +111,16 @@ namespace COMP476Proj
 
         private void updateState(World w)
         {
+            IsVisible(Game1.world.streaker.Position, out canSee, out canReach);
+
             fleePoints = false;
+
             //--------------------------------------------------------------------------
             //        DEFAULT BEHAVIOR TRANSITIONS --> Before aware of streaker
             //--------------------------------------------------------------------------
             if (behavior == PedestrianBehavior.DEFAULT)
             {
-                if (Vector2.Distance(w.streaker.Position, pos) < detectRadius && LineOfSight())
+                if (Vector2.Distance(w.streaker.Position, pos) < detectRadius && canSee)
                 {
                     playSound("Exclamation");
                     behavior = PedestrianBehavior.AWARE;
@@ -126,7 +132,7 @@ namespace COMP476Proj
             //--------------------------------------------------------------------------
             else if (behavior == PedestrianBehavior.AWARE)
             {
-                if (Vector2.Distance(w.streaker.Position, pos) < detectRadius && LineOfSight())
+                if (Vector2.Distance(w.streaker.Position, pos) < detectRadius && canSee)
                     fleePoints = true;
                 else
                     fleePoints = false;

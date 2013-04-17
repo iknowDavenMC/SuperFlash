@@ -26,6 +26,9 @@ namespace COMP476Proj
         float pathTimer = 0;
         float pathDelay = 5000;
 
+        private bool canSee = false;
+        private bool canReach = false;
+
         private SmartCopState state;
         private SmartCopBehavior behavior;
         private SmartCopState defaultState;
@@ -155,13 +158,14 @@ namespace COMP476Proj
 
         public void updateState(GameTime gameTime)
         {
+            IsVisible(Game1.world.streaker.Position, out canSee, out canReach);
 
             //--------------------------------------------------------------------------
             //        DEFAULT BEHAVIOR TRANSITIONS --> Before aware of streaker
             //--------------------------------------------------------------------------
             if (behavior == SmartCopBehavior.DEFAULT)
             {
-                if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && LineOfSight())
+                if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && canSee)
                 {
                     playSound("Exclamation");
                     behavior = SmartCopBehavior.AWARE;
@@ -174,7 +178,7 @@ namespace COMP476Proj
                     path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
                     // Optimize
-                    while (path.Count > 1 && IsVisible(path[1].Position))
+                    while (path.Count > 1 && canReach)
                     {
                         path.RemoveAt(0);
                     }
@@ -187,7 +191,6 @@ namespace COMP476Proj
             //--------------------------------------------------------------------------
             else if (behavior == SmartCopBehavior.AWARE)
             {
-                bool canSee = LineOfSight();
                 float distance = Vector2.Distance(Game1.world.streaker.Position, pos);
 
                 switch (state)
@@ -197,7 +200,7 @@ namespace COMP476Proj
                         pathTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
                         // If sees, chases
-                        if (canSee && distance <= detectRadius)
+                        if (canReach && distance <= detectRadius)
                         {
                             if (Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
                                 Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
@@ -209,8 +212,8 @@ namespace COMP476Proj
                                 transitionToState(SmartCopState.PURSUE);
                             }
                         }
-                        // If timer is up, update path
-                        else if (copsWhoSeeTheStreaker > 0)
+                        // If you or anyone else sees the streaker
+                        else if ((canSee && distance <= detectRadius) || copsWhoSeeTheStreaker > 0)
                         {
                             StreakerSeen = true;
                             if (pathTimer > pathDelay)
@@ -220,7 +223,7 @@ namespace COMP476Proj
                                 path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
                             }
                                 // Optimize
-                                while (path.Count > 1 && IsVisible(path[1].Position))
+                                while (path.Count > 1 && canReach)
                                 {
                                     path.RemoveAt(0);
                                 }
@@ -233,7 +236,7 @@ namespace COMP476Proj
                         // Else, continue along path
                         else
                         {
-                            // If haven't seeked key point, do so
+                            // If done current path and haven't seeked key point, do so
                             if (path.Count == 1 && (Position - path[0].Position).Length() <= movement.ArrivalRadius && !isSeekingKeyNode)
                             {
 
@@ -244,12 +247,12 @@ namespace COMP476Proj
                                 path = AStar.GetPath(Position, positionOfKeyNode, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
                                 // Optimize
-                                while (path.Count > 1 && IsVisible(path[1].Position))
+                                while (path.Count > 1 && canReach)
                                 {
                                     path.RemoveAt(0);
                                 }
                             }
-                            // If have seeked key point, go back to normal
+                            // If done current path and have seeked key point, go back to normal
                             else if (path.Count == 1 && (Position - path[0].Position).Length() <= movement.ArrivalRadius && isSeekingKeyNode)
                             {
                                 if (StreakerSeen)
@@ -274,6 +277,22 @@ namespace COMP476Proj
                         break;
 
                     case SmartCopState.HIT:
+
+                        if (draw.animComplete)
+                        {
+                            if (state == SmartCopState.HIT &&
+                                Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
+                                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
+                            {
+                                Game1.world.streaker.GetHit();
+                                playSound("Hit");
+                            }
+
+                            transitionToState(SmartCopState.PURSUE);
+                        }
+
+                        break;
+
                     case SmartCopState.PURSUE:
 
                         // If sees, chases or hits
@@ -284,10 +303,6 @@ namespace COMP476Proj
                             {
                                 transitionToState(SmartCopState.HIT);
                             }
-                            else
-                            {
-                                transitionToState(SmartCopState.PURSUE);
-                            }
                         }
                         // If anyone else sees, path find
                         else if (copsWhoSeeTheStreaker > 0)
@@ -295,7 +310,7 @@ namespace COMP476Proj
                             path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
                             // Optimize
-                            while (path.Count > 1 && IsVisible(path[1].Position))
+                            while (path.Count > 1 && canReach)
                             {
                                 path.RemoveAt(0);
                             }
@@ -310,7 +325,7 @@ namespace COMP476Proj
                             path = AStar.GetPath(Position, positionOfKeyNode, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
                             // Optimize
-                            while (path.Count > 1 && IsVisible(path[1].Position))
+                            while (path.Count > 1 && canReach)
                             {
                                 path.RemoveAt(0);
                             }

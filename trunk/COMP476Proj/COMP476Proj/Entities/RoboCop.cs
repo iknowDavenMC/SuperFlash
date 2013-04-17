@@ -24,7 +24,9 @@ namespace COMP476Proj
         float pathTimer = 0;
         float pathDelay = 5000;
 
-        private bool lineOfSight = false;
+        private bool canSee = false;
+        private bool canReach = false;
+
         private bool withinHitRadius = false;
 
         private const int HIT_DISTANCE_X = 40;
@@ -109,12 +111,14 @@ namespace COMP476Proj
 
         public void updateState(GameTime gameTime)
         {
-            lineOfSight = LineOfSight();
+            IsVisible(Game1.world.streaker.Position, out canSee, out canReach);
+
             withinHitRadius = Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
                               Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y;
+
             if (state == RoboCopState.STATIC)
             {
-                if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && lineOfSight)
+                if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && canSee)
                 {
                     transitionToState(RoboCopState.PURSUE);
                 }
@@ -129,7 +133,7 @@ namespace COMP476Proj
                 {
                     transitionToState(RoboCopState.HIT);
                 }
-                else if (distance < detectRadius && lineOfSight)
+                else if (distance < detectRadius && canReach)
                 {
                     // Don't change anything
                 }
@@ -138,7 +142,7 @@ namespace COMP476Proj
                     path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
                     // Optimize
-                    while (path.Count > 1 && IsVisible(path[1].Position))
+                    while (path.Count > 1 && canReach)
                     {
                         path.RemoveAt(0);
                     }
@@ -151,7 +155,7 @@ namespace COMP476Proj
                 pathTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
                 // If sees, chase
-                if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && lineOfSight)
+                if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && canSee)
                 {
                     transitionToState(RoboCopState.PURSUE);
                 }
@@ -163,7 +167,7 @@ namespace COMP476Proj
                     path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
                     // Optimize
-                    while (path.Count > 1 && IsVisible(path[1].Position))
+                    while (path.Count > 1 && canReach)
                     {
                         path.RemoveAt(0);
                     }
@@ -179,7 +183,7 @@ namespace COMP476Proj
                         path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
                         // Optimize
-                        while (path.Count > 1 && IsVisible(path[1].Position))
+                        while (path.Count > 1 && canReach)
                         {
                             path.RemoveAt(0);
                         }
