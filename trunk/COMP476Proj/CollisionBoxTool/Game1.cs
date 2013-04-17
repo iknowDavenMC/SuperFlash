@@ -627,14 +627,14 @@ namespace CollisionBoxTool
             Camera.X += dx;
             Camera.Y += dy;
 
-            if (Camera.X < 0)
-                Camera.X = 0;
-            if (Camera.Y < 0)
-                Camera.Y = 0;
-            if (Camera.X + Camera.Width > maxW)
-                Camera.X = maxW - Camera.Width;
-            if (Camera.Y + Camera.Height > maxH)
-                Camera.Y = maxH - Camera.Height;
+            //if (Camera.X < 0)
+            //    Camera.X = 0;
+            //if (Camera.Y < 0)
+            //    Camera.Y = 0;
+            //if (Camera.X + Camera.Width > maxW)
+            //    Camera.X = maxW - Camera.Width;
+            //if (Camera.Y + Camera.Height > maxH)
+            //    Camera.Y = maxH - Camera.Height;
 
             // TODO: Add your update logic here
 
@@ -743,6 +743,16 @@ namespace CollisionBoxTool
                 drawBordered(spriteBatch, 210, 28, "Dumb Cop", Color.Black, (npcType == NPC.Type.DumbCop ? Color.Crimson : Color.White));
                 drawBordered(spriteBatch, 310, 28, "SmartCop", Color.Black, (npcType == NPC.Type.SmartCop ? Color.Orange : Color.White));
                 drawBordered(spriteBatch, 410, 28, "RoboCop", Color.Black, (npcType == NPC.Type.RoboCop ? Color.Coral : Color.White));
+                drawBordered(spriteBatch, 10, 46, "[W]", Color.Black, Color.White);
+                drawBordered(spriteBatch, 50, 46, npcMode.ToString(), Color.Black, Color.White);
+            }
+            if (mode == DrawModes.Consumable)
+            {
+                drawBordered(spriteBatch, 10, 28, "[1,2,3,4]", Color.Black, Color.White);
+                drawBordered(spriteBatch, 110, 28, "Turn", Color.Black, (consType == Consumable.Type.TURN ? Color.Coral : Color.White));
+                drawBordered(spriteBatch, 210, 28, "Mass", Color.Black, (consType == Consumable.Type.MASS ? Color.Orange : Color.White));
+                drawBordered(spriteBatch, 310, 28, "Slip", Color.Black, (consType == Consumable.Type.SLIP ? Color.Crimson : Color.White));
+                drawBordered(spriteBatch, 410, 28, "Speed", Color.Black, (consType == Consumable.Type.SPEED ? Color.Yellow : Color.White));
                 drawBordered(spriteBatch, 10, 46, "[W]", Color.Black, Color.White);
                 drawBordered(spriteBatch, 50, 46, npcMode.ToString(), Color.Black, Color.White);
             }
