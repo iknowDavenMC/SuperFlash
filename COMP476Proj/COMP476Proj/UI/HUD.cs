@@ -226,7 +226,8 @@ namespace COMP476Proj
                 component.Draw(gameTime, spriteBatch, scale, offset);
             }
 
-            spriteBatch.DrawString(spriteFont, displayedScore.ToString(), positionScore * scale + offset, Color.White, 0f, new Vector2(0, 15), scoreScale, SpriteEffects.None, 0f);
+            float scoreOffset = spriteFont.MeasureString(displayedScore.ToString()).X / 2;
+            spriteBatch.DrawString(spriteFont, displayedScore.ToString(), (positionScore + new Vector2(scoreOffset, 0)) * scale + offset, Color.White, 0f, new Vector2(scoreOffset, 15), scoreScale * scale, SpriteEffects.None, 0f);
             spriteBatch.DrawString(spriteFont, minutes + ":" + displaySeconds + seconds, positionTime * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             particleBar.Draw(gameTime, spriteBatch);
             drawGameOver(gameTime, spriteBatch, offset, scale);
