@@ -263,7 +263,7 @@ namespace COMP476Proj
         }
 
         /// <summary>
-        /// Allign to the desired orientation
+        /// Align to the desired orientation
         /// Code is based on the code in the AI book
         /// </summary>
         /// <param name="physics">Physics component of the target</param>

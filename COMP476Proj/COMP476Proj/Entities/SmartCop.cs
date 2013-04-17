@@ -147,7 +147,7 @@ namespace COMP476Proj
                     {
                         hasSeenTheStreaker = true;
                         ++copsWhoSeeTheStreaker;
-                        if(!chasing)
+                        if (!chasing)
                             DataManager.GetInstance().numberOfCopsChasing++;
                         chasing = true;
                     }
@@ -183,10 +183,8 @@ namespace COMP476Proj
                     path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
                     // Optimize
-                    while (path.Count > 1 && canReach)
-                    {
-                        path.RemoveAt(0);
-                    }
+                    OptimizePath(ref path);
+
 
                     transitionToState(SmartCopState.PATHFIND);
                 }
@@ -227,16 +225,17 @@ namespace COMP476Proj
 
                                 path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
                             }
-                                // Optimize
-                                while (path.Count > 1 && canReach)
-                                {
-                                    path.RemoveAt(0);
-                                }
-                                if (hasSeenTheStreaker)
-                                {
-                                    hasSeenTheStreaker = false;
-                                    --copsWhoSeeTheStreaker;
-                                }
+                            bool canReachNode = false;
+                            bool canSeeNode = false;
+
+                            // Optimize
+                            OptimizePath(ref path);
+
+                            if (hasSeenTheStreaker)
+                            {
+                                hasSeenTheStreaker = false;
+                                --copsWhoSeeTheStreaker;
+                            }
                         }
                         // Else, continue along path
                         else
@@ -252,10 +251,7 @@ namespace COMP476Proj
                                 path = AStar.GetPath(Position, positionOfKeyNode, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
                                 // Optimize
-                                while (path.Count > 1 && canReach)
-                                {
-                                    path.RemoveAt(0);
-                                }
+                                OptimizePath(ref path);
                             }
                             // If done current path and have seeked key point, go back to normal
                             else if (path.Count == 1 && (Position - path[0].Position).Length() <= movement.ArrivalRadius && isSeekingKeyNode)
@@ -317,10 +313,7 @@ namespace COMP476Proj
                             path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
                             // Optimize
-                            while (path.Count > 1 && canReach)
-                            {
-                                path.RemoveAt(0);
-                            }
+                            OptimizePath(ref path);
 
                             transitionToState(SmartCopState.PATHFIND);
                         }
@@ -332,10 +325,7 @@ namespace COMP476Proj
                             path = AStar.GetPath(Position, positionOfKeyNode, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
                             // Optimize
-                            while (path.Count > 1 && canReach)
-                            {
-                                path.RemoveAt(0);
-                            }
+                            OptimizePath(ref path);
 
                             transitionToState(SmartCopState.PATHFIND);
                         }
@@ -431,7 +421,7 @@ namespace COMP476Proj
             pos = physics.Position;
 
             bool wallCollision = false;
-            if (state != SmartCopState.FALL || state != SmartCopState.GET_UP || state != SmartCopState.HIT )
+            if (state != SmartCopState.FALL || state != SmartCopState.GET_UP || state != SmartCopState.HIT)
             {
                 wallCollision = testWallCollide();
             }
