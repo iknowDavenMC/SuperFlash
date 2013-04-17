@@ -223,7 +223,7 @@ namespace COMP476Proj
                     if (type.StartsWith("RoboCop"))
                     {
                         npc = new RoboCop(
-                            new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), World.Speeds.RoboCop_Run, 750, 75, 1000, 8, 70, 0.25f, true),
+                            new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), World.Speeds.RoboCop_Run, 750, 75, 1000, 8, 50, 0.25f, true),
                             new MovementAIComponent2D(),
                             new DrawComponent(SpriteDatabase.GetAnimation("roboCop_static"), Color.White, 
                                               Vector2.Zero, new Vector2(.4f, .4f), .5f));
