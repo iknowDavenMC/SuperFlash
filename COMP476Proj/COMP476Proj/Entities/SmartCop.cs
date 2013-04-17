@@ -224,12 +224,14 @@ namespace COMP476Proj
                                 pathTimer = 0;
 
                                 path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
+
+                                OptimizePath(ref path);
                             }
                             bool canReachNode = false;
                             bool canSeeNode = false;
 
                             // Optimize
-                            OptimizePath(ref path);
+                            //OptimizePath(ref path);
 
                             if (hasSeenTheStreaker)
                             {
@@ -378,7 +380,7 @@ namespace COMP476Proj
                     movement.SetTarget(Game1.world.streaker.Position, this);
                     movement.SetTargetVelocity(Game1.world.streaker.ComponentPhysics.Velocity);
                     if (closest == this)
-                        movement.Arrive(ref physics);
+                        movement.Seek(ref physics);
                     else
                         movement.Pursue(ref physics);
                     break;
@@ -390,7 +392,7 @@ namespace COMP476Proj
                 case SmartCopState.PATHFIND:
                     if (path.Count > 0)
                         movement.SetTarget(path[0].Position);
-                    movement.Arrive(ref physics);
+                    movement.Seek(ref physics);
                     break;
                 case SmartCopState.FALL:
                     //movement.Stop(ref physics);

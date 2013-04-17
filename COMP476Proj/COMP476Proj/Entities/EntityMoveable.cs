@@ -159,48 +159,6 @@ namespace COMP476Proj
         /// </summary>
         public virtual void Fall(bool isSuperFlash) { }
 
-        /*
-        public virtual void LineOfSight()
-        {
-            LineSegment test = new LineSegment(Position, Game1.world.streaker.Position);
-
-            // Check the grid for walls
-            int startX = (int)Math.Round(Math.Min(Position.X, Game1.world.streaker.Position.X) / World.gridLength);
-            int startY = (int)Math.Round(Math.Min(Position.Y, Game1.world.streaker.Position.Y) / World.gridLength);
-            int endX = (int)Math.Round(Math.Max(Position.X, Game1.world.streaker.Position.X) / World.gridLength);
-            int endY = (int)Math.Round(Math.Max(Position.Y, Game1.world.streaker.Position.Y) / World.gridLength);
-
-            if (startX < 0)
-                startX = 0;
-            if (startY < 0)
-                startY = 0;
-            if (endX > Game1.world.grid.GetUpperBound(1))
-                endX = Game1.world.grid.GetUpperBound(1);
-            if (endY > Game1.world.grid.GetUpperBound(0))
-                endY = Game1.world.grid.GetUpperBound(0);
-
-            for (int k = startY; k != endY + 1; ++k)
-            {
-                for (int l = startX; l != endX + 1; ++l)
-                {
-                    for (int j = 0; j != Game1.world.grid[k, l].Count; ++j)
-                    {
-                        if (Game1.world.grid[k, l][j].IsSeeThrough)
-                        {
-                            continue;
-                        }
-
-                        if (test.IntersectsBox(Game1.world.grid[k, l][j].BoundingRectangle))
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
-        }
-         * */
-
         public virtual void IsVisible(Vector2 position, out bool canSee, out bool canReach)
         {
             LineSegment lineTest = new LineSegment(Position, position);
