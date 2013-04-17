@@ -247,6 +247,7 @@ EDGES
 39 113
 113 112
 112 50
+107 22
 NPCS
 111 243 Civilian Static 0 0
 235 247 Civilian Wander 0 0
@@ -257,16 +258,65 @@ NPCS
 106 485 Civilian Static 0 0
 237 487 Civilian Wander 0 0
 367 487 Civilian Static 0 0
-1421 977 Civilian Static 0 0
-1375 1045 Civilian Static 0 0
-1499 1056 Civilian Static 0 0
-603 272 SmartCop Static 0 0
-671 281 SmartCop Static 0 0
-669 353 SmartCop Static 0 0
-612 385 SmartCop Static 0 0
-562 217 RoboCop Static 0 0
-567 416 DumbCop Static 0 0
-684 459 DumbCop Static 0 0
+1054 480 Civilian Static 0 0
+1235 476 Civilian Static 0 0
+1274 618 Civilian Static 0 0
+970 633 Civilian Static 0 0
+122 813 Civilian Static 0 0
+106 929 Civilian Static 0 0
+192 1065 Civilian Static 0 0
+326 1074 Civilian Static 0 0
+242 937 Civilian Static 0 0
+241 809 Civilian Static 0 0
+361 813 Civilian Static 0 0
+364 946 Civilian Static 0 0
+2124 627 Civilian Static 0 0
+2022 631 Civilian Static 0 0
+3113 460 Civilian Static 0 0
+3113 657 Civilian Static 0 0
+3127 827 Civilian Static 0 0
+3121 1002 Civilian Static 0 0
+3203 183 Civilian Static 0 0
+3103 123 RoboCop Static 0 0
+2830 156 DumbCop Static 0 0
+2592 932 DumbCop Static 0 0
+1548 925 DumbCop Static 0 0
+830 190 DumbCop Static 0 0
+946 812 Civilian Wander 0 0
+1288 808 Civilian Wander 0 0
+1155 629 Civilian Wander 0 0
+947 472 Civilian Wander 0 0
+1950 323 Civilian Wander 0 0
+1814 323 Civilian Wander 0 0
+1646 325 Civilian Wander 0 0
+2189 561 Civilian Wander 0 0
+2289 619 Civilian Wander 0 0
+2191 719 Civilian Wander 0 0
+1914 734 Civilian Wander 0 0
+1830 625 Civilian Wander 0 0
+1910 557 Civilian Wander 0 0
+2446 321 Civilian Wander 0 0
+2219 321 Civilian Wander 0 0
+2570 378 Civilian Wander 0 0
+2825 794 Civilian Wander 0 0
+2814 318 Civilian Wander 0 0
+1984 122 Civilian Wander 0 0
+1093 122 Civilian Wander 0 0
+666 560 Civilian Wander 0 0
+1521 612 Civilian Wander 0 0
+2258 1041 Civilian Wander 0 0
+1852 993 Civilian Wander 0 0
+3331 873 Civilian Wander 0 0
+3235 582 Civilian Wander 0 0
+3233 737 Civilian Wander 0 0
+3234 892 Civilian Wander 0 0
+1882 129 Civilian Wander 0 0
+2901 909 DumbCop Wander 0 0
+1427 180 DumbCop Wander 0 0
+586 166 DumbCop Wander 0 0
+512 848 DumbCop Static 0 0
+2082 948 DumbCop Wander 0 0
+606 464 DumbCop Wander 0 0
 TRIGGER
 29 89 433 434 1
 29 667 432 427 2
@@ -277,9 +327,9 @@ TRIGGER
 2964 91 416 212 7
 2964 424 437 620 8
 CONSUMABLE
-1200 1018 SLIP
-1100 1018 TURN
-1300 1018 MASS
-1000 1018 SPEED
+3352 700 MASS
+1721 306 MASS
+3123 216 SPEED
+2357 314 SLIP
 PLAYER
-1227 1018
+1117 1075
