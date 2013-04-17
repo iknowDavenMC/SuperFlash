@@ -171,7 +171,7 @@ namespace COMP476Proj
                     animation = SpriteDatabase.GetAnimation("cop_walk");
                 }
                 newNpc = new DumbCop(
-                    new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20), Speeds.DumbCop_Run, 750, Speeds.DumbCop_Run, 1000, 8, 50, 0.25f, true),
+                    new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20), Speeds.DumbCop_Run, 750, Speeds.DumbCop_Walk, 1000, 8, 50, 0.25f, true),
                     new MovementAIComponent2D(),
                     new DrawComponent(animation, Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), dcState);
             }

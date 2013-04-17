@@ -138,9 +138,42 @@ namespace COMP476Proj
 
         #region Public Methods
 
-        public override void ResolveCollision(Entity other)
-        {
-            throw new NotImplementedException();
+        public override void ResolveCollision(Entity other) { }
+
+        public void ChangeColor(int MinHue, int MaxHue, float MinSat, float MaxSat, float MinVal, float MaxVal) {
+        minHue = MinHue;
+            maxHue = MaxHue;
+            if (minHue < 0)
+                minHue = 0;
+            if (minHue > 360)
+                minHue = 360;
+            if (maxHue < 0)
+                maxHue = 0;
+            if (maxHue > 360)
+                maxHue = 360;
+            hueRange = maxHue - minHue;
+            minSat = MinSat;
+            maxSat = MaxSat;
+            if (minSat < 0)
+                minSat = 0;
+            if (minSat > 1)
+                minSat = 1;
+            if (maxSat < 0)
+                maxSat = 0;
+            if (maxSat > 1)
+                maxSat = 1;
+            satRange = maxSat - minSat;
+            minVal = MinVal;
+            maxVal = MaxVal;
+            if (minVal < 0)
+                minVal = 0;
+            if (minVal > 1)
+                minVal = 1;
+            if (maxVal < 0)
+                maxVal = 0;
+            if (maxVal > 1)
+                maxVal = 1;
+            valRange = maxVal - minVal;
         }
 
         public override void Update(GameTime gameTime)
@@ -197,7 +230,7 @@ namespace COMP476Proj
                         {
                             float fadeDist = 100 - fadePercent;
                             p.color.A = (byte)((255 - (agePct - fadePercent) / (1 - fadePercent)) * 255);
-                            dp *= (float)(p.color.A ) / 255f;
+                            dp *= (float)(p.color.A) / 255f;
                         }
                     }
                     p.position += dp;
@@ -212,7 +245,7 @@ namespace COMP476Proj
             foreach (Particle p in particles)
             {
                 float scale = 1f;
-                Vector2 offset = new Vector2(0,0);
+                Vector2 offset = new Vector2(0, 0);
                 if (Absolute)
                 {
                     scale = 1f / Camera.Scale;
