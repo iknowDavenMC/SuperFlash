@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-
+using StreakerLibrary;
 
 namespace COMP476Proj
 {
@@ -22,11 +22,13 @@ namespace COMP476Proj
         private static volatile HUD instance = null;
         //Hud Components
         private List<SpriteComponent> hudComponents;
+        private List<DrawComponent> hudDrawComponents;
+        DrawOscillate superFlashIcon;
         SpriteComponent bannerComponent;
         SpriteComponent healthBarComponent;
         SpriteComponent healthBarContainerComponent;
-        SpriteComponent superFlashIconComponent;
-
+        //SpriteComponent superFlashIconComponent;
+        PowerUpIcon powerUpIcon;
         //Font Components
         private List<FontComponent> fontComponents;
         FontComponent replayText;
@@ -102,15 +104,18 @@ namespace COMP476Proj
             windowHeight = Game1.SCREEN_HEIGHT;
 
             hudComponents = new List<SpriteComponent>();
+            hudDrawComponents = new List<DrawComponent>();
             //Components
             bannerComponent = new SpriteComponent(new Vector2(windowWidth / 2, windowHeight - 20), new Vector2(800, 45));
             healthBarComponent = new SpriteComponent(new Vector2(bannerComponent.getPosition().X-280, bannerComponent.getPosition().Y), new Vector2(580, 12));
             healthBarComponent.setOriginLeft();
             healthBarContainerComponent = new SpriteComponent(new Vector2(bannerComponent.getPosition().X + -284, bannerComponent.getPosition().Y + 10), new Vector2(590, 19));
             healthBarContainerComponent.setOriginBottomLeft();
-            superFlashIconComponent = new SpriteComponent(new Vector2((bannerComponent.getPosition().X - bannerComponent.getSize().X/2) - 25, bannerComponent.getPosition().Y-2), new Vector2(45.0f, 45.0f));
-
-
+            //superFlashIconComponent = new SpriteComponent(new Vector2((bannerComponent.getPosition().X - bannerComponent.getSize().X/2) - 25, bannerComponent.getPosition().Y-2), new Vector2(45.0f, 45.0f));
+            powerUpIcon = new PowerUpIcon(new Vector2(100, 50), 0f, false);
+            superFlashIcon = new DrawOscillate(SpriteDatabase.GetAnimation("superFlashIcon"), new Vector2(100,150), 0f, false);
+            hudDrawComponents.Add(superFlashIcon);
+            
             
             
             //Score Positions
@@ -194,11 +199,11 @@ namespace COMP476Proj
             this.bannerComponent.LoadContent(banner);
             this.healthBarComponent.LoadContent(notorietyBar);
             this.healthBarContainerComponent.LoadContent(notorietyMeter);
-            this.superFlashIconComponent.LoadContent(superFlashIcon);
+            //this.superFlashIconComponent.LoadContent(superFlashIcon);
             hudComponents.Add(bannerComponent);
             hudComponents.Add(healthBarComponent);
             hudComponents.Add(healthBarContainerComponent);
-            hudComponents.Add(superFlashIconComponent);
+            //hudComponents.Add(superFlashIconComponent);
 
             //Font components
             this.replayText.LoadContent(spriteFont);
@@ -290,8 +295,8 @@ namespace COMP476Proj
             }
             particleBar.Update(gameTime);
             UpdateScoreSize(gameTime);
-            updateSuperFlashIcon();
-            
+            updateSuperFlashIcon(gameTime);
+            powerUpIcon.Update(gameTime);
             //Update health bar size
             healthBarComponent.setXScale((int)updateHealthBar(gameTime));
         }
@@ -309,7 +314,11 @@ namespace COMP476Proj
             {
                 component.Draw(gameTime, spriteBatch, scale, offset);
             }
-
+            foreach (DrawComponent dc in hudDrawComponents)
+            {
+                dc.Draw(gameTime, spriteBatch, offset.X, offset.Y);
+            }
+            powerUpIcon.Draw(gameTime, spriteBatch, offset.X, offset.Y);
             float scoreOffset = spriteFont.MeasureString(displayedScore.ToString()).X / 2;
             spriteBatch.DrawString(spriteFont, displayedScore.ToString(), (positionScore + new Vector2(scoreOffset, 0)) * scale + offset, Color.White, 0f, new Vector2(scoreOffset, 15), scoreScale * scale, SpriteEffects.None, 0f);
             
@@ -400,15 +409,20 @@ namespace COMP476Proj
             scoreScale = maxScoreScale;
         }
 
-        public void updateSuperFlashIcon()
+        public void updateSuperFlashIcon(GameTime gameTime)
         {
+            superFlashIcon.Update(gameTime);
             if (Game1.world.streaker.hasSuperFlash())
             {
-                superFlashIconComponent.setAlpha(1.0f);
+                superFlashIcon.OscillateAlpha = true;
+                //superFlashIconComponent.setAlpha(1.0f);
+
             }
             else
             {
-                superFlashIconComponent.setAlpha(0.3f);
+                superFlashIcon.Alpha = 0.2f;
+                superFlashIcon.OscillateAlpha = false;
+                //superFlashIconComponent.setAlpha(0.3f);
             }
         }
         

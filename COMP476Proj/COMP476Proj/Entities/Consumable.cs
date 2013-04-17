@@ -34,16 +34,16 @@ namespace COMP476Proj
             switch (type)
             {
                 case ConsumableType.MASS:
-                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_mass"), rect.Bounds.Center, .4f);
+                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_mass"), .4f);
                     break;
                 case ConsumableType.SLIP:
-                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_slick"), rect.Bounds.Center, .4f);
+                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_slick"), .4f);
                     break;
                 case ConsumableType.SPEED:
-                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_speed"), rect.Bounds.Center, .4f);
+                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_speed"), .4f);
                     break;
                 case ConsumableType.TURN:
-                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_turn"), rect.Bounds.Center, .4f);
+                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_turn"), .4f);
                     break;
             }
         }
@@ -57,19 +57,19 @@ namespace COMP476Proj
             {
                 case 0:
                     cType = ConsumableType.MASS;
-                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_mass"), rect.Bounds.Center, .4f);
+                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_mass"), .4f);
                     break;
                 case 1:
                     cType = ConsumableType.SLIP;
-                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_slick"), rect.Bounds.Center, .4f);
+                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_slick"), .4f);
                     break;
                 case 2:
                     cType = ConsumableType.SPEED;
-                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_speed"), rect.Bounds.Center, .4f);
+                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_speed"), .4f);
                     break;
                 case 3:
                     cType = ConsumableType.TURN;
-                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_turn"), rect.Bounds.Center, .4f);
+                    draw = new DrawOscillate(SpriteDatabase.GetAnimation("pwr_turn"), .4f);
                     break;
             }
         }

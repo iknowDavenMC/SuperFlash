@@ -18,11 +18,6 @@ namespace COMP476Proj
 
         private bool canSee = false;
         private bool canReach = false;
-
-        Node startNode;
-        Node endNode;
-        Node targetNode;
-
         Vector2? lastStreakerPosition;
         List<Node> path;
 

@@ -72,6 +72,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DrawComponent\PowerUpIcon.cs" />
     <Compile Include="DrawComponent\ScorePopup.cs" />
     <Compile Include="Entities\ConsumableSpawnpoint.cs" />
     <Compile Include="Managers\DataManager.cs" />
@@ -109,7 +110,6 @@
     <Compile Include="UI\FontComponent.cs" />
     <Compile Include="UI\HUD.cs" />
     <Compile Include="IntelligenceComponent\MovementAIComponent2D.cs" />
-    <Compile Include="Managers\LevelManager.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="PhysicsComponent\BoundingRectangle.cs" />
     <Compile Include="PhysicsComponent\PhysicsComponent2D.cs" />
