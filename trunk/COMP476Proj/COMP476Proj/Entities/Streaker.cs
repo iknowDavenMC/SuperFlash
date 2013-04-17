@@ -64,7 +64,7 @@ namespace COMP476Proj
         /// Superflash distance
         /// </summary>
         private const int SUPER_FLASH_DISTANCE = 300;
-        
+
         /// <summary>
         /// Time to recover
         /// </summary>
@@ -244,7 +244,7 @@ namespace COMP476Proj
                 {
                     moveDown();
                 }
-                
+
                 // If no movement, static
                 if (direction == Vector2.Zero)
                 {
@@ -459,7 +459,7 @@ namespace COMP476Proj
                     danceTimer = 0;
                     dataMan.IncreaseScore(DataManager.Points.Dance, true, physics.Position.X, physics.Position.Y - 64);
                 }
-                if (danceTotalTime > dataMan.longestDance)
+                if (danceTotalTime > dataMan.longestDance && dataMan.CanGainPoints)
                     dataMan.longestDance = danceTotalTime;
             }
             else
@@ -495,7 +495,7 @@ namespace COMP476Proj
                     draw.animation = SpriteDatabase.GetAnimation("streaker_walk");
                     draw.Play();
                     break;
-                case StreakerState.FALL:            
+                case StreakerState.FALL:
                     if (animComplete)
                     {
                         SoundManager.GetInstance().PlaySound("Common", "Fall", Position, Position);
@@ -510,7 +510,7 @@ namespace COMP476Proj
                     }
                     break;
                 case StreakerState.GET_UP:
-                    
+
                     if (animComplete)
                     {
                         draw.animation = SpriteDatabase.GetAnimation("streaker_static");
@@ -582,7 +582,7 @@ namespace COMP476Proj
             {
                 return;
             }
-            if (!isSlickBoost && charState != StreakerState.FALL && charState != StreakerState.GET_UP 
+            if (!isSlickBoost && charState != StreakerState.FALL && charState != StreakerState.GET_UP
                 && recoverTimer > TIME_TO_RECOVER)
             {
                 SoundManager.GetInstance().PlaySound("Common", "Hit");

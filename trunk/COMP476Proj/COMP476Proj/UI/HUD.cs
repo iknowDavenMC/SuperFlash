@@ -95,7 +95,7 @@ namespace COMP476Proj
         private int sFlashNotifyDelay = 15000;
         bool sFlashOn = false;
 
-        private bool danceNotify = true;
+        private bool danceNotify = false;
         
 
         public float Height { get { return bannerComponent.getSize().Y; } }

@@ -376,7 +376,7 @@ namespace COMP476Proj
     {
         private int targetCount;
         public Achievement_SuperFlashVictims(int victimCount, int points)
-            : base("Exhibitionist x " + victimCount, "Superflash " + victimCount + (victimCount == 1 ? "" : "s") + " at once", points)
+            : base("Exhibitionist x " + victimCount, "Superflash " + victimCount + " victim" + (victimCount == 1 ? "" : "s") + " at once", points)
         {
             targetCount = victimCount;
         }
@@ -387,6 +387,36 @@ namespace COMP476Proj
         }
     }
 
+    public class Achievement_KnockDownPed : Achievement
+    {
+        private int targetCount;
+        public Achievement_KnockDownPed(int victimCount, int points)
+            : base("Ramming Speed! x " + victimCount, "Knock over " + victimCount + " pedestrian" + (victimCount == 1 ? "" : "s"), points)
+        {
+            targetCount = victimCount;
+        }
+        public override void Update(GameTime gameTime) { }
 
+        public override bool IsAchieved()
+        {
+            return DataManager.GetInstance().numberPedestriansKnockedOver >= targetCount;
+        }
+    }
+
+    public class Achievement_KnockDownCop : Achievement
+    {
+        private int targetCount;
+        public Achievement_KnockDownCop(int victimCount, int points)
+            : base("Ramming Speed! x " + victimCount, "Knock over " + victimCount + " pedestrian" + (victimCount == 1 ? "" : "s"), points)
+        {
+            targetCount = victimCount;
+        }
+        public override void Update(GameTime gameTime) { }
+
+        public override bool IsAchieved()
+        {
+            return DataManager.GetInstance().numberPedestriansKnockedOver >= targetCount;
+        }
+    }
 
 }
