@@ -199,8 +199,50 @@ namespace COMP476Proj
             }
             return instance;
         }
-        #endregion
 
+        public void resetHud()
+        {
+            //Initialize current score
+            //currentScore = 0;
+            scoreScale = 1;
+            maxScoreScale = 4.0f;
+            scoreIncrement = 10;
+
+            //Set up Timers
+            timer = 0;
+            timerInterval = 500;
+
+            //Set up current health
+            health = 100;
+            //healthActual = (int)health;
+
+            //Animate timer 
+            timeSoFar = 0;
+            TimeToAnimate = 0.4f;
+            animationSpeed = 0.005f;
+
+            //Game over initializations 
+            isGameOver = false;
+            gameOverTextPosition = new Vector2(windowWidth / 2, windowHeight / 2);
+            gameOverTextScale = 5.0f;
+            gameOverTextSize = new Rectangle(0, 0, 556, 126);
+            gameOverCurrentTime = 0.0f;
+
+            //Fade To Black initialization 
+            fadeToBlackAlpha = 0.0f;
+            fadeToBlackDesiredAlpha = 0.8f;
+            fadeToBlackPosition = new Vector2(0.0f, 0.0f);
+            fadeToBlackCurrentTime = 0.0f;
+
+            playGameOverMusic = true;
+            seconds = 0;
+            minutes = 0;
+            displayedScore = 0;
+            displaySeconds = "0";
+            
+        }
+        #endregion
+        
 
 
         /*-------------------------------------------------------------------------*/
@@ -208,8 +250,8 @@ namespace COMP476Proj
         public void Update(GameTime gameTime)
         {
             //Update the time variables
-            seconds = (float)gameTime.TotalGameTime.Seconds;
-            minutes = (float)gameTime.TotalGameTime.Minutes;
+            seconds = ((int)DataManager.GetInstance().time / 1000)%60;
+            minutes = (int)(DataManager.GetInstance().time / 60000);
             if (seconds < 10)
             {
                 displaySeconds = "0";
@@ -254,10 +296,12 @@ namespace COMP476Proj
             spriteBatch.DrawString(spriteFont, displayedScore.ToString(), (positionScore + new Vector2(scoreOffset, 0)) * scale + offset, Color.White, 0f, new Vector2(scoreOffset, 15), scoreScale * scale, SpriteEffects.None, 0f);
             
             particleBar.Draw(gameTime, spriteBatch);
-            drawGameOver(gameTime, spriteBatch, offset, scale);
-            
             timerText.setText(minutes + ":" + displaySeconds + seconds);
             timerText.Draw(gameTime, spriteBatch, scale, offset);
+
+            drawGameOver(gameTime, spriteBatch, offset, scale);
+            
+            
             
         }
         
@@ -293,7 +337,11 @@ namespace COMP476Proj
                 replayButton.Update(mouse);
                 if (replayButton.isClicked)
                 {
-                    //Game1.load
+ 
+                    Game1.LoadContentReset();
+                    Game1.currentGameState = Game1.GameState.PLAY;
+                    resetHud();
+                    replayButton.isClicked = false;
                 }
             }
         }

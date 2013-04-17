@@ -63,7 +63,7 @@ namespace COMP476Proj
             consumableSpawns = new List<ConsumableSpawnpoint>();
         }
 
-        public void LoadMap(string filename, ContentManager content)
+        public void LoadMap(string filename)
         {
             map.Load(filename);
             foreach (NPC npc in map.startingNPCs)
