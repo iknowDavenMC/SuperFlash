@@ -148,22 +148,26 @@ namespace COMP476Proj
         }
 
     }
+
     /// <summary>
-    /// Achievement earned by entering the Principals office
+    /// Achievement earned by entering a room (given the room's trigger ID)
     /// </summary>
-    public class Achievement_PrincipalsOffice : Achievement
+    public class Achievement_EnterRoom : Achievement
     {
-
-        public Achievement_PrincipalsOffice() : base("Enter Principals Office", "", 1000) { }
-        public override void Update(GameTime gameTime)
+        private int triggerID;
+        public Achievement_EnterRoom(int triggerID, string roomName, int points)
+            : base("Enter the " + roomName, "Enter the " + roomName, points)
         {
-
+            this.triggerID = triggerID;
         }
+
+        public override void Update(GameTime gameTime) { }
+
         public override bool IsAchieved()
         {
             foreach (Trigger trigger in Game1.world.map.triggers)
             {
-                if (trigger.ID == 7)
+                if (trigger.ID == triggerID)
                 {
                     return trigger.hasTriggered();
                 }
@@ -171,165 +175,60 @@ namespace COMP476Proj
             return false;
         }
     }
-    /// <summary>
-    /// Achievement earned by entering the Principals office
-    /// </summary>
-    public class Achievement_Cafeteria : Achievement
-    {
 
-        public Achievement_Cafeteria() : base("Enter the Cafeteria", "", 1000) { }
+    public class Achievement_DoomHallway : Achievement
+    {
+        private bool leftSide = false;
+        private bool rightSide = false;
+        private int leftID, rightID;
+        private bool complete = false;
+        public Achievement_DoomHallway(int leftID, int rightID)
+            : base("Traverse the hallway of DOOM", "Ran all the way through the top hallway", 2000)
+        {
+            this.leftID = leftID;
+            this.rightID = rightID;
+        }
+
         public override void Update(GameTime gameTime)
         {
+            if (!complete)
+                foreach (Trigger trigger in Game1.world.map.triggers)
+                {
+                    if (trigger.hasTriggered())
+                    {
+                        if (trigger.ID == leftID)
+                        {
+                            if (!rightSide)
+                                leftSide = true;
+                            else
+                            {
+                                rightSide = false;
+                                complete = true;
+                            }
+                        }
 
+                        else if (trigger.ID == rightID)
+                        {
+                            if (!leftSide)
+                                rightSide = true;
+                            else
+                            {
+                                leftSide = false;
+                                complete = true;
+                            }
+                        }
+                        else
+                        {
+                            leftSide = false;
+                            rightSide = false;
+                        }
+                    }
+                }
         }
+
         public override bool IsAchieved()
         {
-            foreach (Trigger trigger in Game1.world.map.triggers)
-            {
-                if (trigger.ID == 8)
-                {
-                    return trigger.hasTriggered();
-                }
-            }
-            return false;
-        }
-    }
-    /// <summary>
-    /// Achievement earned by entering the Principals office
-    /// </summary>
-    public class Achievement_GirlsLockerRoom : Achievement
-    {
-
-        public Achievement_GirlsLockerRoom() : base("Enter Girls LockerRoom", "", 8008) { }
-        public override void Update(GameTime gameTime)
-        {
-
-        }
-        public override bool IsAchieved()
-        {
-            foreach (Trigger trigger in Game1.world.map.triggers)
-            {
-                if (trigger.ID == 6)
-                {
-                    return trigger.hasTriggered();
-                }
-            }
-            return false;
-        }
-    }
-    /// <summary>
-    /// Achievement earned by entering the Boys Locker Room
-    /// </summary>
-    public class Achievement_BoysLockerRoom : Achievement
-    {
-
-        public Achievement_BoysLockerRoom() : base("Enter the Boys Locker Room", "", 1000) { }
-        public override void Update(GameTime gameTime)
-        {
-
-        }
-        public override bool IsAchieved()
-        {
-            foreach (Trigger trigger in Game1.world.map.triggers)
-            {
-                if (trigger.ID == 5)
-                {
-                    return trigger.hasTriggered();
-                }
-            }
-            return false;
-        }
-    }
-    /// <summary>
-    /// Achievement earned by entering the Boys Locker Room
-    /// </summary>
-    public class Achievement_BasketBallCourt : Achievement
-    {
-
-        public Achievement_BasketBallCourt() : base("Enter the B-Ball Court", "", 1000) { }
-        public override void Update(GameTime gameTime)
-        {
-
-        }
-        public override bool IsAchieved()
-        {
-            foreach (Trigger trigger in Game1.world.map.triggers)
-            {
-                if (trigger.ID == 4)
-                {
-                    return trigger.hasTriggered();
-                }
-            }
-            return false;
-        }
-    }
-    /// <summary>
-    /// Achievement earned by entering the lower classroom
-    /// </summary>
-    public class Achievement_LowerClassRoom : Achievement
-    {
-
-        public Achievement_LowerClassRoom() : base("Enter the Math Class", "", 1000) { }
-        public override void Update(GameTime gameTime)
-        {
-
-        }
-        public override bool IsAchieved()
-        {
-            foreach (Trigger trigger in Game1.world.map.triggers)
-            {
-                if (trigger.ID == 2)
-                {
-                    return trigger.hasTriggered();
-                }
-            }
-            return false;
-        }
-    }
-    /// <summary>
-    /// Achievement earned by entering the lower classroom
-    /// </summary>
-    public class Achievement_UpperClassRoom : Achievement
-    {
-
-        public Achievement_UpperClassRoom() : base("Enter the Biology Class", "", 1000) { }
-        public override void Update(GameTime gameTime)
-        {
-
-        }
-        public override bool IsAchieved()
-        {
-            foreach (Trigger trigger in Game1.world.map.triggers)
-            {
-                if (trigger.ID == 1)
-                {
-                    return trigger.hasTriggered();
-                }
-            }
-            return false;
-        }
-    }
-    /// <summary>
-    /// Achievement earned by entering the lower classroom
-    /// </summary>
-    public class Achievement_LectureHall : Achievement
-    {
-
-        public Achievement_LectureHall() : base("Enter the Lecture Hall", "", 1000) { }
-        public override void Update(GameTime gameTime)
-        {
-
-        }
-        public override bool IsAchieved()
-        {
-            foreach (Trigger trigger in Game1.world.map.triggers)
-            {
-                if (trigger.ID == 3)
-                {
-                    return trigger.hasTriggered();
-                }
-            }
-            return false;
+            return complete;
         }
     }
 }

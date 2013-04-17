@@ -30,14 +30,14 @@ namespace COMP476Proj
 
             achievList.Add(new Achievement_Playtime());
             achievList.Add(new Achievement_PressSpace());
-            achievList.Add(new Achievement_PrincipalsOffice());
-            achievList.Add(new Achievement_Cafeteria());
-            achievList.Add(new Achievement_GirlsLockerRoom());
-            achievList.Add(new Achievement_BasketBallCourt());
-            achievList.Add(new Achievement_BoysLockerRoom());
-            achievList.Add(new Achievement_LowerClassRoom());
-            achievList.Add(new Achievement_UpperClassRoom());
-            achievList.Add(new Achievement_LectureHall());
+            achievList.Add(new Achievement_EnterRoom(7, "Principal's Office", 1000));
+            achievList.Add(new Achievement_EnterRoom(8, "Cafeteria", 1000));
+            achievList.Add(new Achievement_EnterRoom(6, "Girls' Locker Room", 8008));
+            achievList.Add(new Achievement_EnterRoom(5, "Basketball Court", 1000));
+            achievList.Add(new Achievement_EnterRoom(4, "Boys' Locker Room", 1000));
+            achievList.Add(new Achievement_EnterRoom(2, "Math Class", 1000));
+            achievList.Add(new Achievement_EnterRoom(1, "Biology Class", 1000));
+            achievList.Add(new Achievement_EnterRoom(3, "Lecture Hall", 1000));
             achievList.Add(new Achievement_Slick(1,1));
             achievList.Add(new Achievement_Slick(2,5));
             achievList.Add(new Achievement_Slick(3,10));
@@ -58,6 +58,7 @@ namespace COMP476Proj
             achievList.Add(new Achievement_PowerUp(2,15));
             achievList.Add(new Achievement_PowerUp(3,30));
             achievList.Add(new Achievement_PowerUp(4,50));
+            achievList.Add(new Achievement_DoomHallway(9, 10));
         }
 
         /// <summary>
