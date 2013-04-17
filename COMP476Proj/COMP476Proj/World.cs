@@ -40,7 +40,7 @@ namespace COMP476Proj
         private Flock smartFlock;
         private Flock dumbFlock;
         protected int copSpawnTimer = 0;
-        protected int copSpawnDelay = 10000;
+        protected int copSpawnDelay = 6000;
         protected int spawnCount = 0;
         protected float smartCopThreshold = 0.0f;
         protected float dumbCopThreshold = 1.0f;
@@ -175,7 +175,7 @@ namespace COMP476Proj
                     new MovementAIComponent2D(),
                     new DrawComponent(animation, Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), dcState);
             }
-            else if (randFloat <= smartCopThreshold)
+            else if (randFloat <= smartCopThreshold+dumbCopThreshold)
             {
                 Animation animation;
                 SmartCopState scState;
@@ -221,7 +221,7 @@ namespace COMP476Proj
                 dumbFlock.Members.Add(newNpc);
                 newNpc.flock = dumbFlock;
             }
-
+            spawnCount++;
             updateSpawnData();
         }
 
@@ -272,8 +272,8 @@ namespace COMP476Proj
                 case Difficulty.HARD:
                     if (spawnCount > 5)
                     {
-                        dumbCopThreshold = .75f;
-                        smartCopThreshold = 0.25f;
+                        dumbCopThreshold = 0.5f;
+                        smartCopThreshold = 0.5f;
                         copSpawnDelay = 10000;
                     }
                     else if (spawnCount > 10)
