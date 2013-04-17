@@ -64,7 +64,7 @@ namespace COMP476Proj
         /// </summary>
         private DataManager()
         {
-            health = 100000;
+            health = 100;
 
             score = 0;
 
