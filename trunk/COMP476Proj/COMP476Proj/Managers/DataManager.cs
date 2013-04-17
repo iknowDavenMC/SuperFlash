@@ -38,6 +38,10 @@ namespace COMP476Proj
 
         public int numberCopsKnockedOver;
 
+        public int numberOfCopsChasing;
+
+        public int numberOfRoboCopsChasing;
+
         public int numberOfDumbCopsLost;
 
         public int numberOfSmartCopsLost;
@@ -83,6 +87,10 @@ namespace COMP476Proj
             numberPedestriansKnockedOver = 0;
 
             numberCopsKnockedOver = 0;
+
+            numberOfCopsChasing = 0;
+            
+            numberOfRoboCopsChasing = 0;
 
             numberOfDumbCopsLost = 0;
 

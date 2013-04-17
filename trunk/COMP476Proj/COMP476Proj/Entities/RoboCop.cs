@@ -85,6 +85,7 @@ namespace COMP476Proj
                     playSound("Activation");
                     if (state != RoboCopState.PATHFIND)
                     {
+                        DataManager.GetInstance().numberOfRoboCopsChasing++;
                         draw.Reset();
                     }
                     state = RoboCopState.PURSUE;

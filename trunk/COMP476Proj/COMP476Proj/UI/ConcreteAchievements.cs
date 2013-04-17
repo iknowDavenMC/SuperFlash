@@ -194,7 +194,7 @@ namespace COMP476Proj
             if (!complete)
                 foreach (Trigger trigger in Game1.world.map.triggers)
                 {
-                    if (trigger.hasTriggered())
+                    if (Game1.world.streaker.BoundingRectangle.Collides(trigger.BoundingRectangle))
                     {
                         if (trigger.ID == leftID)
                         {
@@ -219,16 +219,68 @@ namespace COMP476Proj
                         }
                         else
                         {
+                            Game1.world.map.triggers.Find(t => t.ID == leftID).clearTriggered();
+                            Game1.world.map.triggers.Find(t => t.ID == rightID).clearTriggered();
                             leftSide = false;
                             rightSide = false;
                         }
                     }
                 }
         }
-
         public override bool IsAchieved()
         {
             return complete;
         }
     }
+
+    public class Achievement_LoseCops : Achievement
+    {
+        private int countTo;
+        public Achievement_LoseCops(int countTo)
+            : base("Lost " + (countTo == 1 ? "A" : countTo.ToString()) + " Dump Cop" + (countTo == 1 ? "" : "s"), "", 0)
+        {
+            this.countTo = countTo;
+        }
+
+        public override void Update(GameTime gameTime) { }
+
+        public override bool IsAchieved()
+        {
+            return DataManager.GetInstance().numberOfDumbCopsLost >= countTo;
+        }
+    }
+
+    public class Achievement_LoseAllCops : Achievement
+    {
+        private bool chased = false;
+        private int loseNumber;
+        public Achievement_LoseAllCops(int numToLose, int points)
+            : base("Dastardly Escape x" + numToLose, "Lose all cops after" + (numToLose) + "or more are chasing you", points)
+        {
+            loseNumber = numToLose;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (NPC.copsWhoSeeTheStreaker >= loseNumber)
+                chased = true;
+        }
+
+        public override bool IsAchieved()
+        {
+            return chased && DataManager.GetInstance().numberOfCopsChasing == 0;
+        }
+    }
+
+    public class Achievement_TriggerRobocop : Achievement
+    {
+        public Achievement_TriggerRobocop()
+            : base("You're coming with me!", "Spotted by RoboCop", 1000) { }
+        public override void Update(GameTime gameTime) { }
+        public override bool IsAchieved()
+        {
+            return DataManager.GetInstance().numberOfRoboCopsChasing > 0;
+        }
+    }
+
 }
