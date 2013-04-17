@@ -14,6 +14,18 @@ namespace COMP476Proj
     public class World
     {
         #region Fields
+        public struct Speeds
+        {
+            public const int Streaker_Run = 200;
+            public const int Pedestrian_Run = 115;
+            public const int Pedestrian_Walk = 75;
+            public const int DumbCop_Run = 135;
+            public const int DumbCop_Walk = 75;
+            public const int SmartCop_Run = 145;
+            public const int SmartCop_Walk = 75;
+            public const int RoboCop_Run = 115;
+        }
+
         public Streaker streaker;
         public List<NPC> npcs;
         public List<Wall> walls;
@@ -25,7 +37,8 @@ namespace COMP476Proj
         public List<Wall>[,] grid;
         public QuadTree qTree;
         public const int gridLength = 200;
-        private Flock flock;
+        private Flock smartFlock;
+        private Flock dumbFlock;
         protected int copSpawnTimer = 0;
         protected int copSpawnDelay = 30000;
         #endregion
@@ -33,7 +46,7 @@ namespace COMP476Proj
         #region Init
         public World()
         {
-            streaker = new Streaker(new PhysicsComponent2D(new Vector2(-50, -50), 0, new Vector2(20, 20), 200, 1250, 150, 750, 8, 50, 0.25f, true),
+            streaker = new Streaker(new PhysicsComponent2D(new Vector2(-50, -50), 0, new Vector2(20, 20), Speeds.Streaker_Run, 1250, 150, 750, 8, 50, 0.25f, true),
                 new DrawComponent(SpriteDatabase.GetAnimation("streaker_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f));
 
             npcs = new List<NPC>();
@@ -45,7 +58,8 @@ namespace COMP476Proj
 
             qTree = new QuadTree((int)Map.WIDTH, (int)Map.HEIGHT, 3);
             map = new Map();
-            flock = new Flock();
+            smartFlock = new Flock(300);
+            dumbFlock = new Flock(150);
             consumableSpawns = new List<ConsumableSpawnpoint>();
         }
 
@@ -59,8 +73,13 @@ namespace COMP476Proj
                 moveableObjectsY.Add(npc);
                 if (npc is SmartCop)
                 {
-                    flock.Members.Add(npc);
-                    npc.flock = flock;
+                    smartFlock.Members.Add(npc);
+                    npc.flock = smartFlock;
+                }
+                if (npc is DumbCop)
+                {
+                    dumbFlock.Members.Add(npc);
+                    npc.flock = dumbFlock;
                 }
             }
 
@@ -190,18 +209,28 @@ namespace COMP476Proj
                     endX = temp;
                 }
 
-                for (int k = startY; k != endY + 1; ++k)
+                try
                 {
-                    for (int l = startX; l != endX + 1; ++l)
+                    for (int k = startY; k != endY + 1; ++k)
                     {
-                        for (int j = 0; j != grid[k, l].Count; ++j)
+                        for (int l = startX; l != endX + 1; ++l)
                         {
-                            if (moveableObjectsX[i].BoundingRectangle.Collides(grid[k, l][j].BoundingRectangle))
+                            for (int j = 0; j != grid[k, l].Count; ++j)
                             {
-                                moveableObjectsX[i].ResolveCollision(grid[k, l][j]);
+                                if (moveableObjectsX[i].BoundingRectangle.Collides(grid[k, l][j].BoundingRectangle))
+                                {
+                                    moveableObjectsX[i].ResolveCollision(grid[k, l][j]);
+                                }
                             }
                         }
                     }
+                }
+                catch (IndexOutOfRangeException e)
+                {
+                    moveableObjectsY.Remove(moveableObjectsX[i]);
+
+                    moveableObjectsX.RemoveAt(i);
+                    --i;
                 }
             }
 

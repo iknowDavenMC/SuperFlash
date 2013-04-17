@@ -13,11 +13,12 @@ namespace COMP476Proj
 
         public struct Points
         {
-            public const int KnockDown = 100;
+            public const int KnockDownPed = 100;
+            public const int KnockDownCop = 200;
             public const int SuperFlashKnockDown = 150;
             public const int FleeProximity = 10;
             public const int Dance = 20;
-            public const int LoseCop = 300;
+            public const int LoseCop = 500;
             public const int LoseAllCops = 2000;
         }
         /// <summary>
