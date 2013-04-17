@@ -51,7 +51,7 @@ namespace COMP476Proj
         /// related content.  Calling base.Initialize will enumerate through any components
         /// and initialize them as well.
         /// </summary>
-        public override void Initialize()
+        protected override void Initialize()
         {
             InputManager.GetInstance();
 
@@ -65,7 +65,7 @@ namespace COMP476Proj
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
-        public override void LoadContent()
+        protected override void LoadContent()
         {
             SoundManager.GetInstance().LoadContent(Content);
             SoundManager.GetInstance().PlaySong("Level");

@@ -292,7 +292,9 @@ namespace COMP476Proj
                 replayButton.setSize(replayText.getSize());
                 replayButton.Update(mouse);
                 if (replayButton.isClicked)
-                    Game1.currentGameState = Game1.GameState.MAIN;
+                {
+                    //Game1.load
+                }
             }
         }
         #endregion
