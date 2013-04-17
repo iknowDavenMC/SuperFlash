@@ -50,18 +50,25 @@ namespace COMP476Proj
 
             bool collides = false;
 
-            for (int k = startY; k != endY + 1; ++k)
+            try
             {
-                for (int l = startX; l != endX + 1; ++l)
+                for (int k = startY; k != endY + 1; ++k)
                 {
-                    for (int j = 0; j != Game1.world.grid[k, l].Count; ++j)
+                    for (int l = startX; l != endX + 1; ++l)
                     {
-                        if (ray.IntersectsBox(Game1.world.grid[k, l][j].BoundingRectangle))
+                        for (int j = 0; j != Game1.world.grid[k, l].Count; ++j)
                         {
-                            collides = true;
+                            if (ray.IntersectsBox(Game1.world.grid[k, l][j].BoundingRectangle))
+                            {
+                                collides = true;
+                            }
                         }
                     }
                 }
+            }
+            catch (IndexOutOfRangeException e)
+            {
+
             }
 
             if (collides)
