@@ -21,7 +21,8 @@ namespace COMP476Proj
         private Vector2 position;
         private Vector2 origin;
         private Vector2 size;
-        private float scale;
+        public float scale;
+        private Vector2 vectorScale;
         private Rectangle rectangle;
         public float alpha;
         #endregion
@@ -37,6 +38,7 @@ namespace COMP476Proj
             this.size = size;
             this.rectangle = new Rectangle(0, 0, (int)(size.X), (int)(size.Y));
             this.alpha = 1.0f;
+            this.vectorScale = size;
         }
         
         public void LoadContent(Texture2D texture)
@@ -60,6 +62,10 @@ namespace COMP476Proj
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, position, rectangle, Color.White * alpha, 0.0f, origin, scale, SpriteEffects.None, .1f);
+        }
+        public void DrawWithScale(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(texture, position, rectangle, Color.White * alpha, 0.0f, origin, vectorScale, SpriteEffects.None, 0f);
         }
         #endregion
         
