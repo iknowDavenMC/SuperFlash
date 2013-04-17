@@ -75,6 +75,9 @@ namespace COMP476Proj
 
             soundEffects["Other"].Add("Achievement", new List<SoundEffect>(1));
             soundEffects["Other"].Add("Meter", new List<SoundEffect>(1));
+            soundEffects["Other"].Add("Consumable", new List<SoundEffect>(1));
+            soundEffects["Other"].Add("Score", new List<SoundEffect>(1));
+            soundEffects["Other"].Add("SuperFlash Ready", new List<SoundEffect>(1));
 
             soundEffects["Common"].Add("Collide", new List<SoundEffect>(1));
             soundEffects["Common"].Add("Fall", new List<SoundEffect>(1));
@@ -250,7 +253,14 @@ namespace COMP476Proj
                 MediaPlayer.Play(songs[key]);
 
                 // Loop the currently playing song
-                MediaPlayer.IsRepeating = true;
+                if (key == "Main Menu" || key == "Level")
+                {
+                    MediaPlayer.IsRepeating = true;
+                }
+                else
+                {
+                    MediaPlayer.IsRepeating = false;
+                }
 
                 return true;
             }
