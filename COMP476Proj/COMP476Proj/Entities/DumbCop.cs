@@ -319,7 +319,7 @@ namespace COMP476Proj
                     movement.Arrive(ref physics);
                     break;
                 case DumbCopState.FALL:
-                    movement.Stop(ref physics);
+                    //movement.Stop(ref physics);
                     break;
                 case DumbCopState.HIT:
                     movement.Stop(ref physics);
@@ -344,6 +344,8 @@ namespace COMP476Proj
         /// </summary>
         public void Update(GameTime gameTime, World w)
         {
+            pos = physics.Position;
+
             bool wallCollision = false;
             if(state != DumbCopState.FALL || state != DumbCopState.GET_UP || state != DumbCopState.HIT){
                 wallCollision = testWallCollide();

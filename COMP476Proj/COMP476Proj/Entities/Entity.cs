@@ -14,7 +14,7 @@ namespace COMP476Proj
         #region Fields
         protected Vector2 pos;
         protected BoundingRectangle rect;
-        protected bool isColliding = false;
+        public bool isColliding = false;
         #endregion
 
         #region Properties

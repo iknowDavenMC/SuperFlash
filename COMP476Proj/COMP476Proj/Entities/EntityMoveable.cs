@@ -26,6 +26,7 @@ namespace COMP476Proj
             rect.Update(physics.Position);
         }
 
+        /*
         public override void ResolveCollision(Entity other)
         {
             Rectanglef overlap = Rectanglef.Intersect(rect.Bounds, other.BoundingRectangle.Bounds);
@@ -68,6 +69,54 @@ namespace COMP476Proj
 
             // Resolve inter penetration
             physics.ResolveInterPenetration(overlap, rect.Bounds);
+        }
+         * */
+
+        public override void ResolveCollision(Entity other)
+        {
+            Rectanglef overlap = Rectanglef.Intersect(rect.Bounds, other.BoundingRectangle.Bounds);
+
+            if (overlap.X == 0 && overlap.Y == 0 && overlap.Width == 0 && overlap.Height == 0)
+            {
+                // No collision
+                return;
+            }
+
+            isColliding = true;
+            other.isColliding = true;
+
+            // Handle collision
+            if (other is EntityMoveable)
+            {
+                float mass1 = ComponentPhysics.Mass;
+                float mass2 = ((EntityMoveable)other).ComponentPhysics.Mass;
+
+                if (mass1 > mass2)
+                {
+                    if (other is Pedestrian && this is Streaker && ((Pedestrian)other).State != PedestrianState.FALL)
+                        DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDown, true,
+                            ((EntityMoveable)other).ComponentPhysics.Position.X,
+                            ((EntityMoveable)other).ComponentPhysics.Position.Y - 64);
+                    ((EntityMoveable)other).Fall(false);
+                }
+                if (mass1 < mass2)
+                {
+                    if (other is Streaker && this is Pedestrian && ((Pedestrian)this).State != PedestrianState.FALL)
+                        DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDown, true, physics.Position.X, physics.Position.Y - 64);
+                    Fall(false);
+                }
+
+                physics.ResolveCollision(((EntityMoveable)other).physics, overlap);
+                ((EntityMoveable)other).ComponentPhysics.ResolveCollision(physics, overlap);
+
+                physics.ResolveInterPenetration(overlap, rect.Bounds);
+                ((EntityMoveable)other).ComponentPhysics.ResolveInterPenetration(overlap, other.BoundingRectangle.Bounds);
+            }
+            else if (other is Wall)
+            {
+                physics.ResolveWallCollision(overlap);
+                physics.ResolveInterPenetrationWall(overlap, rect.Bounds);
+            }
         }
 
         /// <summary>

@@ -154,10 +154,11 @@ namespace COMP476Proj
                 movement.SetTarget(pos + rightTestDir);
                 movement.Seek(ref physics);
             }
-            
+        }
 
-
-            
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
         }
     }
 }
