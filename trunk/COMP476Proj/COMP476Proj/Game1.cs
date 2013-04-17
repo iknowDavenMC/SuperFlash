@@ -12,6 +12,7 @@ using StreakerLibrary;
 
 namespace COMP476Proj
 {
+    public enum Difficulty { EASY, MEDIUM, HARD, IMPOSSIBLE };
     /// <summary>
     /// This is the main type for your game
     /// </summary>
@@ -29,6 +30,8 @@ namespace COMP476Proj
         public static float elapsedTime;
         FrameRate frameRate;
         public static bool reset;
+        public static Difficulty difficulty = Difficulty.IMPOSSIBLE;
+
         Menu mainMenu;
 
         public enum GameState
