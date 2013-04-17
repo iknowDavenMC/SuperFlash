@@ -91,6 +91,12 @@ namespace COMP476Proj
 
         private ParticleSpewer particleBar;
 
+        private int sFlashNotifyTimer = 0;
+        private int sFlashNotifyDelay = 15000;
+        bool sFlashOn = false;
+
+        private int danceNotifyTimer = 0;
+        private int anceNotifyDelay = 15000;
         
 
         public float Height { get { return bannerComponent.getSize().Y; } }
@@ -115,7 +121,7 @@ namespace COMP476Proj
             healthBarContainerComponent.setOriginBottomLeft();
             //superFlashIconComponent = new SpriteComponent(new Vector2((bannerComponent.getPosition().X - bannerComponent.getSize().X/2) - 25, bannerComponent.getPosition().Y-2), new Vector2(45.0f, 45.0f));
             powerUpIcon = new PowerUpIcon(new Vector2(100, 50), 0f, false);
-            superFlashIcon = new DrawOscillate(SpriteDatabase.GetAnimation("superFlashIcon"), new Vector2(100,150), 0f, false);
+            superFlashIcon = new DrawOscillate(SpriteDatabase.GetAnimation("superFlashIcon"), new Vector2(100,150), 0f,true);
             hudDrawComponents.Add(superFlashIcon);
             
             
@@ -339,8 +345,30 @@ namespace COMP476Proj
             timerText.Draw(gameTime, spriteBatch, scale, offset);
 
             drawGameOver(gameTime, spriteBatch, offset, scale);
-            
-            
+
+            sFlashNotifyTimer += gameTime.ElapsedGameTime.Milliseconds;
+
+            if (Game1.world.streaker.hasSuperFlash() && sFlashNotifyDelay < sFlashNotifyTimer)
+           {
+               spriteBatch.DrawString(spriteFont, "Press S to Superflash!!",
+               new Vector2(Camera.Width / 2 - 120f, 25f) * scale + offset,
+               Color.Black, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+
+                spriteBatch.DrawString(spriteFont, "Press S to Superflash!!",
+                new Vector2(Camera.Width/2-119f,24f) * scale + offset,
+                Color.White, 0f, Vector2.Zero,scale, SpriteEffects.None, 0f);            
+            }
+
+            //if (Game1.world.streaker.hasSuperFlash() && sFlashNotifyDelay < sFlashNotifyTimer)
+            //{
+            //    spriteBatch.DrawString(spriteFont, "Press D to Dance!!",
+            //    new Vector2(Camera.Width / 2 - 120f, 25f) * scale + offset,
+            //    Color.Black, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+
+            //    spriteBatch.DrawString(spriteFont, "Press D to Dance!!",
+            //    new Vector2(Camera.Width / 2 - 119f, 24f) * scale + offset,
+            //    Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            //}
             
         }
         
@@ -450,14 +478,23 @@ namespace COMP476Proj
             if (Game1.world.streaker.hasSuperFlash())
             {
                 superFlashIcon.OscillateAlpha = true;
-                //superFlashIconComponent.setAlpha(1.0f);
-
+                if (!sFlashOn)
+                {
+                    sFlashOn = true;
+                    SoundManager.GetInstance().PlaySound("Other", "SuperFlash Ready", false);
+                    sFlashNotifyTimer = 0;
+                }
             }
             else
             {
                 superFlashIcon.Alpha = 0.2f;
                 superFlashIcon.OscillateAlpha = false;
+                if (sFlashOn)
+                {
+                    sFlashOn = false;
+                }
                 //superFlashIconComponent.setAlpha(0.3f);
+                
             }
         }
         
