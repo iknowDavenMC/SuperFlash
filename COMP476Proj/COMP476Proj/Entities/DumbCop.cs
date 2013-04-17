@@ -356,7 +356,19 @@ namespace COMP476Proj
             movement.Look(ref physics);
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
             physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
-            if (physics.Orientation > 0)
+
+            if (state == DumbCopState.HIT)
+            {
+                if (pos.X < Game1.world.streaker.Position.X)
+                {
+                    draw.SpriteEffect = SpriteEffects.None;
+                }
+                else
+                {
+                    draw.SpriteEffect = SpriteEffects.FlipHorizontally;
+                }
+            }
+            else if (physics.Orientation > 0)
             {
                 draw.SpriteEffect = SpriteEffects.None;
             }

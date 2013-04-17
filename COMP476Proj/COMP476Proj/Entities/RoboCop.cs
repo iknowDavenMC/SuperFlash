@@ -238,7 +238,18 @@ namespace COMP476Proj
         public void Update(GameTime gameTime, World w)
         {
             bool wallCollision = false;
-            if (state != RoboCopState.HIT)
+            if (state ==RoboCopState.HIT)
+            {
+                if (pos.X < Game1.world.streaker.Position.X)
+                {
+                    draw.SpriteEffect = SpriteEffects.None;
+                }
+                else
+                {
+                    draw.SpriteEffect = SpriteEffects.FlipHorizontally;
+                }
+            }
+            else if (state != RoboCopState.HIT)
             {
                 wallCollision = testWallCollide();
             }
