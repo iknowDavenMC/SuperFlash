@@ -60,7 +60,7 @@ namespace COMP476Proj
 
             frameRate = new FrameRate(this, 1);
             mainMenu = new Menu();
-            currentGameState = GameState.PLAY;
+            currentGameState = GameState.MAIN;
             base.Initialize();
         }
 
