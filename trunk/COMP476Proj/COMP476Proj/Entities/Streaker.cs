@@ -49,7 +49,7 @@ namespace COMP476Proj
         /// <summary>
         /// Recover Timer
         /// </summary>
-        private int recoverTimer;
+        private int recoverTimer = 750;
 
         /// <summary>
         /// Whether or not the image is flipped
@@ -69,7 +69,7 @@ namespace COMP476Proj
         /// <summary>
         /// Time to recover
         /// </summary>
-        private const int TIME_TO_RECOVER = 400;
+        private const int TIME_TO_RECOVER = 500;
 
         /// <summary>
         /// Is the player running faster
@@ -150,6 +150,12 @@ namespace COMP476Proj
         {
             return (superFlashTimer >= superFlashDelay);
         }
+
+        public bool IsGhost
+        {
+            get { return recoverTimer < TIME_TO_RECOVER; }
+        }
+
         #endregion
 
         #region Private Methods
