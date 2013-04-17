@@ -80,6 +80,11 @@ namespace COMP476Proj
         /// </summary>
         private DataManager()
         {
+            Reset();
+        }
+
+        public void Reset()
+        {
             health = 100;
 
             score = 0;
@@ -205,36 +210,6 @@ namespace COMP476Proj
             }
         }
 
-        public void resetData()
-        {
-            health = 100;
-
-            score = 0;
-
-            time = 0;
-
-            numberPedestriansKnockedOver = 0;
-
-            numberCopsKnockedOver = 0;
-
-            numberOfDumbCopsLost = 0;
-
-            numberOfSmartCopsLost = 0;
-
-            numberOfSteroids = 0;
-
-            numberOfGrease = 0;
-
-            numberOfSneakers = 0;
-
-            numberOfRedBull = 0;
-
-            timeDancing = 0;
-
-            numberofSuperFlash = 0;
-
-            popups = new List<ScorePopup>();
-        }
         #endregion
     }
 }
