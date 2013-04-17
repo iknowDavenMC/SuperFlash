@@ -33,8 +33,8 @@ namespace COMP476Proj
             achievList.Add(new Achievement_EnterRoom(7, "Principal's Office", 1000));
             achievList.Add(new Achievement_EnterRoom(8, "Cafeteria", 1000));
             achievList.Add(new Achievement_EnterRoom(6, "Girls' Locker Room", 8008));
-            achievList.Add(new Achievement_EnterRoom(5, "Basketball Court", 1000));
-            achievList.Add(new Achievement_EnterRoom(4, "Boys' Locker Room", 1000));
+            achievList.Add(new Achievement_EnterRoom(4, "Basketball Court", 1000));
+            achievList.Add(new Achievement_EnterRoom(5, "Boys' Locker Room", 1000));
             achievList.Add(new Achievement_EnterRoom(2, "Math Class", 1000));
             achievList.Add(new Achievement_EnterRoom(1, "Biology Class", 1000));
             achievList.Add(new Achievement_EnterRoom(3, "Lecture Hall", 1000));
