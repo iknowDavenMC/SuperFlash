@@ -82,6 +82,14 @@ namespace COMP476Proj
             achievList.Add(new Achievement_SuperFlashVictims(5, 1000));
             achievList.Add(new Achievement_SuperFlashVictims(15, 1500));
             achievList.Add(new Achievement_SuperFlashVictims(25, 2500));
+            achievList.Add(new Achievement_KnockDownPed(5, 1000));
+            achievList.Add(new Achievement_KnockDownPed(15, 1500));
+            achievList.Add(new Achievement_KnockDownPed(25, 25000));
+            achievList.Add(new Achievement_KnockDownPed(50, 5000));
+            achievList.Add(new Achievement_KnockDownCop(5, 1000));
+            achievList.Add(new Achievement_KnockDownCop(10, 1500));
+            achievList.Add(new Achievement_KnockDownCop(15, 2500));
+            achievList.Add(new Achievement_KnockDownCop(25, 5000));
         }
 
         /// <summary>
