@@ -54,7 +54,9 @@ namespace COMP476Proj
 
         public int numberOfRedBull;
 
-        private float timeDancing;
+        public float timeDancing;
+
+        public float longestDance;
 
         public int numberofSuperFlash;
 
@@ -105,6 +107,8 @@ namespace COMP476Proj
             numberOfRedBull = 0;
 
             timeDancing = 0;
+
+            longestDance = 0;
 
             numberofSuperFlash = 0;
 

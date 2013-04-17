@@ -275,11 +275,42 @@ namespace COMP476Proj
     public class Achievement_TriggerRobocop : Achievement
     {
         public Achievement_TriggerRobocop()
-            : base("You're coming with me!", "Spotted by RoboCop", 1000) { }
+            : base("Dead or alive, you're coming with me!", "Spotted by RoboCop", 1000) { }
         public override void Update(GameTime gameTime) { }
         public override bool IsAchieved()
         {
             return DataManager.GetInstance().numberOfRoboCopsChasing > 0;
+        }
+    }
+
+    public class Achievement_DanceTime : Achievement
+    {
+        private int targetTime;
+        public Achievement_DanceTime(int timeToDance, int points)
+            : base("Get Jiggy With It", "Dance for " + timeToDance/1000f + " seconds", points)
+        {
+            targetTime = timeToDance;
+        }
+
+        public override void Update(GameTime gameTime) { }
+        public override bool IsAchieved()
+        {
+            return DataManager.GetInstance().timeDancing >= targetTime;
+        }
+    }
+
+    public class Achievement_LongDance : Achievement
+    {
+        private int targetTime;
+        public Achievement_LongDance(int timeToDance, int points)
+            : base("Put on a show", "Dance for " + timeToDance / 1000f + " seconds in a row", points)
+        {
+            targetTime = timeToDance;
+        }
+        public override void Update(GameTime gameTime) { }
+        public override bool IsAchieved()
+        {
+            return DataManager.GetInstance().longestDance >= targetTime;
         }
     }
 

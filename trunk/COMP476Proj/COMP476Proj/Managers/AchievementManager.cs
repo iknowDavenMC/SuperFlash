@@ -67,6 +67,9 @@ namespace COMP476Proj
             achievList.Add(new Achievement_LoseAllCops(5, 1000));
             achievList.Add(new Achievement_LoseAllCops(10, 1500));
             achievList.Add(new Achievement_TriggerRobocop());
+
+            achievList.Add(new Achievement_DanceTime(10000, 2000));
+            achievList.Add(new Achievement_LongDance(5000, 1000));
         }
 
         /// <summary>

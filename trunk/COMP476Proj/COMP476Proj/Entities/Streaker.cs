@@ -20,7 +20,6 @@ namespace COMP476Proj
         /// </summary>
         private bool isDead;
         private bool stayDown;
-
         /// <summary>
         /// Determines how many milliseconds have gone by since input was last checked
         /// </summary>
@@ -108,7 +107,7 @@ namespace COMP476Proj
         private int particleTimer = 0;
         private const int dancePointTimeout = 500;
         private int danceTimer = 0;
-
+        private int danceTotalTime = 0;
         #endregion
 
         #region Constructors
@@ -435,14 +434,21 @@ namespace COMP476Proj
                 Camera.Scale = 2f;
                 danceParticles.Start();
                 danceTimer += gameTime.ElapsedGameTime.Milliseconds;
+                danceTotalTime += gameTime.ElapsedGameTime.Milliseconds;
+                DataManager dataMan = DataManager.GetInstance();
                 if (danceTimer >= dancePointTimeout)
                 {
                     danceTimer = 0;
-                    DataManager.GetInstance().IncreaseScore(DataManager.Points.Dance, true, physics.Position.X, physics.Position.Y - 64);
+                    dataMan.IncreaseScore(DataManager.Points.Dance, true, physics.Position.X, physics.Position.Y - 64);
                 }
+                if (danceTotalTime > dataMan.longestDance)
+                    dataMan.longestDance = danceTotalTime;
             }
             else
+            {
                 Camera.Scale = 1f;
+                danceTotalTime = 0;
+            }
             danceParticles.X = physics.Position.X;
             danceParticles.Y = physics.Position.Y - 020;
             danceParticles.Update(gameTime);
