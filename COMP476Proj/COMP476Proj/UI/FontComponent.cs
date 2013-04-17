@@ -21,10 +21,11 @@ namespace COMP476Proj
         private String text;
         private Vector2 position;
         private Vector2 origin;
-        private Vector2 size;
+        public Vector2 size;
         private float scale;
         private Rectangle rectangle;
         public float alpha;
+        public float timer;
         #endregion
 
         /* -------------------------------------------------------------- */
@@ -38,6 +39,7 @@ namespace COMP476Proj
             this.size = size;
             this.rectangle = new Rectangle(0, 0, (int)(size.X), (int)(size.Y));
             this.alpha = 1.0f;
+            this.timer = 0.0f;
         }
 
         public void LoadContent(SpriteFont font)
@@ -58,7 +60,7 @@ namespace COMP476Proj
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, float scale, Vector2 offset)
         {
-            spriteBatch.DrawString(font, text, position * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, text, position * scale + offset, Color.White*alpha, 0f, Vector2.Zero, this.scale, SpriteEffects.None, 0f);
         }
         #endregion
 
@@ -112,6 +114,11 @@ namespace COMP476Proj
         {
             this.origin.Y = size.Y;
             this.origin.X = 0.0f;
+        }
+        public void setOriginCenter()
+        {
+            this.origin.X = this.size.X / 2;
+            this.origin.Y = this.size.Y / 2;
         }
         #endregion
     }
