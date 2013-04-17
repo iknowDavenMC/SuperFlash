@@ -16,7 +16,7 @@ namespace COMP476Proj
         private static AchievementManager instance;
         private List<Achievement> achievList;
         private List<AchievementToast> toasts;
-        private int toastWidth = 411;
+        private int toastWidth = 481;
         private int toastHeight = 83;
         private float dropSpeed = 250;
 
@@ -34,6 +34,7 @@ namespace COMP476Proj
             toasts = new List<AchievementToast>();
 
             achievList.Add(new Achievement_Playtime());
+            achievList.Add(new Achievement_PlaytimeLong());
             achievList.Add(new Achievement_PressSpace());
             achievList.Add(new Achievement_EnterRoom(7, "Principal's Office", 1000));
             achievList.Add(new Achievement_EnterRoom(8, "Cafeteria", 1000));
@@ -66,15 +67,21 @@ namespace COMP476Proj
             achievList.Add(new Achievement_PowerUp(3, 30));
             achievList.Add(new Achievement_PowerUp(4, 50));
 
-            achievList.Add(new Achievement_LoseCops(1));
-            achievList.Add(new Achievement_LoseCops(5));
-            achievList.Add(new Achievement_LoseCops(10));
+            achievList.Add(new Achievement_LoseCops(1, 1000));
+            achievList.Add(new Achievement_LoseCops(5, 1500));
+            achievList.Add(new Achievement_LoseCops(10, 2000));
             achievList.Add(new Achievement_LoseAllCops(5, 1000));
             achievList.Add(new Achievement_LoseAllCops(10, 1500));
             achievList.Add(new Achievement_TriggerRobocop());
 
             achievList.Add(new Achievement_DanceTime(10000, 2000));
             achievList.Add(new Achievement_LongDance(5000, 1000));
+            achievList.Add(new Achievement_SuperFlash(1, 1000));
+            achievList.Add(new Achievement_SuperFlash(5, 2000));
+            achievList.Add(new Achievement_BigSuperFlash(10, 2500));
+            achievList.Add(new Achievement_SuperFlashVictims(5, 1000));
+            achievList.Add(new Achievement_SuperFlashVictims(15, 1500));
+            achievList.Add(new Achievement_SuperFlashVictims(25, 2500));
         }
 
         /// <summary>

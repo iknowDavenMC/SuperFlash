@@ -13,6 +13,7 @@ namespace COMP476Proj
     // To create an achievement, create a new public class and override the Update
     // and IsAchieved methods. Make sure to call the base constructor with the name,
     // description, and score value.
+
     /// <summary>
     /// Achievement earned through playtime
     /// </summary>
@@ -24,6 +25,33 @@ namespace COMP476Proj
 
         public Achievement_Playtime()
             : base("Easiest achievement ever", "Exist for 2 seconds", 1000)
+        {
+            timePlayed = 0;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            int time = gameTime.ElapsedGameTime.Milliseconds;
+            timePlayed += time;
+        }
+
+        public override bool IsAchieved()
+        {
+            return timePlayed >= maxTime;
+        }
+    }
+
+    /// <summary>
+    /// Achievement earned through playtime
+    /// </summary>
+    /// 
+    public class Achievement_PlaytimeLong : Achievement
+    {
+        private int timePlayed;
+        private const int maxTime = 300000;
+
+        public Achievement_PlaytimeLong()
+            : base("Long Streak!", "Streak for 5 minutes", 1000)
         {
             timePlayed = 0;
         }
@@ -236,8 +264,8 @@ namespace COMP476Proj
     public class Achievement_LoseCops : Achievement
     {
         private int countTo;
-        public Achievement_LoseCops(int countTo)
-            : base("Lost " + (countTo == 1 ? "A" : countTo.ToString()) + " Dumb Cop" + (countTo == 1 ? "" : "s"), "", 0)
+        public Achievement_LoseCops(int countTo, int points)
+            : base("Lost " + (countTo == 1 ? "A" : countTo.ToString()) + " Dumb Cop" + (countTo == 1 ? "" : "s"), "", points)
         {
             this.countTo = countTo;
         }
@@ -313,5 +341,52 @@ namespace COMP476Proj
             return DataManager.GetInstance().longestDance >= targetTime;
         }
     }
+
+    public class Achievement_SuperFlash : Achievement
+    {
+        private int targetCount;
+        public Achievement_SuperFlash(int flashCount, int points)
+            : base("SUPERFLASH! x " + flashCount, "Superflash " + flashCount + " time" + (flashCount == 1 ? "" : "s"), points)
+        {
+            targetCount = flashCount;
+        }
+        public override void Update(GameTime gameTime) { }
+        public override bool IsAchieved()
+        {
+            return DataManager.GetInstance().numberofSuperFlash >= targetCount;
+        }
+    }
+
+    public class Achievement_BigSuperFlash : Achievement
+    {
+        private int targetCount;
+        public Achievement_BigSuperFlash(int victimCount, int points)
+            : base("Oh, the huge manatee!", "Superflash " + victimCount + (victimCount == 1 ? "" : "s") + " at once", points)
+        {
+            targetCount = victimCount;
+        }
+        public override void Update(GameTime gameTime) { }
+        public override bool IsAchieved()
+        {
+            return DataManager.GetInstance().biggestSuperflash >= targetCount;
+        }
+    }
+
+    public class Achievement_SuperFlashVictims : Achievement
+    {
+        private int targetCount;
+        public Achievement_SuperFlashVictims(int victimCount, int points)
+            : base("Exhibitionist x " + victimCount, "Superflash " + victimCount + (victimCount == 1 ? "" : "s") + " at once", points)
+        {
+            targetCount = victimCount;
+        }
+        public override void Update(GameTime gameTime) { }
+        public override bool IsAchieved()
+        {
+            return DataManager.GetInstance().biggestSuperflash >= targetCount;
+        }
+    }
+
+
 
 }

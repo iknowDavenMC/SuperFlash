@@ -124,7 +124,7 @@ namespace COMP476Proj
             recoverTimer = 0;
             inputDelay = 100;
             superFlashTimer = 0;
-            superFlashDelay = 10000;
+            superFlashDelay = 20000;
 
             superFlashParticles = new ParticleSpewer(
                 phys.Position.X + draw.animation.FrameWidth / 2, phys.Position.Y + draw.animation.FrameHeight / 2,
@@ -303,6 +303,7 @@ namespace COMP476Proj
 
         private void superFlash()
         {
+            int victimCount = 0;
             foreach (EntityMoveable entity in Game1.world.moveableObjectsX)
             {
                 if (entity is Streaker)
@@ -361,7 +362,10 @@ namespace COMP476Proj
                     {
                         entity.Fall(true);
                         if (!(entity is RoboCop))
+                        {
+                            ++victimCount;
                             DataManager.GetInstance().IncreaseScore(DataManager.Points.SuperFlashKnockDown, true, entity.ComponentPhysics.Position.X, entity.ComponentPhysics.Position.Y - 64);
+                        }
                     }
                 }
                 catch (IndexOutOfRangeException e)
@@ -369,6 +373,11 @@ namespace COMP476Proj
 
                 }
             }
+            DataManager dataMan = DataManager.GetInstance();
+            dataMan.SuperflashVictims += victimCount;
+            if (dataMan.biggestSuperflash < victimCount)
+                dataMan.biggestSuperflash = victimCount;
+            dataMan.numberofSuperFlash++;
         }
 
         private void undoConsumable()

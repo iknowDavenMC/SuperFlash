@@ -60,6 +60,10 @@ namespace COMP476Proj
 
         public int numberofSuperFlash;
 
+        public int SuperflashVictims;
+
+        public int biggestSuperflash;
+
         public int highScore;
 
         private List<ScorePopup> popups;
