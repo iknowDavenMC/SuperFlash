@@ -122,7 +122,7 @@ namespace COMP476Proj
             Vector2 titleSize = titleFont.MeasureString(title);
             Vector2 textSize = textFont.MeasureString(description);
             Vector2 titlePos = new Vector2(
-                (X + 125 + (width-125) / 2 - titleSize.X / 2)*scale + offset.X,
+                (X + 160 + (width-160) / 2 - titleSize.X / 2)*scale + offset.X,
                 (Y + 40 + borderWidth * 2)*scale + offset.Y);
 
             spriteBatch.DrawString(titleFont, title, titlePos, Color.Black, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
