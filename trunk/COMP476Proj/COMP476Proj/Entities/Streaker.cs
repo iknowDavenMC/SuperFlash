@@ -325,20 +325,28 @@ namespace COMP476Proj
                 int endX = (int)Math.Round(Math.Max(Position.X, entity.Position.X) / World.gridLength);
                 int endY = (int)Math.Round(Math.Max(Position.Y, entity.Position.Y) / World.gridLength);
 
-                for (int k = startY; k != endY + 1; ++k)
+                try
                 {
-                    for (int l = startX; l != endX + 1; ++l)
+                    for (int k = startY; k != endY + 1; ++k)
                     {
-                        for (int j = 0; j != Game1.world.grid[k, l].Count; ++j)
+                        for (int l = startX; l != endX + 1; ++l)
                         {
-                            if (Game1.world.grid[k, l][j].IsSeeThrough)
+                            for (int j = 0; j != Game1.world.grid[k, l].Count; ++j)
                             {
-                                continue;
+                                if (Game1.world.grid[k, l][j].IsSeeThrough)
+                                {
+                                    continue;
+                                }
+
+                                if (test.IntersectsBox(Game1.world.grid[k, l][j].BoundingRectangle))
+                                {
+                                    canBeHit = false;
+                                    break;
+                                }
                             }
 
-                            if (test.IntersectsBox(Game1.world.grid[k, l][j].BoundingRectangle))
+                            if (!canBeHit)
                             {
-                                canBeHit = false;
                                 break;
                             }
                         }
@@ -349,16 +357,15 @@ namespace COMP476Proj
                         }
                     }
 
-                    if (!canBeHit)
+                    if (canBeHit)
                     {
-                        break;
+                        entity.Fall(true);
+                        DataManager.GetInstance().IncreaseScore(DataManager.Points.SuperFlashKnockDown, true, entity.ComponentPhysics.Position.X, entity.ComponentPhysics.Position.Y - 64);
                     }
                 }
-
-                if (canBeHit)
+                catch (IndexOutOfRangeException e)
                 {
-                    entity.Fall(true);
-                    DataManager.GetInstance().IncreaseScore(DataManager.Points.SuperFlashKnockDown, true, entity.ComponentPhysics.Position.X, entity.ComponentPhysics.Position.Y - 64);
+
                 }
             }
         }
@@ -446,7 +453,7 @@ namespace COMP476Proj
             }
             else
             {
-                Camera.Scale = 0.5f;
+                Camera.Scale = 1f;
                 danceTotalTime = 0;
             }
             danceParticles.X = physics.Position.X;
