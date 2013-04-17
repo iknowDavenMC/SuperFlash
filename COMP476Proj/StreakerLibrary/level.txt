@@ -319,9 +319,9 @@ NPCS
 2445 1005 Civilian Static 0 0
 -253 -343 Civilian Static 0 0
 628 902 DumbCop Static 0 0
-2009 1029 DumbCop Static 0 0
 1174 486 DumbCop Static 0 0
 3113 148 RoboCop Static 0 0
+1809 962 DumbCop Static 0 0
 TRIGGER
 29 89 433 434 1
 29 667 432 427 2
