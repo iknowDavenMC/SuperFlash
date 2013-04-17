@@ -533,6 +533,10 @@ namespace COMP476Proj
 
         public void GetHit()
         {
+            if (stayDown)
+            {
+                return;
+            }
             if (!isSlickBoost && charState != StreakerState.FALL && charState != StreakerState.GET_UP 
                 && recoverTimer > TIME_TO_RECOVER)
             {

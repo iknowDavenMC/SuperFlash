@@ -13,14 +13,14 @@ namespace COMP476Proj
         Consumable myConsumable;
         int spawnTimer = 0;
         int spawnDelay;
-        bool spawned = true;
-        private const int MAX_SPAWN_DELAY = 50000;
+        bool spawned = false;
+        private const int MAX_SPAWN_DELAY = 60000;
         private const int MIN_SPAWN_DELAY = 25000;
 
         public ConsumableSpawnpoint(Vector2 pos, ConsumableType type)
         {   
             myConsumable = new Consumable(pos,type);
-            spawnDelay = Game1.random.Next(MIN_SPAWN_DELAY,MIN_SPAWN_DELAY);
+            spawnDelay = Game1.random.Next(MIN_SPAWN_DELAY,MAX_SPAWN_DELAY);
         }
 
         public void Update(GameTime gameTime)
@@ -42,7 +42,7 @@ namespace COMP476Proj
                 {
                     spawned = true;
                     myConsumable.ResetConsumable();
-                    spawnDelay = Game1.random.Next(MIN_SPAWN_DELAY, MIN_SPAWN_DELAY);
+                    spawnDelay = Game1.random.Next(MIN_SPAWN_DELAY, MAX_SPAWN_DELAY);
                 }
             }
 
