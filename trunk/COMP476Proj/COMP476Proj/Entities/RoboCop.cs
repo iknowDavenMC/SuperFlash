@@ -142,11 +142,7 @@ namespace COMP476Proj
                 {
                     path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
-                    // Optimize
-                    while (path.Count > 1 && canReach)
-                    {
-                        path.RemoveAt(0);
-                    }
+                    OptimizePath(ref path);
 
                     transitionToState(RoboCopState.PATHFIND);
                 }
@@ -167,11 +163,7 @@ namespace COMP476Proj
 
                     path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
-                    // Optimize
-                    while (path.Count > 1 && canReach)
-                    {
-                        path.RemoveAt(0);
-                    }
+                    OptimizePath(ref path);
                 }
                 // Else, continue along path
                 else
@@ -183,11 +175,7 @@ namespace COMP476Proj
 
                         path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
-                        // Optimize
-                        while (path.Count > 1 && canReach)
-                        {
-                            path.RemoveAt(0);
-                        }
+                        OptimizePath(ref path);
                     }
                     // If at next node, update node to seek
                     else if (path.Count > 0 && (Position - path[0].Position).Length() <= movement.ArrivalRadius)

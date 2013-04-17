@@ -538,6 +538,8 @@ namespace COMP476Proj
 
         public override void Fall(bool isSuperFlash)
         {
+            recoverTimer = 0;
+
             if (charState != StreakerState.FALL)
             {
                 draw.Reset();
