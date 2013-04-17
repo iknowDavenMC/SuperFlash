@@ -98,7 +98,6 @@ namespace COMP476Proj
             Camera.MaxX = level.Width;
             Camera.MaxY = level.Height;
             Camera.Target = world.streaker;
-            Camera.Scale = 1.0f;
             Camera.Scale = 1f;
 
             Debugger.getInstance();
@@ -118,7 +117,19 @@ namespace COMP476Proj
 
         public static void LoadContentReset()
         {
-            DataManager.GetInstance().resetData();
+            NPC.copsWhoSeeTheStreaker = 0;
+            SmartCop.closest = null;
+            SmartCop.closestDistSq = float.MaxValue;
+            SmartCop.StreakerSeen = false;
+
+            foreach (Trigger trigger in world.map.triggers)
+            {
+                trigger.clearTriggered();
+            }
+
+            AchievementManager.getInstance().Reset();
+            DataManager.GetInstance().Reset();            
+
             elapsedTime = 0.0f;
             world = new World();
             world.LoadMap("level.txt");
