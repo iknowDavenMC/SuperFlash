@@ -85,6 +85,15 @@ namespace COMP476Proj
             int endX = (int)Math.Round(Math.Max(Position.X, Game1.world.streaker.Position.X) / World.gridLength);
             int endY = (int)Math.Round(Math.Max(Position.Y, Game1.world.streaker.Position.Y) / World.gridLength);
 
+            if (startX < 0)
+                startX = 0;
+            if (startY < 0)
+                startY = 0;
+            if (endX > Game1.world.grid.GetUpperBound(1))
+                endX = Game1.world.grid.GetUpperBound(1);
+            if (endY > Game1.world.grid.GetUpperBound(0))
+                endY = Game1.world.grid.GetUpperBound(0);
+
             for (int k = startY; k != endY + 1; ++k)
             {
                 for (int l = startX; l != endX + 1; ++l)
