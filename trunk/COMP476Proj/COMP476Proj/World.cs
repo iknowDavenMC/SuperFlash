@@ -171,7 +171,7 @@ namespace COMP476Proj
                     animation = SpriteDatabase.GetAnimation("cop_walk");
                 }
                 newNpc = new DumbCop(
-                    new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20), 135, 750, 75, 1000, 8, 50, 0.25f, true),
+                    new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20), Speeds.DumbCop_Run, 750, Speeds.DumbCop_Run, 1000, 8, 50, 0.25f, true),
                     new MovementAIComponent2D(),
                     new DrawComponent(animation, Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), dcState);
             }
@@ -192,7 +192,7 @@ namespace COMP476Proj
                 }
                 newNpc = new SmartCop(
                                 new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20),
-                                    100, 750, 75, 1000, 8, 50, 0.25f, true),
+                                    Speeds.SmartCop_Run, 750, Speeds.SmartCop_Walk, 1000, 8, 50, 0.25f, true),
                                 new MovementAIComponent2D(3, 2, MathHelper.ToRadians(45), 0.5f, 50, 25, Vector2.Zero, Vector2.Zero, 0.1f),
                                 new DrawComponent(animation, Color.White, Vector2.Zero,
                                     new Vector2(.4f, .4f), .5f), scState);
@@ -200,7 +200,7 @@ namespace COMP476Proj
             else
             {
                 newNpc = new RoboCop(
-                            new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20), 100, 750, 75, 1000, 8, 50, 0.25f, true),
+                            new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20), Speeds.RoboCop_Run, 750, 75, 1000, 8, 70, 0.25f, true),
                             new MovementAIComponent2D(),
                             new DrawComponent(SpriteDatabase.GetAnimation("roboCop_static"), Color.White,
                                               Vector2.Zero, new Vector2(.4f, .4f), .5f));
@@ -306,7 +306,7 @@ namespace COMP476Proj
         {
             copSpawnTimer += gameTime.ElapsedGameTime.Milliseconds;
             if(copSpawnDelay < copSpawnTimer){
-                //spawnCop();
+                spawnCop();
                 copSpawnTimer = 0;
             }
             // Update node costs
