@@ -75,7 +75,9 @@ namespace COMP476Proj
             reset = false;
             graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
             graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
-            //this.graphics.IsFullScreen = true;
+#if(!DEBUG)
+            this.graphics.IsFullScreen = true;
+#endif
             graphics.ApplyChanges();
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -128,7 +130,7 @@ namespace COMP476Proj
             }
 
             AchievementManager.getInstance().Reset();
-            DataManager.GetInstance().Reset();            
+            DataManager.GetInstance().Reset();
 
             elapsedTime = 0.0f;
             world = new World();
@@ -137,7 +139,7 @@ namespace COMP476Proj
             //Reset data in datamanager
             SoundManager.GetInstance().PlaySong("Level");
             Camera.Target = world.streaker;
-            
+
         }
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -171,11 +173,11 @@ namespace COMP476Proj
             {
                 world.Update(gameTime);
                 Camera.Update(gameTime);
-                //#if (DEBUG)
+#if (DEBUG)
                 {
                     this.Window.Title = frameRate.CurrentFramesPerSecond.ToString() + " frames per second";
                 }
-                //#endif
+#endif
                 elapsedTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 HUD.getInstance().Update(gameTime);
             }
