@@ -381,7 +381,7 @@ namespace COMP476Proj
                     movement.Arrive(ref physics);
                     break;
                 case SmartCopState.FALL:
-                    movement.Stop(ref physics);
+                    //movement.Stop(ref physics);
                     break;
                 case SmartCopState.HIT:
                     movement.Stop(ref physics);
@@ -406,6 +406,8 @@ namespace COMP476Proj
         /// </summary>
         public void Update(GameTime gameTime, World w)
         {
+            pos = physics.Position;
+
             bool wallCollision = false;
             if (state != SmartCopState.FALL || state != SmartCopState.GET_UP || state != SmartCopState.HIT )
             {

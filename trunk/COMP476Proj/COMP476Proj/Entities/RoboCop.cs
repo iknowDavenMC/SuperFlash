@@ -129,6 +129,10 @@ namespace COMP476Proj
                 {
                     transitionToState(RoboCopState.HIT);
                 }
+                else if (distance < detectRadius && lineOfSight)
+                {
+                    // Don't change anything
+                }
                 else
                 {
                     path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
@@ -237,6 +241,8 @@ namespace COMP476Proj
         /// </summary>
         public void Update(GameTime gameTime, World w)
         {
+            pos = physics.Position;
+
             bool wallCollision = false;
             if (state ==RoboCopState.HIT)
             {

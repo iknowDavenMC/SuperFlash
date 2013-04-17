@@ -595,6 +595,66 @@ namespace COMP476Proj
             {
                 if (Math.Abs(overlap.Y - playerRectangle.Y) < 0.5)
                 {
+                    position.Y += (overlap.Height * 0.5f + 1);
+                }
+                else
+                {
+                    position.Y -= (overlap.Height * 0.5f + 1);
+                }
+            }
+            // If same height, collision is horizontal
+            else if (Math.Abs(overlap.Height - playerRectangle.Height) < 0.5)
+            {
+                if (Math.Abs(overlap.X - playerRectangle.X) < 0.5)
+                {
+                    position.X += (overlap.Width * 0.5f + 1);
+                }
+                else
+                {
+                    position.X -= (overlap.Width * 0.5f + 1);
+                }
+            }
+            else if (overlap.Width < overlap.Height)
+            {
+                if (Math.Abs(overlap.X - playerRectangle.X) < 0.0001)
+                {
+                    position.X += (overlap.Width * 0.5f + 1);
+                }
+                else
+                {
+                    position.X -= (overlap.Width * 0.5f + 1);
+                }
+            }
+            else
+            {
+                if (Math.Abs(overlap.Y - playerRectangle.Y) < 0.0001)
+                {
+                    position.Y += (overlap.Height * 0.5f + 1);
+                }
+                else
+                {
+                    position.Y -= (overlap.Height * 0.5f + 1); 
+                } 
+            } 
+        }
+
+        /// <summary>
+        /// Resolve inter penetration between two moveable objects
+        /// </summary>
+        /// <param name="overlap">Area of interpenetration</param>
+        /// <param name="playerRectangle">Rectangle of the player</param>
+        public void ResolveInterPenetrationWall(Rectanglef overlap, Rectanglef playerRectangle)
+        {
+            // If this happens, we've gotten stuck
+            if (overlap.Contains(playerRectangle))
+            {
+                int i = 0;
+            }
+            // If same width, collision is vertical
+            else if (Math.Abs(overlap.Width - playerRectangle.Width) < 0.5)
+            {
+                if (Math.Abs(overlap.Y - playerRectangle.Y) < 0.5)
+                {
                     position.Y += (overlap.Height + 1);
                 }
                 else
@@ -633,9 +693,9 @@ namespace COMP476Proj
                 }
                 else
                 {
-                    position.Y -= (overlap.Height + 1); 
-                } 
-            } 
+                    position.Y -= (overlap.Height + 1);
+                }
+            }
         }
 
         /// <summary>
