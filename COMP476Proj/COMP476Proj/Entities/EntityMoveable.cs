@@ -105,7 +105,11 @@ namespace COMP476Proj
                         DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownCop, true,
                             ((EntityMoveable)other).ComponentPhysics.Position.X,
                             ((EntityMoveable)other).ComponentPhysics.Position.Y - 64);
-                    ((EntityMoveable)other).Fall(false);
+
+                    if (!(other is Streaker && ((Streaker)other).IsGhost))
+                    {
+                        ((EntityMoveable)other).Fall(false);
+                    }
                 }
                 if (mass1 < mass2)
                 {
@@ -115,14 +119,33 @@ namespace COMP476Proj
                         DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownCop, true, physics.Position.X, physics.Position.Y - 64);
                     if (other is Streaker && this is SmartCop && ((SmartCop)this).State != SmartCopState.FALL)
                         DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownCop, true, physics.Position.X, physics.Position.Y - 64);
-                    Fall(false);
+                    
+
+                    if (!(this is Streaker && ((Streaker)this).IsGhost))
+                    {
+                        ((EntityMoveable)this).Fall(false);
+                    }
                 }
 
-                physics.ResolveCollision(((EntityMoveable)other).physics, overlap);
-                ((EntityMoveable)other).ComponentPhysics.ResolveCollision(physics, overlap);
+                if (!(this is Streaker && ((Streaker)this).IsGhost))
+                {
+                    physics.ResolveCollision(((EntityMoveable)other).physics, overlap);
+                }
 
-                physics.ResolveInterPenetration(overlap, rect.Bounds);
-                ((EntityMoveable)other).ComponentPhysics.ResolveInterPenetration(overlap, other.BoundingRectangle.Bounds);
+                if (!(other is Streaker && ((Streaker)other).IsGhost))
+                {
+                    ((EntityMoveable)other).ComponentPhysics.ResolveCollision(physics, overlap);
+                }
+
+                if (!(this is Streaker && ((Streaker)this).IsGhost))
+                {
+                    physics.ResolveInterPenetration(overlap, rect.Bounds);
+                }
+
+                if (!(other is Streaker && ((Streaker)other).IsGhost))
+                {
+                    ((EntityMoveable)other).ComponentPhysics.ResolveInterPenetration(overlap, other.BoundingRectangle.Bounds);
+                }
             }
             else if (other is Wall)
             {
