@@ -73,16 +73,18 @@ namespace COMP476Proj
     /// </summary>
     public class Achievement_Slick : Achievement
     {
-        public Achievement_Slick(int i, int j)
-            : base("Slick Rick " + i, "Picked up " + j + " Lotion Powerups", j*250)
+        protected int count = 0;
+        public Achievement_Slick(int i, int numOfSlicks)
+            : base("Slick Rick " + i, "Picked up " + numOfSlicks + " Lotion Powerups", numOfSlicks * 250)
         {
+            count = numOfSlicks;
         }
 
         public override void Update(GameTime gameTime) { }
 
         public override bool IsAchieved()
         {
-            return DataManager.GetInstance().numberOfGrease >= Value;
+            return DataManager.GetInstance().numberOfGrease >= count;
         }
     }
 
@@ -91,9 +93,11 @@ namespace COMP476Proj
     /// </summary>
     public class Achievement_PowerUp : Achievement
     {
-        public Achievement_PowerUp(int i, int j)
-            : base("Powered Up " + i, "Picked up " + j + " Total Powerups", j * 250)
+        protected int count = 0;
+        public Achievement_PowerUp(int i, int numOfPwr)
+            : base("Powered Up " + i, "Picked up " + numOfPwr + " Total Powerups", numOfPwr * 250)
         {
+            count = numOfPwr;
         }
 
         public override void Update(GameTime gameTime) { }
@@ -109,9 +113,11 @@ namespace COMP476Proj
     /// </summary>
     public class Achievement_Mass : Achievement
     {
-        public Achievement_Mass(int i, int j)
-            : base("Roid Rage " + i, "Picked up " + j + " Steroid Powerups", j * 250)
+        protected int count = 0;
+        public Achievement_Mass(int i, int numOfMass)
+            : base("Roid Rage " + i, "Picked up " + numOfMass + " Steroid Powerups", numOfMass * 250)
         {
+            count = numOfMass;
         }
 
         public override void Update(GameTime gameTime) { }
@@ -127,9 +133,11 @@ namespace COMP476Proj
     /// </summary>
     public class Achievement_Speed : Achievement
     {
-        public Achievement_Speed(int i, int j)
-            : base("Speedy Streakzales " + i, "Picked up " + j + " Energy Drink Powerups", j * 250)
+        protected int count = 0;
+        public Achievement_Speed(int i, int numOfSpeed)
+            : base("Speedy Streakzales " + i, "Picked up " + numOfSpeed + " Energy Drink Powerups", numOfSpeed * 250)
         {
+            count = numOfSpeed;
         }
 
         public override void Update(GameTime gameTime) { }
@@ -145,9 +153,11 @@ namespace COMP476Proj
     /// </summary>
     public class Achievement_Turn : Achievement
     {
-        public Achievement_Turn(int i, int j)
-            : base("Turn on a Dime " + i, "Picked up " + j + " Sneaker Powerups", j * 250)
+        protected int count = 0;
+        public Achievement_Turn(int i, int numOfTurn)
+            : base("Turn on a Dime " + i, "Picked up " + numOfTurn + " Sneaker Powerups", numOfTurn * 250)
         {
+            count = numOfTurn;
         }
 
         public override void Update(GameTime gameTime) { }
