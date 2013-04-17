@@ -142,10 +142,10 @@ namespace COMP476Proj
         {
             int randNum = Game1.random.Next(map.nodes.Count);
             Node randNode = map.nodes.ElementAt(randNum);
-            while (!((Camera.X - Camera.Width / 2 > randNode.Position.X ||
-                   Camera.X + Camera.Width / 2 < randNode.Position.X) &&
-                   (Camera.Y - Camera.Height / 2 > randNode.Position.Y ||
-                   Camera.Y + Camera.Height / 2 < randNode.Position.Y)))
+            while (Camera.X - Camera.Width / 2 < randNode.Position.X &&
+                   Camera.X + Camera.Width / 2 > randNode.Position.X &&
+                   Camera.Y - Camera.Height / 2 < randNode.Position.Y &&
+                   Camera.Y + Camera.Height / 2 > randNode.Position.Y)
             {
                 randNum = Game1.random.Next(map.nodes.Count);
                 randNode = map.nodes.ElementAt(randNum);
