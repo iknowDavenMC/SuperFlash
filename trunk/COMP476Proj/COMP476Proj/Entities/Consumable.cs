@@ -13,7 +13,7 @@ namespace COMP476Proj
     {
         #region Fields
         protected int fadeTimer = 0;
-        protected int fadeDelay = 10000;
+        protected int fadeDelay = 16000;
 
         protected bool consumed = false;
         ConsumableType cType;
