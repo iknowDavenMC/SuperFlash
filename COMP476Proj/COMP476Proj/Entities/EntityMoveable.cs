@@ -252,6 +252,28 @@ namespace COMP476Proj
             }
         }
 
+        public void OptimizePath(ref List<Node> path)
+        {
+            bool canSee;
+            bool canReach;
+
+            if (path.Count > 1)
+            {
+                IsVisible(path[0].Position, out canSee, out canReach);
+            }
+            else
+            {
+                return;
+            }
+
+            // Optimize
+            while (path.Count > 1 && canReach)
+            {
+                path.RemoveAt(0);
+                IsVisible(path[0].Position, out canSee, out canReach);
+            }
+        }
+
         public Vector2 GetKeyNode()
         {
             float distance = float.MaxValue;
