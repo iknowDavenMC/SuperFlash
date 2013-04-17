@@ -446,7 +446,7 @@ namespace COMP476Proj
             }
             else
             {
-                Camera.Scale = 1f;
+                Camera.Scale = 0.5f;
                 danceTotalTime = 0;
             }
             danceParticles.X = physics.Position.X;

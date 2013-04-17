@@ -306,7 +306,7 @@ namespace COMP476Proj
         {
             copSpawnTimer += gameTime.ElapsedGameTime.Milliseconds;
             if(copSpawnDelay < copSpawnTimer){
-                spawnCop();
+                //spawnCop();
                 copSpawnTimer = 0;
             }
             // Update node costs
