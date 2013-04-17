@@ -31,6 +31,7 @@ namespace COMP476Proj
         private DumbCopState defaultState;
         private const int HIT_DISTANCE_X = 40;
         private const int HIT_DISTANCE_Y = 15;
+        public DumbCopState State { get { return state; } }
         #endregion
 
         #region Constructors

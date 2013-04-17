@@ -34,6 +34,7 @@ namespace COMP476Proj
         private SmartCopState defaultState;
         private const int HIT_DISTANCE_X = 40;
         private const int HIT_DISTANCE_Y = 23;
+        public SmartCopState State { get { return state; } }
         #endregion
 
         #region Constructors
