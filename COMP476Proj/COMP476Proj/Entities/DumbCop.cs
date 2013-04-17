@@ -31,6 +31,7 @@ namespace COMP476Proj
         private DumbCopState defaultState;
         private const int HIT_DISTANCE_X = 40;
         private const int HIT_DISTANCE_Y = 15;
+        private bool chasing = false;
         public DumbCopState State { get { return state; } }
         #endregion
 
@@ -148,6 +149,9 @@ namespace COMP476Proj
                     {
                         hasSeenTheStreaker = true;
                         ++copsWhoSeeTheStreaker;
+                        if (!chasing)
+                            DataManager.GetInstance().numberOfCopsChasing++;
+                        chasing = true;
                     }
                     behavior = DumbCopBehavior.AWARE;
                     state = DumbCopState.SEEK;
@@ -209,6 +213,9 @@ namespace COMP476Proj
                             {
                                 DataManager.GetInstance().IncreaseScore(DataManager.Points.LoseCop,
                                     true, Game1.world.streaker.Position.X, Game1.world.streaker.Position.Y - 64);
+                                DataManager.GetInstance().numberOfDumbCopsLost++;
+                                DataManager.GetInstance().numberOfCopsChasing--;
+                                chasing = false;
                                 path.Clear();
                                 behavior = DumbCopBehavior.DEFAULT;
                                 transitionToState(defaultState);
@@ -276,6 +283,7 @@ namespace COMP476Proj
                         {
                             DataManager.GetInstance().IncreaseScore(DataManager.Points.LoseCop,
                                 true, Game1.world.streaker.Position.X, Game1.world.streaker.Position.Y - 64);
+                            DataManager.GetInstance().numberOfDumbCopsLost++;
                             behavior = DumbCopBehavior.DEFAULT;
                             transitionToState(defaultState);
                         }

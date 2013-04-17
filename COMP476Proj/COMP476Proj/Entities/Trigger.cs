@@ -31,7 +31,6 @@ namespace COMP476Proj
             if (!triggered)
             {
                 triggered = true;
-                Console.WriteLine("You collided with trigger " + id);
             }
         }
         public bool hasTriggered()
@@ -42,6 +41,11 @@ namespace COMP476Proj
         public void setTriggered()
         {
             triggered = true;
+        }
+
+        public void clearTriggered()
+        {
+            triggered = false;
         }
     }
 }

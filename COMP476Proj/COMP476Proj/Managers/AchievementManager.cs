@@ -38,6 +38,8 @@ namespace COMP476Proj
             achievList.Add(new Achievement_EnterRoom(2, "Math Class", 1000));
             achievList.Add(new Achievement_EnterRoom(1, "Biology Class", 1000));
             achievList.Add(new Achievement_EnterRoom(3, "Lecture Hall", 1000));
+            achievList.Add(new Achievement_DoomHallway(9, 10));
+
             achievList.Add(new Achievement_Slick(1,1));
             achievList.Add(new Achievement_Slick(2,5));
             achievList.Add(new Achievement_Slick(3,10));
@@ -58,7 +60,13 @@ namespace COMP476Proj
             achievList.Add(new Achievement_PowerUp(2,15));
             achievList.Add(new Achievement_PowerUp(3,30));
             achievList.Add(new Achievement_PowerUp(4,50));
-            achievList.Add(new Achievement_DoomHallway(9, 10));
+
+            achievList.Add(new Achievement_LoseCops(1));
+            achievList.Add(new Achievement_LoseCops(5));
+            achievList.Add(new Achievement_LoseCops(10));
+            achievList.Add(new Achievement_LoseAllCops(5, 1000));
+            achievList.Add(new Achievement_LoseAllCops(10, 1500));
+            achievList.Add(new Achievement_TriggerRobocop());
         }
 
         /// <summary>

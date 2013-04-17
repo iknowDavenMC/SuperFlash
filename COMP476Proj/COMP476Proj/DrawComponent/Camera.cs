@@ -87,7 +87,8 @@ namespace COMP476Proj
             if (Math.Abs(scale - targetScale) > float.Epsilon && timeZooming < timeToZoom)
             {
                 timeZooming += gameTime.ElapsedGameTime.Milliseconds;
-                maxY = (Map.HEIGHT) - (Height / 2 - HUD.getInstance().Height) / scale;
+                maxY = Map.HEIGHT - (Height / 2 - HUD.getInstance().Height) / scale;
+                maxX = Map.WIDTH - (Width / 2) / scale;
                 scale = (timeZooming / timeToZoom) * (targetScale - oldScale) + oldScale;
                 //maxY = 948.5f;// Height* scale;
             }

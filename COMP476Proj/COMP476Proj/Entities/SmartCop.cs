@@ -16,8 +16,7 @@ namespace COMP476Proj
         #region Attributes
         public static SmartCop closest = null;
         public static float closestDistSq = float.MaxValue;
-        private static bool StreakerSeen = false;
-
+        public static bool StreakerSeen = false;
         bool hasSeenTheStreaker = false;
         bool isSeekingKeyNode = false;
 
@@ -34,6 +33,7 @@ namespace COMP476Proj
         private SmartCopState defaultState;
         private const int HIT_DISTANCE_X = 40;
         private const int HIT_DISTANCE_Y = 23;
+        private bool chasing = false;
         public SmartCopState State { get { return state; } }
         #endregion
 
@@ -146,6 +146,9 @@ namespace COMP476Proj
                     {
                         hasSeenTheStreaker = true;
                         ++copsWhoSeeTheStreaker;
+                        if(!chasing)
+                            DataManager.GetInstance().numberOfCopsChasing++;
+                        chasing = true;
                     }
                     behavior = SmartCopBehavior.AWARE;
                     state = SmartCopState.PURSUE;
@@ -261,6 +264,8 @@ namespace COMP476Proj
                                     DataManager.GetInstance().IncreaseScore(DataManager.Points.LoseAllCops, true,
                                         Game1.world.streaker.Position.X, Game1.world.streaker.Position.Y - 64);
                                     StreakerSeen = false;
+                                    chasing = false;
+                                    DataManager.GetInstance().numberOfCopsChasing--;
                                 }
                                 isSeekingKeyNode = false;
                                 path.Clear();
