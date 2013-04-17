@@ -116,7 +116,7 @@ namespace COMP476Proj
                         break;
                 }
                 DataManager.GetInstance().IncreasePowerUp(cType);
-                SoundManager.GetInstance().PlaySound("Other", "Consumable");
+                SoundManager.GetInstance().PlaySound("Other", "Consumable", false);
             }
         }
 
