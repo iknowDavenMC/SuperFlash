@@ -66,6 +66,9 @@ namespace COMP476Proj
 
         public int highScore;
 
+        private bool canGainPoints = false;
+        public bool CanGainPoints { get { return canGainPoints; } }
+
         private List<ScorePopup> popups;
 
         #endregion
@@ -100,7 +103,7 @@ namespace COMP476Proj
             numberCopsKnockedOver = 0;
 
             numberOfCopsChasing = 0;
-            
+
             numberOfRoboCopsChasing = 0;
 
             numberOfDumbCopsLost = 0;
@@ -140,7 +143,7 @@ namespace COMP476Proj
             {
                 instance = new DataManager();
             }
-            
+
             return instance;
         }
 
@@ -152,7 +155,7 @@ namespace COMP476Proj
         {
             time += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (InputManager.GetInstance().IsDoing("Dance", PlayerIndex.One))
+            if (InputManager.GetInstance().IsDoing("Dance", PlayerIndex.One) && canGainPoints)
             {
                 timeDancing += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             }
@@ -167,6 +170,11 @@ namespace COMP476Proj
                     --i;
                 }
             }
+            if (!canGainPoints && NPC.copsWhoSeeTheStreaker > 0)
+            {
+                HUD.getInstance().DanceNotify = true;
+                canGainPoints = true;
+            }
         }
 
         public void DecreaseHealth(int amount)
@@ -179,14 +187,17 @@ namespace COMP476Proj
             }
         }
 
-        public void IncreaseScore(int amount, bool popup = false, float x = 0, float y = 0)
+        public void IncreaseScore(int amount, bool popup = false, float x = 0, float y = 0, bool overridePointBlock = false)
         {
-            if (amount < 0)
-                amount = 0;
-            score += amount;
-            HUD.getInstance().increaseScore(amount);
-            if (popup)
-                popups.Add(new ScorePopup(x, y, amount, popupTime));
+            if (canGainPoints || overridePointBlock)
+            {
+                if (amount < 0)
+                    amount = 0;
+                score += amount;
+                HUD.getInstance().increaseScore(amount);
+                if (popup)
+                    popups.Add(new ScorePopup(x, y, amount, popupTime));
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)

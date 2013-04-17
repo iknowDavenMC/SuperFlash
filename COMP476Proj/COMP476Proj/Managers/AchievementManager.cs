@@ -127,7 +127,7 @@ namespace COMP476Proj
                     {
                         SoundManager.GetInstance().PlayAchievement();
                         achv.Locked = false;
-                        DataManager.GetInstance().IncreaseScore(achv.Value);
+                        DataManager.GetInstance().IncreaseScore(achv.Value, false, 0, 0, true);
                         int toastX = Game1.SCREEN_WIDTH/2 - toastWidth/2;
                         int toastY = Game1.SCREEN_HEIGHT - 45 - (toasts.Count+1)*toastHeight;
                         toasts.Add(new AchievementToast(achv, 3000, new Vector2(toastX, toastY), toastWidth, toastHeight));
