@@ -28,7 +28,7 @@ namespace COMP476Proj
         public HUD hud;
         public static float elapsedTime;
         FrameRate frameRate;
-
+        public static bool reset;
         Menu mainMenu;
 
         public enum GameState
@@ -69,7 +69,7 @@ namespace COMP476Proj
         {
             SoundManager.GetInstance().LoadContent(Content);
             SoundManager.GetInstance().PlaySong("Level");
-
+            reset = false;
             graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
             graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
             //this.graphics.IsFullScreen = true;
@@ -89,7 +89,7 @@ namespace COMP476Proj
             //Create World
 
             world = new World();
-            world.LoadMap("level.txt", Content);
+            world.LoadMap("level.txt");
             Texture2D level = SpriteDatabase.GetAnimation("level_1").Texture;
 
             Camera.MaxX = level.Width;
@@ -113,9 +113,17 @@ namespace COMP476Proj
             mainMenu.LoadContent(Content.Load<Texture2D>("Menu"));
         }
 
-        public void LoadContentReset()
+        public static void LoadContentReset()
         {
-
+            DataManager.GetInstance().resetData();
+            elapsedTime = 0.0f;
+            world = new World();
+            world.LoadMap("level.txt");
+            Texture2D level = SpriteDatabase.GetAnimation("level_1").Texture;
+            //Reset data in datamanager
+            SoundManager.GetInstance().PlaySong("Level");
+            Camera.Target = world.streaker;
+            
         }
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload

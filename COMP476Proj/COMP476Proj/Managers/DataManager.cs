@@ -32,7 +32,7 @@ namespace COMP476Proj
 
         public int score;
 
-        private float time;
+        public float time;
 
         public int numberPedestriansKnockedOver;
 
@@ -53,6 +53,8 @@ namespace COMP476Proj
         private float timeDancing;
 
         public int numberofSuperFlash;
+
+        public int highScore;
 
         private List<ScorePopup> popups;
 
@@ -97,6 +99,8 @@ namespace COMP476Proj
             timeDancing = 0;
 
             numberofSuperFlash = 0;
+
+            highScore = 0;
 
             popups = new List<ScorePopup>();
         }
@@ -189,7 +193,36 @@ namespace COMP476Proj
             }
         }
 
-        
+        public void resetData()
+        {
+            health = 100;
+
+            score = 0;
+
+            time = 0;
+
+            numberPedestriansKnockedOver = 0;
+
+            numberCopsKnockedOver = 0;
+
+            numberOfDumbCopsLost = 0;
+
+            numberOfSmartCopsLost = 0;
+
+            numberOfSteroids = 0;
+
+            numberOfGrease = 0;
+
+            numberOfSneakers = 0;
+
+            numberOfRedBull = 0;
+
+            timeDancing = 0;
+
+            numberofSuperFlash = 0;
+
+            popups = new List<ScorePopup>();
+        }
         #endregion
     }
 }
