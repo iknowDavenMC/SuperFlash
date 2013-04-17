@@ -30,7 +30,7 @@ namespace COMP476Proj
         public static float elapsedTime;
         FrameRate frameRate;
         public static bool reset;
-        public static Difficulty difficulty = Difficulty.IMPOSSIBLE;
+        public static Difficulty difficulty = Difficulty.HARD;
 
         Menu mainMenu;
 

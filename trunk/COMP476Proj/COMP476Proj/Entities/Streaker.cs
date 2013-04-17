@@ -201,6 +201,7 @@ namespace COMP476Proj
             // Dance takes precedence
             if (input.IsDoing("Dance", PlayerIndex.One))
             {
+                HUD.getInstance().DanceNotify = false;
                 if (charState != StreakerState.DANCE)
                 {
                     draw.Reset();

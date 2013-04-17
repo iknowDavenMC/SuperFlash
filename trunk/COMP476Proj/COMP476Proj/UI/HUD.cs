@@ -95,11 +95,15 @@ namespace COMP476Proj
         private int sFlashNotifyDelay = 15000;
         bool sFlashOn = false;
 
-        private int danceNotifyTimer = 0;
-        private int anceNotifyDelay = 15000;
+        private bool danceNotify = true;
         
 
         public float Height { get { return bannerComponent.getSize().Y; } }
+
+        public bool DanceNotify
+        {
+            set { danceNotify = false; }
+        }
         #endregion
 
         /*-------------------------------------------------------------------------*/
@@ -359,16 +363,16 @@ namespace COMP476Proj
                 Color.White, 0f, Vector2.Zero,scale, SpriteEffects.None, 0f);            
             }
 
-            //if (Game1.world.streaker.hasSuperFlash() && sFlashNotifyDelay < sFlashNotifyTimer)
-            //{
-            //    spriteBatch.DrawString(spriteFont, "Press D to Dance!!",
-            //    new Vector2(Camera.Width / 2 - 120f, 25f) * scale + offset,
-            //    Color.Black, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            if (danceNotify)
+            {
+                spriteBatch.DrawString(spriteFont, "Press D to Dance!!",
+                new Vector2(Camera.Width / 2 - 120f, 500f) * scale + offset,
+                   Color.Black, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 
-            //    spriteBatch.DrawString(spriteFont, "Press D to Dance!!",
-            //    new Vector2(Camera.Width / 2 - 119f, 24f) * scale + offset,
-            //    Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
-            //}
+                spriteBatch.DrawString(spriteFont, "Press D to Dance!!",
+                new Vector2(Camera.Width / 2 - 119f, 501f) * scale + offset,
+                Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            }
             
         }
         
