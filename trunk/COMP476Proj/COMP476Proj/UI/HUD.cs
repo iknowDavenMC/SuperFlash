@@ -102,7 +102,7 @@ namespace COMP476Proj
 
         public bool DanceNotify
         {
-            set { danceNotify = false; }
+            set { danceNotify = value; }
         }
         #endregion
 
