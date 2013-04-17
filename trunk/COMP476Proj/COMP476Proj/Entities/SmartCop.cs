@@ -467,7 +467,6 @@ namespace COMP476Proj
                 Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
             {
                 Game1.world.streaker.GetHit();
-                Game1.world.streaker.ResolveCollision(this);
                 playSound("Hit");
             }
             base.Update(gameTime);

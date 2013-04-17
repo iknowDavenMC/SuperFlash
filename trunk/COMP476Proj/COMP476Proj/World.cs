@@ -26,6 +26,8 @@ namespace COMP476Proj
         public QuadTree qTree;
         public const int gridLength = 200;
         private Flock flock;
+        protected int copSpawnTimer = 0;
+        protected int copSpawnDelay = 30000;
         #endregion
 
         #region Init
@@ -105,11 +107,48 @@ namespace COMP476Proj
                 }
             }
         }
+
+        private void spawnCop()
+        {
+            int randNum = Game1.random.Next(map.nodes.Count);
+            Node randNode = map.nodes.ElementAt(randNum);
+            while (!((Camera.X - Camera.Width / 2 > randNode.Position.X ||
+                   Camera.X + Camera.Width / 2 < randNode.Position.X) &&
+                   (Camera.Y - Camera.Height / 2 > randNode.Position.Y ||
+                   Camera.Y + Camera.Height / 2 < randNode.Position.Y)))
+            {
+                randNum = Game1.random.Next(map.nodes.Count);
+                randNode = map.nodes.ElementAt(randNum);
+            }   
+            SmartCop newNpc = new SmartCop(
+                            new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20),
+                                100, 750, 75, 1000, 8, 50, 0.25f, true),
+                            new MovementAIComponent2D(3, 2, MathHelper.ToRadians(45), 0.5f, 50, 25, Vector2.Zero, Vector2.Zero, 0.1f),
+                            new DrawComponent(SpriteDatabase.GetAnimation("smartCop_walk"), Color.White, Vector2.Zero,
+                                new Vector2(.4f, .4f), .5f), SmartCopState.WANDER);
+            npcs.Add(newNpc);
+            moveableObjectsX.Add(newNpc);
+            moveableObjectsY.Add(newNpc);
+            moveableObjectsX = moveableObjectsX.OrderBy(o => o.ComponentPhysics.Position.X).ToList();
+            moveableObjectsY = moveableObjectsY.OrderBy(o => o.ComponentPhysics.Position.Y).ToList();
+            if (newNpc is SmartCop)
+            {
+                flock.Members.Add(newNpc);
+                newNpc.flock = flock;
+            }
+        }
         #endregion
+
+
 
         #region Update & Draw
         public void Update(GameTime gameTime)
         {
+            copSpawnTimer += gameTime.ElapsedGameTime.Milliseconds;
+            if(copSpawnDelay < copSpawnTimer){
+                spawnCop();
+                copSpawnTimer = 0;
+            }
             // Update node costs
             foreach (Node node in map.nodes)
             {
