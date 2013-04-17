@@ -278,15 +278,15 @@ namespace COMP476Proj
                     }
                     else if (spawnCount > 10)
                     {
-                        dumbCopThreshold = .75f;
-                        smartCopThreshold = 0.25f;
-                        copSpawnDelay = 20000;
+                        dumbCopThreshold = .25f;
+                        smartCopThreshold = 0.74f;
+                        copSpawnDelay = 10000;
                     }
                     else if (spawnCount > 25)
                     {
-                        dumbCopThreshold = .25f;
+                        dumbCopThreshold = .22f;
                         smartCopThreshold = 0.74f;
-                        copSpawnDelay = 45000;
+                        copSpawnDelay = 20000;
                     }
                     break;
                 case Difficulty.IMPOSSIBLE:

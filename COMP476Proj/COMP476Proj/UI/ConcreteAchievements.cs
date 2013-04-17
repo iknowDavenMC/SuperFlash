@@ -74,7 +74,7 @@ namespace COMP476Proj
     public class Achievement_Slick : Achievement
     {
         public Achievement_Slick(int i, int j)
-            : base("Slick Rick " + i, "Picked up " + j + " Lotion Powerups", j)
+            : base("Slick Rick " + i, "Picked up " + j + " Lotion Powerups", j*250)
         {
         }
 
@@ -92,7 +92,7 @@ namespace COMP476Proj
     public class Achievement_PowerUp : Achievement
     {
         public Achievement_PowerUp(int i, int j)
-            : base("Powered Up " + i, "Picked up " + j + " Total Powerups", j)
+            : base("Powered Up " + i, "Picked up " + j + " Total Powerups", j * 250)
         {
         }
 
@@ -110,7 +110,7 @@ namespace COMP476Proj
     public class Achievement_Mass : Achievement
     {
         public Achievement_Mass(int i, int j)
-            : base("Roid Rage " + i, "Picked up " + j + " Steroid Powerups", j)
+            : base("Roid Rage " + i, "Picked up " + j + " Steroid Powerups", j * 250)
         {
         }
 
@@ -128,7 +128,7 @@ namespace COMP476Proj
     public class Achievement_Speed : Achievement
     {
         public Achievement_Speed(int i, int j)
-            : base("Speedy Streakzales " + i, "Picked up " + j + " Energy Drink Powerups", j)
+            : base("Speedy Streakzales " + i, "Picked up " + j + " Energy Drink Powerups", j * 250)
         {
         }
 
@@ -146,7 +146,7 @@ namespace COMP476Proj
     public class Achievement_Turn : Achievement
     {
         public Achievement_Turn(int i, int j)
-            : base("Turn on a Dime " + i, "Picked up " + j + " Sneaker Powerups", j)
+            : base("Turn on a Dime " + i, "Picked up " + j + " Sneaker Powerups", j * 250)
         {
         }
 
