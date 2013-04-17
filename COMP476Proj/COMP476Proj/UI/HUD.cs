@@ -20,16 +20,23 @@ namespace COMP476Proj
         #region Attributes
 
         private static volatile HUD instance = null;
+        //Hud Components
+        private List<SpriteComponent> hudComponents;
+        SpriteComponent bannerComponent;
+        SpriteComponent healthBarComponent;
+        SpriteComponent healthBarContainerComponent;
+        SpriteComponent superFlashIconComponent;
 
-        private List<HudComponent> hudComponents;
-        HudComponent bannerComponent;
-        HudComponent healthBarComponent;
-        HudComponent healthBarContainerComponent;
-        HudComponent superFlashIconComponent;
+        //Font Components
+        private List<FontComponent> fontComponents;
+        FontComponent replayText;
+        FontComponent timerText;
 
+
+        //Game Over Buttons
+        Button replayButton;
         //Health Variables
         private float health;
-        //private int healthActual;
 
         //Fade to Black contents
         private Texture2D fadeToBlack;
@@ -50,7 +57,6 @@ namespace COMP476Proj
         private int scoreIncrement;
         private int displayedScore;
         private Vector2 positionScore;
-        private Vector2 positionTime;
         private float scoreScale;
         private float maxScoreScale;
 
@@ -78,6 +84,8 @@ namespace COMP476Proj
 
         private ParticleSpewer particleBar;
 
+        
+
         public float Height { get { return bannerComponent.getSize().Y; } }
         #endregion
 
@@ -90,18 +98,24 @@ namespace COMP476Proj
             windowWidth = Game1.SCREEN_WIDTH;
             windowHeight = Game1.SCREEN_HEIGHT;
 
-            hudComponents = new List<HudComponent>();
+            hudComponents = new List<SpriteComponent>();
             //Components
-            bannerComponent = new HudComponent(new Vector2(windowWidth / 2, windowHeight - 20), new Vector2(800, 45));
-            healthBarComponent = new HudComponent(new Vector2(bannerComponent.getPosition().X-280, bannerComponent.getPosition().Y), new Vector2(580, 12));
+            bannerComponent = new SpriteComponent(new Vector2(windowWidth / 2, windowHeight - 20), new Vector2(800, 45));
+            healthBarComponent = new SpriteComponent(new Vector2(bannerComponent.getPosition().X-280, bannerComponent.getPosition().Y), new Vector2(580, 12));
             healthBarComponent.setOriginLeft();
-            healthBarContainerComponent = new HudComponent(new Vector2(bannerComponent.getPosition().X + -284, bannerComponent.getPosition().Y + 10), new Vector2(590, 19));
+            healthBarContainerComponent = new SpriteComponent(new Vector2(bannerComponent.getPosition().X + -284, bannerComponent.getPosition().Y + 10), new Vector2(590, 19));
             healthBarContainerComponent.setOriginBottomLeft();
-            superFlashIconComponent = new HudComponent(new Vector2((bannerComponent.getPosition().X - bannerComponent.getSize().X/2) - 25, bannerComponent.getPosition().Y-2), new Vector2(45.0f, 45.0f));
+            superFlashIconComponent = new SpriteComponent(new Vector2((bannerComponent.getPosition().X - bannerComponent.getSize().X/2) - 25, bannerComponent.getPosition().Y-2), new Vector2(45.0f, 45.0f));
+
+
+            
+            
             //Score Positions
             positionScore = new Vector2(bannerComponent.getPosition().X - (bannerComponent.getSize().X / 2) + 10, bannerComponent.getPosition().Y + 4);
-            positionTime = new Vector2(bannerComponent.getPosition().X + 355, bannerComponent.getPosition().Y - 12);
 
+            
+            
+            
             //Initialize current score
             //currentScore = 0;
             scoreScale = 1;
@@ -142,7 +156,12 @@ namespace COMP476Proj
                 50, 200, 2, 200, 90, 90, 0.5f, 1, 1, 1, true, 0.75f);
             particleBar.Absolute = true;
 
-            
+            //Test for a font component
+            replayText = new FontComponent(new Vector2(gameOverTextPosition.X-250, gameOverTextPosition.Y + 40), new Vector2(100, 100));
+            timerText = new FontComponent(new Vector2(bannerComponent.getPosition().X + 355, bannerComponent.getPosition().Y - 12), new Vector2(100, 100));
+
+            //Button Initializations
+            replayButton = new Button(replayText.getPosition(), replayText.getSize());
         }
 
         public void loadContent(Texture2D banner, 
@@ -166,6 +185,10 @@ namespace COMP476Proj
             hudComponents.Add(healthBarComponent);
             hudComponents.Add(healthBarContainerComponent);
             hudComponents.Add(superFlashIconComponent);
+
+            //Font components
+            this.replayText.LoadContent(spriteFont);
+            this.timerText.LoadContent(spriteFont);
         }
 
         public static HUD getInstance()
@@ -208,6 +231,7 @@ namespace COMP476Proj
             particleBar.Update(gameTime);
             UpdateScoreSize(gameTime);
             updateSuperFlashIcon();
+            
             //Update health bar size
             healthBarComponent.setXScale((int)updateHealthBar(gameTime));
         }
@@ -221,16 +245,19 @@ namespace COMP476Proj
             offset.Y += Camera.Y;
 
             //Components
-            foreach (HudComponent component in hudComponents)
+            foreach (SpriteComponent component in hudComponents)
             {
                 component.Draw(gameTime, spriteBatch, scale, offset);
             }
 
             float scoreOffset = spriteFont.MeasureString(displayedScore.ToString()).X / 2;
             spriteBatch.DrawString(spriteFont, displayedScore.ToString(), (positionScore + new Vector2(scoreOffset, 0)) * scale + offset, Color.White, 0f, new Vector2(scoreOffset, 15), scoreScale * scale, SpriteEffects.None, 0f);
-            spriteBatch.DrawString(spriteFont, minutes + ":" + displaySeconds + seconds, positionTime * scale + offset, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+            
             particleBar.Draw(gameTime, spriteBatch);
             drawGameOver(gameTime, spriteBatch, offset, scale);
+            
+            timerText.setText(minutes + ":" + displaySeconds + seconds);
+            timerText.Draw(gameTime, spriteBatch, scale, offset);
             
         }
         
@@ -253,6 +280,19 @@ namespace COMP476Proj
                 //Draw Game Over Text
                 interpolate(ref gameOverTextScale, 1.0f, ref gameOverCurrentTime, 0.7f, gameTime);
                 spriteBatch.Draw(gameOverText, gameOverTextPosition * scale + offset, gameOverTextSize, Color.White, 0.0f, new Vector2(gameOverTextSize.Right / 2, gameOverTextSize.Bottom / 2), gameOverTextScale, SpriteEffects.None, 1.0f);
+            
+                //Place the Replay Button
+                replayText.setText("Replay?");
+                replayText.setFontScale(20.0f);
+                replayText.Draw(gameTime, spriteBatch, scale, offset);
+
+                MouseState mouse = Mouse.GetState();
+                
+                replayButton.SetPosition(replayText.getPosition());
+                replayButton.setSize(replayText.getSize());
+                replayButton.Update(mouse);
+                if (replayButton.isClicked)
+                    Game1.currentGameState = Game1.GameState.MAIN;
             }
         }
         #endregion
@@ -277,6 +317,7 @@ namespace COMP476Proj
                 superFlashIconComponent.setAlpha(0.3f);
             }
         }
+        
         //Decreases the score by the desired amount 
         public void decreaseHealth(int amount)
         {
@@ -317,7 +358,6 @@ namespace COMP476Proj
             particleBar.Stop();
             interpolate(ref health, DataManager.GetInstance().health, ref timeSoFar, TimeToAnimate, gameTime);
             particleBar.X = healthBarComponent.getPosition().X + (health / 100.0f) * healthBarComponent.getSize().X - 1;
-
             return ((health / 100.0f) * healthBarComponent.getSize().X);
         }
 

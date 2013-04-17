@@ -14,19 +14,18 @@ namespace COMP476Proj
         Vector2 position;
         Rectangle rectangle;
 
-        Color _color = new Color(255, 255, 255, 255);
         bool isPressed = false;
         public Vector2 size;
 
-        bool down;
         public bool isClicked;
+        
         public Button(Texture2D newTexture, GraphicsDevice graphics)
         {
             texture = newTexture;
             size = new Vector2(211, 61);
 
         }
-        public Button(GraphicsDevice graphics, Vector2 position, Vector2 size)
+        public Button(Vector2 position, Vector2 size)
         {
             this.position = position;
             this.size = size;
@@ -50,6 +49,18 @@ namespace COMP476Proj
             }
         }
 
+        public bool buttonPressed()
+        {
+            return isClicked;
+        }
+        public Vector2 getSize()
+        {
+            return size;
+        }
+        public void setSize(Vector2 size)
+        {
+            this.size = size;
+        }
         public void SetPosition(Vector2 newPosition)
         {
             position = newPosition;
@@ -57,7 +68,7 @@ namespace COMP476Proj
 
         public void Draw(SpriteBatch spritebatch)
         {
-            spritebatch.Draw(texture, rectangle, _color);
+            //spritebatch.Draw(texture, rectangle, _color);
         }
     }
 }
