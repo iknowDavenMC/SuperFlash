@@ -201,9 +201,9 @@ namespace COMP476Proj
         /// <param name="soundSource">What is emitting the sound ex: Streaker</param>
         /// <param name="soundType">Type of sound emmited ex: SuperFlash</param>
         /// <returns>Does the sound effects exist</returns>
-        public bool PlaySound(string soundSource, string soundType)
+        public bool PlaySound(string soundSource, string soundType, bool random = true)
         {
-            if (!soundSource.Equals("Common") && !soundSource.Equals("Streaker") && Game1.random.NextDouble() < 0.8f)
+            if (!soundSource.Equals("Common") && !soundSource.Equals("Streaker") && Game1.random.NextDouble() < 0.8f && random)
             {
                 return false;
             }

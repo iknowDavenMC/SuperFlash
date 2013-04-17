@@ -41,6 +41,96 @@ namespace COMP476Proj
     }
 
     /// <summary>
+    /// Achievement earned by picking up lotion
+    /// </summary>
+    public class Achievement_Slick : Achievement
+    {
+        public Achievement_Slick(int i, int j)
+            : base("Slick Rick " + i, "Picked up " + j + " Lotion Powerups", j)
+        {
+        }
+
+        public override void Update(GameTime gameTime) { }
+
+        public override bool IsAchieved()
+        {
+            return DataManager.GetInstance().numberOfGrease >= Value;
+        }
+    }
+
+    /// <summary>
+    /// Achievement earned by picking up lotion
+    /// </summary>
+    public class Achievement_PowerUp : Achievement
+    {
+        public Achievement_PowerUp(int i, int j)
+            : base("Powered Up " + i, "Picked up " + j + " Total Powerups", j)
+        {
+        }
+
+        public override void Update(GameTime gameTime) { }
+
+        public override bool IsAchieved()
+        {
+            return DataManager.GetInstance().PowerUpCount >= Value;
+        }
+    }
+
+    /// <summary>
+    /// Achievement earned by picking up steroids
+    /// </summary>
+    public class Achievement_Mass : Achievement
+    {
+        public Achievement_Mass(int i, int j)
+            : base("Roid Rage " + i, "Picked up " + j + " Steroid Powerups", j)
+        {
+        }
+
+        public override void Update(GameTime gameTime) { }
+
+        public override bool IsAchieved()
+        {
+            return DataManager.GetInstance().numberOfSteroids >= Value;
+        }
+    }
+
+    /// <summary>
+    /// Achievement earned by picking up energy drinks
+    /// </summary>
+    public class Achievement_Speed : Achievement
+    {
+        public Achievement_Speed(int i, int j)
+            : base("Speedy Streakzales " + i, "Picked up " + j + " Energy Drink Powerups", j)
+        {
+        }
+
+        public override void Update(GameTime gameTime) { }
+
+        public override bool IsAchieved()
+        {
+            return DataManager.GetInstance().numberOfRedBull >= Value;
+        }
+    }
+
+    /// <summary>
+    /// Achievement earned by picking up Sneakers
+    /// </summary>
+    public class Achievement_Turn : Achievement
+    {
+        public Achievement_Turn(int i, int j)
+            : base("Turn on a Dime " + i, "Picked up " + j + " Sneaker Powerups", j)
+        {
+        }
+
+        public override void Update(GameTime gameTime) { }
+
+        public override bool IsAchieved()
+        {
+            return DataManager.GetInstance().numberOfSneakers >= Value;
+        }
+    }
+
+    /// <summary>
     /// Achievement earned by pressing space
     /// </summary>
     public class Achievement_PressSpace : Achievement
