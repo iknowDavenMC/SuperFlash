@@ -203,7 +203,7 @@ namespace COMP476Proj
         /// <returns>Does the sound effects exist</returns>
         public bool PlaySound(string soundSource, string soundType, bool random = true)
         {
-            if (!soundSource.Equals("Common") && !soundSource.Equals("Streaker") && Game1.random.NextDouble() < 0.8f && random)
+            if (!soundSource.Equals("Common") && !soundSource.Equals("Streaker") && random && Game1.random.NextDouble() < 0.8f)
             {
                 return false;
             }
