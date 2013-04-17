@@ -50,19 +50,6 @@ namespace COMP476Proj
             this.BoundingRectangle = new COMP476Proj.BoundingRectangle(phys.Position, 16, 6);
             draw.Play();
         }
-
-        public SmartCop(PhysicsComponent2D phys, MovementAIComponent2D move, DrawComponent draw, SmartCopState pState,
-            float radius)
-        {
-            behavior = SmartCopBehavior.DEFAULT;
-            movement = move;
-            physics = phys;
-            this.draw = draw;
-            state = defaultState = pState;
-            detectRadius = radius;
-            this.BoundingRectangle = new COMP476Proj.BoundingRectangle(phys.Position, 16, 6);
-            draw.Play();
-        }
         #endregion
 
         #region Private Methods
