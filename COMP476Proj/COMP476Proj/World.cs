@@ -224,7 +224,7 @@ namespace COMP476Proj
                 catch (IndexOutOfRangeException e)
                 {
                     moveableObjectsY.Remove(moveableObjectsX[i]);
-
+                    npcs.Remove((NPC)moveableObjectsX[i]);
                     moveableObjectsX.RemoveAt(i);
                     --i;
                 }
