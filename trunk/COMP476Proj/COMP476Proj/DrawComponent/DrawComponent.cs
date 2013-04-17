@@ -19,9 +19,12 @@ namespace COMP476Proj
         protected bool visible = true;
         public Vector2 Origin = Vector2.Zero;
         protected Vector2 scale = Vector2.One;
+        protected Vector2 position = Vector2.Zero;
         protected Color color = Color.White;
         protected SpriteEffects spriteEffects = SpriteEffects.None;
         protected float depth = 0.5f;
+        protected float alpha = 1.0f;
+
 
         //Animation
         protected bool paused = false;
@@ -46,9 +49,16 @@ namespace COMP476Proj
         {
             set { spriteEffects = value; }
         }
-
+        public Vector2 Position
+        {
+            get { return position; }
+        }
         public int CurrentFrame { get { return currentFrame; } }
 
+        public float Alpha
+        {
+            set { alpha = value; }
+        }
         #endregion
 
         /*-------------------------------------------------------------------------*/
@@ -139,8 +149,30 @@ namespace COMP476Proj
                 }
                 
                 Vector2 drawPos = new Vector2(pos.X, pos.Y) - offset;
-                spriteBatch.Draw(animation.Texture, drawPos, sourceRect, color, 0, Origin, scale, spriteEffects, depth);
+                spriteBatch.Draw(animation.Texture, drawPos, sourceRect, color *alpha, 0, Origin, scale, spriteEffects, depth);
                 
+            }
+        }
+
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch, float offsetX, float offsetY)
+        {
+            if (visible)
+            {
+                Rectangle sourceRect = new Rectangle(animation.FrameWidth * currentFrame, animation.YPos, animation.FrameWidth, animation.FrameHeight);
+                Vector2 offset;
+
+                if (spriteEffects == SpriteEffects.FlipHorizontally)
+                {
+                    offset = new Vector2((animation.FrameWidth - PIXELS_LEFT_TO_CENTER) * scale.X, PIXELS_HEAD_TO_TOE * scale.Y);
+                }
+                else
+                {
+                    offset = new Vector2(PIXELS_LEFT_TO_CENTER * scale.X, PIXELS_HEAD_TO_TOE * scale.Y);
+                }
+
+                Vector2 drawPos = new Vector2(Position.X, Position.Y) - offset + new Vector2(offsetX,offsetY);
+                spriteBatch.Draw(animation.Texture, drawPos, sourceRect, color*alpha, 0, Origin, scale, spriteEffects, depth);
+
             }
         }
 

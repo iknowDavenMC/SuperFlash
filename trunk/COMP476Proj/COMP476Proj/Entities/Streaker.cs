@@ -125,7 +125,7 @@ namespace COMP476Proj
             recoverTimer = 0;
             inputDelay = 100;
             superFlashTimer = 0;
-            superFlashDelay = 30000;
+            superFlashDelay = 10000;
 
             superFlashParticles = new ParticleSpewer(
                 phys.Position.X + draw.animation.FrameWidth / 2, phys.Position.Y + draw.animation.FrameHeight / 2,
@@ -146,6 +146,19 @@ namespace COMP476Proj
         {
             get { return isMassBoost; }
         }
+        public bool IsSlickBoost
+        {
+            get { return isSlickBoost; }
+        }
+        public bool IsSpeedBoost
+        {
+            get { return isSpeedBoost; }
+        }
+        public bool IsGripBoost
+        {
+            get { return isGripBoost; }
+        }
+
         public bool hasSuperFlash()
         {
             return (superFlashTimer >= superFlashDelay);

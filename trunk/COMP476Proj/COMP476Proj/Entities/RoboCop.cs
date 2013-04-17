@@ -14,9 +14,6 @@ namespace COMP476Proj
     {
         #region Attributes
 
-        Node startNode;
-        Node endNode;
-        Node targetNode;
         private RoboCopState state;
 
         List<Node> path;
@@ -82,7 +79,10 @@ namespace COMP476Proj
                     draw.Reset();
                     break;
                 case RoboCopState.PURSUE:
-                    playSound("Activation");
+                    if (state == RoboCopState.STATIC)
+                    {
+                        playSound("Activation");
+                    }
                     if (state != RoboCopState.PATHFIND)
                     {
                         DataManager.GetInstance().numberOfRoboCopsChasing++;
@@ -236,7 +236,7 @@ namespace COMP476Proj
 
         private void playSound(string soundName)
         {
-            SoundManager.GetInstance().PlaySound("RoboCop", soundName, Game1.world.streaker.Position, Position);
+            SoundManager.GetInstance().PlaySound("RoboCop", soundName, Game1.world.streaker.Position, Position, false);
         }
         #endregion
 

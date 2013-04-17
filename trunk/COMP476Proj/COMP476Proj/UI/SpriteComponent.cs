@@ -54,12 +54,12 @@ namespace COMP476Proj
         //Repositions from camera for HUD
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, float scale, Vector2 offset)
         {
-            spriteBatch.Draw(texture, position*scale+offset, rectangle, Color.White*alpha, 0.0f, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, position*scale+offset, rectangle, Color.White*alpha, 0.0f, origin, scale, SpriteEffects.None, .1f);
         }
         //Standard draw method
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, rectangle, Color.White * alpha, 0.0f, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, position, rectangle, Color.White * alpha, 0.0f, origin, scale, SpriteEffects.None, .1f);
         }
         #endregion
         

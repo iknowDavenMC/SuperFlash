@@ -38,6 +38,7 @@ namespace COMP476Proj
         #endregion
 
         #region Constructors
+
         public SmartCop(PhysicsComponent2D phys, MovementAIComponent2D move, DrawComponent draw, SmartCopState pState)
         {
             detectRadius = 400;
