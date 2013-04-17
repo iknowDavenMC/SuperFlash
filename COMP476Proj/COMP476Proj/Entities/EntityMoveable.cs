@@ -257,9 +257,9 @@ namespace COMP476Proj
             bool canSee;
             bool canReach;
 
-            if (path.Count > 1)
+            if (path.Count > 2)
             {
-                IsVisible(path[0].Position, out canSee, out canReach);
+                IsVisible(path[1].Position, out canSee, out canReach);
             }
             else
             {
@@ -267,10 +267,10 @@ namespace COMP476Proj
             }
 
             // Optimize
-            while (path.Count > 1 && canReach)
+            while (path.Count > 2 && canReach)
             {
                 path.RemoveAt(0);
-                IsVisible(path[0].Position, out canSee, out canReach);
+                IsVisible(path[1].Position, out canSee, out canReach);
             }
         }
 
