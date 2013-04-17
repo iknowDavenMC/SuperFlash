@@ -393,7 +393,7 @@ namespace COMP476Proj
         public override void Update(GameTime gameTime) { }
         public override bool IsAchieved()
         {
-            return DataManager.GetInstance().biggestSuperflash >= targetCount;
+            return DataManager.GetInstance().SuperflashVictims >= targetCount;
         }
     }
 

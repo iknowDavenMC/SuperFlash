@@ -126,6 +126,10 @@ namespace COMP476Proj
 
             highScore = 0;
 
+            biggestSuperflash = 0;
+
+            SuperflashVictims = 0;
+
             popups = new List<ScorePopup>();
         }
 
