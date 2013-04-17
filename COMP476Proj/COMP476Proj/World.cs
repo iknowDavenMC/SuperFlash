@@ -246,7 +246,7 @@ namespace COMP476Proj
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Vector2 drawPos = new Vector2(0, 0);
-            spriteBatch.Draw(SpriteDatabase.GetAnimation("level_1").Texture, drawPos, Color.White);
+            spriteBatch.Draw(SpriteDatabase.GetAnimation("level_1").Texture, drawPos, null, Color.White, 0, Vector2.Zero,1f,SpriteEffects.None,.1f);
 
             
             foreach (Wall wall in map.walls)

@@ -80,7 +80,10 @@ namespace StreakerLibrary
             Texture2D notorietyMeter = Content.Load<Texture2D>("Hud/notorietyMeter");
 
             Texture2D achieveBanner = Content.Load<Texture2D>("AchievementUnlocked");
-
+            Texture2D pwr_mass = Content.Load<Texture2D>("pwr_mass");
+            Texture2D pwr_slick = Content.Load<Texture2D>("pwr_slick");
+            Texture2D pwr_speed = Content.Load<Texture2D>("pwr_speed");
+            Texture2D pwr_turn = Content.Load<Texture2D>("pwr_turn");
             //Animation elements 
             int notMoving = 150, walk = 60, fall = 60, getUp = 100, dance = 100, attack = 100, flash = 60, slowWalk = 100;
 
@@ -128,6 +131,11 @@ namespace StreakerLibrary
             SpriteDatabase.AddAnimation(new Animation("level_1", level1));
 
             SpriteDatabase.AddAnimation(new Animation("achievement_banner", achieveBanner));
+
+            SpriteDatabase.AddAnimation(new Animation("pwr_mass", pwr_mass));
+            SpriteDatabase.AddAnimation(new Animation("pwr_slick", pwr_slick));
+            SpriteDatabase.AddAnimation(new Animation("pwr_speed", pwr_speed));
+            SpriteDatabase.AddAnimation(new Animation("pwr_turn", pwr_turn));
 
         }
 

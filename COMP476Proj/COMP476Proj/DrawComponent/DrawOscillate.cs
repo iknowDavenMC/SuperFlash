@@ -20,11 +20,11 @@ namespace COMP476Proj
             Origin = Vector2.Zero;
         }
 
-        public DrawOscillate(Animation anim, Vector2 origin, float minScale)
+        public DrawOscillate(Animation anim, Vector2 origin, float depth)
             : base(anim)
         {
             Origin = Vector2.Zero;
-            this.lowerBound = minScale;
+            this.depth = depth;
         }
 
         #endregion
