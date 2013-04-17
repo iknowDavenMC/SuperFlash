@@ -31,8 +31,8 @@ namespace COMP476Proj
             Origin = Vector2.Zero;
             this.position = pos;
             this.depth = depth;
-            oscillateSize = oscillateAlpha = startOscillating;
-
+            oscillateAlpha = startOscillating;
+            oscillateSize = false;
         }
 
         public DrawOscillate(Animation anim, float depth)
