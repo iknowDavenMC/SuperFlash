@@ -265,6 +265,8 @@ NPCS
 669 353 SmartCop Static 0 0
 612 385 SmartCop Static 0 0
 562 217 RoboCop Static 0 0
+567 416 DumbCop Static 0 0
+684 459 DumbCop Static 0 0
 TRIGGER
 29 89 433 434 1
 29 667 432 427 2

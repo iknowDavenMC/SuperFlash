@@ -413,6 +413,7 @@ namespace COMP476Proj
             danceParticles.Stop();
             if (charState == StreakerState.DANCE)
             {
+                Camera.Scale = 2f;
                 danceParticles.Start();
                 danceTimer += gameTime.ElapsedGameTime.Milliseconds;
                 if (danceTimer >= dancePointTimeout)
@@ -421,6 +422,8 @@ namespace COMP476Proj
                     DataManager.GetInstance().IncreaseScore(DataManager.Points.Dance, true, physics.Position.X, physics.Position.Y - 64);
                 }
             }
+            else
+                Camera.Scale = 1f;
             danceParticles.X = physics.Position.X;
             danceParticles.Y = physics.Position.Y - 020;
             danceParticles.Update(gameTime);

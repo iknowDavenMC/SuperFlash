@@ -18,7 +18,7 @@ namespace COMP476Proj
             public const int FleeProximity = 10;
             public const int Dance = 20;
             public const int LoseCop = 300;
-            public const int LoseAllCops = 1000;
+            public const int LoseAllCops = 2000;
         }
         /// <summary>
         /// Private instance
