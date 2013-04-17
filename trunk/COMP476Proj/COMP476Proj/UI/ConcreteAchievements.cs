@@ -237,7 +237,7 @@ namespace COMP476Proj
     {
         private int countTo;
         public Achievement_LoseCops(int countTo)
-            : base("Lost " + (countTo == 1 ? "A" : countTo.ToString()) + " Dump Cop" + (countTo == 1 ? "" : "s"), "", 0)
+            : base("Lost " + (countTo == 1 ? "A" : countTo.ToString()) + " Dumb Cop" + (countTo == 1 ? "" : "s"), "", 0)
         {
             this.countTo = countTo;
         }
