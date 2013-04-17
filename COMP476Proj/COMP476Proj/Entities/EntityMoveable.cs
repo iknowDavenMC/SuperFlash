@@ -124,7 +124,8 @@ namespace COMP476Proj
         /// </summary>
         public virtual void Fall(bool isSuperFlash) { }
 
-        public virtual bool LineOfSight()
+        /*
+        public virtual void LineOfSight()
         {
             LineSegment test = new LineSegment(Position, Game1.world.streaker.Position);
 
@@ -163,10 +164,17 @@ namespace COMP476Proj
             }
             return true;
         }
+         * */
 
-        public virtual bool IsVisible(Vector2 position)
+        public virtual void IsVisible(Vector2 position, out bool canSee, out bool canReach)
         {
-            LineSegment test = new LineSegment(Position, position);
+            LineSegment lineTest = new LineSegment(Position, position);
+
+            bool obstacle;
+            bool isSeeThrough;
+
+            canReach = true;
+            canSee = true;
 
             // Check the grid for walls
             int startX = (int)Math.Round(Math.Min(Position.X, position.X) / World.gridLength);
@@ -180,22 +188,32 @@ namespace COMP476Proj
                 {
                     for (int j = 0; j != Game1.world.grid[k, l].Count; ++j)
                     {
-                        if (test.IntersectsBox(Game1.world.grid[k, l][j].BoundingRectangle))
+                        obstacle = lineTest.IntersectsBox(Game1.world.grid[k, l][j].BoundingRectangle);
+                        isSeeThrough = Game1.world.grid[k, l][j].IsSeeThrough;
+
+                        if (obstacle && isSeeThrough)
                         {
-                            return false;
+                            canReach = false;
+                        }
+                        else if (obstacle && !isSeeThrough)
+                        {
+                            canReach = false;
+                            canSee = false;
+                        }
+
+                        if (!canReach && !canSee)
+                        {
+                            return;
                         }
                     }
                 }
             }
-
-            return true;
         }
 
         public Vector2 GetKeyNode()
         {
             float distance = float.MaxValue;
             Vector2 position = Vector2.Zero;
-            bool fail = false;
 
             foreach (Node node in Game1.world.map.nodes)
             {
@@ -206,7 +224,12 @@ namespace COMP476Proj
                     continue;
                 }
 
-                if (IsVisible(node.Position) && (Position - Position).Length() < distance)
+                bool canReach;
+                bool canSee;
+
+                IsVisible(node.Position, out canSee, out canReach);
+
+                if (canReach && (Position - Position).Length() < distance)
                 {
                     distance = (Position - Position).Length();
                     position = node.Position;

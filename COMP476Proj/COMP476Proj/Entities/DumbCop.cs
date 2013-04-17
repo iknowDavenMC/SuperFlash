@@ -16,6 +16,9 @@ namespace COMP476Proj
 
         bool hasSeenTheStreaker = false;
 
+        private bool canSee = false;
+        private bool canReach = false;
+
         Node startNode;
         Node endNode;
         Node targetNode;
@@ -157,13 +160,14 @@ namespace COMP476Proj
 
         public void updateState()
         {
+            IsVisible(Game1.world.streaker.Position, out canSee, out canReach);
 
             //--------------------------------------------------------------------------
             //        DEFAULT BEHAVIOR TRANSITIONS --> Before aware of streaker
             //--------------------------------------------------------------------------
             if (behavior == DumbCopBehavior.DEFAULT)
             {
-                if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && LineOfSight())
+                if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && canSee)
                 {
                     playSound("Exclamation");
                     behavior = DumbCopBehavior.AWARE;
@@ -175,7 +179,6 @@ namespace COMP476Proj
             //--------------------------------------------------------------------------
             else if (behavior == DumbCopBehavior.AWARE)
             {
-                bool canSee = LineOfSight();
                 float distance = Vector2.Distance(Game1.world.streaker.Position, pos);
 
                 switch (state)
@@ -220,6 +223,22 @@ namespace COMP476Proj
                         break;
 
                     case DumbCopState.HIT:
+
+                        if (draw.animComplete)
+                        {
+                            if (state == DumbCopState.HIT &&
+                                Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
+                                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
+                            {
+                                Game1.world.streaker.GetHit();
+                                playSound("Hit");
+                            }
+
+                            transitionToState(DumbCopState.SEEK);
+                        }
+
+                        break;
+
                     case DumbCopState.SEEK:
 
                         // If sees, chases or hits
@@ -243,7 +262,7 @@ namespace COMP476Proj
                             path = AStar.GetPath(Position, (Vector2)lastStreakerPosition, Game1.world.map.nodes, Game1.world.qTree, true, false);
 
                             // Optimize
-                            while (path.Count > 1 && IsVisible(path[1].Position))
+                            while (path.Count > 1 && canReach)
                             {
                                 path.RemoveAt(0);
                             }
@@ -380,18 +399,12 @@ namespace COMP476Proj
             }
 
             draw.Update(gameTime);
+
             if (draw.animComplete && (state == DumbCopState.FALL || state == DumbCopState.GET_UP))
             {
                 draw.GoToPrevFrame();
             }
-            if (draw.animComplete && state == DumbCopState.HIT &&
-                Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
-                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
-            {
-                Game1.world.streaker.GetHit();
-                Game1.world.streaker.ResolveCollision(this);
-                playSound("Hit");
-            }
+
             base.Update(gameTime);
 
         }
