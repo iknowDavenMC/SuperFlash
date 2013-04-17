@@ -69,7 +69,7 @@ namespace COMP476Proj
         /// <summary>
         /// Time to recover
         /// </summary>
-        private const int TIME_TO_RECOVER = 300;
+        private const int TIME_TO_RECOVER = 400;
 
         /// <summary>
         /// Is the player running faster

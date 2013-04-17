@@ -17,9 +17,6 @@ namespace COMP476Proj
         public static SmartCop closest = null;
         public static float closestDistSq = float.MaxValue;
         private static bool StreakerSeen = false;
-        Node startNode;
-        Node endNode;
-        Node targetNode;
 
         bool hasSeenTheStreaker = false;
         bool isSeekingKeyNode = false;
@@ -33,7 +30,7 @@ namespace COMP476Proj
         private SmartCopBehavior behavior;
         private SmartCopState defaultState;
         private const int HIT_DISTANCE_X = 40;
-        private const int HIT_DISTANCE_Y = 15;
+        private const int HIT_DISTANCE_Y = 23;
         #endregion
 
         #region Constructors
@@ -369,7 +366,7 @@ namespace COMP476Proj
                     movement.SetTarget(Game1.world.streaker.Position, this);
                     movement.SetTargetVelocity(Game1.world.streaker.ComponentPhysics.Velocity);
                     if (closest == this)
-                        movement.Seek(ref physics);
+                        movement.Arrive(ref physics);
                     else
                         movement.Pursue(ref physics);
                     break;
@@ -437,7 +434,19 @@ namespace COMP476Proj
             movement.Look(ref physics);
             physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos, this);
             physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
-            if (physics.Orientation > 0)
+
+            if (state == SmartCopState.HIT)
+            {
+                if (pos.X < Game1.world.streaker.Position.X)
+                {
+                    draw.SpriteEffect = SpriteEffects.None;
+                }
+                else
+                {
+                    draw.SpriteEffect = SpriteEffects.FlipHorizontally;
+                }
+            }
+            else if (physics.Orientation > 0)
             {
                 draw.SpriteEffect = SpriteEffects.None;
             }

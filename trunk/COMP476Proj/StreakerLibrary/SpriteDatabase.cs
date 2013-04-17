@@ -82,7 +82,7 @@ namespace StreakerLibrary
             Texture2D achieveBanner = Content.Load<Texture2D>("AchievementUnlocked");
 
             //Animation elements 
-            int notMoving = 150, walk = 60, fall = 60, getUp = 100, dance = 100, attack = 50, flash = 60, slowWalk = 100;
+            int notMoving = 150, walk = 60, fall = 60, getUp = 100, dance = 100, attack = 100, flash = 60, slowWalk = 100;
 
             SpriteDatabase.AddAnimation(new Animation("streaker_static", streaker, 2, 143, 184, 0, notMoving));
             SpriteDatabase.AddAnimation(new Animation("streaker_walk", streaker, 5, 143, 184, 184, walk));
