@@ -152,8 +152,13 @@ namespace COMP476Proj
             moveableObjectsY = moveableObjectsY.OrderBy(o => o.ComponentPhysics.Position.Y).ToList();
             if (newNpc is SmartCop)
             {
-                flock.Members.Add(newNpc);
-                newNpc.flock = flock;
+                smartFlock.Members.Add(newNpc);
+                newNpc.flock = smartFlock;
+            }
+            if (newNpc is DumbCop)
+            {
+                dumbFlock.Members.Add(newNpc);
+                newNpc.flock = dumbFlock;
             }
         }
         #endregion
@@ -185,16 +190,7 @@ namespace COMP476Proj
                 int startY = (int)Math.Round(moveableObjectsX[i].BoundingRectangle.Bounds.Y / gridLength);
                 int endX = (int)Math.Round((moveableObjectsX[i].BoundingRectangle.Bounds.X + moveableObjectsX[i].BoundingRectangle.Bounds.Width) / gridLength);
                 int endY = (int)Math.Round((moveableObjectsX[i].BoundingRectangle.Bounds.Y + moveableObjectsX[i].BoundingRectangle.Bounds.Height) / gridLength);
-
-                if (startX < 0)
-                    startX = 0;
-                if (startY < 0)
-                    startY = 0;
-                if (endX > Game1.world.grid.GetUpperBound(1))
-                    endX = Game1.world.grid.GetUpperBound(1);
-                if (endY > Game1.world.grid.GetUpperBound(0))
-                    endY = Game1.world.grid.GetUpperBound(0);
-
+                
                 // Make sure loops go from small values to larger ones
                 if (startY > endY)
                 {
