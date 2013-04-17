@@ -20,8 +20,8 @@ namespace COMP476Proj
     {
         public static Random random = new Random();
 
-        public const int SCREEN_WIDTH = 1024;
-        public const int SCREEN_HEIGHT = 768;
+        public const int SCREEN_WIDTH = 1280;
+        public const int SCREEN_HEIGHT = 1024;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont spriteFont;

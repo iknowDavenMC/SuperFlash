@@ -360,7 +360,8 @@ namespace COMP476Proj
                     if (canBeHit)
                     {
                         entity.Fall(true);
-                        DataManager.GetInstance().IncreaseScore(DataManager.Points.SuperFlashKnockDown, true, entity.ComponentPhysics.Position.X, entity.ComponentPhysics.Position.Y - 64);
+                        if (!(entity is RoboCop))
+                            DataManager.GetInstance().IncreaseScore(DataManager.Points.SuperFlashKnockDown, true, entity.ComponentPhysics.Position.X, entity.ComponentPhysics.Position.Y - 64);
                     }
                 }
                 catch (IndexOutOfRangeException e)
