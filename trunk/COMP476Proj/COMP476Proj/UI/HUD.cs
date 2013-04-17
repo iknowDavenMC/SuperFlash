@@ -31,10 +31,13 @@ namespace COMP476Proj
         private List<FontComponent> fontComponents;
         FontComponent replayText;
         FontComponent timerText;
-
+        FontComponent mainMenuText;
+        FontComponent scoreDisplayText;
 
         //Game Over Buttons
         Button replayButton;
+        Button mainMenuButton;
+
         //Health Variables
         private float health;
 
@@ -162,6 +165,17 @@ namespace COMP476Proj
 
             //Button Initializations
             replayButton = new Button(replayText.getPosition(), replayText.getSize());
+            replayText.setAlpha(0.0f);
+
+            mainMenuText = new FontComponent(new Vector2(gameOverTextPosition.X + 100, gameOverTextPosition.Y + 40), new Vector2(100, 100));
+            mainMenuText.alpha = 0.0f;
+            mainMenuButton = new Button(mainMenuText.getPosition(), mainMenuText.getSize());
+
+
+            scoreDisplayText = new FontComponent(new Vector2(windowWidth / 2-150, windowHeight / 2 + 100), new Vector2(300, 100));
+            scoreDisplayText.setFontScale(2.0f);
+            scoreDisplayText.alpha = 0.0f;
+            scoreDisplayText.setOriginCenter();
         }
 
         public void loadContent(Texture2D banner, 
@@ -189,6 +203,8 @@ namespace COMP476Proj
             //Font components
             this.replayText.LoadContent(spriteFont);
             this.timerText.LoadContent(spriteFont);
+            this.mainMenuText.LoadContent(spriteFont);
+            this.scoreDisplayText.LoadContent(spriteFont);
         }
 
         public static HUD getInstance()
@@ -239,6 +255,8 @@ namespace COMP476Proj
             minutes = 0;
             displayedScore = 0;
             displaySeconds = "0";
+
+            replayText.alpha = 0;
             
         }
         #endregion
@@ -310,6 +328,7 @@ namespace COMP476Proj
             //If the game is over, draw the sprites
             if (isGameOver)
             {
+                MouseState mouse = Mouse.GetState();
                 Game1.world.streaker.Kill();
 
                 if (playGameOverMusic)
@@ -317,24 +336,42 @@ namespace COMP476Proj
                     SoundManager.GetInstance().PlaySong("Game Over");
                     playGameOverMusic = false;
                 }
-                //Draw black Alpha
+                //          Draw black Alpha
                 animateFadeToBlack(gameTime);
                 spriteBatch.Draw(fadeToBlack, new Rectangle((int)(0 + offset.X), (int)(0 + offset.Y), (int)(windowWidth * scale + offset.X), (int)(windowHeight * scale + offset.Y)), Color.Black * fadeToBlackAlpha);
 
-                //Draw Game Over Text
+                //          Draw Game Over Text
                 interpolate(ref gameOverTextScale, 1.0f, ref gameOverCurrentTime, 0.7f, gameTime);
                 spriteBatch.Draw(gameOverText, gameOverTextPosition * scale + offset, gameOverTextSize, Color.White, 0.0f, new Vector2(gameOverTextSize.Right / 2, gameOverTextSize.Bottom / 2), gameOverTextScale, SpriteEffects.None, 1.0f);
             
-                //Place the Replay Button
-                replayText.setText("Replay?");
-                replayText.setFontScale(20.0f);
+                //          Replay Button 
+                replayText.setText("Replay");
+                replayText.setFontScale(1.5f);
+
+                interpolate(ref replayText.alpha, 1.0f, ref replayText.timer, 2.0f, gameTime);
+                
                 replayText.Draw(gameTime, spriteBatch, scale, offset);
 
-                MouseState mouse = Mouse.GetState();
-                
                 replayButton.SetPosition(replayText.getPosition());
                 replayButton.setSize(replayText.getSize());
                 replayButton.Update(mouse);
+
+                //          Main Menu Button
+                mainMenuText.setText("Main Menu");
+                mainMenuText.setFontScale(1.5f);
+
+                interpolate(ref mainMenuText.alpha, 1.0f, ref mainMenuText.timer, 2.0f, gameTime);
+
+                mainMenuText.Draw(gameTime, spriteBatch, scale, offset);
+                mainMenuButton.Update(mouse);
+                
+                //          Score Display
+                scoreDisplayText.setText("Final score: " + displayedScore);
+                interpolate(ref scoreDisplayText.alpha, 1.0f, ref scoreDisplayText.timer, 1.0f, gameTime);
+                //interpolate(ref scoreDisplayText.size.Y, 2.0f, ref scoreDisplayText.timer, 2.0f, gameTime);
+                scoreDisplayText.Draw(gameTime, spriteBatch, scale, offset);
+                
+                
                 if (replayButton.isClicked)
                 {
  
@@ -342,6 +379,13 @@ namespace COMP476Proj
                     Game1.currentGameState = Game1.GameState.PLAY;
                     resetHud();
                     replayButton.isClicked = false;
+                }
+                if (mainMenuButton.isClicked)
+                {
+                    Game1.currentGameState = Game1.GameState.MAIN;
+                    Game1.LoadContentReset();
+                    resetHud();
+                    mainMenuButton.isClicked = false;
                 }
             }
         }
