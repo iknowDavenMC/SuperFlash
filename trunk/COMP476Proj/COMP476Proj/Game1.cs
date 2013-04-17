@@ -29,12 +29,20 @@ namespace COMP476Proj
         public static float elapsedTime;
         FrameRate frameRate;
 
+        Menu mainMenu;
+
+        public enum GameState
+        {
+            MAIN, PLAY,
+        }
+        public static GameState currentGameState;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
             this.Window.Title = "Superflash";
+
         }
 
         /// <summary>
@@ -43,12 +51,13 @@ namespace COMP476Proj
         /// related content.  Calling base.Initialize will enumerate through any components
         /// and initialize them as well.
         /// </summary>
-        protected override void Initialize()
+        public override void Initialize()
         {
             InputManager.GetInstance();
 
             frameRate = new FrameRate(this, 1);
-
+            mainMenu = new Menu();
+            currentGameState = GameState.PLAY;
             base.Initialize();
         }
 
@@ -56,7 +65,7 @@ namespace COMP476Proj
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
-        protected override void LoadContent()
+        public override void LoadContent()
         {
             SoundManager.GetInstance().LoadContent(Content);
             SoundManager.GetInstance().PlaySong("Level");
@@ -99,8 +108,15 @@ namespace COMP476Proj
             Texture2D superFlashIcon = Content.Load<Texture2D>("Hud/superFlashButton");
             HUD.getInstance().loadContent(banner, notorietyBar, notorietyMeter, spriteFont, blank, gameOverText, superFlashIcon);
 
+            IsMouseVisible = true;
+
+            mainMenu.LoadContent(Content.Load<Texture2D>("Menu"));
         }
 
+        public void LoadContentReset()
+        {
+
+        }
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// all content.
@@ -124,15 +140,23 @@ namespace COMP476Proj
                 this.Exit();
             //Debugger.getInstance().Clear();
 
-            world.Update(gameTime);
-            Camera.Update(gameTime);
-//#if (DEBUG)
+            if (currentGameState == GameState.MAIN)
             {
-                this.Window.Title = frameRate.CurrentFramesPerSecond.ToString() + " frames per second";
+                mainMenu.Update(gameTime);
             }
-//#endif
-            elapsedTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-            HUD.getInstance().Update(gameTime);
+            //GamePlay
+            if (currentGameState == GameState.PLAY)
+            {
+                world.Update(gameTime);
+                Camera.Update(gameTime);
+                //#if (DEBUG)
+                {
+                    this.Window.Title = frameRate.CurrentFramesPerSecond.ToString() + " frames per second";
+                }
+                //#endif
+                elapsedTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                HUD.getInstance().Update(gameTime);
+            }
             base.Update(gameTime);
         }
 
@@ -145,21 +169,30 @@ namespace COMP476Proj
             frameRate.Update(gameTime);
 
             GraphicsDevice.Clear(Color.ForestGreen);
-            Vector3 center = new Vector3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0);
-            Matrix transform = Matrix.CreateTranslation(-(Camera.X), -(Camera.Y), 0) * Matrix.CreateScale(Camera.Scale) * Matrix.CreateTranslation(center);
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, null, null, null, transform);
-            world.Draw(gameTime, spriteBatch);
-            HUD.getInstance().Draw(gameTime, spriteBatch);
-            //Debugger.getInstance().Draw(spriteBatch);
 
-            foreach (NPC ped in world.npcs)
+            if (currentGameState == GameState.MAIN)
             {
-                ped.BoundingRectangle.Draw(spriteBatch);
+                spriteBatch.Begin();
+                mainMenu.Draw(gameTime, spriteBatch);
+                spriteBatch.End();
             }
+            if (currentGameState == GameState.PLAY)
+            {
+                Vector3 center = new Vector3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0);
+                Matrix transform = Matrix.CreateTranslation(-(Camera.X), -(Camera.Y), 0) * Matrix.CreateScale(Camera.Scale) * Matrix.CreateTranslation(center);
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, null, null, null, transform);
+                world.Draw(gameTime, spriteBatch);
+                HUD.getInstance().Draw(gameTime, spriteBatch);
+                //Debugger.getInstance().Draw(spriteBatch);
 
-            world.streaker.BoundingRectangle.Draw(spriteBatch);
-            spriteBatch.End();
+                foreach (NPC ped in world.npcs)
+                {
+                    ped.BoundingRectangle.Draw(spriteBatch);
+                }
 
+                world.streaker.BoundingRectangle.Draw(spriteBatch);
+                spriteBatch.End();
+            }
 
 
 
