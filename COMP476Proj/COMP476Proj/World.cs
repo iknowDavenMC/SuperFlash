@@ -369,21 +369,41 @@ namespace COMP476Proj
             // Check collision for X
             for (int i = 0; i != moveableObjectsX.Count - 1; ++i)
             {
-                if (moveableObjectsX[i].BoundingRectangle.Collides(moveableObjectsX[i + 1].BoundingRectangle))
+                int j = i + 1;
+
+                do
                 {
-                    //moveableObjectsX[i + 1].ResolveCollision(moveableObjectsX[i]);
-                    moveableObjectsX[i].ResolveCollision(moveableObjectsX[i + 1]);
-                }
+                    if (moveableObjectsX[i].BoundingRectangle.Collides(moveableObjectsX[j].BoundingRectangle))
+                    {
+                        //moveableObjectsX[i + 1].ResolveCollision(moveableObjectsX[i]);
+                        moveableObjectsX[i].ResolveCollision(moveableObjectsX[j]);
+                    }
+
+                    ++j;
+
+                } while (j != moveableObjectsX.Count
+                        && Math.Abs(moveableObjectsX[i].Position.X - moveableObjectsX[j].Position.X) <=
+                        (moveableObjectsX[i].BoundingRectangle.Bounds.Width / 2 + moveableObjectsX[j].BoundingRectangle.Bounds.Width / 2));
             }
 
             // Check collision for Y
-            for (int i = 0; i != moveableObjectsY.Count; ++i)
+            for (int i = 0; i != moveableObjectsY.Count - 1; ++i)
             {
-                if (i < moveableObjectsY.Count - 1 && moveableObjectsY[i].BoundingRectangle.Collides(moveableObjectsY[i + 1].BoundingRectangle))
+                int j = i + 1;
+
+                do
                 {
-                    moveableObjectsY[i].ResolveCollision(moveableObjectsY[i + 1]);
-                    //moveableObjectsY[i + 1].ResolveCollision(moveableObjectsY[i]);
-                }
+                    if (moveableObjectsY[i].BoundingRectangle.Collides(moveableObjectsY[j].BoundingRectangle))
+                    {
+                        //moveableObjectsX[i + 1].ResolveCollision(moveableObjectsX[i]);
+                        moveableObjectsY[i].ResolveCollision(moveableObjectsY[j]);
+                    }
+
+                    ++j;
+
+                } while (j != moveableObjectsY.Count
+                        && Math.Abs(moveableObjectsY[i].Position.Y - moveableObjectsY[j].Position.Y) <=
+                        (moveableObjectsY[i].BoundingRectangle.Bounds.Height / 2 + moveableObjectsY[j].BoundingRectangle.Bounds.Height / 2));
             }
 
 

@@ -124,8 +124,6 @@ namespace COMP476Proj
 
             numberofSuperFlash = 0;
 
-            highScore = 0;
-
             biggestSuperflash = 0;
 
             SuperflashVictims = 0;
