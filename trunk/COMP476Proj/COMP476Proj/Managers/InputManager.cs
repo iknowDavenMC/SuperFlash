@@ -51,6 +51,13 @@ namespace COMP476Proj
 
         #endregion
 
+        #region Properties
+        public ControllerType GetControllerType
+        {
+            get { return controllerType; }
+        }
+        #endregion
+
         #region Constructors
 
         /// <summary>
