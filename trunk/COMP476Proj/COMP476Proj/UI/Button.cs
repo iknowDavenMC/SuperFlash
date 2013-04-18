@@ -47,6 +47,11 @@ namespace COMP476Proj
                 }
 
             }
+            else
+            {
+                isClicked = false;
+                isPressed = false;
+            }
         }
 
         public bool buttonPressed()
