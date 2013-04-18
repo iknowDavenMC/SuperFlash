@@ -212,7 +212,7 @@ namespace COMP476Proj
 
                         npc = new SmartCop(
                             new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), World.Speeds.SmartCop_Run, 750, World.Speeds.SmartCop_Walk, 1000, 8, 50, 0.25f, true),
-                            new MovementAIComponent2D(3, 2, MathHelper.ToRadians(45), 0.5f, 50, 6, Vector2.Zero, Vector2.Zero,0.1f),
+                            new MovementAIComponent2D(3, 2, MathHelper.ToRadians(45), 0.5f, 50, 25, Vector2.Zero, Vector2.Zero,0.1f),
                             new DrawComponent(animation, Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), dcState);
                     }
                     if (type.StartsWith("RoboCop"))

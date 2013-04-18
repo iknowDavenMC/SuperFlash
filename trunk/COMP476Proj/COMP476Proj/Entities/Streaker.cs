@@ -48,7 +48,7 @@ namespace COMP476Proj
         /// <summary>
         /// Recover Timer
         /// </summary>
-        private int recoverTimer = 750;
+        private int recoverTimer = 1000;
 
         /// <summary>
         /// Whether or not the image is flipped
@@ -68,7 +68,7 @@ namespace COMP476Proj
         /// <summary>
         /// Time to recover
         /// </summary>
-        private const int TIME_TO_RECOVER = 500;
+        private const int TIME_TO_RECOVER = 1000;
 
         /// <summary>
         /// Is the player running faster
