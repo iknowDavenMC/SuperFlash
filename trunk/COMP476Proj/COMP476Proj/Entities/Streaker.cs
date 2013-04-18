@@ -140,7 +140,7 @@ namespace COMP476Proj
             powerParticles = new ParticleSpewer(
                 phys.Position.X + draw.animation.FrameWidth / 2, phys.Position.Y + draw.animation.FrameHeight / 2,
                 10000, 10, 0, MathHelper.TwoPi,
-                50, 300, 2, 350, 180, 200, 0.5f, 1f, 0.5f, 1, true, 0f);
+                50, 300, 3, 350, 180, 200, 0.5f, 1f, 0.5f, 1, true, 0f);
             powerParticles.Start();
         }
 
