@@ -354,24 +354,50 @@ namespace COMP476Proj
 
             if (Game1.world.streaker.hasSuperFlash() && sFlashNotifyDelay < sFlashNotifyTimer)
            {
-               spriteBatch.DrawString(spriteFont, "Press S to Superflash!!",
-               new Vector2(Camera.Width / 2 - 120f, 25f) * scale + offset,
-               Color.Black, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+               if (InputManager.GetInstance().GetControllerType == InputManager.ControllerType.Keyboard)
+               {
+                   spriteBatch.DrawString(spriteFont, "Press S to Superflash!!",
+                   new Vector2(Camera.Width / 2 - 120f, 25f) * scale + offset,
+                   Color.Black, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 
-                spriteBatch.DrawString(spriteFont, "Press S to Superflash!!",
-                new Vector2(Camera.Width/2-119f,24f) * scale + offset,
-                Color.White, 0f, Vector2.Zero,scale, SpriteEffects.None, 0f);            
+                   spriteBatch.DrawString(spriteFont, "Press S to Superflash!!",
+                   new Vector2(Camera.Width / 2 - 119f, 24f) * scale + offset,
+                   Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+               }
+               else
+               {
+                   spriteBatch.DrawString(spriteFont, "Press X to Superflash!!",
+                   new Vector2(Camera.Width / 2 - 120f, 25f) * scale + offset,
+                   Color.Black, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+
+                   spriteBatch.DrawString(spriteFont, "Press X to Superflash!!",
+                   new Vector2(Camera.Width / 2 - 119f, 24f) * scale + offset,
+                   Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+               }
             }
 
             if (danceNotify)
             {
-                spriteBatch.DrawString(spriteFont, "Press D to Dance!!",
-                new Vector2(Camera.Width / 2 - 120f, 500f) * scale + offset,
-                   Color.Black, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                if (InputManager.GetInstance().GetControllerType == InputManager.ControllerType.Keyboard)
+                {
+                    spriteBatch.DrawString(spriteFont, "Press D to Dance!!",
+                    new Vector2(Camera.Width / 2 - 120f, 500f) * scale + offset,
+                       Color.Black, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
 
-                spriteBatch.DrawString(spriteFont, "Press D to Dance!!",
-                new Vector2(Camera.Width / 2 - 119f, 501f) * scale + offset,
-                Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                    spriteBatch.DrawString(spriteFont, "Press D to Dance!!",
+                    new Vector2(Camera.Width / 2 - 119f, 501f) * scale + offset,
+                    Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                }
+                else
+                {
+                    spriteBatch.DrawString(spriteFont, "Press A to Dance!!",
+                    new Vector2(Camera.Width / 2 - 120f, 500f) * scale + offset,
+                       Color.Black, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+
+                    spriteBatch.DrawString(spriteFont, "Press A to Dance!!",
+                    new Vector2(Camera.Width / 2 - 119f, 501f) * scale + offset,
+                    Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                }
             }
             
         }
