@@ -17,7 +17,7 @@ namespace COMP476Proj
             public const int KnockDownCop = 200;
             public const int SuperFlashKnockDown = 150;
             public const int FleeProximity = 10;
-            public const int Dance = 20;
+            public const int Dance = 50;
             public const int LoseCop = 500;
             public const int LoseAllCops = 2000;
         }
