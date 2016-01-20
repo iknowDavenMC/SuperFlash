@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Media;
+
+using UnityEngine;
+using Assets.Code._XNA;
 
 namespace COMP476Proj
 {
@@ -161,19 +160,19 @@ namespace COMP476Proj
         /// <returns>Does the sound effects exist</returns>
         public bool PlaySound(string soundSource, string soundType, Vector2 streakerPosition, Vector2 otherPosition, bool random = true)
         {
-            if ((streakerPosition - otherPosition).Length() > distanceThreshold)
+            if ((streakerPosition - otherPosition).magnitude > distanceThreshold)
             {
                 return false;
             }
 
-            if (!soundSource.Equals("Common") && !soundSource.Equals("Streaker") && random && Game1.random.NextDouble() < 0.8f)
+            if (!soundSource.Equals("Common") && !soundSource.Equals("Streaker") && random && SuperFlashGame.random.NextDouble() < 0.8f)
             {
                 return false;
             }
 
             try
             {
-                int index = Game1.random.Next(0, soundEffects[soundSource][soundType].Count);
+                int index = SuperFlashGame.random.Next(0, soundEffects[soundSource][soundType].Count);
 
                 if (soundSource.Equals("Streaker"))
                 {
@@ -181,7 +180,7 @@ namespace COMP476Proj
                 }
                 else
                 {
-                    float pitch = (float)(0.4 * Game1.random.NextDouble() - 0.2);
+                    float pitch = (float)(0.4 * SuperFlashGame.random.NextDouble() - 0.2);
                     soundEffects[soundSource][soundType][index].Play(1, pitch, 0f);
                 }
                 
@@ -203,14 +202,14 @@ namespace COMP476Proj
         /// <returns>Does the sound effects exist</returns>
         public bool PlaySound(string soundSource, string soundType, bool random = true)
         {
-            if (!soundSource.Equals("Common") && !soundSource.Equals("Streaker") && random && Game1.random.NextDouble() < 0.8f)
+            if (!soundSource.Equals("Common") && !soundSource.Equals("Streaker") && random && SuperFlashGame.random.NextDouble() < 0.8f)
             {
                 return false;
             }
 
             try
             {
-                int index = Game1.random.Next(0, soundEffects[soundSource][soundType].Count);
+                int index = SuperFlashGame.random.Next(0, soundEffects[soundSource][soundType].Count);
 
                 if (soundSource.Equals("Streaker"))
                 {
@@ -218,7 +217,7 @@ namespace COMP476Proj
                 }
                 else
                 {
-                    float pitch = (float)(0.4 * Game1.random.NextDouble() - 0.2);
+                    float pitch = (float)(0.4 * SuperFlashGame.random.NextDouble() - 0.2);
                     soundEffects[soundSource][soundType][index].Play(1, pitch, 0f);
                 }
 

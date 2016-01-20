@@ -20,7 +20,7 @@ namespace COMP476Proj
         private Vector2 origin;
         private Vector2 size;
         private float scale;
-        private Rectangle rectangle;
+        private Rect rectangle;
         private float alpha;
         // TO-DO: Make methods to change the center position from center to origin 
 
@@ -31,7 +31,7 @@ namespace COMP476Proj
             this.origin = new Vector2(size.X / 2, size.Y / 2);
             this.scale = 1.0f;
             this.size = size;
-            this.rectangle = new Rectangle(0, 0, (int)(size.X), (int)(size.Y));
+            this.rectangle = new Rect(0, 0, (int)(size.X), (int)(size.Y));
             this.alpha = 1.0f;
         }
 
@@ -46,7 +46,7 @@ namespace COMP476Proj
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, float scale, Vector2 offset)
         {
-            spriteBatch.Draw(texture, position*scale+offset, rectangle, Color.White*alpha, 0.0f, origin, scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, position*scale+offset, rectangle, Color.white*alpha, 0.0f, origin, scale, SpriteEffects.None, 0f);
         }
 
         public Vector2 getPosition()
@@ -56,7 +56,7 @@ namespace COMP476Proj
         public void setSize(int x, int y)
         {
             this.size = new Vector2(x, y);
-            this.rectangle = new Rectangle(0, 0, x, y);
+            this.rectangle = new Rect(0, 0, x, y);
         }
         public Vector2 getSize()
         {

@@ -2,25 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using UnityEngine;
 using StreakerLibrary;
+using Assets.Code._XNA;
 
 namespace COMP476Proj
 {
-    public class DrawComponent
+    public class DrawComponent : MonoBehaviour
     {
         /*-------------------------------------------------------------------------*/
         #region Fields
 
-        public Animation animation;
+        public CustomAnimation animation;
 
         //Draw Logic
         protected bool visible = true;
-        public Vector2 Origin = Vector2.Zero;
-        protected Vector2 scale = Vector2.One;
-        protected Vector2 position = Vector2.Zero;
-        protected Color color = Color.White;
+        public Vector2 Origin = Vector2.zero;
+        protected Vector2 scale = Vector2.one;
+        protected Vector2 position = Vector2.zero;
+        protected Color color = Color.white;
         protected SpriteEffects spriteEffects = SpriteEffects.None;
         protected float depth = 0.5f;
         protected float alpha = 1.0f;
@@ -64,7 +64,7 @@ namespace COMP476Proj
         /*-------------------------------------------------------------------------*/
         #region Init
 
-        public DrawComponent(Animation defaultAnimation) {
+        public DrawComponent(CustomAnimation defaultAnimation) {
             animation = defaultAnimation;
             Pause();
         }
@@ -88,7 +88,7 @@ namespace COMP476Proj
        }
          * */
 
-        public DrawComponent(Animation defaultAnimation, Color col, Vector2 orig, Vector2 scale, float depth)
+				public DrawComponent(CustomAnimation defaultAnimation, Color col, Vector2 orig, Vector2 scale, float depth)
        {
            animation = defaultAnimation;
            color = col;
@@ -102,7 +102,7 @@ namespace COMP476Proj
        /*-------------------------------------------------------------------------*/
         #region Update and Draw
 
-        public virtual void Update(GameTime gameTime)
+        public void Update()
         {
             if (animation != null)
                 timePerFrame = animation.TimePerFrame;
@@ -110,7 +110,7 @@ namespace COMP476Proj
                 timePerFrame = 0;
             if (!paused && timePerFrame > 0)
             {
-                timeElapsed += (float)gameTime.ElapsedGameTime.Milliseconds;
+                timeElapsed += Time.deltaTime * 1000f;
 
                 if (timeElapsed > timePerFrame)
                 {
@@ -132,45 +132,45 @@ namespace COMP476Proj
             }
         }
 
-        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 pos)
+        public virtual void Draw(SpriteBatch spriteBatch, Vector2 pos)
         {
             if (visible)
             {
-                Rectangle sourceRect = new Rectangle(animation.FrameWidth * currentFrame, animation.YPos, animation.FrameWidth, animation.FrameHeight);
+                Rect sourceRect = new Rect(animation.FrameWidth * currentFrame, animation.YPos, animation.FrameWidth, animation.FrameHeight);
                 Vector2 offset;
 
                 if (spriteEffects == SpriteEffects.FlipHorizontally)
                 {
-                    offset = new Vector2((animation.FrameWidth - PIXELS_LEFT_TO_CENTER) * scale.X, PIXELS_HEAD_TO_TOE * scale.Y);
+                    offset = new Vector2((animation.FrameWidth - PIXELS_LEFT_TO_CENTER) * scale.x, PIXELS_HEAD_TO_TOE * scale.y);
                 }
                 else
                 {
-                    offset = new Vector2(PIXELS_LEFT_TO_CENTER * scale.X, PIXELS_HEAD_TO_TOE * scale.Y);
+                    offset = new Vector2(PIXELS_LEFT_TO_CENTER * scale.x, PIXELS_HEAD_TO_TOE * scale.y);
                 }
                 
-                Vector2 drawPos = new Vector2(pos.X, pos.Y) - offset;
+                Vector2 drawPos = new Vector2(pos.x, pos.y) - offset;
                 spriteBatch.Draw(animation.Texture, drawPos, sourceRect, color *alpha, 0, Origin, scale, spriteEffects, depth);
                 
             }
         }
 
-        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch, float offsetX, float offsetY)
+        public virtual void Draw(SpriteBatch spriteBatch, float offsetX, float offsetY)
         {
             if (visible)
             {
-                Rectangle sourceRect = new Rectangle(animation.FrameWidth * currentFrame, animation.YPos, animation.FrameWidth, animation.FrameHeight);
+                Rect sourceRect = new Rect(animation.FrameWidth * currentFrame, animation.YPos, animation.FrameWidth, animation.FrameHeight);
                 Vector2 offset;
 
                 if (spriteEffects == SpriteEffects.FlipHorizontally)
                 {
-                    offset = new Vector2((animation.FrameWidth - PIXELS_LEFT_TO_CENTER) * scale.X, PIXELS_HEAD_TO_TOE * scale.Y);
+                    offset = new Vector2((animation.FrameWidth - PIXELS_LEFT_TO_CENTER) * scale.x, PIXELS_HEAD_TO_TOE * scale.y);
                 }
                 else
                 {
-                    offset = new Vector2(PIXELS_LEFT_TO_CENTER * scale.X, PIXELS_HEAD_TO_TOE * scale.Y);
+                    offset = new Vector2(PIXELS_LEFT_TO_CENTER * scale.x, PIXELS_HEAD_TO_TOE * scale.y);
                 }
 
-                Vector2 drawPos = new Vector2(Position.X, Position.Y) - offset + new Vector2(offsetX,offsetY);
+                Vector2 drawPos = new Vector2(Position.x, Position.y) - offset + new Vector2(offsetX,offsetY);
                 spriteBatch.Draw(animation.Texture, drawPos, sourceRect, color*alpha, 0, Origin, scale, spriteEffects, depth);
 
             }

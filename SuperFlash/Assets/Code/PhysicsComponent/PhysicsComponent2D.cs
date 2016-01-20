@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Threading;
-using Microsoft.Xna.Framework;
+
+using UnityEngine;
+using Assets.Code._XNA;
 
 namespace COMP476Proj
 {
@@ -258,7 +260,7 @@ namespace COMP476Proj
             maxVelocity = maxVelocityWalk;
 
             // Unspecified
-            movementDirection = velocity = acceleration = Vector2.Zero;
+            movementDirection = velocity = acceleration = Vector2.zero;
             rotation = angularAcceleration = 0;
             isStopping = false;
         }
@@ -280,9 +282,9 @@ namespace COMP476Proj
                 acceleration = velocity * -friction;
 
                 // Capped by max acceleration
-                if (acceleration.Length() > maxAcceleration)
+                if (acceleration.magnitude > maxAcceleration)
                 {
-                    if(acceleration.LengthSquared() > 0)
+                    if(acceleration.sqrMagnitude > 0)
                         acceleration.Normalize();
                     acceleration *= maxAcceleration;
                 }
@@ -314,9 +316,9 @@ namespace COMP476Proj
                 }
 
                 // Capped by max velocity
-                if (velocity.Length() > maxVelocity)
+                if (velocity.magnitude > maxVelocity)
                 {
-                    if(velocity.LengthSquared() > 0)
+                    if(velocity.sqrMagnitude > 0)
                         velocity.Normalize();
                     velocity *= maxVelocity;
                 }
@@ -342,9 +344,9 @@ namespace COMP476Proj
                 }
                 
                 // Capped by max velocity
-                if (velocity.Length() > maxVelocity)
+                if (velocity.magnitude > maxVelocity)
                 {
-                    if (velocity.LengthSquared() > 0)
+                    if (velocity.sqrMagnitude > 0)
                         velocity.Normalize();
                     velocity *= maxVelocity;
                 }
@@ -361,7 +363,7 @@ namespace COMP476Proj
             if (isStopping)
             {
                 // Stop
-                velocity = Vector2.Zero;
+                velocity = Vector2.zero;
             }
             else
             {
@@ -440,7 +442,7 @@ namespace COMP476Proj
             if (!targetDirection.Equals(null))
             {
                 movementDirection = (Vector2)targetDirection;
-                if(movementDirection.LengthSquared() > 0)
+                if(movementDirection.sqrMagnitude > 0)
                     movementDirection.Normalize();
             }
 
@@ -541,7 +543,7 @@ namespace COMP476Proj
         {
             // Normal
             Vector2 contactNormal = position - overlap.Center;
-            if(contactNormal.LengthSquared() > 0)
+            if(contactNormal.sqrMagnitude > 0)
                 contactNormal.Normalize();
 
             // Steps outlined in the class slides
@@ -552,7 +554,7 @@ namespace COMP476Proj
 
             velocity += contactNormal / mass;
             movementDirection = velocity;
-            if (movementDirection.LengthSquared() > 0)
+            if (movementDirection.sqrMagnitude > 0)
                 movementDirection.Normalize();
         }
 
@@ -563,7 +565,7 @@ namespace COMP476Proj
         {
             // Normal
             Vector2 contactNormal = position - overlap.Center;
-            if (contactNormal.LengthSquared() > 0)
+            if (contactNormal.sqrMagnitude > 0)
                 contactNormal.Normalize();
 
             // Steps outlined in the class slides
@@ -574,7 +576,7 @@ namespace COMP476Proj
 
             velocity += contactNormal / mass;
             movementDirection = velocity;
-            if (movementDirection.LengthSquared() > 0)
+            if (movementDirection.sqrMagnitude > 0)
                 movementDirection.Normalize();
         }
 

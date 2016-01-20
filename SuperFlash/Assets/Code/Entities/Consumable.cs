@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
+using UnityEngine;
+using Assets.Code._XNA;
 using StreakerLibrary;
 
 namespace COMP476Proj
@@ -12,8 +13,8 @@ namespace COMP476Proj
     public class Consumable : EntityVisible
     {
         #region Fields
-        protected int fadeTimer = 0;
-        protected int fadeDelay = 16000;
+        protected float fadeTimer = 0f;
+        protected float fadeDelay = 16000f;
 
         protected bool consumed = false;
         ConsumableType cType;
@@ -52,7 +53,7 @@ namespace COMP476Proj
         {
             pos = position;
             rect = new BoundingRectangle(position, 10);
-            int randNum = Game1.random.Next(3);
+            int randNum = SuperFlashGame.random.Next(3);
             switch (randNum)
             {
                 case 0:
@@ -74,25 +75,27 @@ namespace COMP476Proj
             }
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update()
         {
-            fadeTimer += gameTime.ElapsedGameTime.Milliseconds;
-            draw.Update(gameTime);
-            ResolveCollision(Game1.world.streaker);
+            fadeTimer += Time.deltaTime * 1000f;
+            draw.Update();
+            ResolveCollision(SuperFlashGame.world.streaker);
             if (fadeTimer > fadeDelay)
             {
                 consumed = true;
             }
-            base.Update(gameTime);
+
+            base.Update();
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            if (fadeTimer < fadeDelay * .75 || (float)Math.Sin(gameTime.TotalGameTime.Milliseconds/10) > 0)
+            if (fadeTimer < fadeDelay * .75 || (float)Math.Sin(Time.time * 1000f/10) > 0)
             {
-                draw.Draw(gameTime, spriteBatch, pos);
+                draw.Draw(spriteBatch, pos);
             }
-            base.Draw(gameTime, spriteBatch);
+
+            base.Draw(spriteBatch);
         }
 
         public override void ResolveCollision(Entity other)

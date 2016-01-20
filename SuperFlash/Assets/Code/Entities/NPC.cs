@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
+
+using UnityEngine;
+using Assets.Code._XNA;
 using StreakerLibrary;
 
 namespace COMP476Proj
@@ -33,7 +35,7 @@ namespace COMP476Proj
         protected virtual bool testWallCollide()
         {
             Vector2 dir = physics.Velocity;
-            if (dir.Length() > 0)
+            if (dir.magnitude > 0)
             {
                 dir.Normalize();
                 dir *= RAY_LENGTH;
@@ -43,10 +45,10 @@ namespace COMP476Proj
             LineSegment ray = new LineSegment(pos, endPoint);
 
             // Check the grid for walls
-            int startX = (int)Math.Round(Math.Min(Position.X, endPoint.X) / World.gridLength);
-            int startY = (int)Math.Round(Math.Min(Position.Y, endPoint.Y) / World.gridLength);
-            int endX = (int)Math.Round(Math.Max(Position.X, endPoint.X) / World.gridLength);
-            int endY = (int)Math.Round(Math.Max(Position.Y, endPoint.Y) / World.gridLength);
+            int startX = (int)Math.Round(Math.Min(Position.x, endPoint.x) / World.gridLength);
+            int startY = (int)Math.Round(Math.Min(Position.y, endPoint.y) / World.gridLength);
+            int endX = (int)Math.Round(Math.Max(Position.x, endPoint.x) / World.gridLength);
+            int endY = (int)Math.Round(Math.Max(Position.y, endPoint.y) / World.gridLength);
 
             bool collides = false;
 
@@ -56,9 +58,9 @@ namespace COMP476Proj
                 {
                     for (int l = startX; l != endX + 1; ++l)
                     {
-                        for (int j = 0; j != Game1.world.grid[k, l].Count; ++j)
+                        for (int j = 0; j != SuperFlashGame.world.grid[k, l].Count; ++j)
                         {
-                            if (ray.IntersectsBox(Game1.world.grid[k, l][j].BoundingRectangle))
+                            if (ray.IntersectsBox(SuperFlashGame.world.grid[k, l][j].BoundingRectangle))
                             {
                                 collides = true;
                             }
@@ -81,10 +83,10 @@ namespace COMP476Proj
 
         private float? closestWallCollide(LineSegment line)
         {
-            int startX = (int)Math.Round(Math.Min(line.start.X, line.end.X) / World.gridLength);
-            int startY = (int)Math.Round(Math.Min(line.start.Y, line.end.Y) / World.gridLength);
-            int endX = (int)Math.Round(Math.Max(line.start.X, line.end.X) / World.gridLength);
-            int endY = (int)Math.Round(Math.Max(line.start.Y, line.end.Y) / World.gridLength);
+            int startX = (int)Math.Round(Math.Min(line.start.x, line.end.x) / World.gridLength);
+            int startY = (int)Math.Round(Math.Min(line.start.y, line.end.y) / World.gridLength);
+            int endX = (int)Math.Round(Math.Max(line.start.x, line.end.x) / World.gridLength);
+            int endY = (int)Math.Round(Math.Max(line.start.y, line.end.y) / World.gridLength);
 
             List<float> collidingDistances = new List<float>();
 
@@ -92,9 +94,9 @@ namespace COMP476Proj
             {
                 for (int l = startX; l != endX + 1; ++l)
                 {
-                    for (int j = 0; j != Game1.world.grid[k, l].Count; ++j)
+                    for (int j = 0; j != SuperFlashGame.world.grid[k, l].Count; ++j)
                     {
-                        BoundingRectangle currRect = Game1.world.grid[k, l][j].BoundingRectangle;
+                        BoundingRectangle currRect = SuperFlashGame.world.grid[k, l][j].BoundingRectangle;
                         if (line.IntersectsBox(currRect))
                         {
                             float? dist = line.intersectionDistance(currRect);
@@ -119,8 +121,8 @@ namespace COMP476Proj
 
         private void wallAvoidance()
         {
-            Vector2 leftTestDir = Vector2.Transform(physics.Velocity, Matrix.CreateRotationX(MathHelper.ToRadians(AVOIDANCE_ANGLE)));
-            if (leftTestDir.Length() > 0)
+            Vector2 leftTestDir = Quaternion.AngleAxis(AVOIDANCE_ANGLE, Vector3.back) * physics.Velocity;
+            if (leftTestDir.magnitude > 0)
             {
                 leftTestDir.Normalize();
                 leftTestDir *= RAY_LENGTH;
@@ -128,8 +130,8 @@ namespace COMP476Proj
             
             float? leftTest = closestWallCollide(new LineSegment(pos,pos+leftTestDir));
 
-            Vector2 rightTestDir = Vector2.Transform(physics.Velocity, Matrix.CreateRotationX(MathHelper.ToRadians(-AVOIDANCE_ANGLE)));
-            if (rightTestDir.Length() > 0)
+						Vector2 rightTestDir = Quaternion.AngleAxis(AVOIDANCE_ANGLE, Vector3.forward) * physics.Velocity;
+            if (rightTestDir.magnitude > 0)
             {
                 rightTestDir.Normalize();
                 rightTestDir *= RAY_LENGTH;
@@ -163,9 +165,9 @@ namespace COMP476Proj
             }
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update()
         {
-            base.Update(gameTime);
+            base.Update();
         }
     }
 }

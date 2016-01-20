@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.3.1f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -59,17 +57,13 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Code\Animation\CustomAnimation.cs" />
+    <Compile Include="Assets\Code\Animation\SpriteDatabase.cs" />
     <Compile Include="Assets\Code\Debugger\Debugger.cs" />
     <Compile Include="Assets\Code\Debugger\FrameRate.cs" />
     <Compile Include="Assets\Code\DrawComponent\CustomCamera.cs" />
@@ -91,9 +85,9 @@
     <Compile Include="Assets\Code\Entities\Streaker.cs" />
     <Compile Include="Assets\Code\Entities\TriggerEntity.cs" />
     <Compile Include="Assets\Code\Entities\Wall.cs" />
-    <Compile Include="Assets\Code\Game\Game1.cs" />
     <Compile Include="Assets\Code\Game\Map.cs" />
     <Compile Include="Assets\Code\Game\Program.cs" />
+    <Compile Include="Assets\Code\Game\SuperFlashGame.cs" />
     <Compile Include="Assets\Code\Game\World.cs" />
     <Compile Include="Assets\Code\IntelligenceComponent\Flock.cs" />
     <Compile Include="Assets\Code\IntelligenceComponent\MovementAIComponent2D.cs" />
@@ -101,6 +95,14 @@
     <Compile Include="Assets\Code\IntelligenceComponent\Pathfinding\Edge.cs" />
     <Compile Include="Assets\Code\IntelligenceComponent\Pathfinding\MinHeap.cs" />
     <Compile Include="Assets\Code\IntelligenceComponent\Pathfinding\Node.cs" />
+    <Compile Include="Assets\Code\LevelCreator\Box.cs" />
+    <Compile Include="Assets\Code\LevelCreator\Consumable.cs" />
+    <Compile Include="Assets\Code\LevelCreator\Edge.cs" />
+    <Compile Include="Assets\Code\LevelCreator\LevelCreator.cs" />
+    <Compile Include="Assets\Code\LevelCreator\NPC.cs" />
+    <Compile Include="Assets\Code\LevelCreator\Node.cs" />
+    <Compile Include="Assets\Code\LevelCreator\Program.cs" />
+    <Compile Include="Assets\Code\LevelCreator\Trigger.cs" />
     <Compile Include="Assets\Code\Managers\AchievementManager.cs" />
     <Compile Include="Assets\Code\Managers\DataManager.cs" />
     <Compile Include="Assets\Code\Managers\FontManager.cs" />
@@ -123,9 +125,11 @@
     <Compile Include="Assets\Code\Utility\QuadTree.cs" />
     <Compile Include="Assets\Code\Utility\Rectanglef.cs" />
     <Compile Include="Assets\Code\Utility\Timer.cs" />
+    <Compile Include="Assets\Code\_XNA\XnaStub.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\Font Notes.txt" />
+    <None Include="Assets\Levels\level.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>

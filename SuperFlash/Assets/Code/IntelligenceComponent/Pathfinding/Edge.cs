@@ -22,7 +22,7 @@ namespace COMP476Proj
         {
             start = s;
             end = e;
-            cost = (e.Position - s.Position).Length();
+            cost = (e.Position - s.Position).magnitude;
             Weight = 0;
         }
 
@@ -31,7 +31,7 @@ namespace COMP476Proj
             // Over time if the node has a weight, erode it to zero.
             if (Weight != 0)
             {
-                float time = gameTime.ElapsedGameTime.Milliseconds;
+                float time = Time.deltaTime * 1000f;
                 if (Weight > 0)
                 {
                     Weight -= degradeRate * time/1000;

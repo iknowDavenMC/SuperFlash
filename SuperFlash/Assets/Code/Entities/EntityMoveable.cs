@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
+
+using UnityEngine;
+using Assets.Code._XNA;
 
 namespace COMP476Proj
 {
@@ -21,7 +23,7 @@ namespace COMP476Proj
 
         #region Public Methods
 
-        public override void Update(GameTime gameTime)
+        public override void Update()
         {
             rect.Update(physics.Position);
         }
@@ -96,22 +98,22 @@ namespace COMP476Proj
                     if (other is Pedestrian && this is Streaker && ((Pedestrian)other).State != PedestrianState.FALL)
                     {
                         DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownPed, true,
-                            ((EntityMoveable)other).ComponentPhysics.Position.X,
-                            ((EntityMoveable)other).ComponentPhysics.Position.Y - 64);
+                            ((EntityMoveable)other).ComponentPhysics.Position.x,
+                            ((EntityMoveable)other).ComponentPhysics.Position.y - 64);
                         DataManager.GetInstance().numberPedestriansKnockedOver++;
                     }
                     if (other is DumbCop && this is Streaker && ((DumbCop)other).State != DumbCopState.FALL)
                     {
                         DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownCop, true,
-                            ((EntityMoveable)other).ComponentPhysics.Position.X,
-                            ((EntityMoveable)other).ComponentPhysics.Position.Y - 64);
+                            ((EntityMoveable)other).ComponentPhysics.Position.x,
+                            ((EntityMoveable)other).ComponentPhysics.Position.y - 64);
                         DataManager.GetInstance().numberCopsKnockedOver++;
                     }
                     if (other is SmartCop && this is Streaker && ((SmartCop)other).State != SmartCopState.FALL)
                     {
                         DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownCop, true,
-                            ((EntityMoveable)other).ComponentPhysics.Position.X,
-                            ((EntityMoveable)other).ComponentPhysics.Position.Y - 64);
+                            ((EntityMoveable)other).ComponentPhysics.Position.x,
+                            ((EntityMoveable)other).ComponentPhysics.Position.y - 64);
                         DataManager.GetInstance().numberCopsKnockedOver++;
                     }
 
@@ -124,17 +126,17 @@ namespace COMP476Proj
                 {
                     if (other is Streaker && this is Pedestrian && ((Pedestrian)this).State != PedestrianState.FALL)
                     {
-                        DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownPed, true, physics.Position.X, physics.Position.Y - 64);
+                        DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownPed, true, physics.Position.x, physics.Position.y - 64);
                         DataManager.GetInstance().numberPedestriansKnockedOver++;
                     }
                     if (other is Streaker && this is DumbCop && ((DumbCop)this).State != DumbCopState.FALL)
                     {
-                        DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownCop, true, physics.Position.X, physics.Position.Y - 64);
+                        DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownCop, true, physics.Position.x, physics.Position.y - 64);
                         DataManager.GetInstance().numberCopsKnockedOver++;
                     }
                     if (other is Streaker && this is SmartCop && ((SmartCop)this).State != SmartCopState.FALL)
                     {
-                        DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownCop, true, physics.Position.X, physics.Position.Y - 64);
+                        DataManager.GetInstance().IncreaseScore(DataManager.Points.KnockDownCop, true, physics.Position.x, physics.Position.y - 64);
                         DataManager.GetInstance().numberCopsKnockedOver++;
                     }
 
@@ -188,10 +190,10 @@ namespace COMP476Proj
             canSee = true;
 
             // Check the grid for walls
-            int startX = (int)Math.Round(Math.Min(Position.X, position.X) / World.gridLength);
-            int startY = (int)Math.Round(Math.Min(Position.Y, position.Y) / World.gridLength);
-            int endX = (int)Math.Round(Math.Max(Position.X, position.X) / World.gridLength);
-            int endY = (int)Math.Round(Math.Max(Position.Y, position.Y) / World.gridLength);
+            int startX = (int)Math.Round(Math.Min(Position.x, position.x) / World.gridLength);
+            int startY = (int)Math.Round(Math.Min(Position.y, position.y) / World.gridLength);
+            int endX = (int)Math.Round(Math.Max(Position.x, position.x) / World.gridLength);
+            int endY = (int)Math.Round(Math.Max(Position.y, position.y) / World.gridLength);
 
             try
             {
@@ -199,10 +201,10 @@ namespace COMP476Proj
                 {
                     for (int l = startX; l != endX + 1; ++l)
                     {
-                        for (int j = 0; j != Game1.world.grid[k, l].Count; ++j)
+                        for (int j = 0; j != SuperFlashGame.world.grid[k, l].Count; ++j)
                         {
-                            obstacle = lineTest.IntersectsBox(Game1.world.grid[k, l][j].BoundingRectangle);
-                            isSeeThrough = Game1.world.grid[k, l][j].IsSeeThrough;
+                            obstacle = lineTest.IntersectsBox(SuperFlashGame.world.grid[k, l][j].BoundingRectangle);
+                            isSeeThrough = SuperFlashGame.world.grid[k, l][j].IsSeeThrough;
 
                             if (obstacle && isSeeThrough)
                             {
@@ -231,7 +233,7 @@ namespace COMP476Proj
         public void OptimizePath(ref List<Node> path)
         {
             bool canSee;
-            bool canReach;
+						bool canReach = false;
 
             if (path.Count > 2)
             {
@@ -253,9 +255,9 @@ namespace COMP476Proj
         public Vector2 GetKeyNode()
         {
             float distance = float.MaxValue;
-            Vector2 position = Vector2.Zero;
+            Vector2 position = Vector2.zero;
 
-            foreach (Node node in Game1.world.map.nodes)
+            foreach (Node node in SuperFlashGame.world.map.nodes)
             {
                 if (!node.IsKey)
                 {
@@ -267,9 +269,9 @@ namespace COMP476Proj
 
                 IsVisible(node.Position, out canSee, out canReach);
 
-                if (canReach && (Position - Position).Length() < distance)
+                if (canReach && (Position - Position).magnitude < distance)
                 {
-                    distance = (Position - Position).Length();
+										distance = (Position - Position).magnitude;
                     position = node.Position;
                 }
             }

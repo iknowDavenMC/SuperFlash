@@ -1,12 +1,11 @@
-﻿#region Using Statements
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
+
+using UnityEngine;
+using Assets.Code._XNA;
 using StreakerLibrary;
-using Microsoft.Xna.Framework.Graphics;
-#endregion
 
 namespace COMP476Proj
 {
@@ -25,7 +24,7 @@ namespace COMP476Proj
         private PedestrianState state;
         private PedestrianBehavior behavior;
         private string studentType;
-        private int fleePointsTime = 500;
+        private float fleePointsTime = 500;
         private const int fleePointsTimeout = 1000;
         private bool fleePoints = false;
         public PedestrianState State { get { return state; } }
@@ -111,7 +110,7 @@ namespace COMP476Proj
 
         private void updateState(World w)
         {
-            IsVisible(Game1.world.streaker.Position, out canSee, out canReach);
+            IsVisible(SuperFlashGame.world.streaker.Position, out canSee, out canReach);
 
             fleePoints = false;
 
@@ -208,15 +207,15 @@ namespace COMP476Proj
         {
             if (studentType == "student1")
             {
-                SoundManager.GetInstance().PlaySound("WhiteBoy", soundName, Game1.world.streaker.Position, Position);
+                SoundManager.GetInstance().PlaySound("WhiteBoy", soundName, SuperFlashGame.world.streaker.Position, Position);
             }
             else if (studentType == "student2")
             {
-                SoundManager.GetInstance().PlaySound("BlackBoy", soundName, Game1.world.streaker.Position, Position);
+                SoundManager.GetInstance().PlaySound("BlackBoy", soundName, SuperFlashGame.world.streaker.Position, Position);
             }
             else if (studentType == "student3")
             {
-                SoundManager.GetInstance().PlaySound("Girl", soundName, Game1.world.streaker.Position, Position);
+                SoundManager.GetInstance().PlaySound("Girl", soundName, SuperFlashGame.world.streaker.Position, Position);
             }
         }
 
@@ -227,14 +226,14 @@ namespace COMP476Proj
         /// <summary>
         /// Update
         /// </summary>
-        public void Update(GameTime gameTime, World w)
+        public void Update(World w)
         {
             pos = physics.Position;
 
             updateState(w);
             movement.Look(ref physics);
-            physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
-            physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
+            physics.UpdatePosition(Time.time, out pos);
+            physics.UpdateOrientation(Time.time);
             if (physics.Orientation > 0)
             {
                 draw.SpriteEffect = SpriteEffects.None;
@@ -244,7 +243,7 @@ namespace COMP476Proj
                 draw.SpriteEffect = SpriteEffects.FlipHorizontally;
             }
             
-            draw.Update(gameTime);
+            draw.Update();
             if (draw.animComplete && (state == PedestrianState.FALL || state == PedestrianState.GET_UP))
             {
                 draw.GoToPrevFrame();
@@ -252,22 +251,22 @@ namespace COMP476Proj
 
             if (fleePoints)
             {
-                fleePointsTime += gameTime.ElapsedGameTime.Milliseconds;
+                fleePointsTime += Time.deltaTime * 1000f;
                 if (fleePointsTime >= fleePointsTimeout)
                 {
                     fleePointsTime = 0;
-                    DataManager.GetInstance().IncreaseScore(DataManager.Points.FleeProximity, true, physics.Position.X, physics.Position.Y - 64);
+                    DataManager.GetInstance().IncreaseScore(DataManager.Points.FleeProximity, true, physics.Position.x, physics.Position.y - 64);
                 }
             }
 
-            base.Update(gameTime);
+            base.Update();
             
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            draw.Draw(gameTime, spriteBatch, physics.Position);
-            base.Draw(gameTime, spriteBatch);
+            draw.Draw(spriteBatch, physics.Position);
+            base.Draw(spriteBatch);
         }
 
         public override void Fall(bool isSuperFlash)

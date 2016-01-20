@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
+using UnityEngine;
+using Assets.Code._XNA;
 using StreakerLibrary;
 
 namespace COMP476Proj
@@ -29,7 +30,7 @@ namespace COMP476Proj
         private int emitters;
         private float minAngle, maxAngle, angleRange;
         private int minLifespan, maxLifespan;
-        // By using HSV instead  of RGB it's easier to vary colours randomly without looking like crap
+        // By using HSV instead  of RGB it's easier to vary colors randomly without looking like crap
         private float minHue, maxHue, hueRange;
         private float minSat, maxSat, satRange;
         private float minVal, maxVal, valRange;
@@ -176,7 +177,7 @@ namespace COMP476Proj
             valRange = maxVal - minVal;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update()
         {
             int count = particles.Count;
             // If particles are fewer than max and the emitter is on, make new particles
@@ -185,16 +186,16 @@ namespace COMP476Proj
                 for (int i = 0; i != emitters; ++i)
                 {
                     Particle p = new Particle();
-                    float angle = (float)Game1.random.NextDouble() * angleRange + minAngle;
+                    float angle = (float)SuperFlashGame.random.NextDouble() * angleRange + minAngle;
                     Vector2 velocity = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
-                    if (velocity.LengthSquared() > 0)
+                    if (velocity.sqrMagnitude > 0)
                         velocity.Normalize();
                     velocity *= speed;
-                    int lifespan = Game1.random.Next(minLifespan, maxLifespan);
-                    float hue = (float)Game1.random.NextDouble() * hueRange + minHue;
-                    float sat = (float)Game1.random.NextDouble() * satRange + minSat;
-                    float val = (float)Game1.random.NextDouble() * valRange + minVal;
-                    p.position = new Vector2(Position.X, Position.Y);
+                    int lifespan = SuperFlashGame.random.Next(minLifespan, maxLifespan);
+                    float hue = (float)SuperFlashGame.random.NextDouble() * hueRange + minHue;
+                    float sat = (float)SuperFlashGame.random.NextDouble() * satRange + minSat;
+                    float val = (float)SuperFlashGame.random.NextDouble() * valRange + minVal;
+                    p.position = new Vector2(Position.x, Position.y);
                     p.velocity = velocity;
                     p.scale = size;
                     p.age = 0;
@@ -205,7 +206,7 @@ namespace COMP476Proj
                 }
             }
 
-            int time = gameTime.ElapsedGameTime.Milliseconds;
+            int time = (int)(Time.deltaTime * 1000f);
 
             for (int i = 0; i != count; ++i)
             {
@@ -229,18 +230,18 @@ namespace COMP476Proj
                         if (agePct >= fadePercent)
                         {
                             float fadeDist = 100 - fadePercent;
-                            p.color.A = (byte)((255 - (agePct - fadePercent) / (1 - fadePercent)) * 255);
-                            dp *= (float)(p.color.A) / 255f;
+                            p.color.a = (byte)((255 - (agePct - fadePercent) / (1 - fadePercent)) * 255);
+                            dp *= (float)(p.color.a) / 255f;
                         }
                     }
                     p.position += dp;
                     particles[i] = p;
                 }
             }
-            base.Update(gameTime);
+            base.Update();
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             foreach (Particle p in particles)
             {
@@ -251,13 +252,13 @@ namespace COMP476Proj
                     scale = 1f / CustomCamera.Scale;
                     offset = new Vector2(-CustomCamera.Width / 2, -CustomCamera.Height / 2);
                     offset *= scale;
-                    offset.X += CustomCamera.X;
-                    offset.Y += CustomCamera.Y;
+                    offset.x += CustomCamera.X;
+                    offset.y += CustomCamera.Y;
                 }
-                Vector2 drawPos = new Vector2(p.position.X - p.scale / 2, p.position.Y - p.scale / 2);
-                spriteBatch.Draw(tex, drawPos * scale + offset, null, p.color, 0f, Vector2.Zero, p.scale * scale, SpriteEffects.None, 0f);
+                Vector2 drawPos = new Vector2(p.position.x - p.scale / 2, p.position.y - p.scale / 2);
+                spriteBatch.Draw(tex, drawPos * scale + offset, null, p.color, 0f, Vector2.zero, p.scale * scale, SpriteEffects.None, 0f);
             }
-            base.Draw(gameTime, spriteBatch);
+            base.Draw(spriteBatch);
         }
 
         /// <summary>
@@ -281,7 +282,7 @@ namespace COMP476Proj
         #region Private Methods
 
         /// <summary>
-        /// Convert a colour from HSV to a Color instance
+        /// Convert a color from HSV to a Color instance
         /// </summary>
         /// <param name="H">Hue</param>
         /// <param name="S">Saturation</param>

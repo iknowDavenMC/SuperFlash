@@ -23,7 +23,7 @@ namespace COMP476Proj
         private Vector2 origin;
         public Vector2 size;
         public float scale;
-        private Rectangle rectangle;
+        private Rect rectangle;
         public float alpha;
         public float timer;
         #endregion
@@ -37,7 +37,7 @@ namespace COMP476Proj
             this.origin = new Vector2(size.X / 2, size.Y / 2);
             this.scale = 1.0f;
             this.size = size;
-            this.rectangle = new Rectangle(0, 0, (int)(size.X), (int)(size.Y));
+            this.rectangle = new Rect(0, 0, (int)(size.X), (int)(size.Y));
             this.alpha = 1.0f;
             this.timer = 0.0f;
         }
@@ -60,7 +60,7 @@ namespace COMP476Proj
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, float scale, Vector2 offset)
         {
-            spriteBatch.DrawString(font, text, position * scale + offset, Color.White*alpha, 0f, Vector2.Zero, this.scale * scale, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, text, position * scale + offset, Color.white*alpha, 0f, Vector2.zero, this.scale * scale, SpriteEffects.None, 0f);
         }
         #endregion
 
@@ -73,7 +73,7 @@ namespace COMP476Proj
         public void setSize(int x, int y)
         {
             this.size = new Vector2(x, y);
-            this.rectangle = new Rectangle(0, 0, x, y);
+            this.rectangle = new Rect(0, 0, x, y);
         }
         public Vector2 getSize()
         {

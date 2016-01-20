@@ -1,6 +1,7 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
+using UnityEngine;
+using Assets.Code._XNA;
 using StreakerLibrary;
 
 namespace COMP476Proj
@@ -122,7 +123,7 @@ namespace COMP476Proj
 
             Vector2 drawPos = new Vector2(center.X - dimensionsFromCenter.X, center.Y - dimensionsFromCenter.Y);
             //Vector2 drawPos = new Vector2(boundingRectangle.X, boundingRectangle.Y);
-            spriteBatch.Draw(tex, drawPos, null, new Color(1,0,0,0.5f), 0, Vector2.Zero, new Vector2(dimensionsFromCenter.X*2, dimensionsFromCenter.Y*2), SpriteEffects.None, 0);
+            spriteBatch.Draw(tex, drawPos, null, new Color(1,0,0,0.5f), 0, Vector2.zero, new Vector2(dimensionsFromCenter.X*2, dimensionsFromCenter.Y*2), SpriteEffects.None, 0);
 #endif
         }
 

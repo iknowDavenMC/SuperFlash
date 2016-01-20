@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using StreakerLibrary;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using UnityEngine;
+using Assets.Code._XNA;
+
 namespace COMP476Proj
 {
     public class DrawOscillate : DrawComponent
@@ -25,55 +26,56 @@ namespace COMP476Proj
         #endregion
 
         #region Constructors
-        public DrawOscillate(Animation anim, Vector2 pos, float depth, bool startOscillating)
+        public DrawOscillate(CustomAnimation anim, Vector2 pos, float depth, bool startOscillating)
             : base(anim)
         {
-            Origin = Vector2.Zero;
+            Origin = Vector2.zero;
             this.position = pos;
             this.depth = depth;
             oscillateAlpha = startOscillating;
             oscillateSize = false;
         }
 
-        public DrawOscillate(Animation anim, float depth)
+        public DrawOscillate(CustomAnimation anim, float depth)
             : base(anim)
         {
-            Origin = Vector2.Zero;
+            Origin = Vector2.zero;
             this.depth = depth;
 
         }
         //public DrawOscillate(Animation anim, Vector2 origin) : base(anim) {
-        //    Origin = Vector2.Zero;
+        //    Origin = Vector2.zero;
         //}
 
         //public DrawOscillate(Animation anim, Vector2 origin, float depth)
         //    : base(anim)
         //{
-        //    Origin = Vector2.Zero;
+        //    Origin = Vector2.zero;
         //    this.depth = depth;
         //}
 
         #endregion
 
         #region Update & Draw
-        public override void Update(GameTime gameTime)
+        public override void Update()
         {
-            float ratio =  (float)Math.Sin(gameTime.TotalGameTime.Milliseconds / 155);;
+            float ratio =  (float)Mathf.Sin(Time.time * 1000f / 155);;
             if (oscillateSize)
             {
-                scale.X = (ratio + 1 + lowerBound) / 5;
-                scale.Y = scale.X;
+                scale.x = (ratio + 1 + lowerBound) / 5;
+                scale.y = scale.x;
             }
             if (oscillateAlpha)
             {
                 alpha = ratio*.5f+.7f;
             }
-            base.Update(gameTime);
+
+            base.Update();
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, float offsetX, float offsetY)
+        public override void Draw(SpriteBatch spriteBatch, float offsetX, float offsetY)
         {
-            base.Draw(gameTime, spriteBatch, offsetX, offsetY);
+            base.Draw(spriteBatch, offsetX, offsetY);
         }
         #endregion
     }

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+
+using UnityEngine;
+using Assets.Code._XNA;
 
 namespace COMP476Proj
 {

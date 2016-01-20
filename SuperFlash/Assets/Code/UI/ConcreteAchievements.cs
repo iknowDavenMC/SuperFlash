@@ -31,7 +31,7 @@ namespace COMP476Proj
 
         public override void Update(GameTime gameTime)
         {
-            int time = gameTime.ElapsedGameTime.Milliseconds;
+            int time = Time.deltaTime * 1000f;
             timePlayed += time;
         }
 
@@ -58,7 +58,7 @@ namespace COMP476Proj
 
         public override void Update(GameTime gameTime)
         {
-            int time = gameTime.ElapsedGameTime.Milliseconds;
+            int time = Time.deltaTime * 1000f;
             timePlayed += time;
         }
 
@@ -203,7 +203,7 @@ namespace COMP476Proj
 
         public override bool IsAchieved()
         {
-            foreach (TriggerEntity trigger in Game1.world.map.triggers)
+            foreach (TriggerEntity trigger in SuperFlashGame.world.map.triggers)
             {
                 if (trigger.ID == triggerID)
                 {
@@ -230,9 +230,9 @@ namespace COMP476Proj
         public override void Update(GameTime gameTime)
         {
             if (!complete)
-                foreach (TriggerEntity trigger in Game1.world.map.triggers)
+                foreach (TriggerEntity trigger in SuperFlashGame.world.map.triggers)
                 {
-                    if (Game1.world.streaker.BoundingRectangle.Collides(trigger.BoundingRectangle))
+                    if (SuperFlashGame.world.streaker.BoundingRectangle.Collides(trigger.BoundingRectangle))
                     {
                         if (trigger.ID == leftID)
                         {
@@ -257,8 +257,8 @@ namespace COMP476Proj
                         }
                         else
                         {
-                            Game1.world.map.triggers.Find(t => t.ID == leftID).clearTriggered();
-                            Game1.world.map.triggers.Find(t => t.ID == rightID).clearTriggered();
+                            SuperFlashGame.world.map.triggers.Find(t => t.ID == leftID).clearTriggered();
+                            SuperFlashGame.world.map.triggers.Find(t => t.ID == rightID).clearTriggered();
                             leftSide = false;
                             rightSide = false;
                         }

@@ -18,7 +18,7 @@ namespace COMP476Proj
 
         public Menu()
         {
-            menuBackground = new SpriteComponent(new Vector2(0.0f, 0.0f), new Vector2(Game1.SCREEN_WIDTH, Game1.SCREEN_HEIGHT));
+            menuBackground = new SpriteComponent(new Vector2(0.0f, 0.0f), new Vector2(SuperFlashGame.SCREEN_WIDTH, SuperFlashGame.SCREEN_HEIGHT));
             menuBackground.setOriginTopLeft();
             playButton = new Button(new Vector2(508.0f, 903.0f), new Vector2(240.0f, 75.0f));
         }
@@ -33,7 +33,7 @@ namespace COMP476Proj
             playButton.Update(mouse);
             if (playButton.buttonPressed())
             {
-                Game1.currentGameState = Game1.GameState.PLAY;
+                SuperFlashGame.currentGameState = SuperFlashGame.GameState.PLAY;
             }
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)

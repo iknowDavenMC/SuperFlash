@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
 using StreakerLibrary;
-using Microsoft.Xna.Framework.Graphics;
+
+using UnityEngine;
+using Assets.Code._XNA;
+
 namespace COMP476Proj
 {
     public class PowerUpIcon : DrawOscillate
@@ -12,25 +14,25 @@ namespace COMP476Proj
         public PowerUpIcon(Vector2 pos,float depth, bool osc) : 
             base(SpriteDatabase.GetAnimation("pwr_mass"), pos, depth, osc)
         {
-            scale.X = .35f;
-            scale.Y = .35f;
+            scale.x = .35f;
+            scale.y = .35f;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update()
         {
-            if (Game1.world.streaker.IsGripBoost)
+            if (SuperFlashGame.world.streaker.IsGripBoost)
             {
                 OscillateAlpha = true;
             }
-            else if (Game1.world.streaker.IsMassBoost)
+            else if (SuperFlashGame.world.streaker.IsMassBoost)
             {
                 OscillateAlpha = true;
             }
-            else if (Game1.world.streaker.IsSlickBoost)
+            else if (SuperFlashGame.world.streaker.IsSlickBoost)
             {
                 OscillateAlpha = true;
             }
-            else if (Game1.world.streaker.IsSpeedBoost)
+            else if (SuperFlashGame.world.streaker.IsSpeedBoost)
             {
                 OscillateAlpha = true;
             }
@@ -38,27 +40,27 @@ namespace COMP476Proj
             {
                 OscillateAlpha = false;
             }
-            base.Update(gameTime);
+            base.Update();
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, float offsetX, float offsetY)
+        public override void Draw(SpriteBatch spriteBatch, float offsetX, float offsetY)
         {
-            if ( Game1.world.streaker.IsGripBoost){
+            if ( SuperFlashGame.world.streaker.IsGripBoost){
                 animation = SpriteDatabase.GetAnimation("pwr_turn");
-                base.Draw(gameTime, spriteBatch, offsetX, offsetY);
+                base.Draw(spriteBatch, offsetX, offsetY);
             }
-            else if( Game1.world.streaker.IsMassBoost){
+            else if( SuperFlashGame.world.streaker.IsMassBoost){
                 animation = SpriteDatabase.GetAnimation("pwr_mass");
-                base.Draw(gameTime, spriteBatch, offsetX, offsetY);
+                base.Draw(spriteBatch, offsetX, offsetY);
             }
-            else if (Game1.world.streaker.IsSlickBoost){
+            else if (SuperFlashGame.world.streaker.IsSlickBoost){
                 animation = SpriteDatabase.GetAnimation("pwr_slick");
-                base.Draw(gameTime, spriteBatch, offsetX, offsetY);
+                base.Draw(spriteBatch, offsetX, offsetY);
             }
-            else if (Game1.world.streaker.IsSpeedBoost)
+            else if (SuperFlashGame.world.streaker.IsSpeedBoost)
             {
                 animation = SpriteDatabase.GetAnimation("pwr_speed");
-                base.Draw(gameTime, spriteBatch, offsetX, offsetY);
+                base.Draw(spriteBatch, offsetX, offsetY);
             }
             else
             {

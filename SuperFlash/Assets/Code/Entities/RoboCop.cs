@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
+using UnityEngine;
+using Assets.Code._XNA;
 using StreakerLibrary;
+
 namespace COMP476Proj
 {
     
@@ -110,16 +112,16 @@ namespace COMP476Proj
             }
         }
 
-        public void updateState(GameTime gameTime)
+        public void updateState()
         {
-            IsVisible(Game1.world.streaker.Position, out canSee, out canReach);
+            IsVisible(SuperFlashGame.world.streaker.Position, out canSee, out canReach);
 
-            withinHitRadius = Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
-                              Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y;
+            withinHitRadius = Math.Abs(SuperFlashGame.world.streaker.Position.x - pos.x) <= HIT_DISTANCE_X &&
+                              Math.Abs(SuperFlashGame.world.streaker.Position.y - pos.y) <= HIT_DISTANCE_Y;
 
             if (state == RoboCopState.STATIC)
             {
-                if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && canSee)
+                if (Vector2.Distance(SuperFlashGame.world.streaker.Position, pos) < detectRadius && canSee)
                 {
                     transitionToState(RoboCopState.PURSUE);
                 }
@@ -129,7 +131,7 @@ namespace COMP476Proj
             //--------------------------------------------------------------------------
             else if (state == RoboCopState.PURSUE)
             {
-                float distance = Vector2.Distance(Game1.world.streaker.Position, pos);
+                float distance = Vector2.Distance(SuperFlashGame.world.streaker.Position, pos);
                 if (withinHitRadius)
                 {
                     transitionToState(RoboCopState.HIT);
@@ -140,7 +142,7 @@ namespace COMP476Proj
                 }
                 else
                 {
-                    path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
+                    path = AStar.GetPath(Position, SuperFlashGame.world.streaker.Position, SuperFlashGame.world.map.nodes, SuperFlashGame.world.qTree, true, false);
 
                     OptimizePath(ref path);
 
@@ -149,10 +151,10 @@ namespace COMP476Proj
             }
             else if (state == RoboCopState.PATHFIND)
             {
-                pathTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                pathTimer += Time.deltaTime * 1000f;
 
                 // If sees, chase
-                if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && canSee)
+                if (Vector2.Distance(SuperFlashGame.world.streaker.Position, pos) < detectRadius && canSee)
                 {
                     transitionToState(RoboCopState.PURSUE);
                 }
@@ -161,7 +163,7 @@ namespace COMP476Proj
                 {
                     pathTimer = 0;
 
-                    path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
+                    path = AStar.GetPath(Position, SuperFlashGame.world.streaker.Position, SuperFlashGame.world.map.nodes, SuperFlashGame.world.qTree, true, false);
 
                     OptimizePath(ref path);
                 }
@@ -169,16 +171,16 @@ namespace COMP476Proj
                 else
                 {
                     // If done path, create a new path
-                    if (path.Count == 1 && (Position - path[0].Position).Length() <= movement.ArrivalRadius)
+                    if (path.Count == 1 && (Position - path[0].Position).magnitude <= movement.ArrivalRadius)
                     {
                         pathTimer = 0;
 
-                        path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
+                        path = AStar.GetPath(Position, SuperFlashGame.world.streaker.Position, SuperFlashGame.world.map.nodes, SuperFlashGame.world.qTree, true, false);
 
                         OptimizePath(ref path);
                     }
                     // If at next node, update node to seek
-                    else if (path.Count > 0 && (Position - path[0].Position).Length() <= movement.ArrivalRadius)
+                    else if (path.Count > 0 && (Position - path[0].Position).magnitude <= movement.ArrivalRadius)
                     {
                         path.RemoveAt(0);
                     }
@@ -206,7 +208,7 @@ namespace COMP476Proj
                     movement.Stop(ref physics);
                     break;
                 case RoboCopState.PURSUE:
-                    movement.SetTarget(Game1.world.streaker.Position);
+                    movement.SetTarget(SuperFlashGame.world.streaker.Position);
                     movement.Pursue(ref physics);
                     break;
                 case RoboCopState.HIT:
@@ -224,7 +226,7 @@ namespace COMP476Proj
 
         private void playSound(string soundName)
         {
-            SoundManager.GetInstance().PlaySound("RoboCop", soundName, Game1.world.streaker.Position, Position, false);
+            SoundManager.GetInstance().PlaySound("RoboCop", soundName, SuperFlashGame.world.streaker.Position, Position, false);
         }
         #endregion
 
@@ -232,14 +234,14 @@ namespace COMP476Proj
         /// <summary>
         /// Update
         /// </summary>
-        public void Update(GameTime gameTime, World w)
+        public void Update(World w)
         {
             pos = physics.Position;
 
             bool wallCollision = false;
             if (state ==RoboCopState.HIT)
             {
-                if (pos.X < Game1.world.streaker.Position.X)
+                if (pos.x < SuperFlashGame.world.streaker.Position.x)
                 {
                     draw.SpriteEffect = SpriteEffects.None;
                 }
@@ -255,12 +257,12 @@ namespace COMP476Proj
 
             if (!wallCollision)
             {
-                updateState(gameTime);
+                updateState();
             }
 
             movement.Look(ref physics);
-            physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
-            physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
+            physics.UpdatePosition(Time.time, out pos);
+            physics.UpdateOrientation(Time.time);
             if (physics.Orientation > 0)
             {
                 draw.SpriteEffect = SpriteEffects.None;
@@ -270,19 +272,19 @@ namespace COMP476Proj
                 draw.SpriteEffect = SpriteEffects.FlipHorizontally;
             }
 
-            draw.Update(gameTime);
+            draw.Update();
             if (draw.animComplete && state == RoboCopState.HIT &&
-                Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
-                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
+                Math.Abs(SuperFlashGame.world.streaker.Position.x - pos.x) <= HIT_DISTANCE_X &&
+                Math.Abs(SuperFlashGame.world.streaker.Position.y - pos.y) <= HIT_DISTANCE_Y)
             {
-                Game1.world.streaker.GetHit();
-                Game1.world.streaker.ResolveCollision(this);
+                SuperFlashGame.world.streaker.GetHit();
+                SuperFlashGame.world.streaker.ResolveCollision(this);
             }
-            base.Update(gameTime);
+            base.Update();
 
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
             draw.Draw(gameTime, spriteBatch, physics.Position);
             base.Draw(gameTime, spriteBatch);

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
+using UnityEngine;
+using Assets.Code._XNA;
 
 namespace COMP476Proj
 {
@@ -11,8 +12,8 @@ namespace COMP476Proj
     public class ConsumableSpawnpoint
     {
         Consumable myConsumable;
-        int spawnTimer = 0;
-        int spawnDelay;
+        float spawnTimer = 0f;
+        float spawnDelay;
         bool spawned = false;
         private const int MAX_SPAWN_DELAY = 60000;
         private const int MIN_SPAWN_DELAY = 25000;
@@ -20,16 +21,16 @@ namespace COMP476Proj
         public ConsumableSpawnpoint(Vector2 pos, ConsumableType type)
         {   
             myConsumable = new Consumable(pos,type);
-            spawnDelay = Game1.random.Next(MIN_SPAWN_DELAY,MAX_SPAWN_DELAY);
+            spawnDelay = SuperFlashGame.random.Next(MIN_SPAWN_DELAY,MAX_SPAWN_DELAY);
         }
 
-        public void Update(GameTime gameTime)
+        public void Update()
         {
 
-            spawnTimer += gameTime.ElapsedGameTime.Milliseconds;
+            spawnTimer += Time.deltaTime * 1000f;
             if (spawned)
             {
-                myConsumable.Update(gameTime);
+                myConsumable.Update();
                 if (myConsumable.isConsumed)
                 {
                     spawned = false;
@@ -42,13 +43,13 @@ namespace COMP476Proj
                 {
                     spawned = true;
                     myConsumable.ResetConsumable();
-                    spawnDelay = Game1.random.Next(MIN_SPAWN_DELAY, MAX_SPAWN_DELAY);
+                    spawnDelay = SuperFlashGame.random.Next(MIN_SPAWN_DELAY, MAX_SPAWN_DELAY);
                 }
             }
 
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             if (spawned)
             {

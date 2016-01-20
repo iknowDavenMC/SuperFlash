@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
+using UnityEngine;
+using Assets.Code._XNA;
+
 namespace COMP476Proj
 {
     public abstract class EntityVisible : Entity
@@ -19,6 +21,6 @@ namespace COMP476Proj
         }
         #endregion
 
-        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch) { }
+        public virtual void Draw(SpriteBatch spriteBatch) { }
     }
 }

@@ -22,7 +22,7 @@ namespace COMP476Proj
         }
         public void updateTimer()
         {
-            timer += Game1.elapsedTime;
+            timer += SuperFlashGame.elapsedTime;
         }
     }
 }

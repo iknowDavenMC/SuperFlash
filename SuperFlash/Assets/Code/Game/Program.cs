@@ -1,21 +1,20 @@
 using System;
 
+using UnityEngine;
+using Assets.Code._XNA;
+
 namespace COMP476Proj
 {
-#if WINDOWS || XBOX
-    static class Program
+    static class Program : MonoBehaviour
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        static void Main(string[] args)
-        {
-            using (Game1 game = new Game1())
-            {
-                game.Run();
-            }
+				SuperFlashGame m_game;
+
+				void Awake()
+				{
+						m_game = new SuperFlashGame();
+
+						m_game.Run();
         }
     }
-#endif
 }
 

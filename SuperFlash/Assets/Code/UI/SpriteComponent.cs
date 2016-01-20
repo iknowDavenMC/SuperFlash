@@ -23,7 +23,7 @@ namespace COMP476Proj
         private Vector2 size;
         public float scale;
         private Vector2 vectorScale;
-        private Rectangle rectangle;
+        private Rect rectangle;
         public float alpha;
         #endregion
 
@@ -36,7 +36,7 @@ namespace COMP476Proj
             this.origin = new Vector2(size.X / 2, size.Y / 2);
             this.scale = 1.0f;
             this.size = size;
-            this.rectangle = new Rectangle(0, 0, (int)(size.X), (int)(size.Y));
+            this.rectangle = new Rect(0, 0, (int)(size.X), (int)(size.Y));
             this.alpha = 1.0f;
             this.vectorScale = size;
         }
@@ -56,16 +56,16 @@ namespace COMP476Proj
         //Repositions from camera for HUD
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch, float scale, Vector2 offset)
         {
-            spriteBatch.Draw(texture, position*scale+offset, rectangle, Color.White*alpha, 0.0f, origin, scale, SpriteEffects.None, .1f);
+            spriteBatch.Draw(texture, position*scale+offset, rectangle, Color.white*alpha, 0.0f, origin, scale, SpriteEffects.None, .1f);
         }
         //Standard draw method
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, rectangle, Color.White * alpha, 0.0f, origin, scale, SpriteEffects.None, .1f);
+            spriteBatch.Draw(texture, position, rectangle, Color.white * alpha, 0.0f, origin, scale, SpriteEffects.None, .1f);
         }
         public void DrawWithScale(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, rectangle, Color.White * alpha, 0.0f, origin, vectorScale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, position, rectangle, Color.white * alpha, 0.0f, origin, vectorScale, SpriteEffects.None, 0f);
         }
         #endregion
         
@@ -78,7 +78,7 @@ namespace COMP476Proj
         public void setSize(int x, int y)
         {
             this.size = new Vector2(x, y);
-            this.rectangle = new Rectangle(0, 0, x, y);
+            this.rectangle = new Rect(0, 0, x, y);
         }
         public Vector2 getSize()
         {

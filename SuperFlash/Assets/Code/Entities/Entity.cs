@@ -1,11 +1,11 @@
-﻿#region Using Statements
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-#endregion
+
+using UnityEngine;
+using Assets.Code._XNA;
 
 namespace COMP476Proj
 {
@@ -28,8 +28,8 @@ namespace COMP476Proj
             get { return rect; }
             set { rect = value; }
         }
-        public float X { get { return pos.X; } set { pos.X = value; } }
-        public float Y { get { return pos.Y; } set { pos.Y = value; } }
+        public float X { get { return pos.x; } set { pos.x = value; } }
+        public float Y { get { return pos.y; } set { pos.y = value; } }
 
         public bool IsColliding
         {
@@ -40,7 +40,7 @@ namespace COMP476Proj
         #endregion
 
         #region Virtual Functions
-        public virtual void Update(GameTime gameTime) { }
+        public virtual void Update() { }
         public abstract void ResolveCollision(Entity other);
         #endregion
     }

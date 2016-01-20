@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
+
+using UnityEngine;
+using Assets.Code._XNA;
 
 namespace COMP476Proj
 {
@@ -73,7 +75,7 @@ namespace COMP476Proj
         public Vector2 intersection(LineSegment line)
         {
             if (isParallel(line))
-                return Vector2.Zero;
+                return Vector2.zero;
 
             float denom = A * line.B - B * line.A;
             float pX = (B * line.C - line.B * C) / denom;
@@ -90,14 +92,14 @@ namespace COMP476Proj
             side[2] = new LineSegment(rect.Bounds.Left, rect.Bounds.Top, rect.Bounds.Left, rect.Bounds.Bottom);
             side[3] = new LineSegment(rect.Bounds.Right, rect.Bounds.Top, rect.Bounds.Right, rect.Bounds.Bottom);
 
-            Vector2 intersectPt = Vector2.Zero;
+            Vector2 intersectPt = Vector2.zero;
             float? shortestDist = null;
             float currDist;
             for (int i = 0; i < 4; i++)
             {
                 intersectPt = intersection(side[i]);
                 currDist = distance(intersectPt);
-                if (!intersectPt.Equals(Vector2.Zero) && (shortestDist == null || currDist < shortestDist))
+                if (!intersectPt.Equals(Vector2.zero) && (shortestDist == null || currDist < shortestDist))
                 {
                     shortestDist = currDist;
                 }

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
+using UnityEngine;
+using Assets.Code._XNA;
 using StreakerLibrary;
 
 namespace COMP476Proj
@@ -149,16 +150,16 @@ namespace COMP476Proj
             }
         }
 
-        public void updateState(GameTime gameTime)
+        public void updateState()
         {
-            IsVisible(Game1.world.streaker.Position, out canSee, out canReach);
+            IsVisible(SuperFlashGame.world.streaker.Position, out canSee, out canReach);
 
             //--------------------------------------------------------------------------
             //        DEFAULT BEHAVIOR TRANSITIONS --> Before aware of streaker
             //--------------------------------------------------------------------------
             if (behavior == SmartCopBehavior.DEFAULT)
             {
-                if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && canSee)
+                if (Vector2.Distance(SuperFlashGame.world.streaker.Position, pos) < detectRadius && canSee)
                 {
                     playSound("Exclamation");
                     behavior = SmartCopBehavior.AWARE;
@@ -168,7 +169,7 @@ namespace COMP476Proj
                 {
                     behavior = SmartCopBehavior.AWARE;
 
-                    path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
+                    path = AStar.GetPath(Position, SuperFlashGame.world.streaker.Position, SuperFlashGame.world.map.nodes, SuperFlashGame.world.qTree, true, false);
 
                     // Optimize
                     OptimizePath(ref path);
@@ -182,19 +183,19 @@ namespace COMP476Proj
             //--------------------------------------------------------------------------
             else if (behavior == SmartCopBehavior.AWARE)
             {
-                float distance = Vector2.Distance(Game1.world.streaker.Position, pos);
+                float distance = Vector2.Distance(SuperFlashGame.world.streaker.Position, pos);
 
                 switch (state)
                 {
                     case SmartCopState.PATHFIND:
 
-                        pathTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                        pathTimer += Time.deltaTime * 1000f;
 
                         // If sees, chases
                         if (canReach && distance <= detectRadius)
                         {
-                            if (Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
-                                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
+                            if (Math.Abs(SuperFlashGame.world.streaker.Position.x - pos.x) <= HIT_DISTANCE_X &&
+                                Math.Abs(SuperFlashGame.world.streaker.Position.y - pos.y) <= HIT_DISTANCE_Y)
                             {
                                 transitionToState(SmartCopState.HIT);
                             }
@@ -211,7 +212,7 @@ namespace COMP476Proj
                             {
                                 pathTimer = 0;
 
-                                path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
+                                path = AStar.GetPath(Position, SuperFlashGame.world.streaker.Position, SuperFlashGame.world.map.nodes, SuperFlashGame.world.qTree, true, false);
 
                                 OptimizePath(ref path);
                             }
@@ -231,25 +232,25 @@ namespace COMP476Proj
                         else
                         {
                             // If done current path and haven't seeked key point, do so
-                            if (path.Count == 1 && (Position - path[0].Position).Length() <= movement.ArrivalRadius && !isSeekingKeyNode)
+                            if (path.Count == 1 && (Position - path[0].Position).magnitude <= movement.ArrivalRadius && !isSeekingKeyNode)
                             {
 
                                 isSeekingKeyNode = true;
 
                                 Vector2 positionOfKeyNode = GetKeyNode();
 
-                                path = AStar.GetPath(Position, positionOfKeyNode, Game1.world.map.nodes, Game1.world.qTree, true, false);
+                                path = AStar.GetPath(Position, positionOfKeyNode, SuperFlashGame.world.map.nodes, SuperFlashGame.world.qTree, true, false);
 
                                 // Optimize
                                 OptimizePath(ref path);
                             }
-                            // If done current path and have seeked key point, go back to normal
-                            else if (path.Count == 1 && (Position - path[0].Position).Length() <= movement.ArrivalRadius && isSeekingKeyNode)
+                            // If done current path and have sought key point, go back to normal
+                            else if (path.Count == 1 && (Position - path[0].Position).magnitude <= movement.ArrivalRadius && isSeekingKeyNode)
                             {
                                 if (StreakerSeen)
                                 {
                                     DataManager.GetInstance().IncreaseScore(DataManager.Points.LoseAllCops, true,
-                                        Game1.world.streaker.Position.X, Game1.world.streaker.Position.Y - 64);
+                                        SuperFlashGame.world.streaker.Position.x, SuperFlashGame.world.streaker.Position.y - 64);
                                     StreakerSeen = false;
                                     chasing = false;
                                     DataManager.GetInstance().numberOfCopsChasing--;
@@ -260,7 +261,7 @@ namespace COMP476Proj
                                 transitionToState(SmartCopState.STATIC);
                             }
                             // If at next node, update node to seek
-                            else if (path.Count > 0 && (Position - path[0].Position).Length() <= movement.ArrivalRadius)
+                            else if (path.Count > 0 && (Position - path[0].Position).magnitude <= movement.ArrivalRadius)
                             {
                                 path.RemoveAt(0);
                             }
@@ -274,10 +275,10 @@ namespace COMP476Proj
                         if (draw.animComplete)
                         {
                             if (state == SmartCopState.HIT &&
-                                Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
-                                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
+                                Math.Abs(SuperFlashGame.world.streaker.Position.x - pos.x) <= HIT_DISTANCE_X &&
+                                Math.Abs(SuperFlashGame.world.streaker.Position.y - pos.y) <= HIT_DISTANCE_Y)
                             {
-                                Game1.world.streaker.GetHit();
+                                SuperFlashGame.world.streaker.GetHit();
                                 playSound("Hit");
                             }
 
@@ -291,8 +292,8 @@ namespace COMP476Proj
                         // If sees, chases or hits
                         if (canSee && distance <= detectRadius)
                         {
-                            if (Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
-                                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
+                            if (Math.Abs(SuperFlashGame.world.streaker.Position.x - pos.x) <= HIT_DISTANCE_X &&
+                                Math.Abs(SuperFlashGame.world.streaker.Position.y - pos.y) <= HIT_DISTANCE_Y)
                             {
                                 transitionToState(SmartCopState.HIT);
                             }
@@ -300,7 +301,7 @@ namespace COMP476Proj
                         // If anyone else sees, path find
                         else if (copsWhoSeeTheStreaker > 0)
                         {
-                            path = AStar.GetPath(Position, Game1.world.streaker.Position, Game1.world.map.nodes, Game1.world.qTree, true, false);
+                            path = AStar.GetPath(Position, SuperFlashGame.world.streaker.Position, SuperFlashGame.world.map.nodes, SuperFlashGame.world.qTree, true, false);
 
                             // Optimize
                             OptimizePath(ref path);
@@ -312,7 +313,7 @@ namespace COMP476Proj
                         {
                             Vector2 positionOfKeyNode = GetKeyNode();
 
-                            path = AStar.GetPath(Position, positionOfKeyNode, Game1.world.map.nodes, Game1.world.qTree, true, false);
+                            path = AStar.GetPath(Position, positionOfKeyNode, SuperFlashGame.world.map.nodes, SuperFlashGame.world.qTree, true, false);
 
                             // Optimize
                             OptimizePath(ref path);
@@ -333,17 +334,17 @@ namespace COMP476Proj
                     case SmartCopState.FALL:
                         if (draw.animComplete)
                         {
-                            SoundManager.GetInstance().PlaySound("Common", "Fall", Game1.world.streaker.Position, Position);
+                            SoundManager.GetInstance().PlaySound("Common", "Fall", SuperFlashGame.world.streaker.Position, Position);
                             transitionToState(SmartCopState.GET_UP);
                         }
                         break;
                     case SmartCopState.GET_UP:
-                        if (draw.animComplete && Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius)
+                        if (draw.animComplete && Vector2.Distance(SuperFlashGame.world.streaker.Position, pos) < detectRadius)
                         {
                             behavior = SmartCopBehavior.AWARE;
                             transitionToState(SmartCopState.PURSUE);
                         }
-                        else if (draw.animComplete && Vector2.Distance(Game1.world.streaker.Position, pos) >= detectRadius)
+                        else if (draw.animComplete && Vector2.Distance(SuperFlashGame.world.streaker.Position, pos) >= detectRadius)
                         {
                             behavior = SmartCopBehavior.DEFAULT;
                             transitionToState(defaultState);
@@ -365,8 +366,8 @@ namespace COMP476Proj
                     movement.Wander(ref physics);
                     break;
                 case SmartCopState.PURSUE:
-                    movement.SetTarget(Game1.world.streaker.Position, this);
-                    movement.SetTargetVelocity(Game1.world.streaker.ComponentPhysics.Velocity);
+                    movement.SetTarget(SuperFlashGame.world.streaker.Position, this);
+                    movement.SetTargetVelocity(SuperFlashGame.world.streaker.ComponentPhysics.Velocity);
                     if (closest == this)
                         movement.Seek(ref physics);
                     else
@@ -398,7 +399,7 @@ namespace COMP476Proj
 
         private void playSound(string soundName)
         {
-            SoundManager.GetInstance().PlaySound("SmartCop", soundName, Game1.world.streaker.Position, Position);
+            SoundManager.GetInstance().PlaySound("SmartCop", soundName, SuperFlashGame.world.streaker.Position, Position);
         }
         #endregion
 
@@ -406,7 +407,7 @@ namespace COMP476Proj
         /// <summary>
         /// Update
         /// </summary>
-        public void Update(GameTime gameTime, World w)
+        public void Update(World w)
         {
             pos = physics.Position;
 
@@ -418,16 +419,16 @@ namespace COMP476Proj
 
             if (!wallCollision)
             {
-                updateState(gameTime);
+                updateState();
             }
 
             if (closest == this)
             {
-                closestDistSq = (Game1.world.streaker.ComponentPhysics.Position - physics.Position).LengthSquared();
+                closestDistSq = (SuperFlashGame.world.streaker.ComponentPhysics.Position - physics.Position).sqrMagnitude;
             }
             else
             {
-                float distSq = (Game1.world.streaker.ComponentPhysics.Position - physics.Position).LengthSquared();
+                float distSq = (SuperFlashGame.world.streaker.ComponentPhysics.Position - physics.Position).sqrMagnitude;
                 if (distSq < closestDistSq)
                 {
                     closest = this;
@@ -436,12 +437,12 @@ namespace COMP476Proj
             }
 
             movement.Look(ref physics);
-            physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos, this);
-            physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
+            physics.UpdatePosition(Time.time, out pos, this);
+            physics.UpdateOrientation(Time.time);
 
             if (state == SmartCopState.HIT)
             {
-                if (pos.X < Game1.world.streaker.Position.X)
+                if (pos.x < SuperFlashGame.world.streaker.Position.x)
                 {
                     draw.SpriteEffect = SpriteEffects.None;
                 }
@@ -459,26 +460,26 @@ namespace COMP476Proj
                 draw.SpriteEffect = SpriteEffects.FlipHorizontally;
             }
 
-            draw.Update(gameTime);
+            draw.Update();
             if (draw.animComplete && (state == SmartCopState.FALL || state == SmartCopState.GET_UP))
             {
                 draw.GoToPrevFrame();
             }
             if (draw.animComplete && state == SmartCopState.HIT &&
-                Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
-                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
+                Math.Abs(SuperFlashGame.world.streaker.Position.x - pos.x) <= HIT_DISTANCE_X &&
+                Math.Abs(SuperFlashGame.world.streaker.Position.y - pos.y) <= HIT_DISTANCE_Y)
             {
-                Game1.world.streaker.GetHit();
+                SuperFlashGame.world.streaker.GetHit();
                 playSound("Hit");
             }
-            base.Update(gameTime);
+            base.Update();
 
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            draw.Draw(gameTime, spriteBatch, physics.Position);
-            base.Draw(gameTime, spriteBatch);
+            draw.Draw(spriteBatch, physics.Position);
+            base.Draw(spriteBatch);
         }
 
         public override void Fall(bool isSuperFlash)

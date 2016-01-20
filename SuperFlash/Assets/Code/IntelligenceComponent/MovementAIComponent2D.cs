@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
 using System.IO;
+
+
+using UnityEngine;
+using Assets.Code._XNA;
 
 namespace COMP476Proj
 {
@@ -94,10 +97,10 @@ namespace COMP476Proj
 
         #endregion
 
-        #region Random Number Attributes
+        #region System.Random Number Attributes
 
         /// <summary>
-        /// Random number
+        /// System.Random number
         /// </summary>
 
         #endregion
@@ -139,8 +142,8 @@ namespace COMP476Proj
 
             timeToTarget = 0.1f;
 
-            targetPosition = Vector2.Zero;
-            targetVelocity = Vector2.Zero;
+            targetPosition = Vector2.zero;
+            targetVelocity = Vector2.zero;
         }
 
         /// <summary>
@@ -187,8 +190,8 @@ namespace COMP476Proj
         /// <returns>Approximately normally distributed number around 0</returns>
         private double normallyDistributedRandomNumber()
         {
-            double a = 2 * Game1.random.NextDouble() - 1;
-            double b = 2 * Game1.random.NextDouble() - 1;
+            double a = 2 * SuperFlashGame.random.NextDouble() - 1;
+            double b = 2 * SuperFlashGame.random.NextDouble() - 1;
 
             return a * b;
         }
@@ -202,16 +205,16 @@ namespace COMP476Proj
         {
             Vector2 velocity = targetPosition - physics.Position;
 
-            if (velocity.Length() < arrivalRadius)
+            if (velocity.magnitude < arrivalRadius)
             {
                 return;
             }
 
             velocity /= timeToTarget;
 
-            if (velocity.Length() > physics.MaxVelocity)
+            if (velocity.magnitude > physics.MaxVelocity)
             {
-                if(velocity.LengthSquared() > 0)
+                if(velocity.sqrMagnitude > 0)
                     velocity.Normalize();
                 velocity *= physics.MaxVelocity;
             }
@@ -227,7 +230,7 @@ namespace COMP476Proj
         private void steeringArrive(ref PhysicsComponent2D physics)
         {
             Vector2 direction = targetPosition - physics.Position;
-            float distance = direction.Length();
+            float distance = direction.magnitude;
             float speed;
 
             if (distance < arrivalRadius)
@@ -245,16 +248,16 @@ namespace COMP476Proj
             }
 
             Vector2 velocity = direction;
-            if(velocity.LengthSquared() > 0)
+            if(velocity.sqrMagnitude > 0)
                 velocity.Normalize();
             velocity *= speed;
 
             Vector2 targetAcceleration = velocity - physics.Velocity;
             targetAcceleration /= timeToTarget;
 
-            if (targetAcceleration.Length() > physics.MaxAcceleration)
+            if (targetAcceleration.magnitude > physics.MaxAcceleration)
             {
-                if (targetAcceleration.LengthSquared() > 0)
+                if (targetAcceleration.sqrMagnitude > 0)
                     targetAcceleration.Normalize();
                 targetAcceleration *= physics.MaxAcceleration;
             }
@@ -313,14 +316,14 @@ namespace COMP476Proj
         {
             Vector2 direction = targetPosition - physics.Position;
 
-            if (direction.Length() == 0)
+            if (direction.magnitude == 0)
             {
                 return true;
             }
 
             float angle = (float)Math.Atan2(direction.X, direction.Y);
 
-            return (Math.Abs(angle - physics.Orientation) < (perceptionAngle / (perceptionConstant * physics.Velocity.Length() + 1)));
+            return (Math.Abs(angle - physics.Orientation) < (perceptionAngle / (perceptionConstant * physics.Velocity.magnitude + 1)));
         }
 
         #endregion
@@ -379,7 +382,7 @@ namespace COMP476Proj
         /// <param name="physics">The physics component of the thinking character</param>
         public void Pursue(ref PhysicsComponent2D physics)
         {
-            if (targetVelocity.Length() == 0)
+            if (targetVelocity.magnitude == 0)
             {
                 Seek(ref physics);
                 return;
@@ -389,9 +392,9 @@ namespace COMP476Proj
             float prediction;
 
             Vector2 direction = targetPosition - physics.Position;
-            float distance = direction.Length();
+            float distance = direction.magnitude;
 
-            float speed = physics.Velocity.Length();
+            float speed = physics.Velocity.magnitude;
 
             if (speed <= distance / maxPrediction)
             {
@@ -425,7 +428,7 @@ namespace COMP476Proj
         /// <param name="physics">The physics component of the thinking character</param>
         public void Evade(ref PhysicsComponent2D physics)
         {
-            if (targetVelocity.Length() == 0)
+            if (targetVelocity.magnitude == 0)
             {
                 Flee(ref physics);
                 return;
@@ -435,9 +438,9 @@ namespace COMP476Proj
             float prediction;
 
             Vector2 direction = targetPosition - physics.Position;
-            float distance = direction.Length();
+            float distance = direction.magnitude;
 
-            float speed = physics.Velocity.Length();
+            float speed = physics.Velocity.magnitude;
 
             if (speed <= distance / maxPrediction)
             {
@@ -465,22 +468,22 @@ namespace COMP476Proj
             Vector2 direction;
             float angle;
 
-            if (physics.Direction.Length() == 0)
+            if (physics.Direction.magnitude == 0)
             {
                 float x, y;
 
                 do
                 {
-                    x = Game1.random.Next(-10, 11);
+                    x = SuperFlashGame.random.Next(-10, 11);
                 } while (x == 0);
 
                 do
                 {
-                    y = Game1.random.Next(-10, 11);
+                    y = SuperFlashGame.random.Next(-10, 11);
                 } while (y == 0);
 
                 direction = new Vector2(x, y);
-                if (direction.LengthSquared() > 0)
+                if (direction.sqrMagnitude > 0)
                     direction.Normalize();
             }
             else
@@ -491,10 +494,10 @@ namespace COMP476Proj
                     Vector2 previousDirection = physics.Direction;
                     direction.X = (float)Math.Cos(angle) * previousDirection.X - (float)Math.Sin(angle) * previousDirection.Y;
                     direction.Y = (float)Math.Sin(angle) * previousDirection.X + (float)Math.Cos(angle) * previousDirection.Y;
-                    if (direction.LengthSquared() > 0)
+                    if (direction.sqrMagnitude > 0)
                         direction.Normalize();
                 }
-                while (direction.Length() == 0);
+                while (direction.magnitude == 0);
             }
 
             // Seek normally
@@ -517,7 +520,7 @@ namespace COMP476Proj
         /// <param name="physics">The physics component of the thinking character</param>
         public void Look(ref PhysicsComponent2D physics)
         {
-            if (physics.Velocity.Length() == 0)
+            if (physics.Velocity.magnitude == 0)
             {
                 return;
             }
@@ -536,7 +539,7 @@ namespace COMP476Proj
         {
             Vector2 direction = targetPosition - physics.Position;
 
-            if (direction.Length() == 0)
+            if (direction.magnitude == 0)
             {
                 return;
             }
@@ -554,7 +557,7 @@ namespace COMP476Proj
         {
             Vector2 direction = physics.Position - targetPosition;
 
-            if (direction.Length() == 0)
+            if (direction.magnitude == 0)
             {
                 return;
             }

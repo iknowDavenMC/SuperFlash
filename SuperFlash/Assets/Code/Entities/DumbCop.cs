@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using StreakerLibrary;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
+
+using UnityEngine;
+using Assets.Code._XNA;
+
 namespace COMP476Proj
 {
     public enum DumbCopState { STATIC, WANDER, PATROL, SEEK, FALL, GET_UP, HIT, PATHFIND };
@@ -160,14 +163,14 @@ namespace COMP476Proj
 
         public void updateState()
         {
-            IsVisible(Game1.world.streaker.Position, out canSee, out canReach);
+            IsVisible(SuperFlashGame.world.streaker.Position, out canSee, out canReach);
 
             //--------------------------------------------------------------------------
             //        DEFAULT BEHAVIOR TRANSITIONS --> Before aware of streaker
             //--------------------------------------------------------------------------
             if (behavior == DumbCopBehavior.DEFAULT)
             {
-                if (Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius && canSee)
+                if (Vector2.Distance(SuperFlashGame.world.streaker.Position, pos) < detectRadius && canSee)
                 {
                     playSound("Exclamation");
                     behavior = DumbCopBehavior.AWARE;
@@ -179,7 +182,7 @@ namespace COMP476Proj
             //--------------------------------------------------------------------------
             else if (behavior == DumbCopBehavior.AWARE)
             {
-                float distance = Vector2.Distance(Game1.world.streaker.Position, pos);
+                float distance = Vector2.Distance(SuperFlashGame.world.streaker.Position, pos);
 
                 switch (state)
                 {
@@ -188,10 +191,10 @@ namespace COMP476Proj
                         // If sees, chases
                         if (canSee && distance <= detectRadius)
                         {
-                            lastStreakerPosition = Game1.world.streaker.Position;
+                            lastStreakerPosition = SuperFlashGame.world.streaker.Position;
 
-                            if (Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
-                                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
+                            if (Math.Abs(SuperFlashGame.world.streaker.Position.x - pos.x) <= HIT_DISTANCE_X &&
+                                Math.Abs(SuperFlashGame.world.streaker.Position.y - pos.y) <= HIT_DISTANCE_Y)
                             {
                                 transitionToState(DumbCopState.HIT);
                             }
@@ -204,10 +207,10 @@ namespace COMP476Proj
                         else
                         {
                             // If done path, go back to default
-                            if (path.Count == 1 && (Position - path[0].Position).Length() <= movement.ArrivalRadius)
+                            if (path.Count == 1 && (Position - path[0].Position).magnitude <= movement.ArrivalRadius)
                             {
                                 DataManager.GetInstance().IncreaseScore(DataManager.Points.LoseCop,
-                                    true, Game1.world.streaker.Position.X, Game1.world.streaker.Position.Y - 64);
+                                    true, SuperFlashGame.world.streaker.Position.x, SuperFlashGame.world.streaker.Position.y - 64);
                                 DataManager.GetInstance().numberOfDumbCopsLost++;
                                 DataManager.GetInstance().numberOfCopsChasing--;
                                 chasing = false;
@@ -216,7 +219,7 @@ namespace COMP476Proj
                                 transitionToState(defaultState);
                             }
                             // If at next node, update node to seek
-                            else if (path.Count > 0 && (Position - path[0].Position).Length() <= movement.ArrivalRadius)
+                            else if (path.Count > 0 && (Position - path[0].Position).magnitude <= movement.ArrivalRadius)
                             {
                                 path.RemoveAt(0);
                             }
@@ -230,10 +233,10 @@ namespace COMP476Proj
                         if (draw.animComplete)
                         {
                             if (state == DumbCopState.HIT &&
-                                Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
-                                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
+                                Math.Abs(SuperFlashGame.world.streaker.Position.x - pos.x) <= HIT_DISTANCE_X &&
+                                Math.Abs(SuperFlashGame.world.streaker.Position.y - pos.y) <= HIT_DISTANCE_Y)
                             {
-                                Game1.world.streaker.GetHit();
+                                SuperFlashGame.world.streaker.GetHit();
                                 playSound("Hit");
                             }
 
@@ -247,10 +250,10 @@ namespace COMP476Proj
                         // If sees, chases or hits
                         if (canSee && distance <= detectRadius)
                         {
-                            lastStreakerPosition = Game1.world.streaker.Position;
+                            lastStreakerPosition = SuperFlashGame.world.streaker.Position;
 
-                            if (Math.Abs(Game1.world.streaker.Position.X - pos.X) <= HIT_DISTANCE_X &&
-                                Math.Abs(Game1.world.streaker.Position.Y - pos.Y) <= HIT_DISTANCE_Y)
+                            if (Math.Abs(SuperFlashGame.world.streaker.Position.x - pos.x) <= HIT_DISTANCE_X &&
+                                Math.Abs(SuperFlashGame.world.streaker.Position.y - pos.y) <= HIT_DISTANCE_Y)
                             {
                                 transitionToState(DumbCopState.HIT);
                             }
@@ -262,7 +265,7 @@ namespace COMP476Proj
                         // Can't see and hasn't path found already, path find to last known position
                         else if (!canSee && lastStreakerPosition != null)
                         {
-                            path = AStar.GetPath(Position, (Vector2)lastStreakerPosition, Game1.world.map.nodes, Game1.world.qTree, true, false);
+                            path = AStar.GetPath(Position, (Vector2)lastStreakerPosition, SuperFlashGame.world.map.nodes, SuperFlashGame.world.qTree, true, false);
 
                             // Optimize
                             while (path.Count > 1 && canReach)
@@ -277,7 +280,7 @@ namespace COMP476Proj
                         else
                         {
                             DataManager.GetInstance().IncreaseScore(DataManager.Points.LoseCop,
-                                true, Game1.world.streaker.Position.X, Game1.world.streaker.Position.Y - 64);
+                                true, SuperFlashGame.world.streaker.Position.x, SuperFlashGame.world.streaker.Position.y - 64);
                             DataManager.GetInstance().numberOfDumbCopsLost++;
                             behavior = DumbCopBehavior.DEFAULT;
                             transitionToState(defaultState);
@@ -296,17 +299,17 @@ namespace COMP476Proj
                     case DumbCopState.FALL:
                         if (draw.animComplete)
                         {
-                            SoundManager.GetInstance().PlaySound("Common", "Fall", Game1.world.streaker.Position, Position);
+                            SoundManager.GetInstance().PlaySound("Common", "Fall", SuperFlashGame.world.streaker.Position, Position);
                             transitionToState(DumbCopState.GET_UP);
                         }
                         break;
                     case DumbCopState.GET_UP:
-                        if (draw.animComplete && Vector2.Distance(Game1.world.streaker.Position, pos) < detectRadius)
+                        if (draw.animComplete && Vector2.Distance(SuperFlashGame.world.streaker.Position, pos) < detectRadius)
                         {
                             behavior = DumbCopBehavior.AWARE;
                             transitionToState(DumbCopState.SEEK);
                         }
-                        else if (draw.animComplete && Vector2.Distance(Game1.world.streaker.Position, pos) >= detectRadius)
+                        else if (draw.animComplete && Vector2.Distance(SuperFlashGame.world.streaker.Position, pos) >= detectRadius)
                         {
                             behavior = DumbCopBehavior.DEFAULT;
                             transitionToState(defaultState);
@@ -328,7 +331,7 @@ namespace COMP476Proj
                     movement.Wander(ref physics);
                     break;
                 case DumbCopState.SEEK:
-                    movement.SetTarget(Game1.world.streaker.Position);
+                    movement.SetTarget(SuperFlashGame.world.streaker.Position);
                     movement.Seek(ref physics);
                     break;
                 case DumbCopState.PATROL:
@@ -357,7 +360,7 @@ namespace COMP476Proj
 
         private void playSound(string soundName)
         {
-            SoundManager.GetInstance().PlaySound("DumbCop", soundName, Game1.world.streaker.Position, Position);
+            SoundManager.GetInstance().PlaySound("DumbCop", soundName, SuperFlashGame.world.streaker.Position, Position);
         }
         #endregion
 
@@ -365,7 +368,7 @@ namespace COMP476Proj
         /// <summary>
         /// Update
         /// </summary>
-        public void Update(GameTime gameTime, World w)
+        public void Update(World w)
         {
             pos = physics.Position;
 
@@ -379,12 +382,12 @@ namespace COMP476Proj
             }
 
             movement.Look(ref physics);
-            physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
-            physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
+            physics.UpdatePosition(Time.time, out pos);
+            physics.UpdateOrientation(Time.time);
 
             if (state == DumbCopState.HIT)
             {
-                if (pos.X < Game1.world.streaker.Position.X)
+                if (pos.x < SuperFlashGame.world.streaker.Position.x)
                 {
                     draw.SpriteEffect = SpriteEffects.None;
                 }
@@ -402,21 +405,21 @@ namespace COMP476Proj
                 draw.SpriteEffect = SpriteEffects.FlipHorizontally;
             }
 
-            draw.Update(gameTime);
+            draw.Update();
 
             if (draw.animComplete && (state == DumbCopState.FALL || state == DumbCopState.GET_UP))
             {
                 draw.GoToPrevFrame();
             }
 
-            base.Update(gameTime);
+            base.Update();
 
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            draw.Draw(gameTime, spriteBatch, physics.Position);
-            base.Draw(gameTime, spriteBatch);
+            draw.Draw(spriteBatch, physics.Position);
+            base.Draw(spriteBatch);
         }
 
         public override void Fall(bool isSuperFlash)

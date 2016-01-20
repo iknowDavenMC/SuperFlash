@@ -124,7 +124,7 @@ namespace COMP476Proj
         /// <param name="gameTime"></param>
         public void Update(GameTime gameTime)
         {
-            int time = gameTime.ElapsedGameTime.Milliseconds;
+            int time = Time.deltaTime * 1000f;
             foreach (Achievement achv in achievList)
             {
                 if (achv.Locked)
@@ -136,8 +136,8 @@ namespace COMP476Proj
                         SoundManager.GetInstance().PlayAchievement();
                         achv.Locked = false;
                         DataManager.GetInstance().IncreaseScore(achv.Value, false, 0, 0, true);
-                        int toastX = Game1.SCREEN_WIDTH/2 - toastWidth/2;
-                        int toastY = Game1.SCREEN_HEIGHT - 45 - (toasts.Count+1)*toastHeight;
+                        int toastX = SuperFlashGame.SCREEN_WIDTH/2 - toastWidth/2;
+                        int toastY = SuperFlashGame.SCREEN_HEIGHT - 45 - (toasts.Count+1)*toastHeight;
                         toasts.Add(new AchievementToast(achv, 3000, new Vector2(toastX, toastY), toastWidth, toastHeight));
                     }
                 }
@@ -149,7 +149,7 @@ namespace COMP476Proj
             for(int i=0; i<toastCount; ++i) 
             {
                 AchievementToast toast = toasts[i];
-                if (i == 0 && toast.Y <= (Game1.SCREEN_HEIGHT - 45 - toastHeight))
+                if (i == 0 && toast.Y <= (SuperFlashGame.SCREEN_HEIGHT - 45 - toastHeight))
                 {
                     drop = true;
                 }

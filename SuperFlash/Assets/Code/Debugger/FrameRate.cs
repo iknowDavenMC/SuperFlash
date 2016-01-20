@@ -7,14 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Threading;
-using Microsoft.Xna.Framework;
+
+using UnityEngine;
+using Assets.Code._XNA;
 
 /// <summary>
 /// FrameRate is used to calculate and control the current frame rate of an application
 /// </summary>
 namespace COMP476Proj
 {
-    class FrameRate : GameComponent
+    class FrameRate : MonoBehaviour
     {
         #region Attributes
 
@@ -72,17 +74,15 @@ namespace COMP476Proj
         /// <summary>
         /// Constructor. By default, time lapse is 2 seconds
         /// </summary>
-        /// <param name="game">The current game instance</param>
         /// <param name="evaluationPeriod">The period of time
         /// over which frame rate should be calculated</param>
         public FrameRate(Game game, int evaluationPeriod = 2)
-            : base(game)
         {
             this.evaluationPeriod = evaluationPeriod;
 
             numberOfFrames = 0;
 
-            game.TargetElapsedTime = TimeSpan.FromSeconds(1.0f / desiredFramesPerSecond);
+            Application.targetFrameRate = desiredFramesPerSecond;
         }
 
         #endregion
@@ -92,16 +92,13 @@ namespace COMP476Proj
         /// <summary>
         /// Update method called automatically
         /// </summary>
-        /// <param name="gameTime">The current game instance's time object</param>
-        public override void Update(GameTime gameTime)
+        public void Update()
         {
-            base.Update(gameTime);
-
             // Count frame
             ++numberOfFrames;
 
             // Look at elapsed time
-            seconds += gameTime.ElapsedGameTime.TotalSeconds;
+            seconds += Time.deltaTime;
 
             // If the correct time lapse has gone by, calculate frame rate and reset values
             if (seconds >= evaluationPeriod)
@@ -131,7 +128,7 @@ namespace COMP476Proj
             if (desiredFramesPerSecond < 240)
             {
                 ++desiredFramesPerSecond;
-                base.Game.TargetElapsedTime = TimeSpan.FromSeconds(1.0f / desiredFramesPerSecond);
+                Application.targetFrameRate = desiredFramesPerSecond;
             }
         }
 
@@ -143,7 +140,7 @@ namespace COMP476Proj
             if (desiredFramesPerSecond > 15)
             {
                 --desiredFramesPerSecond;
-                base.Game.TargetElapsedTime = TimeSpan.FromSeconds(1.0f / desiredFramesPerSecond);
+								Application.targetFrameRate = desiredFramesPerSecond;
             }
         }
 

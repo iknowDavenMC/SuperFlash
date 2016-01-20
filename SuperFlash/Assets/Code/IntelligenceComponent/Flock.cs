@@ -68,7 +68,7 @@ namespace COMP476Proj
             {
                 if (npc != member)
                 {
-                    float distSq = (npc.Position - member.Position).LengthSquared();
+                    float distSq = (npc.Position - member.Position).sqrMagnitude;
                     if (distSq < flockDist * flockDist)
                     {
                         v += npc.ComponentPhysics.Velocity;
@@ -76,7 +76,7 @@ namespace COMP476Proj
                     }
                 }
             }
-            if (neighbourCount == 0 || v.LengthSquared() == 0)
+            if (neighbourCount == 0 || v.sqrMagnitude == 0)
                 return v;
             v /= neighbourCount;
             v.Normalize();
@@ -91,7 +91,7 @@ namespace COMP476Proj
             {
                 if (npc != member)
                 {
-                    float distSq = (npc.Position - member.Position).LengthSquared();
+                    float distSq = (npc.Position - member.Position).sqrMagnitude;
                     if (distSq < flockDist * flockDist)
                     {
                         v += npc.ComponentPhysics.Position;
@@ -99,7 +99,7 @@ namespace COMP476Proj
                     }
                 }
             }
-            if (neighbourCount == 0 || v.LengthSquared() == 0)
+            if (neighbourCount == 0 || v.sqrMagnitude == 0)
                 return v;
             v /= neighbourCount;
             v -= member.Position;
@@ -115,7 +115,7 @@ namespace COMP476Proj
             {
                 if (npc != member)
                 {
-                    float distSq = (member.Position - npc.Position).LengthSquared();
+                    float distSq = (member.Position - npc.Position).sqrMagnitude;
                     if (distSq < flockDist * flockDist)
                     {
                         v += member.ComponentPhysics.Position - npc.ComponentPhysics.Position;
@@ -123,7 +123,7 @@ namespace COMP476Proj
                     }
                 }
             }
-            if (neighbourCount == 0 || v.LengthSquared() == 0)
+            if (neighbourCount == 0 || v.sqrMagnitude == 0)
                 return v;
             v /= neighbourCount;
             v.Normalize();

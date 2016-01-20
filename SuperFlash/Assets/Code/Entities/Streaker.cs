@@ -1,12 +1,11 @@
-﻿#region Using Statements
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
+using UnityEngine;
+using Assets.Code._XNA;
 using StreakerLibrary;
-#endregion
 
 namespace COMP476Proj
 {
@@ -23,22 +22,22 @@ namespace COMP476Proj
         /// <summary>
         /// Determines how many milliseconds have gone by since input was last checked
         /// </summary>
-        private int inputTimer;
+        private float inputTimer;
 
         /// <summary>
         /// Determines how many milliseconds must have gone by before input is checked again
         /// </summary>
-        private int inputDelay;
+        private float inputDelay;
 
         /// <summary>
         /// Determines how many milliseconds have gone by since last super flash
         /// </summary>
-        private int superFlashTimer;
+        private float superFlashTimer;
 
         /// <summary>
         /// Determines how many milliseconds must have gone by before super flash can be done
         /// </summary>
-        private int superFlashDelay;
+        private float superFlashDelay;
 
         /// <summary>
         /// Direction the character is moving
@@ -48,7 +47,7 @@ namespace COMP476Proj
         /// <summary>
         /// Recover Timer
         /// </summary>
-        private int recoverTimer = 1000;
+        private float recoverTimer = 1000f;
 
         /// <summary>
         /// Whether or not the image is flipped
@@ -105,10 +104,10 @@ namespace COMP476Proj
         private ParticleSpewer powerParticles;
 
         private const int particleTimeout = 50;
-        private int particleTimer = 0;
+        private float particleTimer = 0;
         private const int dancePointTimeout = 500;
-        private int danceTimer = 0;
-        private int danceTotalTime = 0;
+        private float danceTimer = 0;
+        private float danceTotalTime = 0;
         #endregion
 
         #region Constructors
@@ -128,18 +127,18 @@ namespace COMP476Proj
             superFlashDelay = 20000;
 
             superFlashParticles = new ParticleSpewer(
-                phys.Position.X + draw.animation.FrameWidth / 2, phys.Position.Y + draw.animation.FrameHeight / 2,
-                10000, 100, 0, MathHelper.TwoPi,
+                phys.Position.x + draw.animation.FrameWidth / 2, phys.Position.y + draw.animation.FrameHeight / 2,
+                10000, 100, 0, Mathf.PI * 2f,
                 500, 1000, 2, 600, 30, 60, 0.1f, 0.1f, 1, 1, true, 0.75f);
 
             danceParticles = new ParticleSpewer(
-                phys.Position.X + draw.animation.FrameWidth / 2, phys.Position.Y + draw.animation.FrameHeight / 2,
-                10000, 100, 0, MathHelper.TwoPi,
+                phys.Position.x + draw.animation.FrameWidth / 2, phys.Position.y + draw.animation.FrameHeight / 2,
+                10000, 100, 0, Mathf.PI * 2f,
                 50, 300, 2, 350, 180, 200, 0.25f, 0.5f, 1, 1, true, 0f);
 
             powerParticles = new ParticleSpewer(
-                phys.Position.X + draw.animation.FrameWidth / 2, phys.Position.Y + draw.animation.FrameHeight / 2,
-                10000, 10, 0, MathHelper.TwoPi,
+                phys.Position.x + draw.animation.FrameWidth / 2, phys.Position.y + draw.animation.FrameHeight / 2,
+                10000, 10, 0, Mathf.PI * 2f,
                 50, 300, 3, 350, 180, 200, 0.5f, 1f, 0.5f, 1, true, 0f);
             powerParticles.Start();
         }
@@ -183,11 +182,11 @@ namespace COMP476Proj
         /// Deals with the user input from gamepad or keyboard
         /// </summary>
         /// <param name="gameTime">Game time</param>
-        private void handleUserInput(GameTime gameTime)
+        private void handleUserInput()
         {
-            inputTimer += gameTime.ElapsedGameTime.Milliseconds;
-            superFlashTimer += gameTime.ElapsedGameTime.Milliseconds;
-            recoverTimer += gameTime.ElapsedGameTime.Milliseconds;
+            inputTimer += Time.deltaTime * 1000f;
+            superFlashTimer += Time.deltaTime * 1000f;
+            recoverTimer += Time.deltaTime * 1000f;
 
             if (inputTimer < inputDelay)
             {
@@ -199,7 +198,7 @@ namespace COMP476Proj
             }
 
             // Reset direction
-            direction = Vector2.Zero;
+            direction = Vector2.zero;
 
             // Get input manager instance
             InputManager input = InputManager.GetInstance();
@@ -253,7 +252,7 @@ namespace COMP476Proj
                 }
 
                 // If no movement, static
-                if (direction == Vector2.Zero)
+                if (direction == Vector2.zero)
                 {
                     if (charState != StreakerState.STATIC)
                     {
@@ -276,7 +275,7 @@ namespace COMP476Proj
         /// </summary>
         private void moveLeft()
         {
-            direction += -Vector2.UnitX;
+            direction += Vector2.left;
             charState = StreakerState.WALK;
             flip = true;
         }
@@ -286,7 +285,7 @@ namespace COMP476Proj
         /// </summary>
         private void moveRight()
         {
-            direction += Vector2.UnitX;
+            direction += Vector2.right;
             charState = StreakerState.WALK;
             flip = false;
         }
@@ -296,7 +295,7 @@ namespace COMP476Proj
         /// </summary>
         private void moveDown()
         {
-            direction += Vector2.UnitY;
+            direction += Vector2.down;
             charState = StreakerState.WALK;
         }
 
@@ -305,21 +304,21 @@ namespace COMP476Proj
         /// </summary>
         private void moveUp()
         {
-            direction += -Vector2.UnitY;
+            direction += Vector2.up;
             charState = StreakerState.WALK;
         }
 
         private void superFlash()
         {
             int victimCount = 0;
-            foreach (EntityMoveable entity in Game1.world.moveableObjectsX)
+            foreach (EntityMoveable entity in SuperFlashGame.world.moveableObjectsX)
             {
                 if (entity is Streaker)
                 {
                     continue;
                 }
 
-                if ((entity.Position - Position).Length() > SUPER_FLASH_DISTANCE)
+                if ((entity.Position - Position).magnitude > SUPER_FLASH_DISTANCE)
                 {
                     continue;
                 }
@@ -329,10 +328,10 @@ namespace COMP476Proj
                 LineSegment test = new LineSegment(Position, entity.Position);
 
                 // Check the grid for walls
-                int startX = (int)Math.Round(Math.Min(Position.X, entity.Position.X) / World.gridLength);
-                int startY = (int)Math.Round(Math.Min(Position.Y, entity.Position.Y) / World.gridLength);
-                int endX = (int)Math.Round(Math.Max(Position.X, entity.Position.X) / World.gridLength);
-                int endY = (int)Math.Round(Math.Max(Position.Y, entity.Position.Y) / World.gridLength);
+                int startX = (int)Math.Round(Math.Min(Position.x, entity.Position.x) / World.gridLength);
+                int startY = (int)Math.Round(Math.Min(Position.y, entity.Position.y) / World.gridLength);
+                int endX = (int)Math.Round(Math.Max(Position.x, entity.Position.x) / World.gridLength);
+                int endY = (int)Math.Round(Math.Max(Position.y, entity.Position.y) / World.gridLength);
 
                 try
                 {
@@ -340,14 +339,14 @@ namespace COMP476Proj
                     {
                         for (int l = startX; l != endX + 1; ++l)
                         {
-                            for (int j = 0; j != Game1.world.grid[k, l].Count; ++j)
+                            for (int j = 0; j != SuperFlashGame.world.grid[k, l].Count; ++j)
                             {
-                                if (Game1.world.grid[k, l][j].IsSeeThrough)
+                                if (SuperFlashGame.world.grid[k, l][j].IsSeeThrough)
                                 {
                                     continue;
                                 }
 
-                                if (test.IntersectsBox(Game1.world.grid[k, l][j].BoundingRectangle))
+                                if (test.IntersectsBox(SuperFlashGame.world.grid[k, l][j].BoundingRectangle))
                                 {
                                     canBeHit = false;
                                     break;
@@ -372,7 +371,7 @@ namespace COMP476Proj
                         if (!(entity is RoboCop))
                         {
                             ++victimCount;
-                            DataManager.GetInstance().IncreaseScore(DataManager.Points.SuperFlashKnockDown, true, entity.ComponentPhysics.Position.X, entity.ComponentPhysics.Position.Y - 64);
+                            DataManager.GetInstance().IncreaseScore(DataManager.Points.SuperFlashKnockDown, true, entity.ComponentPhysics.Position.x, entity.ComponentPhysics.Position.y - 64);
                         }
                     }
                 }
@@ -412,11 +411,11 @@ namespace COMP476Proj
 
         #region Public Methods
 
-        public override void Update(GameTime gameTime)
+        public override void Update()
         {
             if (isGripBoost || isMassBoost || isSlickBoost || isSpeedBoost)
             {
-                consumableTimer += gameTime.ElapsedGameTime.Milliseconds;
+                consumableTimer += Time.deltaTime * 1000f;
             }
 
             if (consumableTimer >= consumableDelay)
@@ -428,43 +427,43 @@ namespace COMP476Proj
 
             if (charState != StreakerState.FALL && charState != StreakerState.GET_UP && charState != StreakerState.SUPERFLASH)
             {
-                handleUserInput(gameTime);
+                handleUserInput();
             }
 
-            physics.UpdatePosition(gameTime.ElapsedGameTime.TotalSeconds, out pos);
-            physics.UpdateOrientation(gameTime.ElapsedGameTime.TotalSeconds);
+            physics.UpdatePosition(Time.time, out pos);
+            physics.UpdateOrientation(Time.time);
 
             if (!stayDown)
             {
-                draw.Update(gameTime);
+                draw.Update();
             }
 
             UpdateStates(draw.animComplete);
             if (superFlashParticles.IsStarted)
             {
-                particleTimer += gameTime.ElapsedGameTime.Milliseconds;
+                particleTimer += Time.deltaTime * 1000f;
                 if (particleTimer >= particleTimeout)
                 {
                     particleTimer = 0;
                     superFlashParticles.Stop();
                 }
             }
-            superFlashParticles.X = physics.Position.X;
-            superFlashParticles.Y = physics.Position.Y - 020;
-            superFlashParticles.Update(gameTime);
+            superFlashParticles.X = physics.Position.x;
+            superFlashParticles.Y = physics.Position.y - 020;
+            superFlashParticles.Update();
 
             danceParticles.Stop();
             if (charState == StreakerState.DANCE)
             {
                 CustomCamera.Scale = 2f;
                 danceParticles.Start();
-                danceTimer += gameTime.ElapsedGameTime.Milliseconds;
-                danceTotalTime += gameTime.ElapsedGameTime.Milliseconds;
+                danceTimer += Time.deltaTime * 1000f;
+                danceTotalTime += Time.deltaTime * 1000f;
                 DataManager dataMan = DataManager.GetInstance();
                 if (danceTimer >= dancePointTimeout)
                 {
                     danceTimer = 0;
-                    dataMan.IncreaseScore(DataManager.Points.Dance, true, physics.Position.X, physics.Position.Y - 64);
+                    dataMan.IncreaseScore(DataManager.Points.Dance, true, physics.Position.x, physics.Position.y - 64);
                 }
                 if (danceTotalTime > dataMan.longestDance && dataMan.CanGainPoints)
                     dataMan.longestDance = danceTotalTime;
@@ -474,9 +473,9 @@ namespace COMP476Proj
                 CustomCamera.Scale = 1f;
                 danceTotalTime = 0;
             }
-            danceParticles.X = physics.Position.X;
-            danceParticles.Y = physics.Position.Y - 020;
-            danceParticles.Update(gameTime);
+            danceParticles.X = physics.Position.x;
+            danceParticles.Y = physics.Position.y - 020;
+            danceParticles.Update();
 
             powerParticles.Start();
             if (isGripBoost)
@@ -489,12 +488,12 @@ namespace COMP476Proj
                 powerParticles.ChangeColor(210, 240, 0.5f, 1, 0.75f, 1);
             else
                 powerParticles.Stop();
-            powerParticles.X = physics.Position.X;
-            powerParticles.Y = physics.Position.Y - 020;
-            powerParticles.Update(gameTime);
+            powerParticles.X = physics.Position.x;
+            powerParticles.Y = physics.Position.y - 020;
+            powerParticles.Update();
 
             //Debugger.getInstance().pointsToDraw.Add(physics.position);
-            base.Update(gameTime);
+            base.Update();
         }
 
         public void UpdateStates(bool animComplete)
@@ -574,13 +573,13 @@ namespace COMP476Proj
             }
         }
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            superFlashParticles.Draw(gameTime, spriteBatch);
-            danceParticles.Draw(gameTime, spriteBatch);
-            powerParticles.Draw(gameTime, spriteBatch);
-            draw.Draw(gameTime, spriteBatch, physics.Position);
-            base.Draw(gameTime, spriteBatch);
+            superFlashParticles.Draw(spriteBatch);
+            danceParticles.Draw(spriteBatch);
+            powerParticles.Draw(spriteBatch);
+            draw.Draw(spriteBatch, physics.Position);
+            base.Draw(spriteBatch);
         }
 
         public override void Fall(bool isSuperFlash)

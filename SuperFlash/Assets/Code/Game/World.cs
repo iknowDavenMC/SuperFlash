@@ -52,7 +52,7 @@ namespace COMP476Proj
         public World()
         {
             streaker = new Streaker(new PhysicsComponent2D(new Vector2(-50, -50), 0, new Vector2(20, 20), Speeds.Streaker_Run, 1250, 150, 750, 8, 50, 0.25f, true),
-                new DrawComponent(SpriteDatabase.GetAnimation("streaker_static"), Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f));
+                new DrawComponent(SpriteDatabase.GetAnimation("streaker_static"), Color.white, Vector2.zero, new Vector2(.4f, .4f), .5f));
 
             npcs = new List<NPC>();
             moveableObjectsX = new List<EntityMoveable>();
@@ -111,7 +111,7 @@ namespace COMP476Proj
         private void createMapGrid()
         {
             // Add walls to the grid
-            BoundingRectangle test = new BoundingRectangle(Vector2.Zero, gridLength / 2);
+            BoundingRectangle test = new BoundingRectangle(Vector2.zero, gridLength / 2);
 
             grid = new List<Wall>[(int)Math.Ceiling((Map.HEIGHT + 100) / gridLength), (int)Math.Ceiling((Map.WIDTH + 100) / gridLength)];
 
@@ -140,24 +140,24 @@ namespace COMP476Proj
 
         private void spawnCop()
         {
-            int randNum = Game1.random.Next(map.nodes.Count);
+            int randNum = SuperFlashGame.random.Next(map.nodes.Count);
             Node randNode = map.nodes.ElementAt(randNum);
             while (CustomCamera.X - CustomCamera.Width / 2 < randNode.Position.X &&
                    CustomCamera.X + CustomCamera.Width / 2 > randNode.Position.X &&
                    CustomCamera.Y - CustomCamera.Height / 2 < randNode.Position.Y &&
                    CustomCamera.Y + CustomCamera.Height / 2 > randNode.Position.Y)
             {
-                randNum = Game1.random.Next(map.nodes.Count);
+                randNum = SuperFlashGame.random.Next(map.nodes.Count);
                 randNode = map.nodes.ElementAt(randNum);
             }
-            double randFloat = Game1.random.NextDouble();
-            randNum = Game1.random.Next(2);
+            double randFloat = SuperFlashGame.random.NextDouble();
+            randNum = SuperFlashGame.random.Next(2);
             
             NPC newNpc;
 
             if (randFloat <= dumbCopThreshold)
             {
-                Animation animation;
+                CustomAnimation animation;
                 DumbCopState dcState;
                 if (randNum == 1)
                 {
@@ -173,11 +173,11 @@ namespace COMP476Proj
                 newNpc = new DumbCop(
                     new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20), Speeds.DumbCop_Run, 750, Speeds.DumbCop_Walk, 1000, 8, 50, 0.25f, true),
                     new MovementAIComponent2D(),
-                    new DrawComponent(animation, Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), dcState);
+                    new DrawComponent(animation, Color.white, Vector2.zero, new Vector2(.4f, .4f), .5f), dcState);
             }
             else if (randFloat <= smartCopThreshold+dumbCopThreshold)
             {
-                Animation animation;
+                CustomAnimation animation;
                 SmartCopState scState;
                 if (randNum == 1)
                 {
@@ -193,8 +193,8 @@ namespace COMP476Proj
                 newNpc = new SmartCop(
                                 new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20),
                                     Speeds.SmartCop_Run, 750, Speeds.SmartCop_Walk, 1000, 8, 50, 0.25f, true),
-                                new MovementAIComponent2D(3, 2, MathHelper.ToRadians(45), 0.5f, 50, 25, Vector2.Zero, Vector2.Zero, 0.1f),
-                                new DrawComponent(animation, Color.White, Vector2.Zero,
+                                new MovementAIComponent2D(3, 2, MathHelper.ToRadians(45), 0.5f, 50, 25, Vector2.zero, Vector2.zero, 0.1f),
+                                new DrawComponent(animation, Color.white, Vector2.zero,
                                     new Vector2(.4f, .4f), .5f), scState);
             }
             else
@@ -202,8 +202,8 @@ namespace COMP476Proj
                 newNpc = new RoboCop(
                             new PhysicsComponent2D(new Vector2(randNode.Position.X, randNode.Position.Y), 0, new Vector2(20, 20), Speeds.RoboCop_Run, 750, 75, 1000, 8, 50, 0.25f, true),
                             new MovementAIComponent2D(),
-                            new DrawComponent(SpriteDatabase.GetAnimation("roboCop_static"), Color.White,
-                                              Vector2.Zero, new Vector2(.4f, .4f), .5f));
+                            new DrawComponent(SpriteDatabase.GetAnimation("roboCop_static"), Color.white,
+                                              Vector2.zero, new Vector2(.4f, .4f), .5f));
             }
             
             npcs.Add(newNpc);
@@ -227,7 +227,7 @@ namespace COMP476Proj
 
         public void updateSpawnData()
         {
-            switch (Game1.difficulty)
+            switch (SuperFlashGame.difficulty)
             {
                 case Difficulty.EASY:
                     if (spawnCount > 5)
@@ -304,7 +304,7 @@ namespace COMP476Proj
         #region Update & Draw
         public void Update(GameTime gameTime)
         {
-            copSpawnTimer += gameTime.ElapsedGameTime.Milliseconds;
+            copSpawnTimer += Time.deltaTime * 1000f;
             if(copSpawnDelay < copSpawnTimer){
                 spawnCop();
                 copSpawnTimer = 0;
@@ -466,7 +466,7 @@ namespace COMP476Proj
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             Vector2 drawPos = new Vector2(0, 0);
-            spriteBatch.Draw(SpriteDatabase.GetAnimation("level_1").Texture, drawPos, null, Color.White, 0, Vector2.Zero,1f,SpriteEffects.None,.1f);
+            spriteBatch.Draw(SpriteDatabase.GetAnimation("level_1").Texture, drawPos, null, Color.white, 0, Vector2.zero,1f,SpriteEffects.None,.1f);
 
             
             foreach (Wall wall in map.walls)
@@ -485,7 +485,7 @@ namespace COMP476Proj
 #if (DEBUG)
             foreach (Node n in map.nodes)
             {
-                Rectangle destRect = new Rectangle((int)n.Position.X - 3, (int)n.Position.Y - 3, 6, 6);
+                Rect destRect = new Rect((int)n.Position.X - 3, (int)n.Position.Y - 3, 6, 6);
                 spriteBatch.Draw(blank, destRect, Color.Cyan);
             }
 #endif

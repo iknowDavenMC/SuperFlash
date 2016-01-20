@@ -95,7 +95,7 @@ namespace COMP476Proj
 
         public void Update(GameTime gameTime)
         {
-            int time = gameTime.ElapsedGameTime.Milliseconds;
+            int time = Time.deltaTime * 1000f;
             age += time;
 
             leftSpewer.Update(gameTime);
@@ -113,7 +113,7 @@ namespace COMP476Proj
             
             leftSpewer.Draw(gameTime, spriteBatch);
             rightSpewer.Draw(gameTime, spriteBatch);
-            spriteBatch.Draw(banner, bannerPos, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(banner, bannerPos, null, Color.white, 0f, Vector2.zero, scale, SpriteEffects.None, 0);
 
             FontManager fontMan = FontManager.getInstance();
             SpriteFont titleFont = fontMan.getFont("AchieveTitle");
@@ -125,8 +125,8 @@ namespace COMP476Proj
                 (X + 125 + (width-125) / 2 - titleSize.X / 2)*scale + offset.X,
                 (Y + 40 + borderWidth * 2)*scale + offset.Y);
 
-            spriteBatch.DrawString(titleFont, title, titlePos, Color.Black, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
-            spriteBatch.DrawString(titleFont, title, titlePos + new Vector2(2,-2) * scale, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 0);
+            spriteBatch.DrawString(titleFont, title, titlePos, Color.black, 0, Vector2.zero, scale, SpriteEffects.None, 0);
+            spriteBatch.DrawString(titleFont, title, titlePos + new Vector2(2,-2) * scale, Color.white, 0, Vector2.zero, scale, SpriteEffects.None, 0);
         }
     }
 }

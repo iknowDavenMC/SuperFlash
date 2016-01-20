@@ -155,11 +155,11 @@ namespace COMP476Proj
         /// <param name="gameTime">Current game time</param>
         public void Update(GameTime gameTime)
         {
-            time += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            time += Time.deltaTime * 1000f;
 
             if (InputManager.GetInstance().IsDoing("Dance", PlayerIndex.One) && canGainPoints)
             {
-                timeDancing += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                timeDancing += Time.deltaTime * 1000f;
             }
 
             for (int i = 0; i != popups.Count; ++i)

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
+using UnityEngine;
+using Assets.Code._XNA;
 
 namespace COMP476Proj
 {
@@ -24,12 +25,12 @@ namespace COMP476Proj
             age = 0;
             lifespan = life;
             font = FontManager.getInstance().getFont("AchieveTitle");
-            position.X -= font.MeasureString(value.ToString()).X / 2;
+            position.x -= font.MeasureString(value.ToString()).x / 2f;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update()
         {
-            float time = gameTime.ElapsedGameTime.Milliseconds;
+            float time = Time.deltaTime * 1000f;
             age += (int)time;
             if (age >= lifespan)
             {
@@ -37,14 +38,14 @@ namespace COMP476Proj
             }
             else
             {
-                position.Y -= riseSpeed * time/1000f;
+                position.y -= riseSpeed * time/1000f;
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(font, value.ToString(), position, Color.Black);
-            spriteBatch.DrawString(font, value.ToString(), position + new Vector2(1,-1), Color.White);
+            spriteBatch.DrawString(font, value.ToString(), position, Color.black);
+            spriteBatch.DrawString(font, value.ToString(), position + new Vector2(1,-1), Color.white);
         }
     }
 }

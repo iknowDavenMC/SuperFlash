@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
+
+using UnityEngine;
+using Assets.Code._XNA;
 using StreakerLibrary;
 
 namespace COMP476Proj
@@ -16,9 +12,9 @@ namespace COMP476Proj
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Microsoft.Xna.Framework.Game
+    public class SuperFlashGame : Game
     {
-        public static Random random = new Random();
+        public static System.Random random = new System.Random();
 
         public const int SCREEN_WIDTH = 1280;
         public const int SCREEN_HEIGHT = 1024;
@@ -39,7 +35,7 @@ namespace COMP476Proj
             MAIN, PLAY,
         }
         public static GameState currentGameState;
-        public Game1()
+        public SuperFlashGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -61,7 +57,6 @@ namespace COMP476Proj
             frameRate = new FrameRate(this, 1);
             mainMenu = new Menu();
             currentGameState = GameState.MAIN;
-            base.Initialize();
         }
 
         /// <summary>
@@ -89,8 +84,8 @@ namespace COMP476Proj
             fontMan.addFont("AchieveText", Content.Load<SpriteFont>("Fonts/AchievementText"));
             SpriteDatabase.loadSprites(Content);
             Texture2D blank = new Texture2D(GraphicsDevice, 1, 1);
-            blank.SetData(new[] { Color.White });
-            SpriteDatabase.AddAnimation(new Animation("blank", blank, 1, 1, 1, 0, 1));
+            blank.SetData(new[] { Color.white });
+            SpriteDatabase.AddAnimation(new CustomAnimation("blank", blank, 1, 1, 1, 0, 1));
             //Create World
 
             world = new World();
@@ -178,7 +173,7 @@ namespace COMP476Proj
                     this.Window.Title = frameRate.CurrentFramesPerSecond.ToString() + " frames per second";
                 }
 #endif
-                elapsedTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                elapsedTime += Time.deltaTime * 1000f;
                 HUD.getInstance().Update(gameTime);
             }
             base.Update(gameTime);

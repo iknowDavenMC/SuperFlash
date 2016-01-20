@@ -3,7 +3,9 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
+
+using UnityEngine;
+using Assets.Code._XNA;
 using StreakerLibrary;
 
 namespace COMP476Proj
@@ -144,10 +146,10 @@ namespace COMP476Proj
                         pEnd = nodes.Find(n => n.ID == sid);
                     }
                     NPC npc = null;
-                    Animation animation;
+                    CustomAnimation animation;
                     if (type.StartsWith("Civilian"))
                     {
-                        int pnum = Game1.random.Next(1, 4);
+                        int pnum = SuperFlashGame.random.Next(1, 4);
                         string pedAnim = "student" + pnum + "_static";
                         //Animation a = SpriteDatabase.GetAnimation("cop_static");
                         PedestrianState pstate = PedestrianState.WANDER;
@@ -163,7 +165,7 @@ namespace COMP476Proj
                         npc = new Pedestrian(
                             new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), 115, 750, 75, 1000, 8, 40, 0.25f, true),
                             new MovementAIComponent2D(),
-                            new DrawComponent(animation, Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f),
+                            new DrawComponent(animation, Color.white, Vector2.zero, new Vector2(.4f, .4f), .5f),
                             pstate
                             );
                     }
@@ -192,7 +194,7 @@ namespace COMP476Proj
                         npc = new DumbCop(
                             new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), World.Speeds.DumbCop_Run, 750, World.Speeds.DumbCop_Walk, 1000, 8, 50, 0.25f, true),
                             new MovementAIComponent2D(),
-                            new DrawComponent(animation, Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), dcState);
+                            new DrawComponent(animation, Color.white, Vector2.zero, new Vector2(.4f, .4f), .5f), dcState);
 
                     }
                     if (type.StartsWith("SmartCop"))
@@ -212,16 +214,16 @@ namespace COMP476Proj
 
                         npc = new SmartCop(
                             new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), World.Speeds.SmartCop_Run, 750, World.Speeds.SmartCop_Walk, 1000, 8, 50, 0.25f, true),
-                            new MovementAIComponent2D(3, 2, MathHelper.ToRadians(45), 0.5f, 50, 25, Vector2.Zero, Vector2.Zero,0.1f),
-                            new DrawComponent(animation, Color.White, Vector2.Zero, new Vector2(.4f, .4f), .5f), dcState);
+                            new MovementAIComponent2D(3, 2, Mathf.Deg2Rad * 45f, 0.5f, 50, 25, Vector2.zero, Vector2.zero,0.1f),
+                            new DrawComponent(animation, Color.white, Vector2.zero, new Vector2(.4f, .4f), .5f), dcState);
                     }
                     if (type.StartsWith("RoboCop"))
                     {
                         npc = new RoboCop(
                             new PhysicsComponent2D(new Vector2(x, y), 0, new Vector2(20, 20), World.Speeds.RoboCop_Run, 750, 75, 1000, 8, 50, 0.25f, true),
                             new MovementAIComponent2D(),
-                            new DrawComponent(SpriteDatabase.GetAnimation("roboCop_static"), Color.White, 
-                                              Vector2.Zero, new Vector2(.4f, .4f), .5f));
+                            new DrawComponent(SpriteDatabase.GetAnimation("roboCop_static"), Color.white, 
+                                              Vector2.zero, new Vector2(.4f, .4f), .5f));
                     }
                     if (npc != null)
                     {

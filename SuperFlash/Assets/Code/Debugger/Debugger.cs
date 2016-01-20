@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+
+using UnityEngine;
+using Assets.Code._XNA;
 using StreakerLibrary;
 #endregion
 
@@ -15,12 +16,12 @@ namespace COMP476Proj
         private static Debugger instance = null;
 
         public List<Vector2> pointsToDraw;
-        public List<Rectangle> rectsToDraw;
+        public List<Rect> rectsToDraw;
 
         private Debugger()
         {
             pointsToDraw = new List<Vector2>();
-            rectsToDraw = new List<Rectangle>();
+            rectsToDraw = new List<Rect>();
         }
 
         public static Debugger getInstance()
@@ -42,16 +43,16 @@ namespace COMP476Proj
         {
             foreach (Vector2 point in pointsToDraw)
             {
-                spriteBatch.Draw(SpriteDatabase.GetAnimation("happyface").Texture, point, Color.White);
+                spriteBatch.Draw(SpriteDatabase.GetAnimation("happyface").Texture, point, Color.white);
             }
 
-            foreach (Rectangle rect in rectsToDraw)
+            foreach (Rect rect in rectsToDraw)
             {
                 
-                spriteBatch.Draw(SpriteDatabase.GetAnimation("happyface").Texture, new Vector2(rect.Left,rect.Top), Color.White);
-                spriteBatch.Draw(SpriteDatabase.GetAnimation("happyface").Texture, new Vector2(rect.Left, rect.Bottom), Color.White);
-                spriteBatch.Draw(SpriteDatabase.GetAnimation("happyface").Texture, new Vector2(rect.Right, rect.Top), Color.White);
-                spriteBatch.Draw(SpriteDatabase.GetAnimation("happyface").Texture, new Vector2(rect.Right, rect.Bottom), Color.White);
+                spriteBatch.Draw(SpriteDatabase.GetAnimation("happyface").Texture, new Vector2(rect.xMin, rect.yMin), Color.white);
+                spriteBatch.Draw(SpriteDatabase.GetAnimation("happyface").Texture, new Vector2(rect.xMin, rect.yMax), Color.white);
+                spriteBatch.Draw(SpriteDatabase.GetAnimation("happyface").Texture, new Vector2(rect.xMax, rect.yMin), Color.white);
+                spriteBatch.Draw(SpriteDatabase.GetAnimation("happyface").Texture, new Vector2(rect.xMax, rect.yMax), Color.white);
             }
         }
     }

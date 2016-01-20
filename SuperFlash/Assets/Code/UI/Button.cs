@@ -12,7 +12,7 @@ namespace COMP476Proj
     {
         Texture2D texture;
         Vector2 position;
-        Rectangle rectangle;
+        Rect rectangle;
 
         bool isPressed = false;
         public Vector2 size;
@@ -33,8 +33,8 @@ namespace COMP476Proj
         
         public void Update(MouseState mouse)
         {
-            rectangle = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
-            Rectangle mouseRectangle = new Rectangle(mouse.X, mouse.Y, 1, 1);
+            rectangle = new Rect((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
+            Rect mouseRectangle = new Rect(mouse.X, mouse.Y, 1, 1);
             //This is where the hover of the mouse is
             if (mouseRectangle.Intersects(rectangle))
             {

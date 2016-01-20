@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Xna.Framework;
+
+using UnityEngine;
+using Assets.Code._XNA;
 
 namespace COMP476Proj
 {
@@ -147,7 +149,7 @@ namespace COMP476Proj
         /// <returns></returns>
         private static float getHeuristic(AStarNode n1, AStarNode n2)
         {
-            return (n1.node.Position - n2.node.Position).LengthSquared();
+            return (n1.node.Position - n2.node.Position).sqrMagnitude;
         }
 
         /// <summary>
@@ -270,7 +272,7 @@ namespace COMP476Proj
                     if (blocked)
                         continue;
                 }
-                float dist = (node.Position - searchPos).LengthSquared();
+                float dist = (node.Position - searchPos).sqrMagnitude;
                 if (dist < minDist)
                 {
                     minDist = dist;

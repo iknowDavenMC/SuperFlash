@@ -55,7 +55,7 @@ namespace COMP476Proj
         private bool isGameOver;
         private Texture2D gameOverText;
         private Vector2 gameOverTextPosition;
-        private Rectangle gameOverTextSize;
+        private Rect gameOverTextSize;
         private float gameOverTextScale;
         private float gameOverCurrentTime; 
 
@@ -112,8 +112,8 @@ namespace COMP476Proj
         private HUD()
         {
             //Set window properties
-            windowWidth = Game1.SCREEN_WIDTH;
-            windowHeight = Game1.SCREEN_HEIGHT;
+            windowWidth = SuperFlashGame.SCREEN_WIDTH;
+            windowHeight = SuperFlashGame.SCREEN_HEIGHT;
 
             hudComponents = new List<SpriteComponent>();
             hudDrawComponents = new List<DrawComponent>();
@@ -159,7 +159,7 @@ namespace COMP476Proj
             isGameOver = false; 
             gameOverTextPosition = new Vector2(windowWidth / 2, windowHeight / 2);
             gameOverTextScale = 5.0f;
-            gameOverTextSize = new Rectangle(0, 0, 556, 126);
+            gameOverTextSize = new Rect(0, 0, 556, 126);
             gameOverCurrentTime = 0.0f; 
 
             //Fade To Black initialization 
@@ -266,7 +266,7 @@ namespace COMP476Proj
             isGameOver = false;
             gameOverTextPosition = new Vector2(windowWidth / 2, windowHeight / 2);
             gameOverTextScale = 5.0f;
-            gameOverTextSize = new Rectangle(0, 0, 556, 126);
+            gameOverTextSize = new Rect(0, 0, 556, 126);
             gameOverCurrentTime = 0.0f;
 
             //Fade To Black initialization 
@@ -306,7 +306,7 @@ namespace COMP476Proj
             //Updating the displayed score
             if (displayedScore < DataManager.GetInstance().score)
             {
-                timer += Game1.elapsedTime;
+                timer += SuperFlashGame.elapsedTime;
                 if (timer > timerInterval)
                 {
                     timer = 0;
@@ -342,7 +342,7 @@ namespace COMP476Proj
             float scoreOffset = spriteFont.MeasureString(displayedScore.ToString()).X / 2;
             spriteBatch.DrawString(spriteFont, displayedScore.ToString(), 
                 (positionScore + new Vector2(scoreOffset, 0)) * scale + offset, 
-                Color.White, 0f, new Vector2(scoreOffset, 15), scoreScale * scale, SpriteEffects.None, 0f);
+                Color.white, 0f, new Vector2(scoreOffset, 15), scoreScale * scale, SpriteEffects.None, 0f);
             
             particleBar.Draw(gameTime, spriteBatch);
             timerText.setText(minutes + ":" + displaySeconds + seconds);
@@ -350,29 +350,29 @@ namespace COMP476Proj
 
             drawGameOver(gameTime, spriteBatch, offset, scale);
 
-            sFlashNotifyTimer += gameTime.ElapsedGameTime.Milliseconds;
+            sFlashNotifyTimer += Time.deltaTime * 1000f;
 
-            if (Game1.world.streaker.hasSuperFlash() && sFlashNotifyDelay < sFlashNotifyTimer)
+            if (SuperFlashGame.world.streaker.hasSuperFlash() && sFlashNotifyDelay < sFlashNotifyTimer)
            {
                if (InputManager.GetInstance().GetControllerType == InputManager.ControllerType.Keyboard)
                {
                    spriteBatch.DrawString(spriteFont, "Press S to Superflash!!",
                    new Vector2(CustomCamera.Width / 2 - 120f, 25f) * scale + offset,
-                   Color.Black, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                   Color.black, 0f, Vector2.zero, scale, SpriteEffects.None, 0f);
 
                    spriteBatch.DrawString(spriteFont, "Press S to Superflash!!",
                    new Vector2(CustomCamera.Width / 2 - 119f, 24f) * scale + offset,
-                   Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                   Color.white, 0f, Vector2.zero, scale, SpriteEffects.None, 0f);
                }
                else
                {
                    spriteBatch.DrawString(spriteFont, "Press X to Superflash!!",
                    new Vector2(CustomCamera.Width / 2 - 120f, 25f) * scale + offset,
-                   Color.Black, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                   Color.black, 0f, Vector2.zero, scale, SpriteEffects.None, 0f);
 
                    spriteBatch.DrawString(spriteFont, "Press X to Superflash!!",
                    new Vector2(CustomCamera.Width / 2 - 119f, 24f) * scale + offset,
-                   Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                   Color.white, 0f, Vector2.zero, scale, SpriteEffects.None, 0f);
                }
             }
 
@@ -382,21 +382,21 @@ namespace COMP476Proj
                 {
                     spriteBatch.DrawString(spriteFont, "Press D to Dance!!",
                     new Vector2(CustomCamera.Width / 2 - 120f, 500f) * scale + offset,
-                       Color.Black, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                       Color.black, 0f, Vector2.zero, scale, SpriteEffects.None, 0f);
 
                     spriteBatch.DrawString(spriteFont, "Press D to Dance!!",
                     new Vector2(CustomCamera.Width / 2 - 119f, 501f) * scale + offset,
-                    Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                    Color.white, 0f, Vector2.zero, scale, SpriteEffects.None, 0f);
                 }
                 else
                 {
                     spriteBatch.DrawString(spriteFont, "Press A to Dance!!",
                     new Vector2(CustomCamera.Width / 2 - 120f, 500f) * scale + offset,
-                       Color.Black, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                       Color.black, 0f, Vector2.zero, scale, SpriteEffects.None, 0f);
 
                     spriteBatch.DrawString(spriteFont, "Press A to Dance!!",
                     new Vector2(CustomCamera.Width / 2 - 119f, 501f) * scale + offset,
-                    Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
+                    Color.white, 0f, Vector2.zero, scale, SpriteEffects.None, 0f);
                 }
             }
             
@@ -408,16 +408,16 @@ namespace COMP476Proj
             if (isGameOver)
             {
                 MouseState mouse = Mouse.GetState();
-                Game1.world.streaker.Kill();
+                SuperFlashGame.world.streaker.Kill();
                 
                 
                 //          Draw black Alpha
                 animateFadeToBlack(gameTime);
-                spriteBatch.Draw(fadeToBlack, new Rectangle((int)(0 + offset.X), (int)(0 + offset.Y), (int)(windowWidth * scale + offset.X), (int)(windowHeight * scale + offset.Y)), Color.Black * fadeToBlackAlpha);
+                spriteBatch.Draw(fadeToBlack, new Rect((int)(0 + offset.X), (int)(0 + offset.Y), (int)(windowWidth * scale + offset.X), (int)(windowHeight * scale + offset.Y)), Color.black * fadeToBlackAlpha);
                 
                 //          Draw Game Over Text
                 interpolate(ref gameOverTextScale, 1.0f, ref gameOverCurrentTime, 0.7f, gameTime);
-                spriteBatch.Draw(gameOverText, gameOverTextPosition * scale + offset, gameOverTextSize, Color.White, 0.0f, new Vector2(gameOverTextSize.Right / 2, gameOverTextSize.Bottom / 2), gameOverTextScale, SpriteEffects.None, 1.0f);
+                spriteBatch.Draw(gameOverText, gameOverTextPosition * scale + offset, gameOverTextSize, Color.white, 0.0f, new Vector2(gameOverTextSize.Right / 2, gameOverTextSize.Bottom / 2), gameOverTextScale, SpriteEffects.None, 1.0f);
             
                 //          Replay Button 
                 replayText.setText("Replay");
@@ -477,15 +477,15 @@ namespace COMP476Proj
                 if (replayButton.isClicked)
                 {
  
-                    Game1.LoadContentReset();
-                    Game1.currentGameState = Game1.GameState.PLAY;
+                    SuperFlashGame.LoadContentReset();
+                    SuperFlashGame.currentGameState = SuperFlashGame.GameState.PLAY;
                     resetHud();
                     replayButton.isClicked = false;
                 }
                 if (mainMenuButton.isClicked)
                 {
-                    Game1.currentGameState = Game1.GameState.MAIN;
-                    Game1.LoadContentReset();
+                    SuperFlashGame.currentGameState = SuperFlashGame.GameState.MAIN;
+                    SuperFlashGame.LoadContentReset();
                     resetHud();
                     mainMenuButton.isClicked = false;
                 }
@@ -505,7 +505,7 @@ namespace COMP476Proj
         public void updateSuperFlashIcon(GameTime gameTime)
         {
             superFlashIcon.Update(gameTime);
-            if (Game1.world.streaker.hasSuperFlash())
+            if (SuperFlashGame.world.streaker.hasSuperFlash())
             {
                 superFlashIcon.OscillateAlpha = true;
                 if (!sFlashOn)
@@ -576,7 +576,7 @@ namespace COMP476Proj
         {
             if (scoreScale > 1.0f)
             {
-                scoreScale -= animationSpeed * gameTime.ElapsedGameTime.Milliseconds;
+                scoreScale -= animationSpeed * Time.deltaTime * 1000f;
             }
             else if (scoreScale < 1.0f)
             {
@@ -616,7 +616,7 @@ namespace COMP476Proj
         {
             if (currentTime < timeToAnimate)
             {
-                currentTime += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                currentTime += Time.deltaTime * 1000f;
                 currentTime /= 1000.0f;
             }
             if (currentTime > timeToAnimate)
