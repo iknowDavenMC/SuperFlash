@@ -1,0 +1,18 @@
+Hint Text:
+Arial
+Size 15
+Spacing 0
+Regular
+
+Achievement Title:
+Segoe UI Mono
+Size 11
+Spacing 0
+Bold Italic
+
+Achievement text: 
+Segoe UI Mono
+Size 10
+Spacing 0
+Italic
+
