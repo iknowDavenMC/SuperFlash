@@ -1,0 +1,12 @@
+C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_bin\Debug\Assembly-CSharp.dll
+C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_bin\Debug\Assembly-CSharp.pdb
+C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_bin\Debug\UnityEditor.dll
+C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_bin\Debug\UnityEngine.dll
+C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_bin\Debug\UnityEngine.Networking.dll
+C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_bin\Debug\UnityEngine.UI.dll
+C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_bin\Debug\UnityEngine.xml
+C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_bin\Debug\UnityEngine.UI.xml
+C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_bin\Debug\UnityEngine.Networking.xml
+C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_bin\Debug\UnityEditor.xml
+C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_obj\Debug\Assembly-CSharp.dll
+C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_obj\Debug\Assembly-CSharp.pdb
