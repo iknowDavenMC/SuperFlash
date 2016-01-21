@@ -65,7 +65,7 @@ namespace StreakerLibrary
 
         #region Load Content
 
-				/*
+				
         public static void loadSprites(ContentManager Content)
         {
             Texture2D streaker = Content.Load<Texture2D>("streaker");
@@ -146,7 +146,7 @@ namespace StreakerLibrary
             
 
         }
-				 * */
+				 
 
         #endregion
     }
