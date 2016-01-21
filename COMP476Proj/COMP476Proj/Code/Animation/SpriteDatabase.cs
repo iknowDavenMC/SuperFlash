@@ -116,7 +116,7 @@ namespace StreakerLibrary
 
             SpriteDatabase.AddAnimation(new CustomAnimation("student1_static", student1, 2, 137, 155, 0, notMoving));
             SpriteDatabase.AddAnimation(new CustomAnimation("student1_flee", student1, 5, 137, 155, 155, walk));
-            SpriteDatabase.AddAnimation(new CustomAnimation("student1_fall", student1, 6, 137, 155, 310, fall));
+            SpriteDatabase.AddAnimation(new CustomAnimation("student1_fall", student1, 6 /* OOPS */, 137, 155, 310, fall));
             SpriteDatabase.AddAnimation(new CustomAnimation("student1_getup", student1, 7, 137, 155, 465, getUp));
             SpriteDatabase.AddAnimation(new CustomAnimation("student1_walk", student1, 4, 137, 155, 620, slowWalk));
 
