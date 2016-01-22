@@ -8,5 +8,6 @@ C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_bin\Debug
 C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_bin\Debug\UnityEngine.UI.xml
 C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_bin\Debug\UnityEngine.Networking.xml
 C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_bin\Debug\UnityEditor.xml
+C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_obj\Debug\SuperFlash.CSharp.csprojResolveAssemblyReference.cache
 C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_obj\Debug\Assembly-CSharp.dll
 C:\Users\dcampbell\Documents\GitHub\SuperFlash\SuperFlash\Temp\UnityVS_obj\Debug\Assembly-CSharp.pdb
