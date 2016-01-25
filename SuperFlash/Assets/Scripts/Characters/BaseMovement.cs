@@ -4,6 +4,7 @@ using System.Collections;
 public abstract class BaseMovement : MonoBehaviour
 {
 		public float m_speed = 250f;
+		public int m_orderInLayerAccuracy = 100;
 
 		protected SpriteRenderer m_spriteRenderer;
 		protected Animator m_animator;
@@ -57,6 +58,8 @@ public abstract class BaseMovement : MonoBehaviour
 				{
 						m_rigidBody.AddForce(movement);
 				}
+
+				m_spriteRenderer.sortingOrder = (int)(-transform.position.y * m_orderInLayerAccuracy);
 		}
 
 		private void UpdateOrientation()
