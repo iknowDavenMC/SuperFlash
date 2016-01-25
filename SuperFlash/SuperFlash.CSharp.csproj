@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.3.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -63,7 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Camera\CameraMovement.cs" />
-    <Compile Include="Assets\Scripts\Streaker\Streaker.cs" />
+    <Compile Include="Assets\Scripts\Characters\BaseMovement.cs" />
+    <Compile Include="Assets\Scripts\Characters\NPCMovement.cs" />
+    <Compile Include="Assets\Scripts\Cops\CopMovement.cs" />
+    <Compile Include="Assets\Scripts\Streaker\StreakerMovement.cs" />
+    <Compile Include="Assets\Scripts\Students\StudentMovement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\Font Notes.txt" />
