@@ -67,9 +67,10 @@
     <Compile Include="Assets\Scripts\Camera\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\Characters\BaseMovement.cs" />
     <Compile Include="Assets\Scripts\Characters\NPCMovement.cs" />
-    <Compile Include="Assets\Scripts\Cops\CopMovement.cs" />
-    <Compile Include="Assets\Scripts\Streaker\StreakerMovement.cs" />
-    <Compile Include="Assets\Scripts\Students\StudentMovement.cs" />
+    <Compile Include="Assets\Scripts\Constants\UnityEditorConstants.cs" />
+    <Compile Include="Assets\Scripts\Characters\Cops\CopMovement.cs" />
+    <Compile Include="Assets\Scripts\Characters\Streaker\StreakerMovement.cs" />
+    <Compile Include="Assets\Scripts\Characters\Students\StudentMovement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\Font Notes.txt" />
